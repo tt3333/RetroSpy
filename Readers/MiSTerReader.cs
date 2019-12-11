@@ -35,7 +35,7 @@ namespace RetroSpy.Readers
             if (packet.Length != packetSize) return null;
 
             byte[] buttonValues = new byte[buttons];
-            int[] axesValues = new int[axes];
+            short[] axesValues = new short[axes];
 
             for (int i = 0; i < buttons; ++i)
                 buttonValues[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
@@ -45,7 +45,7 @@ namespace RetroSpy.Readers
                 axesValues[i] = 0;
                 for (byte j = 0; j < 16; ++j)
                 {
-                    axesValues[i] |= (packet[buttons + i * 16 + j] == 0x30 ? 0 : 1) << j;
+                    axesValues[i] |= (short)((packet[buttons + i * 16 + j] == 0x30 ? 0 : 1) << j);
                 }
             }
 
