@@ -119,6 +119,7 @@
     <Compile Include="Readers\SSHControllerReader.cs" />
     <Compile Include="Readers\GenesisMiniReader.cs" />
     <Compile Include="Readers\NeoGeoMini.cs" />
+    <Compile Include="Readers\MiSTerReader.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
     <Compile Include="Readers\XboxReaderV2.cs" />

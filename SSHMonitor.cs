@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Threading;
 using System.Windows.Threading;
 
 namespace RetroSpy
@@ -21,15 +22,17 @@ namespace RetroSpy
         ShellStream _data;
         List <byte> _localBuffer;
         string _command;
+        int _delayInMilliseconds;
 
         DispatcherTimer _timer;
 
-        public SSHMonitor(string hostname, string command)
+        public SSHMonitor(string hostname, string command, string username, string password, int delayInMilliseconds)
         {
             _localBuffer = new List <byte> ();
             //_datPort = new SerialPort (portName, BAUD_RATE);
-            _client = new SshClient(hostname, "retrospy", "retrospy");
+            _client = new SshClient(hostname, username, password);
             _command = command;
+            _delayInMilliseconds = delayInMilliseconds;
         }
 
         public void Start ()
@@ -40,6 +43,8 @@ namespace RetroSpy
             //_datPort.Open ();
             _client.Connect();
             _data = _client.CreateShellStream("", 0, 0, 0, 0, 0);
+            if (_delayInMilliseconds > 0)
+                Thread.Sleep(_delayInMilliseconds);
             _data.WriteLine(_command);
 
             _timer = new DispatcherTimer ();
