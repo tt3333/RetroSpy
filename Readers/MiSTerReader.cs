@@ -30,22 +30,22 @@ namespace RetroSpy.Readers
                 buttons |= (int)((packet[8+j] == 0x30 ? 0 : 1) << j);
             }
 
-            int packetSize = 2 + (axes * 16) + buttons;
+            int packetSize = 16 + (axes * 32) + buttons + 1;
 
             if (packet.Length != packetSize) return null;
 
             byte[] buttonValues = new byte[buttons];
-            short[] axesValues = new short[axes];
+            int[] axesValues = new int[axes];
 
             for (int i = 0; i < buttons; ++i)
-                buttonValues[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
+                buttonValues[i] = (byte)((packet[16+i] == 0x31) ? 1 : 0);
 
             for (int i = 0; i < axes; ++i)
             {
                 axesValues[i] = 0;
-                for (byte j = 0; j < 16; ++j)
+                for (byte j = 0; j < 32; ++j)
                 {
-                    axesValues[i] |= (short)((packet[buttons + i * 16 + j] == 0x30 ? 0 : 1) << j);
+                    axesValues[i] |= (packet[16 + buttons + i * 32 + j] == 0x30 ? 0 : 1) << j;
                 }
             }
 
@@ -58,10 +58,10 @@ namespace RetroSpy.Readers
 
             for(int i = 0; i < axesValues.Length; ++i)
             {
-                if (i >= AXES_NAMES.Length)
-                    outState.SetAnalog(AXES_NAMES[i], axesValues[i] / short.MaxValue);
+                if (i < AXES_NAMES.Length)
+                    outState.SetAnalog(AXES_NAMES[i], axesValues[i] / (float)short.MaxValue);
 
-                outState.SetAnalog("a" + i, axesValues[i] / short.MaxValue);
+                outState.SetAnalog("a" + i.ToString(), axesValues[i] / (float)short.MaxValue);
             }
 
             if (axes >= 2)
