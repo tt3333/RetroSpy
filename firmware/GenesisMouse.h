@@ -1,5 +1,5 @@
 //
-// BoosterGripSpy.h
+// GenesisMouse.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,38 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef BoosterGripSpy_h
-#define BoosterGripSpy_h
+#ifndef GenesisMouseSpy_h
+#define GenesisMouseSpy_h
 
-enum
-{
-    BG_BTN_UP    = 1,
-    BG_BTN_DOWN  = 2,
-    BG_BTN_LEFT  = 4,
-    BG_BTN_RIGHT = 8,
-    BG_BTN_1     = 16,
-    BG_BTN_2     = 32,
-	BG_BTN_3	 = 64
-};
+#include "ControllerSpy.h"
 
-const byte BG_INPUT_PINS = 7;
-
-const unsigned long BG_READ_DELAY_MS = 5;
-
-class BoosterGripSpy {
+class GenesisMouseSpy : public ControllerSpy {
     public:
-        BoosterGripSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_5, byte db9_pin_6, byte db9_pin_9);
-
-        word getState();
+        void setup();
+        void loop();
+        void writeSerial();
+        void debugSerial();
+        void updateState();
 
     private:
-        void readCycle();
-
-        word _currentState;
-
-        unsigned long _lastReadTime;
-
-        byte _inputPins[BG_INPUT_PINS];
+        unsigned char rawData[24];
+        const uint8_t TH = 0;  // Pin 8, 0 on PINB
+        const uint8_t TR = 7;  // Pin 7
+        const uint8_t TL = 6;  // Pin 6
 };
 
 #endif

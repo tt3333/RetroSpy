@@ -1,5 +1,5 @@
 //
-// ClassicControllerSpy.h
+// SMS.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,37 +24,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef ClassicControllerSpy_h
-#define ClassicControllerSpy_h
+#ifndef SMSSpy_h
+#define SMSSpy_h
 
-enum
-{
-    CC_BTN_UP    = 1,
-    CC_BTN_DOWN  = 2,
-    CC_BTN_LEFT  = 4,
-    CC_BTN_RIGHT = 8,
-    CC_BTN_1     = 16,
-    CC_BTN_2     = 32
-};
+#include "ControllerSpy.h"
 
-const byte CC_INPUT_PINS = 6;
-
-const unsigned long CC_READ_DELAY_MS = 5;
-
-class ClassicControllerSpy {
+class SMSSpy : public ControllerSpy {
     public:
-        ClassicControllerSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_6, byte db9_pin_9);
+        void setup(uint8_t outputType);
+        void setup();
+        void loop();
+        void writeSerial();
+        void debugSerial();
+        void updateState();
 
-        word getState();
+        enum outputTypes {
+            OUTPUT_SMS = 1,
+            OUTPUT_GENESIS  = 2,
+        };
 
     private:
-        void readCycle();
+        enum buttonTypes {
+            CC_BTN_UP    = 1,
+            CC_BTN_DOWN  = 2,
+            CC_BTN_LEFT  = 4,
+            CC_BTN_RIGHT = 8,
+            CC_BTN_1     = 16,
+            CC_BTN_2     = 32
+        };
 
-        word _currentState;
+        uint8_t outputType = OUTPUT_SMS;
 
-        unsigned long _lastReadTime;
+        static const byte CC_INPUT_PINS = 6;
+        static const unsigned long CC_READ_DELAY_MS = 5;
 
-        byte _inputPins[CC_INPUT_PINS];
+        byte inputPins[CC_INPUT_PINS];
+        word currentState;
+	word lastState = -1;
+        unsigned long lastReadTime;
 };
 
 #endif

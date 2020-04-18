@@ -1,5 +1,5 @@
 //
-// SegaControllerSpy.h
+// BoosterGrip.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,35 +24,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SegaControllerSpy_h
-#define SegaControllerSpy_h
+#ifndef BoosterGripSpy_h
+#define BoosterGripSpy_h
 
-enum
-{
-    SCS_CTL_ON    = 1, // The controller is connected
-    SCS_BTN_UP    = 2,
-    SCS_BTN_DOWN  = 4,
-    SCS_BTN_LEFT  = 8,
-    SCS_BTN_RIGHT = 16,
-    SCS_BTN_B     = 32,
-    SCS_BTN_C     = 64,
-    SCS_BTN_A     = 128,
-    SCS_BTN_START = 256,
-    SCS_BTN_Z     = 512,
-    SCS_BTN_Y     = 1024,
-    SCS_BTN_X     = 2048,
-    SCS_BTN_MODE  = 4096
-};
+#include "ControllerSpy.h"
 
-class SegaControllerSpy {
+class BoosterGripSpy : public ControllerSpy {
     public:
-        SegaControllerSpy();
-        word getState();
-        void getMouseState(byte data[3]);
+        void setup();
+        void loop();
+        void writeSerial();
+        void debugSerial();
+        void updateState();
 
-   private:
-      unsigned long last6buttonCheck;
-      bool sixButtonConnected;    
+    private:
+        word currentState;
+        word lastState = -1;
+
+        static const byte BG_INPUT_PINS = 7;
+        const unsigned long BG_READ_DELAY_MS = 5;
+  
+        unsigned long lastReadTime;
+
+        byte inputPins[BG_INPUT_PINS];
+
+        enum buttonTypes {
+            BG_BTN_UP    = 1,
+            BG_BTN_DOWN  = 2,
+            BG_BTN_LEFT  = 4,
+            BG_BTN_RIGHT = 8,
+            BG_BTN_1     = 16,
+            BG_BTN_2     = 32,
+            BG_BTN_3     = 64
+        };
+
 };
 
 #endif
