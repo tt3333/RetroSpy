@@ -49,6 +49,7 @@ cd ..\..\..
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip firmware
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip firmware_teensy
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip experimental
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip MiSTer\retrospy
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
 
 :end
