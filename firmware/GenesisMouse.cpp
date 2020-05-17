@@ -26,7 +26,26 @@
 
 #include "GenesisMouse.h"
 
+#define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
+
 void GenesisMouseSpy::setup() {
+#if defined(__arm__) && defined(CORE_TEENSY)
+    // GPIOD_PDIR & 0xFF;
+    pinMode(2, INPUT_PULLUP);
+    pinMode(14, INPUT_PULLUP);
+    pinMode(7, INPUT_PULLUP);
+    pinMode(8, INPUT_PULLUP);
+    pinMode(6, INPUT_PULLUP);
+    pinMode(20, INPUT_PULLUP);
+    pinMode(21, INPUT_PULLUP);
+    pinMode(5, INPUT_PULLUP);
+  
+    // GPIOB_PDIR & 0xF;
+    pinMode(16, INPUT_PULLUP);
+    pinMode(17, INPUT_PULLUP);
+    pinMode(19, INPUT_PULLUP);
+    pinMode(18, INPUT_PULLUP);
+#else
     // Setup input pins
     // Assumes pin 8 is SELECT (DB9 pin 7)
     // Assumes pins 2-7 are DB9 pins 1,2,3,4,6,9
@@ -36,6 +55,7 @@ void GenesisMouseSpy::setup() {
     {
         pinMode(i, INPUT_PULLUP);
     }
+#endif
 }
 
 void GenesisMouseSpy::loop() {
@@ -45,6 +65,8 @@ void GenesisMouseSpy::loop() {
 #else
     debugSerial();
 #endif
+
+  T_DELAY(5);
 }
 
 void GenesisMouseSpy::updateState() {
@@ -52,15 +74,17 @@ void GenesisMouseSpy::updateState() {
 
     noInterrupts();
 
-    WAIT_FALLING_EDGEB(TH);
-    WAIT_FALLING_EDGE(TL);
+    WAIT_FALLING_EDGEB(GENESIS_TH);
+    WAIT_FALLING_EDGE(GENESIS_TL);
 
     while(reads != 3) {
         rawData[reads] = 0;
-        WAIT_FALLING_EDGE(TL);
-        rawData[reads] |= ((PIND & 0b00111100) << 2);
-        WAIT_LEADING_EDGE(TL);
-        rawData[reads] |= ((PIND & 0b00111100) >> 2);
+        WAIT_FALLING_EDGE(GENESIS_TL);
+        WAIT_FOR_LINES_TO_SETTLE;
+        rawData[reads] |= (READ_PORTD(0b00111100) << 2);
+        WAIT_LEADING_EDGE(GENESIS_TL);
+        WAIT_FOR_LINES_TO_SETTLE;
+        rawData[reads] |= (READ_PORTD(0b00111100) >> 2);
         ++reads;
     }
 
@@ -85,4 +109,3 @@ void GenesisMouseSpy::debugSerial() {
             Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
   Serial.print("\n");
 }
-

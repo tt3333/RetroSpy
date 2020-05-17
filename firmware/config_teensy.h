@@ -15,18 +15,11 @@
 #define DIGITAL_PIN_19	   2
 #define DIGITAL_PIN_18	   3
 
-// Used for MODE_SELECT determination
-#define DIGITAL_PIN_33	   33
-#define DIGITAL_PIN_34	   34
-#define DIGITAL_PIN_35	   35
-#define DIGITAL_PIN_36	   36
-#define DIGITAL_PIN_37	   37
-
-#define MODEPIN_SNES       DIGITAL_PIN_33
-#define MODEPIN_N64        DIGITAL_PIN_34
-#define MODEPIN_GC         DIGITAL_PIN_35
-#define MODEPIN_DREAMCAST  DIGITAL_PIN_36
-#define MODEPIN_WII        DIGITAL_PIN_37
+#define MODEPIN_SNES       33
+#define MODEPIN_N64        34
+#define MODEPIN_GC         35
+#define MODEPIN_DREAMCAST  36
+#define MODEPIN_WII        37
 
 #define N64_PIN	           DIGITAL_PIN_02
 
@@ -111,12 +104,16 @@
 #define SMS_INPUT_PIN_4     5
 #define SMS_INPUT_PIN_5    16
 
-#define SMSONG_INPUT_PIN_0     7
-#define SMSONG_INPUT_PIN_1     8
-#define SMSONG_INPUT_PIN_2     6 
-#define SMSONG_INPUT_PIN_3    20
-#define SMSONG_INPUT_PIN_4    21
-#define SMSONG_INPUT_PIN_5     5
+#define SMSONGEN_INPUT_PIN_0     7
+#define SMSONGEN_INPUT_PIN_1     8
+#define SMSONGEN_INPUT_PIN_2     6 
+#define SMSONGEN_INPUT_PIN_3    20
+#define SMSONGEN_INPUT_PIN_4    21
+#define SMSONGEN_INPUT_PIN_5     5
+
+#define GENESIS_TH            DIGITAL_PIN_16
+#define GENESIS_TR            DIGITAL_PIN_05
+#define GENESIS_TL            DIGITAL_PIN_21
 
 #define READ_PORTD( mask ) (GPIOD_PDIR & mask)
 #define READ_PORTB( mask ) (GPIOB_PDIR & mask)

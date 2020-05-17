@@ -110,6 +110,10 @@
 #define SMSONG_INPUT_PIN_4    DIGITAL_PIN_06
 #define SMSONG_INPUT_PIN_5    DIGITAL_PIN_07
 
+#define GENESIS_TH            DIGITAL_PIN_08
+#define GENESIS_TR            DIGITAL_PIN_07
+#define GENESIS_TL            DIGITAL_PIN_06
+
 #define PIND_READ( pin ) (PIND&(1<<(pin)))
 #define PINB_READ( pin ) (PINB&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))

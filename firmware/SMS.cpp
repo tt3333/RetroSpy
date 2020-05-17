@@ -45,12 +45,12 @@ void SMSSpy::setup() {
         break;
     case OUTPUT_GENESIS:
         // I don't know why these are different.
-        inputPins[0] = SMSONG_INPUT_PIN_0;
-        inputPins[1] = SMSONG_INPUT_PIN_1;
-        inputPins[2] = SMSONG_INPUT_PIN_2;
-        inputPins[3] = SMSONG_INPUT_PIN_3;
-        inputPins[4] = SMSONG_INPUT_PIN_4;
-        inputPins[5] = SMSONG_INPUT_PIN_5;
+        inputPins[0] = SMSONGEN_INPUT_PIN_0;
+        inputPins[1] = SMSONGEN_INPUT_PIN_1;
+        inputPins[2] = SMSONGEN_INPUT_PIN_2;
+        inputPins[3] = SMSONGEN_INPUT_PIN_3;
+        inputPins[4] = SMSONGEN_INPUT_PIN_4;
+        inputPins[5] = SMSONGEN_INPUT_PIN_5;
         break;
     }
 
