@@ -127,6 +127,7 @@ void common_pin_setup()
   pinMode(18, INPUT_PULLUP); 
 }
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()

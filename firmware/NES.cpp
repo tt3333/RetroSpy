@@ -9,6 +9,7 @@ void NESSpy::loop() {
 #else
     debugSerial();
 #endif
+	T_DELAY(5);
 }
 
 void NESSpy::writeSerial() {

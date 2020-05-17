@@ -1,9 +1,56 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino
-// v3.3
+// v4.0
 // RetroSpy written by zoggins
 // NintendoSpy originally written by jaburns
 
+// ---------- Uncomment one of these options to select operation mode --------------
+// 
+//#define MODE_GC
+//#define MODE_N64
+//#define MODE_SNES
+//#define MODE_NES
+
+//-- Arduino Only
+//#define MODE_GENESIS
+//#define MODE_SMS_ON_GENESIS // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
+//#define MODE_GENESIS_MOUSE
+//#define MODE_SMS
+//#define MODE_BOOSTER_GRIP
+//#define MODE_PLAYSTATION
+//#define MODE_TG16
+//#define MODE_SATURN
+//#define MODE_SATURN3D
+//#define MODE_NEOGEO
+//#define MODE_ThreeDO
+//#define MODE_INTELLIVISION
+//#define MODE_JAGUAR
+//#define MODE_FMTOWNS
+//#define MODE_PCFX
+//#define MODE_COLECOVISION
+
+//--- Teensy Only
+//#define MODE_DREAMCAST
+//#define MODE_WII
+//#define MODE_CD32
+
+//Bridge one of the analog GND to the right analog IN to enable your selected mode
+//#define MODE_DETECT
+
+// ---------------------------------------------------------------------------------
+// The only reason you'd want to use 2-wire mode is if you built a NintendoSpy
+// before the 3-wire firmware was implemented.  This mode is for backwards
+// compatibility only.
+//#define MODE_2WIRE_SNES
+//#define MODE_2WIRE_NES
+// ---------------------------------------------------------------------------------
+
+// Uncomment this for serial debugging output
+//#define DEBUG
+
+///////////////////////////////////////////////////////////////////////////////
+// ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
+///////////////////////////////////////////////////////////////////////////////
 #include "common.h"
 
 #include "NES.h"
@@ -27,6 +74,10 @@
 #include "PlayStation.h"
 #include "TG16.h"
 #include "ThreeDO.h"
+
+#include "Dreamcast.h"
+#include "AmigaCD32.h"
+#include "Wii.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -68,19 +119,34 @@ PlayStationSpy PlayStationSpy;
 TG16Spy TG16Spy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
+#elif defined(MODE_DREAMCAST)
+DreamcastSpy DCSpy;
+#elif defined(MODE_WII)
+WiiSpy WiiSpy;
+#elif defined(MODE_CD32)
+AmigaCd32Spy Cd32Spy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
 N64Spy N64Spy;
 GCSpy GCSpy;
+DreamcastSpy DCSpy;
+WiiSpy WiiSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
+
+  // for MODE_DETECT
+#if defined(__arm__) && defined(CORE_TEENSY)
+  for(int i = 33; i < 40; ++i)
+    pinMode(i, INPUT_PULLUP);
+#else
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+#endif
 
 #if defined(MODE_NES)
     NESSpy.setup();
@@ -122,6 +188,12 @@ void setup()
     TG16Spy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
+#elif defined(MODE_Dreamcast)
+    DCSpy.setup();
+#elif defined(MODE_Wii)
+    WiiSpy.setup();
+#elif defined(MODE_CD32)
+    Cd32Spy.setup();    
 #elif defined(MODE_DETECT)
     if ( !PINC_READ(MODEPIN_SNES)) {
         SNESSpy.setup();
@@ -129,12 +201,22 @@ void setup()
         N64Spy.setup();
     } else if ( !PINC_READ(MODEPIN_GC)) {
         GCSpy.setup();
-    } else {
+    }
+#if defined(__arm__) && defined(CORE_TEENSY)
+  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+       DCSpy.setup();
+    } else if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.setup()();
+    }
+#endif 
+    else {
         NESSpy.setup();
     }
 #endif
 
-    Serial.begin( 115200 );
+  T_DELAY(5000);
+
+  Serial.begin( 115200 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +270,15 @@ void loop()
         N64Spy.loop();
     } else if( !PINC_READ( MODEPIN_GC ) ) {
         GCSpy.loop();
-    } else {
+    } 
+#if defined(__arm__) && defined(CORE_TEENSY)
+	else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+        DreamcastSpy.loop();
+    } else if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.loop();
+    }
+#endif
+	else {
         NESSpy.loop();
     }
 #endif
