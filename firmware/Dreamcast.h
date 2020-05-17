@@ -5,13 +5,16 @@
 
 class DreamcastSpy : public ControllerSpy {
     public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+		    void setup();
+        FASTRUN void loop();
+        FASTRUN void writeSerial();
+        FASTRUN void debugSerial();
+        FASTRUN void updateState();
 
     private:
-        unsigned char rawData[NES_BITCOUNT * 3];
+		byte rawData[16000];
+		byte* p;
+    int byteCount;
 };
 
 #endif

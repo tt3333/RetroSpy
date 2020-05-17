@@ -5,13 +5,14 @@
 
 class AmigaCd32Spy : public ControllerSpy {
     public:
+        void setup();
         void loop();
         void writeSerial();
         void debugSerial();
         void updateState();
 
     private:
-        unsigned char rawData[NES_BITCOUNT * 3];
+        byte      rawData[16000];
 };
 
 #endif

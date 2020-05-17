@@ -105,3 +105,5 @@
 
 #define T_DELAY
 #define A_DELAY( ms ) delay(ms)
+
+#define FASTRUN

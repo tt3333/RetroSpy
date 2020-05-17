@@ -25,8 +25,9 @@ void common_pin_setup()
 
   for(int i = 2; i <= 6; ++i)
     pinMode(i, INPUT_PULLUP);
-}
 #endif
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
