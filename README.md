@@ -18,7 +18,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 
 ## Fourth Generation
  - NEC PC Engine/TurboGraphx-16/SuperGrafx [2, 3 and 6-button controllers](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
- - Sega Genesis [3/6-button controllers and the Mega Mouse](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
+ - Sega Genesis [3/6-button controllers and the Mega Mouse](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
  - Commodore CDTV [wirelesss remotes](https://github.com/zoggins/RetroSpy/wiki/CDTV-Wireless-Remotes-on-Arduino-Getting-Started), [wired mice/joysticks](https://github.com/zoggins/RetroSpy/wiki/CDTV-Wired-Mouse-&-Joystick-on-Arduino-Getting-Started) and [keyboards](https://github.com/zoggins/RetroSpy/wiki/CDTV-Keyboard-on-Arduino-Getting-Started)
  - SNES [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
@@ -59,6 +59,9 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [SNK Neo Geo Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
 
+## "Emulation"
+ - MiSTer [USB controllers](https://github.com/zoggins/RetroSpy/wiki/MiSTer-Getting-Started)
+
 ## To-Do List
  - TurboGrafx-16 Mini (when its released)
  - NEOGEO Arcade Stick Pro
@@ -77,3 +80,6 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - PlayStation Analog Joystick
  - Master System Sports Pad
  - CDTV Trackball
+ - CD-i Thumbstick controller
+ - Playstation Namco NegCon
+ - Genesis XE-1 AP
