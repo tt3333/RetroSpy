@@ -59,8 +59,8 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [SNK Neo Geo Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
 
-## "Emulation"
- - MiSTer [USB controllers](https://github.com/zoggins/RetroSpy/wiki/MiSTer-Getting-Started)
+## MiSTer
+ - [USB controllers](https://github.com/zoggins/RetroSpy/wiki/MiSTer-Getting-Started)
 
 ## To-Do List
  - TurboGrafx-16 Mini (when its released)
