@@ -1,17 +1,9 @@
 /*
- * jstest.c  Version 1.2
+ * retrospy.c  Version 1.0
  *
- * Copyright (c) 1996-1999 Vojtech Pavlik
+ * Copyright (c) 2020 Chris Mallery
  *
- * Sponsored by SuSE
- */
-
-/*
- * This program can be used to test all the features of the Linux
- * joystick API, including non-blocking and select() access, as
- * well as version 0.x compatibility mode. It is also intended to
- * serve as an example implementation for those who wish to learn
- * how to write their own joystick using applications.
+ * Based on jstest.c Version 1.2
  */
 
 /*
@@ -175,7 +167,11 @@ int main (int argc, char **argv)
 				printf("%d", (axis[i] & (1 << j)) != 0);
 		}
 		
-/* 		printf("%d|%d|", axes, buttons);
+		//Probably could reduce the bandwidth by outputing the axes values directly,
+		//but can do it later.
+
+		/*
+		printf("%d|%d|", axes, buttons);
 		for (i = 0; i < buttons; ++i)
 		{
 			printf(button[i] != 0 ? "1" : "0|");
@@ -186,8 +182,6 @@ int main (int argc, char **argv)
 			printf("%d|", axis[i]);
 		}*/
 		printf("\n");
-
-		//usleep(5000);
 	}
 
 }
