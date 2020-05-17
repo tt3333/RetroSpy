@@ -214,7 +214,7 @@ void setup()
     }
 #endif
 
-  delay(5000);
+  T_DELAY(5000);
 
   Serial.begin( 115200 );
 }

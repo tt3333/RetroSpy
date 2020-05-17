@@ -36,21 +36,21 @@ void SMSSpy::setup() {
     // TODO: Move these to config.h
     switch (outputType) {
     case OUTPUT_SMS:
-        inputPins[0] = 2;
-        inputPins[1] = 3;
-        inputPins[2] = 4;
-        inputPins[3] = 5;
-        inputPins[4] = 7;
-        inputPins[5] = 8;
+        inputPins[0] = SMS_INPUT_PIN_0;
+        inputPins[1] = SMS_INPUT_PIN_1;
+        inputPins[2] = SMS_INPUT_PIN_2;
+        inputPins[3] = SMS_INPUT_PIN_3;
+        inputPins[4] = SMS_INPUT_PIN_4;
+        inputPins[5] = SMS_INPUT_PIN_5;
         break;
     case OUTPUT_GENESIS:
         // I don't know why these are different.
-        inputPins[0] = 2;
-        inputPins[1] = 3;
-        inputPins[2] = 4;
-        inputPins[3] = 5;
-        inputPins[4] = 6;
-        inputPins[5] = 7;
+        inputPins[0] = SMSONG_INPUT_PIN_0;
+        inputPins[1] = SMSONG_INPUT_PIN_1;
+        inputPins[2] = SMSONG_INPUT_PIN_2;
+        inputPins[3] = SMSONG_INPUT_PIN_3;
+        inputPins[4] = SMSONG_INPUT_PIN_4;
+        inputPins[5] = SMSONG_INPUT_PIN_5;
         break;
     }
 

@@ -104,6 +104,20 @@
 #define CD32_DATA     DIGITAL_PIN_05  
 #define CD32_CLOCK    DIGITAL_PIN_21  
 
+#define SMS_INPUT_PIN_0     7
+#define SMS_INPUT_PIN_1     8
+#define SMS_INPUT_PIN_2     6
+#define SMS_INPUT_PIN_3    20
+#define SMS_INPUT_PIN_4     5
+#define SMS_INPUT_PIN_5    16
+
+#define SMSONG_INPUT_PIN_0     7
+#define SMSONG_INPUT_PIN_1     8
+#define SMSONG_INPUT_PIN_2     6 
+#define SMSONG_INPUT_PIN_3    20
+#define SMSONG_INPUT_PIN_4    21
+#define SMSONG_INPUT_PIN_5     5
+
 #define READ_PORTD( mask ) (GPIOD_PDIR & mask)
 #define READ_PORTB( mask ) (GPIOB_PDIR & mask)
 
