@@ -13,7 +13,7 @@ namespace RetroSpy
     public class SSHMonitor
     {
         const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 7;
+        const int TIMER_MS  = 1;
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;

@@ -67,9 +67,15 @@ namespace RetroSpy.Readers
             if (axes >= 2)
             {
                 if (axesValues[axes - 2] < 0)
+                {
                     outState.SetButton("left", true);
+                    outState.SetButton("right", false);
+                }
                 else if (axesValues[axes - 2] > 0)
+                {
                     outState.SetButton("right", true);
+                    outState.SetButton("left", false);
+                }
                 else
                 {
                     outState.SetButton("left", false);
@@ -77,9 +83,15 @@ namespace RetroSpy.Readers
                 }
 
                 if (axesValues[axes - 1] < 0)
+                {
                     outState.SetButton("up", true);
+                    outState.SetButton("down", false);
+                }
                 else if (axesValues[axes - 1] > 0)
+                {
                     outState.SetButton("down", true);
+                    outState.SetButton("up", false);
+                }
                 else
                 {
                     outState.SetButton("up", false);
