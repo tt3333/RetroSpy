@@ -27,6 +27,23 @@
 #include "Genesis.h"
 
 void GenesisSpy::setup() {
+#if defined(__arm__) && defined(CORE_TEENSY)
+    // GPIOD_PDIR & 0xFF;
+    pinMode(2, INPUT_PULLUP);
+    pinMode(14, INPUT_PULLUP);
+    pinMode(7, INPUT_PULLUP);
+    pinMode(8, INPUT_PULLUP);
+    pinMode(6, INPUT_PULLUP);
+    pinMode(20, INPUT_PULLUP);
+    pinMode(21, INPUT_PULLUP);
+    pinMode(5, INPUT_PULLUP);
+  
+    // GPIOB_PDIR & 0xF;
+    pinMode(16, INPUT_PULLUP);
+    pinMode(17, INPUT_PULLUP);
+    pinMode(19, INPUT_PULLUP);
+    pinMode(18, INPUT_PULLUP);
+#else
     // Setup input pins
     // Assumes pin 8 is SELECT (DB9 pin 7)
     // Assumes pins 2-7 are DB9 pins 1,2,3,4,6,9
@@ -36,9 +53,7 @@ void GenesisSpy::setup() {
     {
         pinMode(i, INPUT_PULLUP);
     }
-
-    last6buttonCheck = millis();
-    sixButtonConnected = false;
+#endif
 }
 
 void GenesisSpy::loop() {
@@ -48,58 +63,48 @@ void GenesisSpy::loop() {
 #else
     debugSerial();
 #endif
+  T_DELAY(5);
+  A_DELAY(1);
 }
 
 void GenesisSpy::updateState() {
     currentState = 0xFFFF;
-    bool check6 = false;
-    unsigned long currentTime = millis();
-    if (!sixButtonConnected && (currentTime - last6buttonCheck) > 100)
-    {
-      check6 = true;
-      last6buttonCheck  = currentTime;
-    }
 
     noInterrupts();
 
     do {
     } while (WAIT_FOR_STATE_TWO);
+    WAIT_FOR_LINES_TO_SETTLE;
     currentState &= SHIFT_A_AND_START;
 
     do {
     } while (WAIT_FOR_STATE_THREE);
+    WAIT_FOR_LINES_TO_SETTLE;
     currentState &= SHIFT_UDLRBC;
 
-    if (sixButtonConnected || check6)
+    // Six Button
+    do {
+    } while (WAIT_FOR_STATE_FOUR_OR_SIX);
+
+    if (NOT_STATE_SIX)
     {
-        // Six Button
+        //currentState &= SHIFT_A_AND_START;
+        do {
+        } while (WAIT_FOR_STATE_THREE);
+        //currentState &= SHIFT_UDLRBC;
+
         do {
         } while (WAIT_FOR_STATE_FOUR_OR_SIX);
-
-        if (NOT_STATE_SIX)
-        {
-            //currentState &= SHIFT_A_AND_START;
-            do {
-            } while (WAIT_FOR_STATE_THREE);
-            //currentState &= SHIFT_UDLRBC;
-
-            do {
-            } while (WAIT_FOR_STATE_FOUR_OR_SIX);
-        }
     }
 
     if (STATE_SIX)
     {
         do {
         } while (WAIT_FOR_STATE_SEVEN);
+        WAIT_FOR_LINES_TO_SETTLE;
         currentState &= SHIFT_ZYXM;
-        sixButtonConnected = true;
     }
-    else
-    {
-      sixButtonConnected = false;
-    }
-
+ 
     interrupts();
 
     currentState = ~currentState;

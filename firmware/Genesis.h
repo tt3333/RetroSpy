@@ -29,20 +29,26 @@
 
 #include "ControllerSpy.h"
 
-#define SHIFT_A_AND_START (TWOC_MASK_A_AND_START_CTRL | (PIND << 1))
-#define SHIFT_UDLRBC (TWOC_MASK_UPLRBC | (PIND >> 1))
-#define SHIFT_ZYXM (TWOC_MASK_XYXM | (PIND << 7))
+#define SHIFT_A_AND_START (TWOC_MASK_A_AND_START_CTRL | (READ_PORTD(0xFF) << 1))
+#define SHIFT_UDLRBC (TWOC_MASK_UPLRBC | (READ_PORTD(0xFF) >> 1))
+#define SHIFT_ZYXM (TWOC_MASK_XYXM | (READ_PORTD(0xFF) << 7))
 
-#define STATE_TWO (PINB & 1) == 0 && (PIND & MASK_PINS_FOUR_AND_FIVE) == 0 && (PIND & MASK_PINS_TWO_AND_THREE) != 0
-#define WAIT_FOR_STATE_TWO (PINB & 1) != 0 || (PIND & MASK_PINS_FOUR_AND_FIVE) != 0 || (PIND & MASK_PINS_TWO_AND_THREE) == 0
-#define STATE_THREE (PINB & 1) == 1 && (PIND & MASK_PINS_FOUR_AND_FIVE) != 0
-#define WAIT_FOR_STATE_THREE (PINB & 1) != 1 || (PIND & MASK_PINS_FOUR_AND_FIVE) == 0
-#define STATE_FOUR_OR_SIX (PINB & 1) == 0 && (PIND & MASK_PINS_FOUR_AND_FIVE) == 0
-#define WAIT_FOR_STATE_FOUR_OR_SIX (PINB & 1) != 0 || (PIND & MASK_PINS_FOUR_AND_FIVE) != 0
-#define STATE_SIX (PINB & 1) == 0 && (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) == 0
-#define NOT_STATE_SIX (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) != 0
-#define STATE_SEVEN (PINB & 1) == 1 && (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) != 0
-#define WAIT_FOR_STATE_SEVEN (PINB & 1) != 1 || (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) == 0
+#define STATE_TWO READ_PORTB(1) == 0 && READ_PORTD(MASK_PINS_FOUR_AND_FIVE) == 0 && READ_PORTD(MASK_PINS_TWO_AND_THREE) != 0
+#define WAIT_FOR_STATE_TWO READ_PORTB(1) != 0 || READ_PORTD(MASK_PINS_FOUR_AND_FIVE) != 0 || READ_PORTD(MASK_PINS_TWO_AND_THREE) == 0
+#define STATE_THREE READ_PORTB(1) == 1 && READ_PORTD(MASK_PINS_FOUR_AND_FIVE) != 0
+#define WAIT_FOR_STATE_THREE READ_PORTB(1) != 1 || READ_PORTD(MASK_PINS_FOUR_AND_FIVE) == 0
+#define STATE_FOUR_OR_SIX READ_PORTB(1) == 0 && READ_PORTD(MASK_PINS_FOUR_AND_FIVE) == 0
+#define WAIT_FOR_STATE_FOUR_OR_SIX READ_PORTB(1) != 0 || READ_PORTD(MASK_PINS_FOUR_AND_FIVE) != 0
+#define STATE_SIX READ_PORTB(1) == 0 && READ_PORTD(MASK_PINS_TWO_THREE_FOUR_FIVE) == 0
+#define NOT_STATE_SIX READ_PORTD(MASK_PINS_TWO_THREE_FOUR_FIVE) != 0
+#define STATE_SEVEN READ_PORTB(1) == 1 && READ_PORTD(MASK_PINS_TWO_THREE_FOUR_FIVE) != 0
+#define WAIT_FOR_STATE_SEVEN READ_PORTB(1) != 1 || READ_PORTD(MASK_PINS_TWO_THREE_FOUR_FIVE) == 0
+
+#if defined(__arm__) && defined(CORE_TEENSY)
+#define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
+#else
+#define WAIT_FOR_LINES_TO_SETTLE
+#endif 
 
 class GenesisSpy : public ControllerSpy {
     public:
@@ -77,11 +83,8 @@ class GenesisSpy : public ControllerSpy {
         static const uint16_t TWOC_MASK_UPLRBC              = 0xFF81; // 0b1111111110000001
         static const uint16_t TWOC_MASK_XYXM                = 0xE1FF; // 0b1110000111111111
 
-        unsigned long last6buttonCheck;
-        bool sixButtonConnected;
-
-	word currentState = 0;
-	word lastState = -1;
+      	word currentState = 0;
+      	word lastState = -1;
 };
 
 #endif

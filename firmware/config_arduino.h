@@ -99,7 +99,7 @@
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
 
 #define READ_PORTD( mask ) (PIND & mask)
-#define READ_PORTB( mask ) (PIND & mask)
+#define READ_PORTB( mask ) (PINB & mask)
 
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 

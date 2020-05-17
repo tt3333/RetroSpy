@@ -10,9 +10,9 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
+//#define MODE_GENESIS
 
 //-- Arduino Only
-//#define MODE_GENESIS
 //#define MODE_SMS_ON_GENESIS // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
 //#define MODE_GENESIS_MOUSE
 //#define MODE_SMS
@@ -214,7 +214,7 @@ void setup()
     }
 #endif
 
-  T_DELAY(5000);
+  delay(5000);
 
   Serial.begin( 115200 );
 }
