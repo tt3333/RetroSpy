@@ -2,6 +2,23 @@
 
 void common_pin_setup()
 {
+#if defined(__arm__) && defined(CORE_TEENSY)
+	// GPIOD_PDIR & 0xFF;
+	pinMode(2, INPUT_PULLUP);
+	pinMode(14, INPUT_PULLUP);
+	pinMode(7, INPUT_PULLUP);
+	pinMode(8, INPUT_PULLUP);
+	pinMode(6, INPUT_PULLUP);
+	pinMode(20, INPUT_PULLUP);
+	pinMode(21, INPUT_PULLUP);
+	pinMode(5, INPUT_PULLUP);
+
+	// GPIOB_PDIR & 0xF;
+	pinMode(16, INPUT_PULLUP);
+	pinMode(17, INPUT_PULLUP);
+	pinMode(19, INPUT_PULLUP);
+	pinMode(18, INPUT_PULLUP);
+#else
   PORTD = 0x00;
   PORTB = 0x00;
   DDRD  = 0x00;
@@ -9,6 +26,7 @@ void common_pin_setup()
   for(int i = 2; i <= 6; ++i)
     pinMode(i, INPUT_PULLUP);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
@@ -50,6 +68,8 @@ read_loop:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
+#pragma GCC optimize ("-O2")
+#pragma GCC push_options
 void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigned char count)
 {
     for( unsigned char i = first ; i < first + count ; i++ ) {
@@ -57,6 +77,7 @@ void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigne
     }
     Serial.write( SPLIT );
 }
+#pragma GCC pop_options
 
 void sendRawDataDebug(unsigned char rawControllerData[], unsigned char first, unsigned char count)
 {

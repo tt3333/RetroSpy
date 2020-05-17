@@ -12,8 +12,9 @@ void N64Spy::loop() {
 #endif
     } else {
       // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
-      delay(2);
+      A_DELAY(2);
     }
+	T_DELAY(5);
 }
 
 // Verifies that the 9 bits prefixing N64 controller data in 'rawData'
