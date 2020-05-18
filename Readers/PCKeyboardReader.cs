@@ -9,7 +9,7 @@ using SharpDX.DirectInput;
 
 namespace RetroSpy.Readers
 {
-    sealed public class PCKeyboardReader : IControllerReader
+    sealed public class PCKeyboardReader : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
@@ -35,8 +35,10 @@ namespace RetroSpy.Readers
                 throw new IOException("Connected keyboard could not be acquired.");
             }
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
             _timer.Tick += tick;
             _timer.Start();
         }
@@ -49,7 +51,7 @@ namespace RetroSpy.Readers
             catch (Exception)
             {
                 Finish();
-                if (ControllerDisconnected != null) ControllerDisconnected(this, EventArgs.Empty);
+                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -64,9 +66,9 @@ namespace RetroSpy.Readers
             for (int i = 0; i < state.PressedKeys.Count; i++)
             {
                 outState.SetButton(state.PressedKeys[i].ToString(), true);
-            }       
+            }
 
-            if (ControllerStateChanged != null) ControllerStateChanged(this, outState.Build());
+            ControllerStateChanged?.Invoke(this, outState.Build());
         }
 
         public void Finish()
@@ -77,11 +79,30 @@ namespace RetroSpy.Readers
                 _keyboard.Dispose();
                 _keyboard = null;
             }
+            if(_dinput != null)
+            {
+                _dinput.Dispose();
+                _dinput = null;
+            }
             if (_timer != null)
             {
                 _timer.Stop();
                 _timer = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -56,13 +56,17 @@ namespace RetroSpy
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
-            _portListUpdateTimer = new DispatcherTimer();
-            _portListUpdateTimer.Interval = TimeSpan.FromSeconds(1);
+            _portListUpdateTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
             _portListUpdateTimer.Tick += (sender, e) => updatePortList();
             _portListUpdateTimer.Start();
 
-            _xiAndGamepadListUpdateTimer = new DispatcherTimer();
-            _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
+            _xiAndGamepadListUpdateTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
             _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
             {
                 if (_vm.Sources.SelectedItem == InputSource.PAD)
@@ -140,12 +144,12 @@ namespace RetroSpy
 
         void updateBeagleList()
         {
-            _vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
+            //_vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
         }
 
         void updateBeagleI2CList()
         {
-            _vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
+            //_vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) 

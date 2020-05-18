@@ -23,17 +23,21 @@ namespace RetroSpy.Readers
             this.delayInMilliseconds = delayInMilliseconds;
 
             BaseControllerReader.ControllerStateChanged += BaseControllerReader_ControllerStateChanged;
+            BaseControllerReader.ControllerDisconnected += BaseControllerReader_ControllerDisconnected;
         }
 
-        private async void BaseControllerReader_ControllerStateChanged(IControllerReader sender, ControllerState state)
+        private void BaseControllerReader_ControllerDisconnected(object sender, EventArgs e)
+        {
+            ControllerDisconnected?.Invoke(this, e);
+        }
+
+        private async void BaseControllerReader_ControllerStateChanged(object sender, ControllerState e)
         {
             if (!disposedValue)
             {
                 await Task.Delay(delayInMilliseconds);
 
-                var controllerStateChanged = ControllerStateChanged;
-                if (controllerStateChanged != null)
-                    controllerStateChanged(this, state);
+                ControllerStateChanged?.Invoke(this, e);
             }
         }
 
@@ -54,7 +58,8 @@ namespace RetroSpy.Readers
             {
                 if (disposing)
                 {
-                    BaseControllerReader.ControllerStateChanged -= BaseControllerReader_ControllerStateChanged;       
+                    BaseControllerReader.ControllerStateChanged -= BaseControllerReader_ControllerStateChanged;
+                    BaseControllerReader.ControllerDisconnected -= BaseControllerReader_ControllerDisconnected;
                 }
 
                 disposedValue = true;

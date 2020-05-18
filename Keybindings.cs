@@ -66,14 +66,14 @@ namespace RetroSpy
             _reader.ControllerStateChanged -= reader_ControllerStateChanged;
         }
 
-        void reader_ControllerStateChanged (IControllerReader reader, ControllerState state)
+        void Reader_ControllerStateChanged (object reader, ControllerState e)
         {
             foreach (var binding in _bindings) 
             {
                 bool allRequiredButtonsDown = true;
 
                 foreach (var requiredButton in binding.RequiredButtons) {
-                    allRequiredButtonsDown &= state.Buttons [requiredButton];
+                    allRequiredButtonsDown &= e.Buttons [requiredButton];
                 }
 
                 if (allRequiredButtonsDown && !binding.CurrentlyDepressed) {
@@ -87,7 +87,7 @@ namespace RetroSpy
             }
         }
 
-        static ushort readKeybinding (string name) 
+        static ushort ReadKeybinding (string name) 
         {
             var upperName = name.ToUpperInvariant ();
 
@@ -102,7 +102,7 @@ namespace RetroSpy
             }
         }
 
-        static ushort vkConvert (Key key) {
+        static ushort VkConvert (Key key) {
             return (ushort) KeyInterop.VirtualKeyFromKey (key);
         }
 

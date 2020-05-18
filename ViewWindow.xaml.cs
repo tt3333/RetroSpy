@@ -117,10 +117,13 @@ namespace RetroSpy
         }
 
 
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        private class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+            [DllImport("user32.dll")]
+            public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        }
 
         private const int GWL_STYLE = -16;
         private const int WS_MAXIMIZEBOX = 0x10000;
@@ -128,8 +131,8 @@ namespace RetroSpy
         private void Window_SourceInitialized(object sender, EventArgs ea)
         {   
             var hwnd = new WindowInteropHelper((Window)sender).Handle;
-            var value = GetWindowLong(hwnd, GWL_STYLE);
-            SetWindowLong(hwnd, GWL_STYLE, (int)(value & ~WS_MAXIMIZEBOX));
+            var value = NativeMethods.GetWindowLong(hwnd, GWL_STYLE);
+            NativeMethods.SetWindowLong(hwnd, GWL_STYLE, (int)(value & ~WS_MAXIMIZEBOX));
        
             WindowAspectRatio.Register((ViewWindow)sender);
         }
@@ -210,14 +213,16 @@ namespace RetroSpy
 
             if (skinBackground.Image != null)
             {
-                var img = new Image();
-                img.VerticalAlignment = VerticalAlignment.Top;
-                img.HorizontalAlignment = HorizontalAlignment.Left;
-                img.Source = skinBackground.Image;
-                img.Stretch = Stretch.Fill;
-                img.Margin = new Thickness(0, 0, 0, 0);
-                img.Width = skinBackground.Image.PixelWidth;
-                img.Height = skinBackground.Image.PixelHeight;
+                var img = new Image
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Source = skinBackground.Image,
+                    Stretch = Stretch.Fill,
+                    Margin = new Thickness(0, 0, 0, 0),
+                    Width = skinBackground.Image.PixelWidth,
+                    Height = skinBackground.Image.PixelHeight
+                };
 
                 ControllerGrid.Children.Add(img);
             }
@@ -325,26 +330,30 @@ namespace RetroSpy
         }
         static Image getImageForElement (Skin.ElementConfig config)
         {
-            var img = new Image ();
-            img.VerticalAlignment = VerticalAlignment.Top;
-            img.HorizontalAlignment = HorizontalAlignment.Left;
-            img.Source = config.Image;
-            img.Stretch = Stretch.Fill;
-            img.Margin = new Thickness (config.X, config.Y, 0, 0);
-            img.Width = config.Width;
-            img.Height = config.Height;
+            var img = new Image
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Source = config.Image,
+                Stretch = Stretch.Fill,
+                Margin = new Thickness(config.X, config.Y, 0, 0),
+                Width = config.Width,
+                Height = config.Height
+            };
             return img;
         }
 
         static Grid getGridForAnalogTrigger (Skin.AnalogTrigger trigger)
         {
-            var img = new Image ();
-            img.VerticalAlignment = VerticalAlignment.Top;
+            var img = new Image
+            {
+                VerticalAlignment = VerticalAlignment.Top,
 
-            img.HorizontalAlignment = 
+                HorizontalAlignment =
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Left
                 ? HorizontalAlignment.Right
-                : HorizontalAlignment.Left;
+                : HorizontalAlignment.Left
+            };
 
             img.VerticalAlignment = 
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Up
@@ -356,15 +365,16 @@ namespace RetroSpy
             img.Margin = new Thickness (0, 0, 0, 0);
             img.Width = trigger.Config.Width;
             img.Height = trigger.Config.Height;
-            
 
-            var grid = new Grid ();
 
-            grid.HorizontalAlignment = HorizontalAlignment.Left;
-            grid.VerticalAlignment = VerticalAlignment.Top;
-            grid.Margin = new Thickness (trigger.Config.X, trigger.Config.Y, 0, 0);
-            grid.Width = trigger.Config.Width;
-            grid.Height = trigger.Config.Height;
+            var grid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(trigger.Config.X, trigger.Config.Y, 0, 0),
+                Width = trigger.Config.Width,
+                Height = trigger.Config.Height
+            };
 
             grid.Children.Add (img);
 
@@ -428,21 +438,21 @@ namespace RetroSpy
             _reader.Finish ();
         }
 
-        void reader_ControllerStateChanged (IControllerReader reader, ControllerState newState)
+        void reader_ControllerStateChanged (object reader, ControllerState e)
         {
-            newState = _blinkFilter.Process (newState);
+            e = _blinkFilter.Process (e);
 
             // This assumes you can't press left/right and up/down at the same time.  The code gets more complicated otherwise.
             var compassDirectionStates = new Dictionary<string, bool>();
-            if (newState.Buttons.ContainsKey("up") && newState.Buttons.ContainsKey("left") && newState.Buttons.ContainsKey("right") && newState.Buttons.ContainsKey("down"))
+            if (e.Buttons.ContainsKey("up") && e.Buttons.ContainsKey("left") && e.Buttons.ContainsKey("right") && e.Buttons.ContainsKey("down"))
             {
                 string[] compassDirections= { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
 
                 var compassDirectionStatesTemp = new bool[8];
-                compassDirectionStatesTemp[0] = newState.Buttons["up"];
-                compassDirectionStatesTemp[2] = newState.Buttons["right"];
-                compassDirectionStatesTemp[4] = newState.Buttons["down"];
-                compassDirectionStatesTemp[6] = newState.Buttons["left"];
+                compassDirectionStatesTemp[0] = e.Buttons["up"];
+                compassDirectionStatesTemp[2] = e.Buttons["right"];
+                compassDirectionStatesTemp[4] = e.Buttons["down"];
+                compassDirectionStatesTemp[6] = e.Buttons["left"];
 
                 if (compassDirectionStatesTemp[0] && compassDirectionStatesTemp[2])
                 {
@@ -473,15 +483,15 @@ namespace RetroSpy
 
             foreach (var button in _buttonsWithImages)
             {
-                if (newState.Buttons.ContainsKey(button.Item1.Name))
+                if (e.Buttons.ContainsKey(button.Item1.Name))
                 {
                     if (button.Item2.Dispatcher.CheckAccess())
-                        button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                        button.Item2.Visibility = e.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
                     else
                     {
                         button.Item2.Dispatcher.Invoke(() =>
                         {
-                            button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                            button.Item2.Visibility = e.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
                         });
                     }
                 }
@@ -502,9 +512,9 @@ namespace RetroSpy
 
             foreach (var button in _rangeButtonsWithImages) 
             {
-                if (!newState.Analogs.ContainsKey (button.Item1.Name)) continue;
+                if (!e.Analogs.ContainsKey (button.Item1.Name)) continue;
 
-                var value = newState.Analogs [button.Item1.Name];
+                var value = e.Analogs [button.Item1.Name];
                 var visible = button.Item1.From <= value && value <= button.Item1.To;
                 button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
             }
@@ -517,17 +527,17 @@ namespace RetroSpy
                 float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
                 float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                var x = newState.Analogs.ContainsKey(skin.XName)
-                      ? skin.Config.X + xrange * newState.Analogs[skin.XName]
+                var x = e.Analogs.ContainsKey(skin.XName)
+                      ? skin.Config.X + xrange * e.Analogs[skin.XName]
                       : skin.Config.X;
 
-                var y = newState.Analogs.ContainsKey(skin.YName)
-                      ? skin.Config.Y + yrange * newState.Analogs[skin.YName]
+                var y = e.Analogs.ContainsKey(skin.YName)
+                      ? skin.Config.Y + yrange * e.Analogs[skin.YName]
                       : skin.Config.Y;
 
                 Visibility visibility;
                 if (skin.VisibilityName != "")
-                    visibility = (newState.Buttons.ContainsKey(skin.VisibilityName) && newState.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
+                    visibility = (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
                 else
                     visibility = Visibility.Visible;
 
@@ -550,11 +560,11 @@ namespace RetroSpy
             {
                 var skin = touchpad.Item1;
 
-                if (newState.Analogs.ContainsKey(skin.XName) && newState.Analogs.ContainsKey(skin.YName))
+                if (e.Analogs.ContainsKey(skin.XName) && e.Analogs.ContainsKey(skin.YName))
                 {
                     // Show
-                    var x = (newState.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width/2);
-                    var y = (newState.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height/2);
+                    var x = (e.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width/2);
+                    var y = (e.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height/2);
 
                     if(touchpad.Item2.Dispatcher.CheckAccess())
                     {
@@ -591,9 +601,9 @@ namespace RetroSpy
                 var skin = trigger.Item1;
                 var grid = trigger.Item2;
 
-                if (!newState.Analogs.ContainsKey (skin.Name)) continue;
+                if (!e.Analogs.ContainsKey (skin.Name)) continue;
 
-                var val = newState.Analogs [skin.Name];
+                var val = e.Analogs [skin.Name];
                 if (skin.UseNegative) val *= -1;
                 if (skin.IsReversed) val = 1 - val;
                 if (val < 0) val = 0;
@@ -687,13 +697,13 @@ namespace RetroSpy
         // INotifyPropertyChanged interface implementation
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged (string propertyName) {
-            if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }  
     }
 
     internal class WindowAspectRatio
     {
-        private double _ratio;
+        private readonly double _ratio;
         private ViewWindow _window;
         private bool _calculatedMagic;
 

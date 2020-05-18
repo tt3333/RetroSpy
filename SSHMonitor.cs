@@ -10,7 +10,7 @@ namespace RetroSpy
 {
     //public delegate void PacketEventHandler (object sender, byte[] packet);
 
-    public class SSHMonitor
+    public class SSHMonitor : IDisposable
     {
         const int BAUD_RATE = 115200;
         const int TIMER_MS  = 1;
@@ -21,8 +21,8 @@ namespace RetroSpy
         SshClient _client;
         ShellStream _data;
         List <byte> _localBuffer;
-        string _command;
-        int _delayInMilliseconds;
+        readonly string _command;
+        readonly int _delayInMilliseconds;
 
         DispatcherTimer _timer;
 
@@ -47,8 +47,10 @@ namespace RetroSpy
                 Thread.Sleep(_delayInMilliseconds);
             _data.WriteLine(_command);
 
-            _timer = new DispatcherTimer ();
-            _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS); 
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
             _timer.Tick += tick;
             _timer.Start ();
         }
@@ -61,7 +63,12 @@ namespace RetroSpy
                 }
                 catch (IOException) {}
                 _data = null;
-                _client.Disconnect();
+                if (_client != null)
+                {
+                    _client.Disconnect();
+                    _client.Dispose();
+                    _client = null;
+                }
             }
             if (_timer != null) {
                 _timer.Stop ();
@@ -84,7 +91,7 @@ namespace RetroSpy
             }
             catch (IOException) {
                 Stop ();
-                if (Disconnected != null) Disconnected (this, EventArgs.Empty);
+                Disconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -97,10 +104,24 @@ namespace RetroSpy
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize  = lastSplitIndex - packetStart;
-            PacketReceived (this, _localBuffer.GetRange (packetStart, packetSize).ToArray ());
+            PacketReceived (this, new PacketData(_localBuffer.GetRange (packetStart, packetSize).ToArray ()));
 
             // Clear our buffer up until the last split character.
             _localBuffer.RemoveRange (0, lastSplitIndex);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Stop();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

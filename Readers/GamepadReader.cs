@@ -9,7 +9,7 @@ using SharpDX.DirectInput;
 
 namespace RetroSpy.Readers
 {
-    sealed public class GamepadReader : IControllerReader
+    sealed public class GamepadReader : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
@@ -59,13 +59,15 @@ namespace RetroSpy.Readers
                 throw new IOException("Connected gamepad could not be acquired.");
             }
 
-            _timer = new DispatcherTimer ();
-            _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS);
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
             _timer.Tick += tick;
             _timer.Start ();
         }
 
-        static int octantAngle (int octant) {
+        static int OctantAngle (int octant) {
             return 2750 + 4500 * octant;
         }
 
@@ -76,7 +78,7 @@ namespace RetroSpy.Readers
             catch(Exception)
             { 
                 Finish ();
-                if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -108,7 +110,7 @@ namespace RetroSpy.Readers
             outState.SetAnalog ("ry", (float)state.RotationY / RANGE);
             outState.SetAnalog ("rz", (float)state.RotationZ / RANGE);
 
-            if (ControllerStateChanged != null) ControllerStateChanged (this, outState.Build ());
+            ControllerStateChanged?.Invoke(this, outState.Build());
         }
 
         public void Finish ()
@@ -118,10 +120,29 @@ namespace RetroSpy.Readers
                 _joystick.Dispose ();
                 _joystick = null;
             }
+            if (_dinput != null)
+            {
+                _dinput.Dispose();
+                _dinput = null;
+            }
             if (_timer != null) {
                 _timer.Stop ();
                 _timer = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

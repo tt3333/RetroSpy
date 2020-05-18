@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    sealed public class SSHControllerReader : IControllerReader 
+    sealed public class SSHControllerReader : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
 
-        Func <byte[], ControllerState> _packetParser;
+        readonly Func <byte[], ControllerState> _packetParser;
         SSHMonitor _serialMonitor;
 
         public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerState> packetParser, 
@@ -28,13 +28,13 @@ namespace RetroSpy.Readers
         void serialMonitor_Disconnected(object sender, EventArgs e)
         {
             Finish ();
-            if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+            ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor_PacketReceived (object sender, byte[] packet)
+        void serialMonitor_PacketReceived (object sender, PacketData packet)
         {
             if (ControllerStateChanged != null) {
-                var state = _packetParser (packet);
+                var state = _packetParser (packet._packet);
                 if (state != null) {
                     ControllerStateChanged (this, state);
                 }
@@ -45,8 +45,23 @@ namespace RetroSpy.Readers
         {
             if (_serialMonitor != null) {
                 _serialMonitor.Stop ();
+                _serialMonitor.Dispose();
                 _serialMonitor = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

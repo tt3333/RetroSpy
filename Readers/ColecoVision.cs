@@ -8,8 +8,6 @@ namespace RetroSpy.Readers
 {
     static public class ColecoVision
     {
-        static int spinnerValue = 32;
-
         const int PACKET_SIZE = 11;
 
         static readonly string[] BUTTONS = {
