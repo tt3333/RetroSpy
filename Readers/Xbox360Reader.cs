@@ -15,12 +15,12 @@ namespace RetroSpy.Readers
             "up", "down", "left", "right", "start", "back", "l3", "r3", "lb", "rb", "xbox", null, "a", "b", "x", "y"
         };
 
-        static float readTrigger(byte input)
+        static float ReadTrigger(byte input)
         {
             return (float)input / 255;
         }
 
-        static float readStick(short input)
+        static float ReadStick(short input)
         {
             return (float)input / 32768;
         }
@@ -62,13 +62,13 @@ namespace RetroSpy.Readers
                 outState.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 
-            outState.SetAnalog("trig_l", readTrigger(polishedPacket[16]));
-            outState.SetAnalog("trig_r", readTrigger(polishedPacket[17]));
+            outState.SetAnalog("trig_l", ReadTrigger(polishedPacket[16]));
+            outState.SetAnalog("trig_r", ReadTrigger(polishedPacket[17]));
 
-            outState.SetAnalog("rstick_x", readStick(sticks[2]));
-            outState.SetAnalog("rstick_y", readStick(sticks[3]));
-            outState.SetAnalog("lstick_x", readStick(sticks[0]));
-            outState.SetAnalog("lstick_y", readStick(sticks[1]));
+            outState.SetAnalog("rstick_x", ReadStick(sticks[2]));
+            outState.SetAnalog("rstick_y", ReadStick(sticks[3]));
+            outState.SetAnalog("lstick_x", ReadStick(sticks[0]));
+            outState.SetAnalog("lstick_y", ReadStick(sticks[1]));
 
             return outState.Build();
         }

@@ -24,15 +24,15 @@ namespace RetroSpy.Readers
             _packet2Parser = packet2Parser;
 
             _serialMonitor = new SerialMonitor (portName);
-            _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
-            _serialMonitor.Disconnected += serialMonitor_Disconnected;
+            _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += SerialMonitor_Disconnected;
             _serialMonitor.Start();
 
             if (port2Name != "Not Connected")
             {
                 _serialMonitor2 = new SerialMonitor(port2Name);
-                _serialMonitor2.PacketReceived += serialMonitor2_PacketReceived;
-                _serialMonitor2.Disconnected += serialMonitor2_Disconnected;
+                _serialMonitor2.PacketReceived += SerialMonitor2_PacketReceived;
+                _serialMonitor2.Disconnected += SerialMonitor2_Disconnected;
                 _serialMonitor2.Start();
 
             }
@@ -40,13 +40,13 @@ namespace RetroSpy.Readers
                 _serialMonitor2 = null;                
         }
 
-        void serialMonitor_Disconnected(object sender, EventArgs e)
+        void SerialMonitor_Disconnected(object sender, EventArgs e)
         {
             Finish ();
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor_PacketReceived (object sender, PacketData packet)
+        void SerialMonitor_PacketReceived (object sender, PacketData packet)
         {
             if (ControllerStateChanged != null) {
                 var state = _packetParser (packet._packet);
@@ -56,13 +56,13 @@ namespace RetroSpy.Readers
             }
         }
 
-        void serialMonitor2_Disconnected(object sender, EventArgs e)
+        void SerialMonitor2_Disconnected(object sender, EventArgs e)
         {
             Finish();
             ControllerDisconnected2?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor2_PacketReceived(object sender, PacketData packet)
+        void SerialMonitor2_PacketReceived(object sender, PacketData packet)
         {
             _packet2Parser(packet._packet);
         }

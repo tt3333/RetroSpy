@@ -19,7 +19,7 @@ namespace RetroSpy.Readers
             null, null, null, null, null, null, null, "left", "middle", "right", null
         };
 
-        static float readMouse(bool sign, byte data)
+        static float ReadMouse(bool sign, byte data)
         {
             float val;
             if (sign)
@@ -57,12 +57,12 @@ namespace RetroSpy.Readers
                 }
 
                 bool ySign = packet[11] != 0;
-                byte yVal = SignalTool.readByte(packet, 14, 7);
+                byte yVal = SignalTool.ReadByte(packet, 14, 7);
                 bool xSign = packet[21] != 0;
-                byte xVal = SignalTool.readByte(packet, 24, 7);
+                byte xVal = SignalTool.ReadByte(packet, 24, 7);
 
-                float x = readMouse(xSign, xVal);
-                float y = readMouse(ySign, yVal);
+                float x = ReadMouse(xSign, xVal);
+                float y = ReadMouse(ySign, yVal);
 
                 SignalTool.SetMouseProperties(x, y, state);
             }

@@ -48,7 +48,7 @@ namespace RetroSpy
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
-            _timer.Tick += tick;
+            _timer.Tick += Tick;
             _timer.Start();
         }
 
@@ -71,7 +71,7 @@ namespace RetroSpy
             }
         }
 
-        void tick(object sender, EventArgs e)
+        void Tick(object sender, EventArgs e)
         {
             if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
 

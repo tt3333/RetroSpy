@@ -44,7 +44,7 @@
                  DisplayMemberPath="Name"
                  SelectedValue="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged" />
         <TextBox Name="txtDelay" Margin="145,137,10.333,0" VerticalAlignment="Top" Height="24    " Text="{Binding DelayInMilliseconds}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" />
-        <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="goButton_Click" />
+        <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="GoButton_Click" />
         <ListBox Margin="0,198,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
         	SelectedIndex="0"
         	ItemsSource="{Binding Backgrounds.Items}"

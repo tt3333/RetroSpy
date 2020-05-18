@@ -11,7 +11,7 @@ namespace RetroSpy.Readers
         /// <summary>
         /// Reads a byte of data from a string of 8 bits in a controller data packet.
         /// </summary>
-        public static byte readByte (byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
+        public static byte ReadByte (byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
         {
             byte val = 0;
             for (int i = 0 ; i < numBits; ++i) {
@@ -22,7 +22,7 @@ namespace RetroSpy.Readers
             return val;
         }
 
-        public static byte readByteBackwards(byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
+        public static byte ReadByteBackwards(byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
         {
             byte val = 0;
             for (int i = 0; i < numBits; ++i)
@@ -35,7 +35,7 @@ namespace RetroSpy.Readers
             return val;
         }
 
-        static float middleOfThree(float a, float b, float c)
+        static float MiddleOfThree(float a, float b, float c)
         {
             // Compare each three number to find middle  
             // number. Enter only if a > b 
@@ -61,9 +61,9 @@ namespace RetroSpy.Readers
         }
 
 
-        static float[] windowX = new float[3];
+        static readonly float[] windowX = new float[3];
         static int windowPositionX = 0;
-        static float[] windowY = new float[3];
+        static readonly float[] windowY = new float[3];
         static int windowPositionY = 0;
         public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
@@ -75,8 +75,8 @@ namespace RetroSpy.Readers
             windowPositionY += 1;
             windowPositionY = (windowPositionY % 3);
 
-            y = middleOfThree(windowY[0], windowY[1], windowY[2]);
-            x = middleOfThree(windowX[0], windowX[1], windowX[2]);
+            y = MiddleOfThree(windowY[0], windowY[1], windowY[2]);
+            x = MiddleOfThree(windowX[0], windowX[1], windowX[2]);
 
             float y1 = y;
             float x1 = x;

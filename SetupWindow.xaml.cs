@@ -60,7 +60,7 @@ namespace RetroSpy
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            _portListUpdateTimer.Tick += (sender, e) => updatePortList();
+            _portListUpdateTimer.Tick += (sender, e) => UpdatePortList();
             _portListUpdateTimer.Start();
 
             _xiAndGamepadListUpdateTimer = new DispatcherTimer
@@ -71,11 +71,11 @@ namespace RetroSpy
             {
                 if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
-                    updateGamepadList();
+                    UpdateGamepadList();
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PC360)
                 {
-                    updateXIList();
+                    UpdateXIList();
                 }
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 //{
@@ -88,7 +88,7 @@ namespace RetroSpy
             };
             _xiAndGamepadListUpdateTimer.Start();
 
-            updatePortList();
+            UpdatePortList();
             _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
             _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
             _vm.XIAndGamepad.SelectFirst();
@@ -98,7 +98,7 @@ namespace RetroSpy
 
             if (results.ParseErrors.Count > 0)
             {
-                showSkinParseErrors(results.ParseErrors);
+                ShowSkinParseErrors(results.ParseErrors);
             }
         }
 
@@ -115,14 +115,14 @@ namespace RetroSpy
             _vm.Sources.UpdateContents(prunedSources);
         }
 
-        void showSkinParseErrors (List <string> errs) {
+        void ShowSkinParseErrors (List <string> errs) {
             StringBuilder msg = new StringBuilder ();
             msg.AppendLine ("Some skins were unable to be parsed:");
             foreach (var err in errs) msg.AppendLine (err);
             MessageBox.Show (msg.ToString (), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        void updatePortList () {
+        void UpdatePortList () {
             var ports = SerialPort.GetPortNames();
             _vm.Ports.UpdateContents (ports);
             var ports2 = new string[ports.Length + 1];
@@ -132,27 +132,27 @@ namespace RetroSpy
             _vm.Ports2.UpdateContents(ports2);
         }
 
-        void updateGamepadList()
+        void UpdateGamepadList()
         {
             _vm.XIAndGamepad.UpdateContents(GamepadReader.GetDevices());
         }
 
-        void updateXIList()
+        void UpdateXIList()
         {
             _vm.XIAndGamepad.UpdateContents(XInputReader.GetDevices());
         }
 
-        void updateBeagleList()
+        void UpdateBeagleList()
         {
             //_vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
         }
 
-        void updateBeagleI2CList()
+        void UpdateBeagleI2CList()
         {
             //_vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
         }
 
-        void goButton_Click (object sender, RoutedEventArgs e) 
+        void GoButton_Click (object sender, RoutedEventArgs e) 
         {
             this.Hide ();
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
@@ -231,11 +231,11 @@ namespace RetroSpy
             _vm.ComPort2OptionVisibility = _vm.Sources.SelectedItem.RequiresComPort2 ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname ? Visibility.Visible : Visibility.Hidden;
-            updateGamepadList();
-            updateXIList();
-            updatePortList();
-            updateBeagleList();
-            updateBeagleI2CList();
+            UpdateGamepadList();
+            UpdateXIList();
+            UpdatePortList();
+            UpdateBeagleList();
+            UpdateBeagleI2CList();
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
             _vm.Skins.SelectFirst ();
             if(_vm.Sources.GetSelectedId() == Properties.Settings.Default.Source)

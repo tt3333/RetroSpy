@@ -47,6 +47,7 @@
 |      beagle.cs        --  C# .NET source
 |      beagle_net.dll   --  Compiled .NET binding
  ========================================================================*/
+#pragma warning disable IDE1006
 
 using System;
 using System.Reflection;
@@ -3100,3 +3101,5 @@ public static int bg_iv_mon_parse (
 } // class BeagleApi
 
 } // namespace TotalPhase
+
+#pragma warning restore IDE1006

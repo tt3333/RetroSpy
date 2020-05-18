@@ -8,8 +8,8 @@ namespace RetroSpy.Readers
 {
     sealed public class ControllerStateBuilder
     {
-        Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
-        Dictionary <string, float> _analogs = new Dictionary <string, float> ();
+        readonly Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
+        readonly Dictionary <string, float> _analogs = new Dictionary <string, float> ();
 
         public void SetButton (string name, bool value) {
             _buttons [name] = value;

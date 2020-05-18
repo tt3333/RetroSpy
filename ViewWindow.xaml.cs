@@ -13,7 +13,7 @@ namespace RetroSpy
 {
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {
-        public void calculateMagic()
+        public void CalculateMagic()
         {
             _magicHeight = Height - _originalHeight;
             _magicWidth = Width - _originalWidth;
@@ -229,33 +229,33 @@ namespace RetroSpy
 
             foreach (var detail in _skin.Details)
             {
-                if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
                     detail.Config.X = detail.Config.OriginalX;
                     detail.Config.Y = detail.Config.OriginalY;
-                    var image = getImageForElement(detail.Config);
+                    var image = GetImageForElement(detail.Config);
                     _detailsWithImages.Add(new Tuple<Skin.Detail, Image>(detail, image));
                     ControllerGrid.Children.Add(image);
                 }
             }
 
             foreach (var trigger in _skin.AnalogTriggers) {
-                if (bgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
                 {
                     trigger.Config.X = trigger.Config.OriginalX;
                     trigger.Config.Y = trigger.Config.OriginalY;
-                    var grid = getGridForAnalogTrigger(trigger);
+                    var grid = GetGridForAnalogTrigger(trigger);
                     _triggersWithGridImages.Add(new Tuple<Skin.AnalogTrigger, Grid>(trigger, grid));
                     ControllerGrid.Children.Add(grid);
                 }
             }
 
             foreach (var button in _skin.Buttons) {
-                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
-                    var image = getImageForElement(button.Config);
+                    var image = GetImageForElement(button.Config);
                     _buttonsWithImages.Add(new Tuple<Skin.Button, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
@@ -263,11 +263,11 @@ namespace RetroSpy
             }
 
             foreach (var button in _skin.RangeButtons) {
-                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
-                    var image = getImageForElement(button.Config);
+                    var image = GetImageForElement(button.Config);
                     _rangeButtonsWithImages.Add(new Tuple<Skin.RangeButton, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
@@ -275,13 +275,13 @@ namespace RetroSpy
             }
             
             foreach (var stick in _skin.AnalogSticks) {
-                if (bgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
                 {
                     stick.Config.X = stick.Config.OriginalX;
                     stick.Config.Y = stick.Config.OriginalY;
                     stick.XRange = stick.OriginalXRange;
                     stick.YRange = stick.OriginalYRange;
-                    var image = getImageForElement(stick.Config);
+                    var image = GetImageForElement(stick.Config);
                     _sticksWithImages.Add(new Tuple<Skin.AnalogStick, Image>(stick, image));
                     if (stick.VisibilityName != "")
                         image.Visibility = Visibility.Hidden;
@@ -291,21 +291,21 @@ namespace RetroSpy
 
             foreach (var touchpad in _skin.TouchPads)
             {
-                if (bgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
                 {
                     touchpad.Config.X = touchpad.Config.OriginalX;
                     touchpad.Config.Y = touchpad.Config.OriginalY;
                     touchpad.XRange = touchpad.OriginalXRange;
                     touchpad.YRange = touchpad.OriginalYRange;
-                    var image = getImageForElement(touchpad.Config);
+                    var image = GetImageForElement(touchpad.Config);
                     _touchPadWithImages.Add(new Tuple<Skin.TouchPad, Image>(touchpad, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
 
-            _reader.ControllerStateChanged += reader_ControllerStateChanged;
-            _reader.ControllerDisconnected += reader_ControllerDisconnected;
+            _reader.ControllerStateChanged += Reader_ControllerStateChanged;
+            _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
             try {
                 _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);
@@ -320,7 +320,7 @@ namespace RetroSpy
         }
 
 
-        static bool bgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
+        static bool BgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
         {
             if (ignoreBgs.Contains(bgName))
             {
@@ -328,7 +328,7 @@ namespace RetroSpy
             }
             return eligableBgs.Count == 0 || eligableBgs.Contains(bgName);
         }
-        static Image getImageForElement (Skin.ElementConfig config)
+        static Image GetImageForElement (Skin.ElementConfig config)
         {
             var img = new Image
             {
@@ -343,7 +343,7 @@ namespace RetroSpy
             return img;
         }
 
-        static Grid getGridForAnalogTrigger (Skin.AnalogTrigger trigger)
+        static Grid GetGridForAnalogTrigger (Skin.AnalogTrigger trigger)
         {
             var img = new Image
             {
@@ -416,7 +416,7 @@ namespace RetroSpy
         }
 
 
-        void reader_ControllerDisconnected (object sender, EventArgs e)
+        void Reader_ControllerDisconnected (object sender, EventArgs e)
         {
             if (this.Dispatcher.CheckAccess())
                 Close();
@@ -438,7 +438,7 @@ namespace RetroSpy
             _reader.Finish ();
         }
 
-        void reader_ControllerStateChanged (object reader, ControllerState e)
+        void Reader_ControllerStateChanged (object reader, ControllerState e)
         {
             e = _blinkFilter.Process (e);
 
@@ -747,7 +747,7 @@ namespace RetroSpy
         {
             if (!_calculatedMagic)
             {
-                _window.calculateMagic();
+                _window.CalculateMagic();
                 _calculatedMagic = true;
             }
 

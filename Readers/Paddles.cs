@@ -11,7 +11,7 @@ namespace RetroSpy.Readers
 
         const int PACKET_SIZE = 6;
 
-        static float readPaddle(ushort input)
+        static float ReadPaddle(ushort input)
         {
             return (float)(input) / 256;
         }
@@ -27,7 +27,7 @@ namespace RetroSpy.Readers
 
             var state = new ControllerStateBuilder();
 
-            state.SetAnalog("paddle", readPaddle(packet[2]));
+            state.SetAnalog("paddle", ReadPaddle(packet[2]));
             state.SetAnalog("paddle2", SecondPaddle);
             state.SetButton("fire2", SecondButton);
             state.SetButton("fire", (packet[1] != 0x00));
@@ -42,7 +42,7 @@ namespace RetroSpy.Readers
             if (packet[4] != 5) return null;
 
             SecondButton = (packet[1] != 0x00);
-            SecondPaddle = readPaddle(packet[2]);
+            SecondPaddle = ReadPaddle(packet[2]);
 
             return null;
         }

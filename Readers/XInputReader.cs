@@ -65,11 +65,11 @@ namespace RetroSpy.Readers
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
-            _timer.Tick += tick;
+            _timer.Tick += Tick;
             _timer.Start ();
         }
 
-        void tick (object sender, EventArgs e)
+        void Tick (object sender, EventArgs e)
         {
             var state = new XInputState ();
             if (NativeMethods.XInputGetState (_id, ref state) > 0) {

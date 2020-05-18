@@ -44,7 +44,7 @@ namespace RetroSpy
 
             foreach (var binding in doc.Root.Elements ("binding")) 
             {
-                var outputKey = readKeybinding (binding.Attribute ("output-key").Value);
+                var outputKey = ReadKeybinding (binding.Attribute ("output-key").Value);
                 if (outputKey == 0) continue;
 
                 List <string> requiredButtons = new List <string> ();
@@ -58,12 +58,12 @@ namespace RetroSpy
             }
 
             _reader = reader;
-            _reader.ControllerStateChanged += reader_ControllerStateChanged;
+            _reader.ControllerStateChanged += Reader_ControllerStateChanged;
         }
 
         public void Finish ()
         {
-            _reader.ControllerStateChanged -= reader_ControllerStateChanged;
+            _reader.ControllerStateChanged -= Reader_ControllerStateChanged;
         }
 
         void Reader_ControllerStateChanged (object reader, ControllerState e)
@@ -107,66 +107,66 @@ namespace RetroSpy
         }
 
         static readonly IReadOnlyDictionary <string, ushort> VK_KEYWORDS = new Dictionary <string, ushort> {
-            { "ENTER", vkConvert (Key.Enter) },
-            { "TAB", vkConvert (Key.Tab) },
-            { "ESC", vkConvert (Key.Escape) },
-            { "ESCAPE", vkConvert (Key.Escape) },
-            { "HOME", vkConvert (Key.Home) },
-            { "END", vkConvert (Key.End) },
-            { "LEFT", vkConvert (Key.Left) },
-            { "RIGHT", vkConvert (Key.Right) },
-            { "UP", vkConvert (Key.Up) },
-            { "DOWN", vkConvert (Key.Down) },
-            { "PGUP", vkConvert (Key.Prior) },
-            { "PGDN", vkConvert (Key.Next) },
-            { "NUMLOCK", vkConvert (Key.NumLock) },
-            { "SCROLLLOCK", vkConvert (Key.Scroll) },
-            { "PRTSC", vkConvert (Key.PrintScreen) },
-            { "BREAK", vkConvert (Key.Cancel) },
-            { "BACKSPACE", vkConvert (Key.Back) },
-            { "BKSP", vkConvert (Key.Back) },
-            { "BS", vkConvert (Key.Back) },
-            { "CLEAR", vkConvert (Key.Clear) },
-            { "CAPSLOCK", vkConvert (Key.Capital) },
-            { "INS", vkConvert (Key.Insert) },
-            { "INSERT", vkConvert (Key.Insert) },
-            { "DEL", vkConvert (Key.Delete) },
-            { "DELETE", vkConvert (Key.Delete) },
-            { "HELP", vkConvert (Key.Help) },
-            { "F1", vkConvert (Key.F1) },
-            { "F2", vkConvert (Key.F2) },
-            { "F3", vkConvert (Key.F3) },
-            { "F4", vkConvert (Key.F4) },
-            { "F5", vkConvert (Key.F5) },
-            { "F6", vkConvert (Key.F6) },
-            { "F7", vkConvert (Key.F7) },
-            { "F8", vkConvert (Key.F8) },
-            { "F9", vkConvert (Key.F9) },
-            { "F10", vkConvert (Key.F10) },
-            { "F11", vkConvert (Key.F11) },
-            { "F12", vkConvert (Key.F12) },
-            { "F13", vkConvert (Key.F13) },
-            { "F14", vkConvert (Key.F14) },
-            { "F15", vkConvert (Key.F15) },
-            { "F16", vkConvert (Key.F16) },
-            { "NUMPAD0", vkConvert (Key.NumPad0) },
-            { "NUMPAD1", vkConvert (Key.NumPad1) },
-            { "NUMPAD2", vkConvert (Key.NumPad2) },
-            { "NUMPAD3", vkConvert (Key.NumPad3) },
-            { "NUMPAD4", vkConvert (Key.NumPad4) },
-            { "NUMPAD5", vkConvert (Key.NumPad5) },
-            { "NUMPAD6", vkConvert (Key.NumPad6) },
-            { "NUMPAD7", vkConvert (Key.NumPad7) },
-            { "NUMPAD8", vkConvert (Key.NumPad8) },
-            { "NUMPAD9", vkConvert (Key.NumPad9) },
-            { "MULTIPLY", vkConvert (Key.Multiply) },
-            { "*", vkConvert (Key.Multiply) },
-            { "ADD", vkConvert (Key.Add) },
-            { "+", vkConvert (Key.Add) },
-            { "SUBTRACT", vkConvert (Key.Subtract) },
-            { "-", vkConvert (Key.Subtract) },
-            { "DIVIDE", vkConvert (Key.Divide) },
-            { "/", vkConvert (Key.Divide) }
+            { "ENTER", VkConvert (Key.Enter) },
+            { "TAB", VkConvert (Key.Tab) },
+            { "ESC", VkConvert (Key.Escape) },
+            { "ESCAPE", VkConvert (Key.Escape) },
+            { "HOME", VkConvert (Key.Home) },
+            { "END", VkConvert (Key.End) },
+            { "LEFT", VkConvert (Key.Left) },
+            { "RIGHT", VkConvert (Key.Right) },
+            { "UP", VkConvert (Key.Up) },
+            { "DOWN", VkConvert (Key.Down) },
+            { "PGUP", VkConvert (Key.Prior) },
+            { "PGDN", VkConvert (Key.Next) },
+            { "NUMLOCK", VkConvert (Key.NumLock) },
+            { "SCROLLLOCK", VkConvert (Key.Scroll) },
+            { "PRTSC", VkConvert (Key.PrintScreen) },
+            { "BREAK", VkConvert (Key.Cancel) },
+            { "BACKSPACE", VkConvert (Key.Back) },
+            { "BKSP", VkConvert (Key.Back) },
+            { "BS", VkConvert (Key.Back) },
+            { "CLEAR", VkConvert (Key.Clear) },
+            { "CAPSLOCK", VkConvert (Key.Capital) },
+            { "INS", VkConvert (Key.Insert) },
+            { "INSERT", VkConvert (Key.Insert) },
+            { "DEL", VkConvert (Key.Delete) },
+            { "DELETE", VkConvert (Key.Delete) },
+            { "HELP", VkConvert (Key.Help) },
+            { "F1", VkConvert (Key.F1) },
+            { "F2", VkConvert (Key.F2) },
+            { "F3", VkConvert (Key.F3) },
+            { "F4", VkConvert (Key.F4) },
+            { "F5", VkConvert (Key.F5) },
+            { "F6", VkConvert (Key.F6) },
+            { "F7", VkConvert (Key.F7) },
+            { "F8", VkConvert (Key.F8) },
+            { "F9", VkConvert (Key.F9) },
+            { "F10", VkConvert (Key.F10) },
+            { "F11", VkConvert (Key.F11) },
+            { "F12", VkConvert (Key.F12) },
+            { "F13", VkConvert (Key.F13) },
+            { "F14", VkConvert (Key.F14) },
+            { "F15", VkConvert (Key.F15) },
+            { "F16", VkConvert (Key.F16) },
+            { "NUMPAD0", VkConvert (Key.NumPad0) },
+            { "NUMPAD1", VkConvert (Key.NumPad1) },
+            { "NUMPAD2", VkConvert (Key.NumPad2) },
+            { "NUMPAD3", VkConvert (Key.NumPad3) },
+            { "NUMPAD4", VkConvert (Key.NumPad4) },
+            { "NUMPAD5", VkConvert (Key.NumPad5) },
+            { "NUMPAD6", VkConvert (Key.NumPad6) },
+            { "NUMPAD7", VkConvert (Key.NumPad7) },
+            { "NUMPAD8", VkConvert (Key.NumPad8) },
+            { "NUMPAD9", VkConvert (Key.NumPad9) },
+            { "MULTIPLY", VkConvert (Key.Multiply) },
+            { "*", VkConvert (Key.Multiply) },
+            { "ADD", VkConvert (Key.Add) },
+            { "+", VkConvert (Key.Add) },
+            { "SUBTRACT", VkConvert (Key.Subtract) },
+            { "-", VkConvert (Key.Subtract) },
+            { "DIVIDE", VkConvert (Key.Divide) },
+            { "/", VkConvert (Key.Divide) }
         };
     }
 }

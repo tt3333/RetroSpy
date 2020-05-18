@@ -19,18 +19,18 @@ namespace RetroSpy.Readers
             _packetParser = packetParser;
 
             _serialMonitor = new SerialMonitor (portName);
-            _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
-            _serialMonitor.Disconnected += serialMonitor_Disconnected;
+            _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += SerialMonitor_Disconnected;
             _serialMonitor.Start ();
         }
 
-        void serialMonitor_Disconnected(object sender, EventArgs e)
+        void SerialMonitor_Disconnected(object sender, EventArgs e)
         {
             Finish ();
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor_PacketReceived (object sender, PacketData packet)
+        void SerialMonitor_PacketReceived (object sender, PacketData packet)
         {
             if (ControllerStateChanged != null) {
                 var state = _packetParser (packet._packet);

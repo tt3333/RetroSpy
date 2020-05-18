@@ -18,11 +18,11 @@ namespace RetroSpy.Readers
             null, null, null, null, "start", "left", "right", "middle"
         };
 
-        static float readTrigger(byte input)
+        static float ReadTrigger(byte input)
         {
             return (float)(input) / 256;
         }
-        static float readStick(byte input)
+        static float ReadStick(byte input)
         {
             return (float)(input - 128) / 128;
         }
@@ -132,12 +132,12 @@ namespace RetroSpy.Readers
                         j += 2;
                     }
 
-                    state.SetAnalog("stick_x", readStick(joyx));
-                    state.SetAnalog("stick_y", readStick(joyy));
-                    state.SetAnalog("stick_x2", readStick(joyx2));
-                    state.SetAnalog("stick_y2", readStick(joyy2));
-                    state.SetAnalog("trig_r", readTrigger(rtrigger));
-                    state.SetAnalog("trig_l", readTrigger(ltrigger));
+                    state.SetAnalog("stick_x", ReadStick(joyx));
+                    state.SetAnalog("stick_y", ReadStick(joyy));
+                    state.SetAnalog("stick_x2", ReadStick(joyx2));
+                    state.SetAnalog("stick_y2", ReadStick(joyy2));
+                    state.SetAnalog("trig_r", ReadTrigger(rtrigger));
+                    state.SetAnalog("trig_l", ReadTrigger(ltrigger));
 
 
                 }

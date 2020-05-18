@@ -124,8 +124,8 @@ namespace RetroSpy.Readers
                     state.SetButton("left_button", packet[2] == 0x00);
                     state.SetButton("right_button", packet[1] == 0x00);
 
-                    sbyte xVal = (sbyte)SignalTool.readByte(packet, 3);
-                    sbyte yVal = (sbyte)SignalTool.readByte(packet, 11);
+                    sbyte xVal = (sbyte)SignalTool.ReadByte(packet, 3);
+                    sbyte yVal = (sbyte)SignalTool.ReadByte(packet, 11);
 
                     SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, state);
                 }
@@ -137,8 +137,8 @@ namespace RetroSpy.Readers
                 state.SetButton("left_button", packet[0] != 0x00);
                 state.SetButton("right_button", packet[2] != 0x00);
 
-                sbyte xVal = (sbyte)SignalTool.readByteBackwards(packet, 3);
-                sbyte yVal = (sbyte)SignalTool.readByteBackwards(packet, 11);
+                sbyte xVal = (sbyte)SignalTool.ReadByteBackwards(packet, 3);
+                sbyte yVal = (sbyte)SignalTool.ReadByteBackwards(packet, 11);
 
                 SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, state);
             }

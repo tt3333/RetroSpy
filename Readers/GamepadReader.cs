@@ -63,7 +63,7 @@ namespace RetroSpy.Readers
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
-            _timer.Tick += tick;
+            _timer.Tick += Tick;
             _timer.Start ();
         }
 
@@ -71,7 +71,7 @@ namespace RetroSpy.Readers
             return 2750 + 4500 * octant;
         }
 
-        void tick (object sender, EventArgs e)
+        void Tick (object sender, EventArgs e)
         {
             try
             { _joystick.Poll(); }
@@ -97,10 +97,10 @@ namespace RetroSpy.Readers
             outState.SetButton ("left", false);
 
             if (pov != null && pov.Length > 0 && pov[0] >= 0) {
-                outState.SetButton ("up", pov[0] > octantAngle (6) || pov[0] < octantAngle (1));
-                outState.SetButton ("right", pov[0] > octantAngle (0) && pov[0] < octantAngle (3));
-                outState.SetButton ("down", pov[0] > octantAngle (2) && pov[0] < octantAngle (5));
-                outState.SetButton ("left", pov[0] > octantAngle (4) && pov[0] < octantAngle (7));
+                outState.SetButton ("up", pov[0] > OctantAngle (6) || pov[0] < OctantAngle (1));
+                outState.SetButton ("right", pov[0] > OctantAngle (0) && pov[0] < OctantAngle (3));
+                outState.SetButton ("down", pov[0] > OctantAngle (2) && pov[0] < OctantAngle (5));
+                outState.SetButton ("left", pov[0] > OctantAngle (4) && pov[0] < OctantAngle (7));
             }    
 
             outState.SetAnalog ("x", (float)state.X / RANGE);
