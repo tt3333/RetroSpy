@@ -5,6 +5,11 @@
 void WiiSpy::setup() {
   pinMode(19, INPUT);
   pinMode(18, INPUT);
+
+  cleanData[0] = 2;
+  cleanData[1] = -1;
+  cleanData[46] = '\n';
+  cleanData[50] = '\n';
 }
 
 void WiiSpy::loop() {

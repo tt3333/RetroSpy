@@ -185,9 +185,9 @@ void setup()
     TG16Spy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
-#elif defined(MODE_Dreamcast)
+#elif defined(MODE_DREAMCAST)
     DCSpy.setup();
-#elif defined(MODE_Wii)
+#elif defined(MODE_WII)
     WiiSpy.setup();
 #elif defined(MODE_CD32)
     Cd32Spy.setup();    
@@ -260,6 +260,12 @@ void loop()
     TG16Spy.loop();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.loop();
+#elif defined(MODE_DREAMCAST)
+    DCSpy.loop();
+#elif defined(MODE_WII)
+    WiiSpy.loop();
+#elif defined(MODE_CD32)
+   Cd32Spy.loop();
 #elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();

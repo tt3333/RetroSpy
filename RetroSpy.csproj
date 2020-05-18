@@ -1442,9 +1442,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="experimental\legacy\dreamcast\dreamcast.ino" />
-    <Content Include="firmware_teensy\firmware_teensy.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="experimental\AmigaMouse\AmigaMouse.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
