@@ -291,9 +291,7 @@ void WiiSpy::setup() {
 }
 
 void WiiSpy::loop() {
-#ifdef MODE_WII
-#error "MODE_WII not supported on Arduino"
-#endif
+
 }
 
 void WiiSpy::writeSerial() {

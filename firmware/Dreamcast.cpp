@@ -349,9 +349,7 @@ void DreamcastSpy::setup() {
 }
 
 void DreamcastSpy::loop() {
-#ifdef MODE_DREAMCAST
-#error "MODE_DREAMCAST not supported on Arduino"
-#endif
+
 }
 
 void DreamcastSpy::writeSerial() {
