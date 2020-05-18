@@ -6,6 +6,9 @@
 #include "config_arduino.h"
 #endif
 
+// Uncomment this for serial debugging output
+//#define DEBUG
+
 #define N64_BITCOUNT		32
 #define SNES_BITCOUNT       16
 #define SNES_BITCOUNT_EXT   32
