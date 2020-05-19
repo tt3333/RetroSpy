@@ -1,7 +1,7 @@
 /*
- * retrospy.c  Version 1.0
+ * retrospy.c Version 1.0
  *
- * Copyright (c) 2020 Chris Mallery
+ * Copyright (c) 2020 RetroSpy Technologies
  *
  * Based on jstest.c Version 1.2
  */

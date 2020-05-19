@@ -30,7 +30,7 @@
 //#define MODE_COLECOVISION
 
 //--- Teensy Only
-#define MODE_DREAMCAST
+//#define MODE_DREAMCAST
 //#define MODE_WII
 //#define MODE_CD32
 
