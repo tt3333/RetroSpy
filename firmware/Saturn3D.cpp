@@ -9,6 +9,8 @@ void Saturn3DSpy::loop() {
 #else
     debugSerial();
 #endif
+
+  T_DELAY(5);
 }
 
 void Saturn3DSpy::updateState() {

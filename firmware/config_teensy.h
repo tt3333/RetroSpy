@@ -43,15 +43,15 @@
 #define PCFX_CLOCK         NOT_CONNECTED
 #define PCFX_DATA          NOT_CONNECTED
 
-#define SS_SELECT0         NOT_CONNECTED
-#define SS_SEL             NOT_CONNECTED
-#define SS_SELECT1         NOT_CONNECTED
-#define SS_REQ             NOT_CONNECTED
-#define SS_ACK             NOT_CONNECTED
-#define SS_DATA0           NOT_CONNECTED
-#define SS_DATA1           NOT_CONNECTED
-#define SS_DATA2           NOT_CONNECTED
-#define SS_DATA3           NOT_CONNECTED
+#define SS_SELECT0         DIGITAL_PIN_21
+#define SS_SEL             DIGITAL_PIN_21
+#define SS_SELECT1         DIGITAL_PIN_05
+#define SS_REQ             DIGITAL_PIN_05
+#define SS_ACK             DIGITAL_PIN_16
+#define SS_DATA0           DIGITAL_PIN_07
+#define SS_DATA1           DIGITAL_PIN_08
+#define SS_DATA2           DIGITAL_PIN_06
+#define SS_DATA3           DIGITAL_PIN_20
 
 #define TG_SELECT          NOT_CONNECTED
 #define TG_DATA1           NOT_CONNECTED

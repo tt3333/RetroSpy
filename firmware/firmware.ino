@@ -13,14 +13,14 @@
 //#define MODE_GENESIS
 //#define MODE_SMS_ON_GENESIS // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
 //#define MODE_GENESIS_MOUSE
+//#define MODE_SATURN
+//#define MODE_SATURN3D
 
 //-- Arduino Only
 //#define MODE_SMS
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
-//#define MODE_SATURN
-//#define MODE_SATURN3D
 //#define MODE_NEOGEO
 //#define MODE_ThreeDO
 //#define MODE_INTELLIVISION
