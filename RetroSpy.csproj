@@ -74,6 +74,9 @@
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Renci.SshNet">
       <HintPath>.\Renci.SshNet.dll</HintPath>
@@ -363,6 +366,7 @@
     <Content Include="firmware\Wii.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
     <Content Include="MiSTer\axbtnmap.c" />
     <Content Include="MiSTer\axbtnmap.h" />
     <Content Include="MiSTer\retrospy.c" />
