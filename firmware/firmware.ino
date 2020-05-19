@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// RetroSpy Firmware for Arduino
+// RetroSpy Firmware for Arduino Uno & Teensy 3.5
 // v4.0
-// RetroSpy written by zoggins
+// RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
 // ---------- Uncomment one of these options to select operation mode --------------
@@ -36,14 +36,6 @@
 
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
-
-// ---------------------------------------------------------------------------------
-// The only reason you'd want to use 2-wire mode is if you built a NintendoSpy
-// before the 3-wire firmware was implemented.  This mode is for backwards
-// compatibility only.
-//#define MODE_2WIRE_SNES
-//#define MODE_2WIRE_NES
-// ---------------------------------------------------------------------------------
 
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
