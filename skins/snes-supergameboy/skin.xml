@@ -13,5 +13,4 @@
   <button name="down" image="circle.png" x="233" y="700" width="35" height="35" />
   <button name="left" image="circle.png" x="180" y="650" width="35" height="35" />
   <button name="right" image="circle.png" x="275" y="650" width="35" height="35" />
-
 </skin>

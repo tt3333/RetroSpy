@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Ports;
 using System.Threading;
 using System.Windows.Threading;
 
@@ -12,39 +11,45 @@ namespace RetroSpy
 
     public class SSHMonitor : IDisposable
     {
-        const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 1;
+        private const int BAUD_RATE = 115200;
+        private const int TIMER_MS = 1;
 
         public event PacketEventHandler PacketReceived;
+
         public event EventHandler Disconnected;
 
-        SshClient _client;
-        ShellStream _data;
-        List <byte> _localBuffer;
-        readonly string _command;
-        readonly int _delayInMilliseconds;
-
-        DispatcherTimer _timer;
+        private SshClient _client;
+        private ShellStream _data;
+        private List<byte> _localBuffer;
+        private readonly string _command;
+        private readonly int _delayInMilliseconds;
+        private DispatcherTimer _timer;
 
         public SSHMonitor(string hostname, string command, string username, string password, int delayInMilliseconds)
         {
-            _localBuffer = new List <byte> ();
+            _localBuffer = new List<byte>();
             //_datPort = new SerialPort (portName, BAUD_RATE);
             _client = new SshClient(hostname, username, password);
             _command = command;
             _delayInMilliseconds = delayInMilliseconds;
         }
 
-        public void Start ()
+        public void Start()
         {
-            if (_timer != null) return;
+            if (_timer != null)
+            {
+                return;
+            }
 
-            _localBuffer.Clear ();
+            _localBuffer.Clear();
             //_datPort.Open ();
             _client.Connect();
             _data = _client.CreateShellStream("", 0, 0, 0, 0, 0);
             if (_delayInMilliseconds > 0)
+            {
                 Thread.Sleep(_delayInMilliseconds);
+            }
+
             _data.WriteLine(_command);
 
             _timer = new DispatcherTimer
@@ -52,16 +57,18 @@ namespace RetroSpy
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
             _timer.Tick += Tick;
-            _timer.Start ();
+            _timer.Start();
         }
 
-        public void Stop ()
+        public void Stop()
         {
-            if (_data != null) {
-                try { // If the device has been unplugged, Close will throw an IOException.  This is fine, we'll just keep cleaning up.
-                    _data.Close ();
+            if (_data != null)
+            {
+                try
+                { // If the device has been unplugged, Close will throw an IOException.  This is fine, we'll just keep cleaning up.
+                    _data.Close();
                 }
-                catch (IOException) {}
+                catch (IOException) { }
                 _data = null;
                 if (_client != null)
                 {
@@ -70,44 +77,61 @@ namespace RetroSpy
                     _client = null;
                 }
             }
-            if (_timer != null) {
-                _timer.Stop ();
+            if (_timer != null)
+            {
+                _timer.Stop();
                 _timer = null;
             }
         }
 
-        void Tick (object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
         {
-            if (_data == null || !_data.CanRead || PacketReceived == null) return;
+            if (_data == null || !_data.CanRead || PacketReceived == null)
+            {
+                return;
+            }
 
             // Try to read some data from the COM port and append it to our localBuffer.
             // If there's an IOException then the device has been disconnected.
-            try {
+            try
+            {
                 int readCount = (int)_data.Length;
-                if (readCount < 1) return;
-                byte[] readBuffer = new byte [readCount];
-                _data.Read (readBuffer, 0, readCount);
-                _localBuffer.AddRange (readBuffer);
+                if (readCount < 1)
+                {
+                    return;
+                }
+
+                byte[] readBuffer = new byte[readCount];
+                _data.Read(readBuffer, 0, readCount);
+                _localBuffer.AddRange(readBuffer);
             }
-            catch (IOException) {
-                Stop ();
+            catch (IOException)
+            {
+                Stop();
                 Disconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
             // Try and find 2 splitting characters in our buffer.
-            int lastSplitIndex = _localBuffer.LastIndexOf (0x0A);
-            if (lastSplitIndex <= 1) return;
-            int sndLastSplitIndex = _localBuffer.LastIndexOf (0x0A, lastSplitIndex - 1);
-            if (lastSplitIndex == -1) return;
+            int lastSplitIndex = _localBuffer.LastIndexOf(0x0A);
+            if (lastSplitIndex <= 1)
+            {
+                return;
+            }
+
+            int sndLastSplitIndex = _localBuffer.LastIndexOf(0x0A, lastSplitIndex - 1);
+            if (lastSplitIndex == -1)
+            {
+                return;
+            }
 
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
-            int packetSize  = lastSplitIndex - packetStart;
-            PacketReceived (this, new PacketData(_localBuffer.GetRange (packetStart, packetSize).ToArray ()));
+            int packetSize = lastSplitIndex - packetStart;
+            PacketReceived(this, new PacketData(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 
             // Clear our buffer up until the last split character.
-            _localBuffer.RemoveRange (0, lastSplitIndex);
+            _localBuffer.RemoveRange(0, lastSplitIndex);
         }
 
         private void Dispose(bool disposing)

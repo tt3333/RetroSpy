@@ -12,6 +12,5 @@
   <button name="select" image="circle2.png" x="388" y="201" width="50" height="25" />
 
   <stick xname="lstick_x" yname="lstick_y" image="stick.png"
-   x="140" y="155" width="118" height="114" xrange="15" yrange="15" yreverse="true"/>
-
+   x="140" y="155" width="118" height="114" xrange="15" yrange="15" yreverse="true" />
 </skin>

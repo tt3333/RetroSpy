@@ -1,39 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class CDi
+    public static class CDi
     {
-        const int PACKET_SIZE = 24;
+        private const int PACKET_SIZE = 24;
 
-        static readonly string[] BUTTONS = {
+        private static readonly string[] BUTTONS = {
             "wired-up", "wired-down", "wired-left", "wired-right", "wired-1", "wired-2",
             "wireless-up", "wireless-down", "wireless-left", "wireless-right", "wireless-1", "wireless-2"
         };
 
-        static float ReadAnalogButton(byte input)
+        private static float ReadAnalogButton(byte input)
         {
             return (float)(input) / 256;
         }
 
-        static public ControllerState ReadFromPacket (byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
             byte[] cleanedData = new byte[12];
             for (int i = 0; i < 24; i = i + 2)
+            {
                 cleanedData[i / 2] = (byte)((packet[i]) | ((packet[i + 1]) >> 4));
-            
+            }
 
-            var state = new ControllerStateBuilder ();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
-            for (int i = 0 ; i < BUTTONS.Length ; ++i) {
-                if (string.IsNullOrEmpty (BUTTONS [i])) continue;
-                state.SetButton (BUTTONS[i], cleanedData[i] != 0x00);
+            for (int i = 0; i < BUTTONS.Length; ++i)
+            {
+                if (string.IsNullOrEmpty(BUTTONS[i]))
+                {
+                    continue;
+                }
+
+                state.SetButton(BUTTONS[i], cleanedData[i] != 0x00);
             }
 
             // Set double 1 buttons
@@ -72,20 +75,28 @@ namespace RetroSpy.Readers
             float y = 0;
 
             if (cleanedData[2] > 0)
-                x = -1*ReadAnalogButton(cleanedData[2]);
+            {
+                x = -1 * ReadAnalogButton(cleanedData[2]);
+            }
             else if (cleanedData[3] > 0)
+            {
                 x = ReadAnalogButton(cleanedData[3]);
+            }
 
             if (cleanedData[0] > 0)
+            {
                 y = ReadAnalogButton(cleanedData[0]);
+            }
             else if (cleanedData[1] > 0)
+            {
                 y = -1 * ReadAnalogButton(cleanedData[1]);
+            }
 
             state.SetAnalog("stick_x", x);
             state.SetAnalog("stick_y", y);
             SignalTool.SetMouseProperties(x, y, state);
 
-            return state.Build ();
+            return state.Build();
         }
     }
 }

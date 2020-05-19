@@ -4,14 +4,14 @@
 #include "ControllerSpy.h"
 
 class ThreeDOSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[32];
+private:
+	unsigned char rawData[32];
 	unsigned char bytesToReturn = 0;
 };
 

@@ -4,15 +4,15 @@
 #include "ControllerSpy.h"
 
 class AmigaCd32Spy : public ControllerSpy {
-    public:
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        byte      rawData[16000];
+private:
+	byte      rawData[16000];
 };
 
 #endif

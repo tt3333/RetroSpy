@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    static internal class SignalTool
+    internal static class SignalTool
     {
         /// <summary>
         /// Reads a byte of data from a string of 8 bits in a controller data packet.
         /// </summary>
-        public static byte ReadByte (byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
+        public static byte ReadByte(byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
         {
             byte val = 0;
-            for (int i = 0 ; i < numBits; ++i) {
-                if ((packet[i+offset] & mask) != 0) {
-                    val |= (byte)(1<<((numBits-1)-i));
+            for (int i = 0; i < numBits; ++i)
+            {
+                if ((packet[i + offset] & mask) != 0)
+                {
+                    val |= (byte)(1 << ((numBits - 1) - i));
                 }
             }
             return val;
@@ -35,36 +33,48 @@ namespace RetroSpy.Readers
             return val;
         }
 
-        static float MiddleOfThree(float a, float b, float c)
+        private static float MiddleOfThree(float a, float b, float c)
         {
-            // Compare each three number to find middle  
-            // number. Enter only if a > b 
+            // Compare each three number to find middle
+            // number. Enter only if a > b
             if (a > b)
             {
                 if (b > c)
+                {
                     return b;
+                }
                 else if (a > c)
+                {
                     return c;
+                }
                 else
+                {
                     return a;
+                }
             }
             else
             {
-                // Decided a is not greater than b. 
+                // Decided a is not greater than b.
                 if (a > c)
+                {
                     return a;
+                }
                 else if (b > c)
+                {
                     return c;
+                }
                 else
+                {
                     return b;
+                }
             }
         }
 
+        private static readonly float[] windowX = new float[3];
+        private static int windowPositionX = 0;
+        private static readonly float[] windowY = new float[3];
+        private static int windowPositionY = 0;
 
-        static readonly float[] windowX = new float[3];
-        static int windowPositionX = 0;
-        static readonly float[] windowY = new float[3];
-        static int windowPositionY = 0;
         public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             windowX[windowPositionX] = x;
@@ -85,8 +95,8 @@ namespace RetroSpy.Readers
             {
                 // Direction shows around the unit circle
                 double radian = Math.Atan2(y, x);
-                x1 = maxCircleSize*(float)Math.Cos(radian);
-                y1 = maxCircleSize*(float)Math.Sin(radian);
+                x1 = maxCircleSize * (float)Math.Cos(radian);
+                y1 = maxCircleSize * (float)Math.Sin(radian);
 
                 // Don't let magnitude exceed the unit circle
                 if (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)) > maxCircleSize)
@@ -106,19 +116,26 @@ namespace RetroSpy.Readers
 
         public static void FakeAnalogStick(byte up, byte down, byte left, byte right, ControllerStateBuilder state, string xName, string yName)
         {
-
             float x = 0;
             float y = 0;
 
             if (right != 0x00)
+            {
                 x = 1;
+            }
             else if (left != 0x00)
+            {
                 x = -1;
+            }
 
             if (up != 0x00)
+            {
                 y = 1;
+            }
             else if (down != 0x00)
+            {
                 y = -1;
+            }
 
             if (y != 0 || x != 0)
             {

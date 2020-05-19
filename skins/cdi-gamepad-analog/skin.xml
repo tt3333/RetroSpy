@@ -21,5 +21,4 @@
   <analog name="wireless-analog_down" image="circle2.png" x="105" y="136" width="30" height="30" direction="fade" />
   <analog name="wireless-analog_left" image="circle2.png" x="68" y="102" width="30" height="30" direction="fade" />
   <analog name="wireless-analog_right" image="circle2.png" x="148" y="104" width="30" height="30" direction="fade" />
-  
 </skin>

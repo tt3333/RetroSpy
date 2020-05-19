@@ -1,27 +1,24 @@
+using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Windows.Input;
-using System.Windows.Markup;
-using RetroSpy.Readers;
+using System.Xml.Linq;
 
 namespace RetroSpy
 {
     public class Keybindings
     {
-        class Binding 
+        private class Binding
         {
-            readonly public ushort OutputKey;
-            readonly public IReadOnlyList <string> RequiredButtons;
+            public readonly ushort OutputKey;
+            public readonly IReadOnlyList<string> RequiredButtons;
 
             public bool CurrentlyDepressed;
 
-            public Binding (ushort outputKey, IReadOnlyList <string> requiredButtons) {
+            public Binding(ushort outputKey, IReadOnlyList<string> requiredButtons)
+            {
                 OutputKey = outputKey;
                 RequiredButtons = requiredButtons;
             }
@@ -29,84 +26,99 @@ namespace RetroSpy
 
         public const string XML_FILE_PATH = "keybindings.xml";
 
-        IControllerReader _reader;
-        List <Binding> _bindings = new List <Binding> ();
+        private IControllerReader _reader;
+        private List<Binding> _bindings = new List<Binding>();
 
-        public Keybindings (string xmlFilePath, IControllerReader reader)
+        public Keybindings(string xmlFilePath, IControllerReader reader)
         {
-            var xmlPath = Path.Combine (Environment.CurrentDirectory, xmlFilePath);
+            string xmlPath = Path.Combine(Environment.CurrentDirectory, xmlFilePath);
 
-            if (! File.Exists (xmlPath)) {
-                throw new ConfigParseException ("Could not find "+XML_FILE_PATH);
+            if (!File.Exists(xmlPath))
+            {
+                throw new ConfigParseException("Could not find " + XML_FILE_PATH);
             }
 
-            var doc = XDocument.Load (xmlPath);
+            XDocument doc = XDocument.Load(xmlPath);
 
-            foreach (var binding in doc.Root.Elements ("binding")) 
+            foreach (XElement binding in doc.Root.Elements("binding"))
             {
-                var outputKey = ReadKeybinding (binding.Attribute ("output-key").Value);
-                if (outputKey == 0) continue;
-
-                List <string> requiredButtons = new List <string> ();
-                foreach (var input in binding.Elements ("input")) {
-                    requiredButtons.Add (input.Attribute ("button").Value);
+                ushort outputKey = ReadKeybinding(binding.Attribute("output-key").Value);
+                if (outputKey == 0)
+                {
+                    continue;
                 }
 
-                if (requiredButtons.Count < 1) continue;
+                List<string> requiredButtons = new List<string>();
+                foreach (XElement input in binding.Elements("input"))
+                {
+                    requiredButtons.Add(input.Attribute("button").Value);
+                }
 
-                _bindings.Add (new Binding (outputKey, requiredButtons));
+                if (requiredButtons.Count < 1)
+                {
+                    continue;
+                }
+
+                _bindings.Add(new Binding(outputKey, requiredButtons));
             }
 
             _reader = reader;
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
         }
 
-        public void Finish ()
+        public void Finish()
         {
             _reader.ControllerStateChanged -= Reader_ControllerStateChanged;
         }
 
-        void Reader_ControllerStateChanged (object reader, ControllerState e)
+        private void Reader_ControllerStateChanged(object reader, ControllerState e)
         {
-            foreach (var binding in _bindings) 
+            foreach (Binding binding in _bindings)
             {
                 bool allRequiredButtonsDown = true;
 
-                foreach (var requiredButton in binding.RequiredButtons) {
-                    allRequiredButtonsDown &= e.Buttons [requiredButton];
+                foreach (string requiredButton in binding.RequiredButtons)
+                {
+                    allRequiredButtonsDown &= e.Buttons[requiredButton];
                 }
 
-                if (allRequiredButtonsDown && !binding.CurrentlyDepressed) {
-                    SendKeys.PressKey (binding.OutputKey);
+                if (allRequiredButtonsDown && !binding.CurrentlyDepressed)
+                {
+                    SendKeys.PressKey(binding.OutputKey);
                     binding.CurrentlyDepressed = true;
                 }
-                else if (!allRequiredButtonsDown && binding.CurrentlyDepressed) {
-                    SendKeys.ReleaseKey (binding.OutputKey);
+                else if (!allRequiredButtonsDown && binding.CurrentlyDepressed)
+                {
+                    SendKeys.ReleaseKey(binding.OutputKey);
                     binding.CurrentlyDepressed = false;
                 }
             }
         }
 
-        static ushort ReadKeybinding (string name) 
+        private static ushort ReadKeybinding(string name)
         {
-            var upperName = name.ToUpperInvariant ();
+            string upperName = name.ToUpperInvariant();
 
-            if (Regex.Match (upperName, "^[A-Z0-9]$").Success) {
-                return (ushort)upperName.ToCharArray()[0];
+            if (Regex.Match(upperName, "^[A-Z0-9]$").Success)
+            {
+                return upperName.ToCharArray()[0];
             }
-            else if (VK_KEYWORDS.ContainsKey (upperName)) {
-                return VK_KEYWORDS [upperName];
-            } 
-            else {
+            else if (VK_KEYWORDS.ContainsKey(upperName))
+            {
+                return VK_KEYWORDS[upperName];
+            }
+            else
+            {
                 return 0;
             }
         }
 
-        static ushort VkConvert (Key key) {
-            return (ushort) KeyInterop.VirtualKeyFromKey (key);
+        private static ushort VkConvert(Key key)
+        {
+            return (ushort)KeyInterop.VirtualKeyFromKey(key);
         }
 
-        static readonly IReadOnlyDictionary <string, ushort> VK_KEYWORDS = new Dictionary <string, ushort> {
+        private static readonly IReadOnlyDictionary<string, ushort> VK_KEYWORDS = new Dictionary<string, ushort> {
             { "ENTER", VkConvert (Key.Enter) },
             { "TAB", VkConvert (Key.Tab) },
             { "ESC", VkConvert (Key.Escape) },

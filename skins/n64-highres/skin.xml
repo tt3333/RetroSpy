@@ -41,5 +41,4 @@
 
     <stick xname="stick_x" yname="stick_y" image="stick.png"
            x="406" y="429" width="80" height="80" xrange="60" yrange="60" />
-
 </skin>

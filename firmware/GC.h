@@ -4,21 +4,21 @@
 #include "ControllerSpy.h"
 
 class GCSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
+private:
 	bool seenGC2N64 = false;
-        bool checkPrefixGBA();
-        bool checkPrefixGC();
-        bool checkBothGCPrefixOnRaphnet();
-        void sendRawGBAData();
+	bool checkPrefixGBA();
+	bool checkPrefixGC();
+	bool checkBothGCPrefixOnRaphnet();
+	void sendRawGBAData();
 
-        unsigned char rawData[34 + GC_PREFIX + GC_BITCOUNT];
-        unsigned char readBits;
+	unsigned char rawData[34 + GC_PREFIX + GC_BITCOUNT];
+	unsigned char readBits;
 };
 
 #endif

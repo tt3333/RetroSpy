@@ -28,113 +28,113 @@
 
 void GenesisSpy::setup() {
 #if defined(__arm__) && defined(CORE_TEENSY)
-    // GPIOD_PDIR & 0xFF;
-    pinMode(2, INPUT_PULLUP);
-    pinMode(14, INPUT_PULLUP);
-    pinMode(7, INPUT_PULLUP);
-    pinMode(8, INPUT_PULLUP);
-    pinMode(6, INPUT_PULLUP);
-    pinMode(20, INPUT_PULLUP);
-    pinMode(21, INPUT_PULLUP);
-    pinMode(5, INPUT_PULLUP);
-  
-    // GPIOB_PDIR & 0xF;
-    pinMode(16, INPUT_PULLUP);
-    pinMode(17, INPUT_PULLUP);
-    pinMode(19, INPUT_PULLUP);
-    pinMode(18, INPUT_PULLUP);
+	// GPIOD_PDIR & 0xFF;
+	pinMode(2, INPUT_PULLUP);
+	pinMode(14, INPUT_PULLUP);
+	pinMode(7, INPUT_PULLUP);
+	pinMode(8, INPUT_PULLUP);
+	pinMode(6, INPUT_PULLUP);
+	pinMode(20, INPUT_PULLUP);
+	pinMode(21, INPUT_PULLUP);
+	pinMode(5, INPUT_PULLUP);
+
+	// GPIOB_PDIR & 0xF;
+	pinMode(16, INPUT_PULLUP);
+	pinMode(17, INPUT_PULLUP);
+	pinMode(19, INPUT_PULLUP);
+	pinMode(18, INPUT_PULLUP);
 #else
-    // Setup input pins
-    // Assumes pin 8 is SELECT (DB9 pin 7)
-    // Assumes pins 2-7 are DB9 pins 1,2,3,4,6,9
-    // DB9 pin 5 is +5V !!!DO NOT CONNECT TO THE ARDUINO!!!!
-    // DB9 pin 8 is ground (connecting probably won't hurt, but its unnecessary to connect it to the Arduino)
-    for (byte i = 2; i <= 8; i++)
-    {
-        pinMode(i, INPUT_PULLUP);
-    }
+	// Setup input pins
+	// Assumes pin 8 is SELECT (DB9 pin 7)
+	// Assumes pins 2-7 are DB9 pins 1,2,3,4,6,9
+	// DB9 pin 5 is +5V !!!DO NOT CONNECT TO THE ARDUINO!!!!
+	// DB9 pin 8 is ground (connecting probably won't hurt, but its unnecessary to connect it to the Arduino)
+	for (byte i = 2; i <= 8; i++)
+	{
+		pinMode(i, INPUT_PULLUP);
+	}
 #endif
 }
 
 void GenesisSpy::loop() {
-    updateState();
+	updateState();
 #if !defined(DEBUG)
-    writeSerial();
+	writeSerial();
 #else
-    debugSerial();
+	debugSerial();
 #endif
-  T_DELAY(5);
-  A_DELAY(1);
+	T_DELAY(5);
+	A_DELAY(1);
 }
 
 void GenesisSpy::updateState() {
-    currentState = 0xFFFF;
+	currentState = 0xFFFF;
 
-    noInterrupts();
+	noInterrupts();
 
-    do {
-    } while (WAIT_FOR_STATE_TWO);
-    WAIT_FOR_LINES_TO_SETTLE;
-    currentState &= SHIFT_A_AND_START;
+	do {
+	} while (WAIT_FOR_STATE_TWO);
+	WAIT_FOR_LINES_TO_SETTLE;
+	currentState &= SHIFT_A_AND_START;
 
-    do {
-    } while (WAIT_FOR_STATE_THREE);
-    WAIT_FOR_LINES_TO_SETTLE;
-    currentState &= SHIFT_UDLRBC;
+	do {
+	} while (WAIT_FOR_STATE_THREE);
+	WAIT_FOR_LINES_TO_SETTLE;
+	currentState &= SHIFT_UDLRBC;
 
-    // Six Button
-    do {
-    } while (WAIT_FOR_STATE_FOUR_OR_SIX);
+	// Six Button
+	do {
+	} while (WAIT_FOR_STATE_FOUR_OR_SIX);
 
-    if (NOT_STATE_SIX)
-    {
-        //currentState &= SHIFT_A_AND_START;
-        do {
-        } while (WAIT_FOR_STATE_THREE);
-        //currentState &= SHIFT_UDLRBC;
+	if (NOT_STATE_SIX)
+	{
+		//currentState &= SHIFT_A_AND_START;
+		do {
+		} while (WAIT_FOR_STATE_THREE);
+		//currentState &= SHIFT_UDLRBC;
 
-        do {
-        } while (WAIT_FOR_STATE_FOUR_OR_SIX);
-    }
+		do {
+		} while (WAIT_FOR_STATE_FOUR_OR_SIX);
+	}
 
-    if (STATE_SIX)
-    {
-        do {
-        } while (WAIT_FOR_STATE_SEVEN);
-        WAIT_FOR_LINES_TO_SETTLE;
-        currentState &= SHIFT_ZYXM;
-    }
- 
-    interrupts();
+	if (STATE_SIX)
+	{
+		do {
+		} while (WAIT_FOR_STATE_SEVEN);
+		WAIT_FOR_LINES_TO_SETTLE;
+		currentState &= SHIFT_ZYXM;
+	}
 
-    currentState = ~currentState;
+	interrupts();
+
+	currentState = ~currentState;
 }
 
 void GenesisSpy::writeSerial() {
-    for (unsigned char i = 0; i < 13; ++i)
-    {
-        Serial.write(currentState & (1 << i) ? ONE : ZERO);
-    }
-    Serial.write(SPLIT);
+	for (unsigned char i = 0; i < 13; ++i)
+	{
+		Serial.write(currentState & (1 << i) ? ONE : ZERO);
+	}
+	Serial.write(SPLIT);
 }
 
 void GenesisSpy::debugSerial() {
-    if (currentState != lastState)
-    {
-        Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
-        Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
-        Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
-        Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
-        Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
-        Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
-        Serial.print((currentState & SCS_BTN_A)     ? "A" : "0");
-        Serial.print((currentState & SCS_BTN_B)     ? "B" : "0");
-        Serial.print((currentState & SCS_BTN_C)     ? "C" : "0");
-        Serial.print((currentState & SCS_BTN_X)     ? "X" : "0");
-        Serial.print((currentState & SCS_BTN_Y)     ? "Y" : "0");
-        Serial.print((currentState & SCS_BTN_Z)     ? "Z" : "0");
-        Serial.print((currentState & SCS_BTN_MODE)  ? "M" : "0");
-        Serial.print("\n");
-        lastState = currentState;
-    }
+	if (currentState != lastState)
+	{
+		Serial.print((currentState & SCS_CTL_ON) ? "+" : "-");
+		Serial.print((currentState & SCS_BTN_UP) ? "U" : "0");
+		Serial.print((currentState & SCS_BTN_DOWN) ? "D" : "0");
+		Serial.print((currentState & SCS_BTN_LEFT) ? "L" : "0");
+		Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
+		Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
+		Serial.print((currentState & SCS_BTN_A) ? "A" : "0");
+		Serial.print((currentState & SCS_BTN_B) ? "B" : "0");
+		Serial.print((currentState & SCS_BTN_C) ? "C" : "0");
+		Serial.print((currentState & SCS_BTN_X) ? "X" : "0");
+		Serial.print((currentState & SCS_BTN_Y) ? "Y" : "0");
+		Serial.print((currentState & SCS_BTN_Z) ? "Z" : "0");
+		Serial.print((currentState & SCS_BTN_MODE) ? "M" : "0");
+		Serial.print("\n");
+		lastState = currentState;
+	}
 }

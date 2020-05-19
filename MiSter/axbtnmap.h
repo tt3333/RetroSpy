@@ -23,15 +23,15 @@
 #include <stdint.h>
 #include <linux/input.h>
 
-/* The following values come from include/input.h in the kernel
-   source; the small variant is used up to version 2.6.27, the large
-   one from 2.6.28 onwards. We need to handle both values because the
-   kernel doesn't; it only expects one of the values, and we need to
-   determine which one at run-time. */
+ /* The following values come from include/input.h in the kernel
+	source; the small variant is used up to version 2.6.27, the large
+	one from 2.6.28 onwards. We need to handle both values because the
+	kernel doesn't; it only expects one of the values, and we need to
+	determine which one at run-time. */
 #define KEY_MAX_LARGE 0x2FF
 #define KEY_MAX_SMALL 0x1FF
 
-/* Axis map size. */
+	/* Axis map size. */
 #define AXMAP_SIZE (ABS_MAX + 1)
 
 /* Button map size. */
@@ -62,4 +62,3 @@ int getbtnmap(int fd, uint16_t *btnmap);
 int setbtnmap(int fd, uint16_t *btnmap);
 
 #endif
-

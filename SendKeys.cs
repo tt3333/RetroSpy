@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy
 {
@@ -12,33 +8,35 @@ namespace RetroSpy
 
     public class SendKeys
     {
-        const int INPUT_MOUSE = 0;
-        const int INPUT_KEYBOARD = 1;
-        const int INPUT_HARDWARE = 2;
-        const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
-        const uint KEYEVENTF_KEYUP = 0x0002;
-        const uint KEYEVENTF_UNICODE = 0x0004;
-        const uint KEYEVENTF_SCANCODE = 0x0008;
+        private const int INPUT_MOUSE = 0;
+        private const int INPUT_KEYBOARD = 1;
+        private const int INPUT_HARDWARE = 2;
+        private const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
+        private const uint KEYEVENTF_KEYUP = 0x0002;
+        private const uint KEYEVENTF_UNICODE = 0x0004;
+        private const uint KEYEVENTF_SCANCODE = 0x0008;
 
-        struct INPUT
+        private struct INPUT
         {
             public int type;
             public InputUnion u;
         }
 
         [StructLayout(LayoutKind.Explicit)]
-        struct InputUnion
+        private struct InputUnion
         {
             [FieldOffset(0)]
             public MOUSEINPUT mi;
+
             [FieldOffset(0)]
             public KEYBDINPUT ki;
+
             [FieldOffset(0)]
             public HARDWAREINPUT hi;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        struct MOUSEINPUT
+        private struct MOUSEINPUT
         {
             public int dx;
             public int dy;
@@ -49,7 +47,7 @@ namespace RetroSpy
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        class KEYBDINPUT : IDisposable
+        private class KEYBDINPUT : IDisposable
         {
             public ushort wVk;
             public ushort wScan;
@@ -66,7 +64,6 @@ namespace RetroSpy
             {
                 if (disposing)
                 {
-                    
                 }
                 dwExtraInfo = IntPtr.Zero;
             }
@@ -79,28 +76,31 @@ namespace RetroSpy
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        struct HARDWAREINPUT
+        private struct HARDWAREINPUT
         {
             public uint uMsg;
             public ushort wParamL;
             public ushort wParamH;
         }
 
-        class NativeMethods
+        private class NativeMethods
         {
             [DllImport("user32.dll")]
-            static public extern IntPtr GetMessageExtraInfo();
+            public static extern IntPtr GetMessageExtraInfo();
 
             [DllImport("user32.dll", SetLastError = true)]
-            static public extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+            public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
         }
 
-        static INPUT InputForKey (ushort key, bool releasing)
+        private static INPUT InputForKey(ushort key, bool releasing)
         {
-            return new INPUT {
+            return new INPUT
+            {
                 type = INPUT_KEYBOARD,
-                u = new InputUnion {
-                    ki = new KEYBDINPUT {
+                u = new InputUnion
+                {
+                    ki = new KEYBDINPUT
+                    {
                         wVk = key,
                         wScan = 0,
                         dwFlags = releasing ? KEYEVENTF_KEYUP : 0,
@@ -110,26 +110,26 @@ namespace RetroSpy
             };
         }
 
-        static void SendInputs (params INPUT[] inputs)
+        private static void SendInputs(params INPUT[] inputs)
         {
             NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
         }
 
-        static public void PressKey (ushort key)
+        public static void PressKey(ushort key)
         {
-            SendInputs (InputForKey (key, false));
+            SendInputs(InputForKey(key, false));
         }
 
-        static public void ReleaseKey(ushort key)
+        public static void ReleaseKey(ushort key)
         {
-            SendInputs (InputForKey (key, true));
+            SendInputs(InputForKey(key, true));
         }
 
-        static public void PressAndReleaseKey (ushort key)
+        public static void PressAndReleaseKey(ushort key)
         {
-            SendInputs (
-                InputForKey (key, false),
-                InputForKey (key, true)
+            SendInputs(
+                InputForKey(key, false),
+                InputForKey(key, true)
             );
         }
     }

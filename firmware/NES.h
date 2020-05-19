@@ -12,14 +12,14 @@
 #include "ControllerSpy.h"
 
 class NESSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[NES_BITCOUNT * 3];
+private:
+	unsigned char rawData[NES_BITCOUNT * 3];
 };
 
 #endif

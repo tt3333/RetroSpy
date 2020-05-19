@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class Paddles
+    public static class Paddles
     {
+        private const int PACKET_SIZE = 6;
 
-        const int PACKET_SIZE = 6;
-
-        static float ReadPaddle(ushort input)
+        private static float ReadPaddle(ushort input)
         {
             return (float)(input) / 256;
         }
 
-        static bool SecondButton;
-        static float SecondPaddle;
+        private static bool SecondButton;
+        private static float SecondPaddle;
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
-            if (packet.Length < PACKET_SIZE) return null;
-            if (packet[4] != 5) return null;
+            if (packet[4] != 5)
+            {
+                return null;
+            }
 
-            var state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
             state.SetAnalog("paddle", ReadPaddle(packet[2]));
             state.SetAnalog("paddle2", SecondPaddle);
@@ -35,11 +34,17 @@ namespace RetroSpy.Readers
             return state.Build();
         }
 
-        static public ControllerState ReadFromSecondPacket(byte[] packet)
+        public static ControllerState ReadFromSecondPacket(byte[] packet)
         {
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
-            if (packet.Length < PACKET_SIZE) return null;
-            if (packet[4] != 5) return null;
+            if (packet[4] != 5)
+            {
+                return null;
+            }
 
             SecondButton = (packet[1] != 0x00);
             SecondPaddle = ReadPaddle(packet[2]);

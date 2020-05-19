@@ -4,15 +4,15 @@
 #include "ControllerSpy.h"
 
 class SNESSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[SNES_BITCOUNT_EXT];
-	      unsigned char bytesToReturn = SNES_BITCOUNT;
+private:
+	unsigned char rawData[SNES_BITCOUNT_EXT];
+	unsigned char bytesToReturn = SNES_BITCOUNT;
 };
 
 #endif

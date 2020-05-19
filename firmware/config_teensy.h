@@ -93,9 +93,9 @@
 #define AJ_COLUMN3		   NOT_CONNECTED
 #define AJ_COLUMN4         NOT_CONNECTED
 
-#define CD32_LATCH    DIGITAL_PIN_20 
-#define CD32_DATA     DIGITAL_PIN_05  
-#define CD32_CLOCK    DIGITAL_PIN_21  
+#define CD32_LATCH    DIGITAL_PIN_20
+#define CD32_DATA     DIGITAL_PIN_05
+#define CD32_CLOCK    DIGITAL_PIN_21
 
 #define SMS_INPUT_PIN_0     7
 #define SMS_INPUT_PIN_1     8
@@ -106,7 +106,7 @@
 
 #define SMSONGEN_INPUT_PIN_0     7
 #define SMSONGEN_INPUT_PIN_1     8
-#define SMSONGEN_INPUT_PIN_2     6 
+#define SMSONGEN_INPUT_PIN_2     6
 #define SMSONGEN_INPUT_PIN_3    20
 #define SMSONGEN_INPUT_PIN_4    21
 #define SMSONGEN_INPUT_PIN_5     5

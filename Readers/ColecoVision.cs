@@ -1,42 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    static public class ColecoVision
+    public static class ColecoVision
     {
-        const int PACKET_SIZE = 11;
+        private const int PACKET_SIZE = 11;
 
-        static readonly string[] BUTTONS = {
-            "up", "down", "left", "right", "L", null, null, null, null, "R" 
+        private static readonly string[] BUTTONS = {
+            "up", "down", "left", "right", "L", null, null, null, null, "R"
         };
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE ) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
-            var state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
             for (int i = 0; i < BUTTONS.Length; ++i)
             {
-                if (string.IsNullOrEmpty(BUTTONS[i])) continue;
+                if (string.IsNullOrEmpty(BUTTONS[i]))
+                {
+                    continue;
+                }
+
                 state.SetButton(BUTTONS[i], packet[i] != 0x00);
             }
             float x = 0;
             float y = 0;
 
             if (packet[3] != 0x00)
+            {
                 x = 1;
+            }
             else if (packet[2] != 0x00)
+            {
                 x = -1;
+            }
 
             if (packet[0] != 0x00)
+            {
                 y = 1;
+            }
             else if (packet[1] != 0x00)
+            {
                 y = -1;
+            }
 
             if (y != 0 || x != 0)
             {
@@ -55,7 +66,7 @@ namespace RetroSpy.Readers
 
             state.SetAnalog("x", x);
             state.SetAnalog("y", y);
-            
+
             state.SetButton("1", packet[5] == 0 && packet[6] == 0 && packet[7] == 0 && packet[8] != 0);
             state.SetButton("2", packet[5] == 0 && packet[6] == 0 && packet[7] != 0 && packet[8] == 0);
             state.SetButton("3", packet[5] != 0 && packet[6] == 0 && packet[7] == 0 && packet[8] != 0);
@@ -72,7 +83,9 @@ namespace RetroSpy.Readers
             state.SetButton("blue", packet[5] != 0 && packet[6] == 0 && packet[7] != 0 && packet[8] != 0);
 
             for (int i = 0; i < 64; ++i)
+            {
                 state.SetButton("E" + i.ToString(), i == (packet[10] - 11));
+            }
 
             return state.Build();
         }

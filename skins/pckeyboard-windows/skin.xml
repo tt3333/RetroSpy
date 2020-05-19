@@ -9,17 +9,17 @@
     <button name="F2" image="circle2.png" x="174" y="13" width="40" height="40" />
     <button name="F3" image="circle2.png" x="226" y="13" width="40" height="40" />
     <button name="F4" image="circle2.png" x="281" y="13" width="40" height="40" />
-    
+
 	<button name="F5" image="circle2.png" x="355" y="13" width="40" height="40" />
     <button name="F6" image="circle2.png" x="410" y="13" width="40" height="40" />
     <button name="F7" image="circle2.png" x="465" y="13" width="40" height="40" />
     <button name="F8" image="circle2.png" x="520" y="13" width="40" height="40" />
-	
+
     <button name="F9" image="circle2.png" x="591" y="13" width="40" height="40" />
     <button name="F10" image="circle2.png" x="646" y="13" width="40" height="40" />
     <button name="F11" image="circle2.png" x="701" y="13" width="40" height="40" />
     <button name="F12" image="circle2.png" x="756" y="13" width="40" height="40" />
-	
+
 	<button name="PrintScreen" image="circle2.png" x="811" y="13" width="40" height="40" />
     <button name="ScrollLock" image="circle2.png" x="866" y="13" width="40" height="40" />
     <button name="Pause" image="circle2.png" x="921" y="13" width="40" height="40" />
@@ -53,7 +53,7 @@
 	<button name="P" image="circle2.png" x="566" y="127" width="40" height="40" />
 	<button name="LeftBracket" image="circle2.png" x="618" y="127" width="40" height="40" />
 	<button name="RightBracket" image="circle2.png" x="670" y="127" width="40" height="40" />
-	
+
 	<button name="Capital" image="circle2.png" x="14" y="177" width="40" height="40" />
 	<button name="A" image="circle2.png" x="109" y="177" width="40" height="40" />
 	<button name="S" image="circle2.png" x="161" y="177" width="40" height="40" />
@@ -67,7 +67,7 @@
 	<button name="Semicolon" image="circle2.png" x="577" y="177" width="40" height="40" />
 	<button name="Apostrophe" image="circle2.png" x="629" y="177" width="40" height="40" />
 	<button name="Return" image="circle2.png" x="720" y="162" width="60" height="60" />
-	
+
 	<button name="LeftShift" image="circle2.png" x="18" y="230" width="40" height="40" />
 	<button name="Z" image="circle2.png" x="135" y="230" width="40" height="40" />
 	<button name="X" image="circle2.png" x="187" y="230" width="40" height="40" />
@@ -80,7 +80,7 @@
 	<button name="Period" image="circle2.png" x="551" y="230" width="40" height="40" />
 	<button name="Slash" image="circle2.png" x="603" y="230" width="40" height="40" />
 	<button name="RightShift" image="circle2.png" x="655" y="230" width="40" height="40" />
-	
+
 	<button name="LeftControl" image="circle2.png" x="21" y="280" width="40" height="40" />
 	<button name="LeftWindowsKey" image="circle2.png" x="99" y="280" width="40" height="40" />
 	<button name="LeftAlt" image="circle2.png" x="165" y="280" width="40" height="40" />
@@ -93,27 +93,27 @@
 	<button name="Insert" image="circle2.png" x="807" y="76" width="40" height="40" />
 	<button name="Home" image="circle2.png" x="861" y="76" width="40" height="40" />
 	<button name="PageUp" image="circle2.png" x="915" y="76" width="40" height="40" />
-	
+
 	<button name="Delete" image="circle2.png" x="807" y="127" width="40" height="40" />
 	<button name="End" image="circle2.png" x="861" y="127" width="40" height="40" />
 	<button name="PageDown" image="circle2.png" x="915" y="127" width="40" height="40" />
-	
+
 	<button name="Up" image="circle2.png" x="861" y="230" width="40" height="40" />
-	
+
 	<button name="Left" image="circle2.png" x="807" y="280" width="40" height="40" />
 	<button name="Down" image="circle2.png" x="861" y="280" width="40" height="40" />
 	<button name="Right" image="circle2.png" x="915" y="280" width="40" height="40" />
-	
+
 	<button name="NumberLock" image="circle2.png" x="973" y="76" width="40" height="40" />
 	<button name="Divide" image="circle2.png" x="1026" y="76" width="40" height="40" />
 	<button name="Multiply" image="circle2.png" x="1079" y="76" width="40" height="40" />
 	<button name="Subtract" image="circle2.png" x="1132" y="76" width="40" height="40" />
-	
+
 	<button name="NumberPad7" image="circle2.png" x="973" y="127" width="40" height="40" />
 	<button name="NumberPad8" image="circle2.png" x="1026" y="127" width="40" height="40" />
 	<button name="NumberPad9" image="circle2.png" x="1079" y="127" width="40" height="40" />
 	<button name="Add" image="circle2.png" x="1132" y="127" width="40" height="40" />
-	
+
 	<button name="NumberPad4" image="circle2.png" x="973" y="177" width="40" height="40" />
 	<button name="NumberPad5" image="circle2.png" x="1026" y="177" width="40" height="40" />
 	<button name="NumberPad6" image="circle2.png" x="1079" y="177" width="40" height="40" />
@@ -124,6 +124,5 @@
 	<button name="NumberPadEnter" image="circle2.png" x="1132" y="230" width="40" height="40" />
 
 	<button name="NumberPad0" image="circle2.png" x="973" y="280" width="40" height="40" />
-	<button name="Decimal" image="circle2.png" x="1079" y="280" width="40" height="40" /> 	
-	
+	<button name="Decimal" image="circle2.png" x="1079" y="280" width="40" height="40" />
 </skin>

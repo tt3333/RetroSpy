@@ -1,53 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class Playstation2
+    public static class Playstation2
     {
-        const int PACKET_SIZE = 152;
-        const int POLISHED_PACKET_SIZE = 33;
+        private const int PACKET_SIZE = 152;
+        private const int POLISHED_PACKET_SIZE = 33;
 
-        static readonly string[] BUTTONS = {
+        private static readonly string[] BUTTONS = {
             null, "select", "lstick", "rstick", "start", "up", "right", "down", "left", "l2", "r2", "l1", "r1", "triangle", "circle", "x", "square"
         };
 
-        static float ReadAnalogButton(byte input)
+        private static float ReadAnalogButton(byte input)
         {
-            return (float) input/256;
+            return (float)input / 256;
         }
-        static float ReadStick(byte input)
+
+        private static float ReadStick(byte input)
         {
             return (float)(input - 128) / 128;
         }
 
-        static float ReadMouse(bool over, byte data)
+        private static float ReadMouse(bool over, byte data)
         {
             float val = 0;
             if (over)
             {
                 if (data >= 128)
+                {
                     val = -1.0f;
+                }
                 else
+                {
                     val = 1.0f;
+                }
             }
             else
             {
                 if (data >= 128)
+                {
                     val = (-1.0f * (255 - data)) / 127.0f;
+                }
                 else
+                {
                     val = data / 127.0f;
+                }
             }
 
             return val;
         }
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
@@ -64,9 +70,13 @@ namespace RetroSpy.Readers
 
             int nextNumBytes = 0;
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79)
+            {
                 nextNumBytes = 4;
+            }
             else if (polishedPacket[0] == 0x12)
+            {
                 nextNumBytes = 2;
+            }
 
             for (int i = 0; i < nextNumBytes; ++i)
             {
@@ -89,15 +99,25 @@ namespace RetroSpy.Readers
                 }
             }
 
-            if (polishedPacket.Length < POLISHED_PACKET_SIZE) return null;
+            if (polishedPacket.Length < POLISHED_PACKET_SIZE)
+            {
+                return null;
+            }
 
-            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 && polishedPacket[0] != 0x12) return null;
+            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 && polishedPacket[0] != 0x12)
+            {
+                return null;
+            }
 
-            var state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
             for (int i = 0; i < BUTTONS.Length; ++i)
             {
-                if (string.IsNullOrEmpty(BUTTONS[i])) continue;
+                if (string.IsNullOrEmpty(BUTTONS[i]))
+                {
+                    continue;
+                }
+
                 state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 

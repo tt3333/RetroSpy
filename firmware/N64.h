@@ -4,15 +4,15 @@
 #include "ControllerSpy.h"
 
 class N64Spy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        bool checkPrefixN64();
-        unsigned char rawData[512]; // This can probably be lowered.
+private:
+	bool checkPrefixN64();
+	unsigned char rawData[512]; // This can probably be lowered.
 };
 
 #endif

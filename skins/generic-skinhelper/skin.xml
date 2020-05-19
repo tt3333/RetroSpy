@@ -33,5 +33,4 @@
     <stick xname="rz" yname="null" image="slider.png" x="450" y="276" xrange="170" yrange="0" />
     <stick xname="s0" yname="null" image="slider.png" x="450" y="313" xrange="170" yrange="0" />
     <stick xname="s1" yname="null" image="slider.png" x="450" y="350" xrange="170" yrange="0" />
-
 </skin>

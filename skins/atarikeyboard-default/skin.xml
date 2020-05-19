@@ -18,5 +18,4 @@
   <button name="star" image="circle2.png" x="60" y="401" width="40" height="40" />
   <button name="0" image="circle2.png" x="135" y="401" width="40" height="40" />
   <button name="pound" image="circle2.png" x="213" y="401" width="40" height="40" />
-	
 </skin>

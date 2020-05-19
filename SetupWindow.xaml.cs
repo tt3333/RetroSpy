@@ -1,30 +1,28 @@
-﻿using System;
-using System.Linq;
+﻿using RetroSpy.Readers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.IO.Ports;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Threading;
-
-using RetroSpy.Readers;
-using System.ComponentModel;
-using System.IO;
-using System.Text;
-using System.Reflection;
 
 namespace RetroSpy
 {
     public partial class SetupWindow : Window
     {
-        SetupWindowViewModel _vm;
-        DispatcherTimer _portListUpdateTimer;
-        DispatcherTimer _xiAndGamepadListUpdateTimer;
-        List <Skin> _skins;
-        List<string> _excludedSources;
+        private SetupWindowViewModel _vm;
+        private DispatcherTimer _portListUpdateTimer;
+        private DispatcherTimer _xiAndGamepadListUpdateTimer;
+        private List<Skin> _skins;
+        private List<string> _excludedSources;
 
-        public SetupWindow ()
+        public SetupWindow()
         {
             InitializeComponent();
             _vm = new SetupWindowViewModel();
@@ -38,16 +36,18 @@ namespace RetroSpy
                 return;
             }
 
-            var results = Skin.LoadAllSkinsFromParentFolder("skins");
+            Skin.LoadResults results = Skin.LoadAllSkinsFromParentFolder("skins");
             _skins = results.SkinsLoaded;
 
             _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
 
-            var hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
-            foreach (var source in hiddenConsoles)
+            string[] hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
+            foreach (string source in hiddenConsoles)
             {
                 if (source != "")
+                {
                     _excludedSources.Add(source);
+                }
             }
 
             PopulateSources();
@@ -105,7 +105,7 @@ namespace RetroSpy
         private void PopulateSources()
         {
             List<InputSource> prunedSources = new List<InputSource>();
-            foreach (var source in InputSource.ALL)
+            foreach (InputSource source in InputSource.ALL)
             {
                 if (!_excludedSources.Contains(source.Name))
                 {
@@ -115,46 +115,55 @@ namespace RetroSpy
             _vm.Sources.UpdateContents(prunedSources);
         }
 
-        void ShowSkinParseErrors (List <string> errs) {
-            StringBuilder msg = new StringBuilder ();
-            msg.AppendLine ("Some skins were unable to be parsed:");
-            foreach (var err in errs) msg.AppendLine (err);
-            MessageBox.Show (msg.ToString (), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+        private void ShowSkinParseErrors(List<string> errs)
+        {
+            StringBuilder msg = new StringBuilder();
+            msg.AppendLine("Some skins were unable to be parsed:");
+            foreach (string err in errs)
+            {
+                msg.AppendLine(err);
+            }
+
+            MessageBox.Show(msg.ToString(), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        void UpdatePortList () {
-            var ports = SerialPort.GetPortNames();
-            _vm.Ports.UpdateContents (ports);
-            var ports2 = new string[ports.Length + 1];
+        private void UpdatePortList()
+        {
+            string[] ports = SerialPort.GetPortNames();
+            _vm.Ports.UpdateContents(ports);
+            string[] ports2 = new string[ports.Length + 1];
             ports2[0] = "Not Connected";
             for (int i = 0; i < ports.Length; ++i)
+            {
                 ports2[i + 1] = ports[i];
+            }
+
             _vm.Ports2.UpdateContents(ports2);
         }
 
-        void UpdateGamepadList()
+        private void UpdateGamepadList()
         {
             _vm.XIAndGamepad.UpdateContents(GamepadReader.GetDevices());
         }
 
-        void UpdateXIList()
+        private void UpdateXIList()
         {
             _vm.XIAndGamepad.UpdateContents(XInputReader.GetDevices());
         }
 
-        void UpdateBeagleList()
+        private void UpdateBeagleList()
         {
             //_vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
         }
 
-        void UpdateBeagleI2CList()
+        private void UpdateBeagleI2CList()
         {
             //_vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
         }
 
-        void GoButton_Click (object sender, RoutedEventArgs e) 
+        private void GoButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide ();
+            Hide();
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
             Properties.Settings.Default.Port2 = _vm.Ports2.SelectedItem;
             Properties.Settings.Default.Source = _vm.Sources.GetSelectedId();
@@ -183,7 +192,7 @@ namespace RetroSpy
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC ||
                          _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 ||
                          _vm.Sources.SelectedItem == InputSource.GENMINI || _vm.Sources.SelectedItem == InputSource.C64MINI ||
-                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3 
+                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3
                          || _vm.Sources.SelectedItem == InputSource.PS4 || _vm.Sources.SelectedItem == InputSource.MISTER)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
@@ -191,7 +200,10 @@ namespace RetroSpy
                 else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 || _vm.Sources.SelectedItem == InputSource.ATARI5200)
                 {
                     if (_vm.Ports.SelectedItem == _vm.Ports2.SelectedItem)
+                    {
                         throw new Exception("Port 1 and Port 2 cannot be the same!");
+                    }
+
                     reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem);
                 }
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
@@ -202,31 +214,39 @@ namespace RetroSpy
                 //{
                 //    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 //}
-                else {
+                else
+                {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
                 }
                 if (_vm.DelayInMilliseconds > 0)
+                {
                     reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds);
+                }
 
-                new ViewWindow (_vm.Skins.SelectedItem,
-                                _vm.Backgrounds.SelectedItem, 
+                new ViewWindow(_vm.Skins.SelectedItem,
+                                _vm.Backgrounds.SelectedItem,
                                 reader, _vm.StaticViewerWindowName)
-                    .ShowDialog ();
+                    .ShowDialog();
             }
 #if DEBUG
             catch (ConfigParseException ex) {
 #else
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 #endif
-                MessageBox.Show (ex.Message, "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            this.Show ();
+            Show();
         }
 
-        private void SourceSelectComboBox_SelectionChanged (object sender, SelectionChangedEventArgs e)
+        private void SourceSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_vm.Sources.SelectedItem == null) return;
+            if (_vm.Sources.SelectedItem == null)
+            {
+                return;
+            }
+
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
             _vm.ComPort2OptionVisibility = _vm.Sources.SelectedItem.RequiresComPort2 ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
@@ -236,19 +256,23 @@ namespace RetroSpy
             UpdatePortList();
             UpdateBeagleList();
             UpdateBeagleI2CList();
-            _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
-            _vm.Skins.SelectFirst ();
-            if(_vm.Sources.GetSelectedId() == Properties.Settings.Default.Source)
+            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == _vm.Sources.SelectedItem));
+            _vm.Skins.SelectFirst();
+            if (_vm.Sources.GetSelectedId() == Properties.Settings.Default.Source)
             {
                 _vm.Skins.SelectId(Properties.Settings.Default.Skin);
             }
         }
 
-        private void Skin_SelectionChanged (object sender, SelectionChangedEventArgs e)
+        private void Skin_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_vm.Skins.SelectedItem == null) return;
-            _vm.Backgrounds.UpdateContents (_vm.Skins.SelectedItem.Backgrounds);
-            _vm.Backgrounds.SelectFirst ();
+            if (_vm.Skins.SelectedItem == null)
+            {
+                return;
+            }
+
+            _vm.Backgrounds.UpdateContents(_vm.Skins.SelectedItem.Backgrounds);
+            _vm.Backgrounds.SelectFirst();
             if (_vm.Skins.GetSelectedId() == Properties.Settings.Default.Skin)
             {
                 _vm.Backgrounds.SelectId(Properties.Settings.Default.Background);
@@ -268,7 +292,7 @@ namespace RetroSpy
             PopulateSources();
 
             string hiddenConsoleList = "";
-            foreach(var source in _excludedSources)
+            foreach (string source in _excludedSources)
             {
                 hiddenConsoleList += source + ";";
             }
@@ -280,26 +304,32 @@ namespace RetroSpy
 
     public class SetupWindowViewModel : INotifyPropertyChanged
     {
-        public class ListView <T>
+        public class ListView<T>
         {
-            List <T> _items;
+            private List<T> _items;
 
             public CollectionView Items { get; private set; }
             public T SelectedItem { get; set; }
 
-            public ListView () {
-                _items = new List <T> ();
-                Items = new CollectionView (_items);
+            public ListView()
+            {
+                _items = new List<T>();
+                Items = new CollectionView(_items);
             }
 
-            public void UpdateContents (IEnumerable <T> items) {
-                _items.Clear ();
-                _items.AddRange (items);
-                Items.Refresh ();
+            public void UpdateContents(IEnumerable<T> items)
+            {
+                _items.Clear();
+                _items.AddRange(items);
+                Items.Refresh();
             }
 
-            public void SelectFirst () {
-                if (_items.Count > 0) SelectedItem = _items [0];
+            public void SelectFirst()
+            {
+                if (_items.Count > 0)
+                {
+                    SelectedItem = _items[0];
+                }
             }
 
             public void SelectId(int id)
@@ -322,7 +352,7 @@ namespace RetroSpy
 
             public int GetSelectedId()
             {
-                if( SelectedItem != null)
+                if (SelectedItem != null)
                 {
                     return _items.IndexOf(SelectedItem);
                 }
@@ -330,29 +360,33 @@ namespace RetroSpy
             }
         }
 
-        public ListView <string> Ports { get; set; }
+        public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
-        public ListView <uint> XIAndGamepad { get; set; }
-        public ListView <Skin> Skins { get; set; }
-        public ListView <Skin.Background> Backgrounds { get; set; }
-        public ListView <InputSource> Sources { get; set; }
+        public ListView<uint> XIAndGamepad { get; set; }
+        public ListView<Skin> Skins { get; set; }
+        public ListView<Skin.Background> Backgrounds { get; set; }
+        public ListView<InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
         public bool StaticViewerWindowName { get; set; }
         public string Hostname { get; set; }
 
-        Visibility _comPortOptionVisibility;
-        public Visibility ComPortOptionVisibility {
-            get { return _comPortOptionVisibility; }
-            set {
+        private Visibility _comPortOptionVisibility;
+
+        public Visibility ComPortOptionVisibility
+        {
+            get => _comPortOptionVisibility;
+            set
+            {
                 _comPortOptionVisibility = value;
-                NotifyPropertyChanged ("ComPortOptionVisibility");
+                NotifyPropertyChanged("ComPortOptionVisibility");
             }
         }
 
-        Visibility _comPort2OptionVisibility;
+        private Visibility _comPort2OptionVisibility;
+
         public Visibility ComPort2OptionVisibility
         {
-            get { return _comPort2OptionVisibility; }
+            get => _comPort2OptionVisibility;
             set
             {
                 _comPort2OptionVisibility = value;
@@ -360,10 +394,11 @@ namespace RetroSpy
             }
         }
 
-        Visibility _XIAndGamepadOptionVisibility;
+        private Visibility _XIAndGamepadOptionVisibility;
+
         public Visibility XIAndGamepadOptionVisibility
         {
-            get { return _XIAndGamepadOptionVisibility; }
+            get => _XIAndGamepadOptionVisibility;
             set
             {
                 _XIAndGamepadOptionVisibility = value;
@@ -371,10 +406,11 @@ namespace RetroSpy
             }
         }
 
-        Visibility _SSHOptionVisibility;
+        private Visibility _SSHOptionVisibility;
+
         public Visibility SSHOptionVisibility
         {
-            get { return _SSHOptionVisibility; }
+            get => _SSHOptionVisibility;
             set
             {
                 _SSHOptionVisibility = value;
@@ -382,20 +418,26 @@ namespace RetroSpy
             }
         }
 
-        public SetupWindowViewModel () {
-            Ports   = new ListView <string> ();
+        public SetupWindowViewModel()
+        {
+            Ports = new ListView<string>();
             Ports2 = new ListView<string>();
             XIAndGamepad = new ListView<uint>();
-            Skins   = new ListView <Skin> ();
-            Sources = new ListView <InputSource> ();
-            Backgrounds = new ListView <Skin.Background> ();
+            Skins = new ListView<Skin>();
+            Sources = new ListView<InputSource>();
+            Backgrounds = new ListView<Skin.Background>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        void NotifyPropertyChanged (string prop) {
-            if (PropertyChanged == null) return;
-            PropertyChanged (this, new PropertyChangedEventArgs (prop));
+
+        private void NotifyPropertyChanged(string prop)
+        {
+            if (PropertyChanged == null)
+            {
+                return;
+            }
+
+            PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
-

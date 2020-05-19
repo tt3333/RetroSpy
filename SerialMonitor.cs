@@ -20,16 +20,16 @@ namespace RetroSpy
 
     public class SerialMonitor : IDisposable
     {
-        const int BAUD_RATE = 115200;
-        const int TIMER_MS = 1;
+        private const int BAUD_RATE = 115200;
+        private const int TIMER_MS = 1;
 
         public event PacketEventHandler PacketReceived;
+
         public event EventHandler Disconnected;
 
-        SerialPort _datPort;
-        List<byte> _localBuffer;
-
-        DispatcherTimer _timer;
+        private SerialPort _datPort;
+        private List<byte> _localBuffer;
+        private DispatcherTimer _timer;
 
         public SerialMonitor(string portName)
         {
@@ -39,7 +39,10 @@ namespace RetroSpy
 
         public void Start()
         {
-            if (_timer != null) return;
+            if (_timer != null)
+            {
+                return;
+            }
 
             _localBuffer.Clear();
             _datPort.Open();
@@ -71,16 +74,23 @@ namespace RetroSpy
             }
         }
 
-        void Tick(object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
         {
-            if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
+            if (_datPort == null || !_datPort.IsOpen || PacketReceived == null)
+            {
+                return;
+            }
 
             // Try to read some data from the COM port and append it to our localBuffer.
             // If there's an IOException then the device has been disconnected.
             try
             {
                 int readCount = _datPort.BytesToRead;
-                if (readCount < 1) return;
+                if (readCount < 1)
+                {
+                    return;
+                }
+
                 byte[] readBuffer = new byte[readCount];
                 _datPort.Read(readBuffer, 0, readCount);
                 _datPort.DiscardInBuffer();
@@ -95,9 +105,16 @@ namespace RetroSpy
 
             // Try and find 2 splitting characters in our buffer.
             int lastSplitIndex = _localBuffer.LastIndexOf(0x0A);
-            if (lastSplitIndex <= 1) return;
+            if (lastSplitIndex <= 1)
+            {
+                return;
+            }
+
             int sndLastSplitIndex = _localBuffer.LastIndexOf(0x0A, lastSplitIndex - 1);
-            if (lastSplitIndex == -1) return;
+            if (lastSplitIndex == -1)
+            {
+                return;
+            }
 
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;

@@ -10,7 +10,7 @@ void DreamcastSpy::setup() {
 	p = &rawData[6];
 }
 
-FASTRUN void DreamcastSpy::loop() 
+FASTRUN void DreamcastSpy::loop()
 {
 	updateState();
 
@@ -19,8 +19,6 @@ FASTRUN void DreamcastSpy::loop()
 #else
 	debugSerial();
 #endif
-  
-
 }
 
 FASTRUN void DreamcastSpy::writeSerial() {
@@ -183,7 +181,6 @@ FASTRUN void DreamcastSpy::debugSerial() {
 			Serial.print("|");
 			Serial.print(keycode[i]);
 		}
-
 	}
 	else if (dcCommand == 8 && controllerType == 0x200)
 	{
@@ -236,7 +233,6 @@ FASTRUN void DreamcastSpy::debugSerial() {
 			}
 		}
 		Serial.print(axis3);
-
 	}
 	else if (dcCommand == 8 && controllerType == 1)
 	{
@@ -297,7 +293,7 @@ FASTRUN void DreamcastSpy::debugSerial() {
 FASTRUN void DreamcastSpy::updateState() {
 	byte prevPin;
 
-//start_state:
+	//start_state:
 state1:
 	interrupts();
 	byteCount = 0;
@@ -346,22 +342,17 @@ state7:
 }
 #else
 void DreamcastSpy::setup() {
-
 }
 
 void DreamcastSpy::loop() {
-
 }
 
 void DreamcastSpy::writeSerial() {
-
 }
 
 void DreamcastSpy::debugSerial() {
-
 }
 
 void DreamcastSpy::updateState() {
-
 }
 #endif

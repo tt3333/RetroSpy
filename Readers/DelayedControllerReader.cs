@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    sealed public class DelayedControllerReader : IControllerReader, IDisposable
+    public sealed class DelayedControllerReader : IControllerReader, IDisposable
     {
         private readonly IControllerReader baseControllerReader;
         private readonly int delayInMilliseconds;
 
         public event EventHandler ControllerDisconnected;
+
         public event StateEventHandler ControllerStateChanged;
 
-        public IControllerReader BaseControllerReader { get { return baseControllerReader; } }
-        public int DelayInMilliseconds { get { return delayInMilliseconds; } }
+        public IControllerReader BaseControllerReader => baseControllerReader;
+        public int DelayInMilliseconds => delayInMilliseconds;
 
         public DelayedControllerReader(IControllerReader baseControllerReader, int delayInMilliseconds)
         {
@@ -50,9 +48,10 @@ namespace RetroSpy.Readers
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
@@ -70,6 +69,7 @@ namespace RetroSpy.Readers
         {
             Dispose(true);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

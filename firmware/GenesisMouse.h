@@ -30,15 +30,15 @@
 #include "ControllerSpy.h"
 
 class GenesisMouseSpy : public ControllerSpy {
-    public:
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[24];
+private:
+	unsigned char rawData[24];
 };
 
 #endif
