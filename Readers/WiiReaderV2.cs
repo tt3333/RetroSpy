@@ -14,10 +14,10 @@ namespace RetroSpy.Readers
 
         static private byte encryptionKeySet = 255;
 
-        private static byte[] wm_rand;
-        private static byte[] wm_key;
-        private static byte[] wm_ft;
-        private static byte[] wm_sb;
+        private static readonly byte[] wm_rand;
+        private static readonly byte[] wm_key;
+        private static readonly byte[] wm_ft;
+        private static readonly byte[] wm_sb;
 
         static WiiReaderV2()
         {
@@ -53,7 +53,7 @@ namespace RetroSpy.Readers
                 {
                     wm_key[5 - j] = data[10 + j];
                 }
-                if(!wm_gentabs())
+                if(!Wm_gentabs())
                 {
                     var outState = new ControllerStateBuilder();
 
@@ -259,13 +259,13 @@ namespace RetroSpy.Readers
         }
 
 
-        static byte wm_ror8(byte a, byte b)
+        static byte Wm_ror8(byte a, byte b)
         {
             // bit shift with roll-over
             return (byte)((a >> b) | ((a << (8 - b)) & 0xFF));
         }
 
-        static private bool wm_gentabs()
+        static private bool Wm_gentabs()
         {
             byte idx;
 
@@ -286,12 +286,12 @@ namespace RetroSpy.Readers
                     t0[i] = (sboxes[0, wm_rand[i]]);
                 }
 
-                tkey[0] = (byte)((wm_ror8((byte)(ans[0] ^ t0[5]), (byte)(t0[2] % 8)) - t0[9]) ^ t0[4]);
-                tkey[1] = (byte)((wm_ror8((byte)(ans[1] ^ t0[1]), (byte)(t0[0] % 8)) - t0[5]) ^ t0[7]);
-                tkey[2] = (byte)((wm_ror8((byte)(ans[2] ^ t0[6]), (byte)(t0[8] % 8)) - t0[2]) ^ t0[0]);
-                tkey[3] = (byte)((wm_ror8((byte)(ans[3] ^ t0[4]), (byte)(t0[7] % 8)) - t0[3]) ^ t0[2]);
-                tkey[4] = (byte)((wm_ror8((byte)(ans[4] ^ t0[1]), (byte)(t0[6] % 8)) - t0[3]) ^ t0[4]);
-                tkey[5] = (byte)((wm_ror8((byte)(ans[5] ^ t0[7]), (byte)(t0[8] % 8)) - t0[5]) ^ t0[9]);
+                tkey[0] = (byte)((Wm_ror8((byte)(ans[0] ^ t0[5]), (byte)(t0[2] % 8)) - t0[9]) ^ t0[4]);
+                tkey[1] = (byte)((Wm_ror8((byte)(ans[1] ^ t0[1]), (byte)(t0[0] % 8)) - t0[5]) ^ t0[7]);
+                tkey[2] = (byte)((Wm_ror8((byte)(ans[2] ^ t0[6]), (byte)(t0[8] % 8)) - t0[2]) ^ t0[0]);
+                tkey[3] = (byte)((Wm_ror8((byte)(ans[3] ^ t0[4]), (byte)(t0[7] % 8)) - t0[3]) ^ t0[2]);
+                tkey[4] = (byte)((Wm_ror8((byte)(ans[4] ^ t0[1]), (byte)(t0[6] % 8)) - t0[3]) ^ t0[4]);
+                tkey[5] = (byte)((Wm_ror8((byte)(ans[5] ^ t0[7]), (byte)(t0[8] % 8)) - t0[5]) ^ t0[9]);
 
                 // compare with actual key
                 if (tkey.SequenceEqual(wm_key)) break; // if match, then use this idx
@@ -323,7 +323,7 @@ namespace RetroSpy.Readers
             return true;
         }
 
-        static byte[,] ans_tbl = {
+        static readonly byte[,] ans_tbl = {
             {0xA8,0x77,0xA6,0xE0,0xF7,0x43},
             {0x5A,0x35,0x85,0xE2,0x72,0x97},
             {0x8F,0xB7,0x1A,0x62,0x87,0x38},
@@ -333,7 +333,7 @@ namespace RetroSpy.Readers
             {0x30,0x7E,0x90, 0xE,0x85, 0xA},
         };
 
-        static byte[,] sboxes = {
+        static readonly byte[,] sboxes = {
         {
             0x70,0x51,   3,0x86,0x40, 0xD,0x4F,0xEB,0x3E,0xCC,0xD1,0x87,0x35,0xBD,0xF5, 0xB,
             0x5E,0xD0,0xF8,0xF2,0xD5,0xE2,0x6C,0x31, 0xC,0xAD,0xFC,0x21,0xC3,0x78,0xC1,   6,

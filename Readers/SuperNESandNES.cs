@@ -8,7 +8,7 @@ namespace RetroSpy.Readers
 {
     static public class SuperNESandNES
     {
-        static ControllerState readPacketButtons(byte[] packet, string[] buttons)
+        static ControllerState ReadPacketButtons(byte[] packet, string[] buttons)
         {
             if (packet.Length < buttons.Length) return null;
 
@@ -24,7 +24,7 @@ namespace RetroSpy.Readers
         }
 
 
-        static ControllerState readPacketButtons_ascii(byte[] packet, string[] buttons)
+        static ControllerState ReadPacketButtons_ascii(byte[] packet, string[] buttons)
         {
             if (packet.Length < buttons.Length) return null;
 
@@ -77,22 +77,22 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
-            return readPacketButtons(packet, BUTTONS_INTELLIVISION);
+            return ReadPacketButtons(packet, BUTTONS_INTELLIVISION);
         }
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
-            return readPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
+            return ReadPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
         }
 
         static public ControllerState ReadFromPacket_PCFX(byte[] packet)
         {
             if (packet.Length != BUTTONS_PCFX.Length) return null;
-            return readPacketButtons(packet, BUTTONS_PCFX);
+            return ReadPacketButtons(packet, BUTTONS_PCFX);
         }
 
         static public ControllerState ReadFromPacket_PSClassic(byte[] packet)
         {
-            return readPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
+            return ReadPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {
@@ -108,8 +108,8 @@ namespace RetroSpy.Readers
 
             if (state != null && packet.Length == 32 && packet[15] != 0x00)
             {
-                float y = (float)(SignalTool.readByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
-                float x = (float)(SignalTool.readByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
+                float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
+                float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
                 SignalTool.SetMouseProperties(x, y, state);
 
             }
@@ -204,7 +204,7 @@ namespace RetroSpy.Readers
                     polishedPacket[i] = packet[i];
                 }
 
-                return readPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
+                return ReadPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
             }
             else
             {

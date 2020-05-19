@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RetroSpy.Readers
 {
-    public class ControllerState
+    public class ControllerState : EventArgs
     {
         static public readonly ControllerState Zero = new ControllerState
             (new Dictionary <string, bool> (), new Dictionary <string, float> ());

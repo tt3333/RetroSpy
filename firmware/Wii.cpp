@@ -1,6 +1,5 @@
 #include "Wii.h"
 
-
 #if defined(__arm__) && defined(CORE_TEENSY)
 void WiiSpy::setup() {
   pinMode(19, INPUT);
@@ -30,46 +29,7 @@ void WiiSpy::loop() {
     {
       // STOP
       i2c_index -= (i2c_index % 9);
-#ifdef ANALYZE
-      byte addr = 0;
-      for (int i = 0; i < 7; ++i)
-      {
-        if (rawData[i] != 0)
-          addr |= 1 << (6 - i);
-      }
-      if (addr != 0x52) return;
-      
-      Serial.print(i2c_index / 9);
-      Serial.print(',');
-      //Serial.printf("Addr=0x%02X,", addr);
-      Serial.print(addr);
-      if (rawData[7] == 0)
-        Serial.print("W");
-      else
-        Serial.print("R");
-      Serial.print(",");
-      Serial.print(rawData[8] ? "N" : "A");
-      Serial.print(",");
 
-      int i = 9;
-      byte numbytes = 1;
-      while (i < i2c_index)
-      {
-        byte data = 0;
-        for (int j = 0; j < 8; ++j)
-        {
-          if (rawData[j + i] != 0)
-            data |= 1 << (7 - j);
-        }
-        ++numbytes;
-        //Serial.printf("0x%02X,", data);
-        Serial.print(data);
-        Serial.print(rawData[i + 8] ? "N" : "A");
-        Serial.print(" ");
-        i += 9;
-      }
-      Serial.print("\n");
-#else
       byte tempData[128];
       tempData[0] = 0;
       for (int i = 0; i < 7; ++i)
@@ -233,33 +193,12 @@ void WiiSpy::loop() {
           }                       
 
 #ifdef DEBUG
-          Serial.print(cleanData[0]);
-          Serial.print(' ');
-          Serial.print(cleanData[1]);
-          Serial.print(' ');
-          j = 2;
-          int toPrint = 22;
-          if (cleanData[0] == 3)
-          {
-            toPrint = 26;
-          }
-          for (int i = 0; i < toPrint; ++i)
-          {
-            byte data = (cleanData[j] | (cleanData[j + 1] >> 4));
-            Serial.print(data);
-            Serial.print(' ');
-            j += 2;
-          }
-          Serial.print('\n');
+		  debugSerial();
 #else
-          if (cleanData[0] == 3)
-            Serial.write(cleanData, 51);
-          else
-            Serial.write(cleanData, 47);
+		  writeSerial();
 #endif
         }
       }
-#endif
     }
     else if ((last_portb == 0x4) && (current_portb == 0xC))
     {
@@ -274,12 +213,34 @@ void WiiSpy::loop() {
   }
 }
 
-void WiiSpy::writeSerial() {
-
+void WiiSpy::writeSerial() 
+{
+	if (cleanData[0] == 3)
+		Serial.write(cleanData, 51);
+	else
+		Serial.write(cleanData, 47);
 }
 
-void WiiSpy::debugSerial() {
-
+void WiiSpy::debugSerial()
+{
+	Serial.print(cleanData[0]);
+	Serial.print(' ');
+	Serial.print(cleanData[1]);
+	Serial.print(' ');
+	int j = 2;
+	int toPrint = 22;
+	if (cleanData[0] == 3)
+	{
+	toPrint = 26;
+	}
+	for (int i = 0; i < toPrint; ++i)
+	{
+	byte data = (cleanData[j] | (cleanData[j + 1] >> 4));
+	Serial.print(data);
+	Serial.print(' ');
+	j += 2;
+	}
+	Serial.print('\n');
 }
 
 void WiiSpy::updateState() {

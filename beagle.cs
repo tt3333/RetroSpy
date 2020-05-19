@@ -47,6 +47,7 @@
 |      beagle.cs        --  C# .NET source
 |      beagle_net.dll   --  Compiled .NET binding
  ========================================================================*/
+#pragma warning disable IDE1006
 
 using System;
 using System.Reflection;
@@ -415,7 +416,7 @@ public class BeagleApi {
 static long tp_min(long x, long y) { return x < y ? x : y; }
 
 private class GCContext {
-    GCHandle[] handles;
+    readonly GCHandle[] handles;
     int index;
     public GCContext () {
         handles = new GCHandle[16];
@@ -436,19 +437,16 @@ private class GCContext {
 /*=========================================================================
 | VERSION
  ========================================================================*/
-[DllImport ("beagle")]
-private static extern int bg_c_version ();
-
 public const int BG_API_VERSION    = 0x050a;   // v5.10
 public const int BG_REQ_SW_VERSION = 0x050a;   // v5.10
 
-private static short BG_SW_VERSION;
-private static short BG_REQ_API_VERSION;
-private static bool  BG_LIBRARY_LOADED;
+private static readonly short BG_SW_VERSION;
+private static readonly short BG_REQ_API_VERSION;
+private static readonly bool  BG_LIBRARY_LOADED;
 
 static BeagleApi () {
-    BG_SW_VERSION      = (short)(bg_c_version() & 0xffff);
-    BG_REQ_API_VERSION = (short)((bg_c_version() >> 16) & 0xffff);
+    BG_SW_VERSION      = (short)(NativeMethods.bg_c_version() & 0xffff);
+    BG_REQ_API_VERSION = (short)((NativeMethods.bg_c_version() >> 16) & 0xffff);
     BG_LIBRARY_LOADED  = 
         ((BG_SW_VERSION >= BG_REQ_SW_VERSION) &&
          (BG_API_VERSION >= BG_REQ_API_VERSION));
@@ -607,7 +605,7 @@ public static int bg_find_devices (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int devices_num_devices = (int)tp_min(num_devices, devices.Length);
-    return net_bg_find_devices(devices_num_devices, devices);
+    return NativeMethods.net_bg_find_devices(devices_num_devices, devices);
 }
 
 /*
@@ -630,7 +628,7 @@ public static int bg_find_devices_ext (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int devices_num_devices = (int)tp_min(num_devices, devices.Length);
     int unique_ids_num_ids = (int)tp_min(num_ids, unique_ids.Length);
-    return net_bg_find_devices_ext(devices_num_devices, devices, unique_ids_num_ids, unique_ids);
+    return NativeMethods.net_bg_find_devices_ext(devices_num_devices, devices, unique_ids_num_ids, unique_ids);
 }
 
 /*
@@ -653,7 +651,7 @@ public static int bg_open (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_open(port_number);
+    return NativeMethods.net_bg_open(port_number);
 }
 
 /*
@@ -687,7 +685,7 @@ public static int bg_open_ext (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_open_ext(port_number, ref bg_ext);
+    return NativeMethods.net_bg_open_ext(port_number, ref bg_ext);
 }
 
 /* Close the Beagle port. */
@@ -696,7 +694,7 @@ public static int bg_close (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_close(beagle);
+    return NativeMethods.net_bg_close(beagle);
 }
 
 /*
@@ -709,7 +707,7 @@ public static int bg_port (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_port(beagle);
+    return NativeMethods.net_bg_port(beagle);
 }
 
 /*
@@ -728,7 +726,7 @@ public static int bg_features (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_features(beagle);
+    return NativeMethods.net_bg_features(beagle);
 }
 
 public static int bg_unique_id_to_features (
@@ -736,7 +734,7 @@ public static int bg_unique_id_to_features (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_unique_id_to_features(unique_id);
+    return NativeMethods.net_bg_unique_id_to_features(unique_id);
 }
 
 /*
@@ -750,7 +748,7 @@ public static uint bg_unique_id (
 )
 {
     if (!BG_LIBRARY_LOADED) return 0;
-    return net_bg_unique_id(beagle);
+    return NativeMethods.net_bg_unique_id(beagle);
 }
 
 /*
@@ -763,7 +761,7 @@ public static string bg_status_string (
 )
 {
     if (!BG_LIBRARY_LOADED) return null;
-    return Marshal.PtrToStringAnsi(net_bg_status_string(status));
+    return Marshal.PtrToStringAnsi(NativeMethods.net_bg_status_string(status));
 }
 
 /*
@@ -777,7 +775,7 @@ public static int bg_version (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_version(beagle, ref version);
+    return NativeMethods.net_bg_version(beagle, ref version);
 }
 
 /*
@@ -793,7 +791,7 @@ public static int bg_latency (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_latency(beagle, milliseconds);
+    return NativeMethods.net_bg_latency(beagle, milliseconds);
 }
 
 /*
@@ -807,7 +805,7 @@ public static int bg_timeout (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_timeout(beagle, milliseconds);
+    return NativeMethods.net_bg_timeout(beagle, milliseconds);
 }
 
 /*
@@ -820,7 +818,7 @@ public static uint bg_sleep_ms (
 )
 {
     if (!BG_LIBRARY_LOADED) return 0;
-    return net_bg_sleep_ms(milliseconds);
+    return NativeMethods.net_bg_sleep_ms(milliseconds);
 }
 
 /* Configure the target power pin. */
@@ -833,7 +831,7 @@ public static int bg_target_power (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_target_power(beagle, power_flag);
+    return NativeMethods.net_bg_target_power(beagle, power_flag);
 }
 
 public const byte BG_HOST_IFCE_FULL_SPEED = 0x00;
@@ -844,7 +842,7 @@ public static int bg_host_ifce_speed (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_host_ifce_speed(beagle);
+    return NativeMethods.net_bg_host_ifce_speed(beagle);
 }
 
 /* Returns the device address that the beagle is attached to. */
@@ -853,7 +851,7 @@ public static int bg_dev_addr (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_dev_addr(beagle);
+    return NativeMethods.net_bg_dev_addr(beagle);
 }
 
 
@@ -868,7 +866,7 @@ public static int bg_host_buffer_size (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_host_buffer_size(beagle, num_bytes);
+    return NativeMethods.net_bg_host_buffer_size(beagle, num_bytes);
 }
 
 /* Query the amount of buffering that is unused and free for buffering. */
@@ -877,7 +875,7 @@ public static int bg_host_buffer_free (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_host_buffer_free(beagle);
+    return NativeMethods.net_bg_host_buffer_free(beagle);
 }
 
 /* Query the amount of buffering that is used and no longer available. */
@@ -886,7 +884,7 @@ public static int bg_host_buffer_used (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_host_buffer_used(beagle);
+    return NativeMethods.net_bg_host_buffer_used(beagle);
 }
 
 /* Benchmark the speed of the host to Beagle interface */
@@ -897,7 +895,7 @@ public static int bg_commtest (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_commtest(beagle, num_samples, delay_count);
+    return NativeMethods.net_bg_commtest(beagle, num_samples, delay_count);
 }
 
 
@@ -931,7 +929,7 @@ public static int bg_enable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_enable(beagle, protocol);
+    return NativeMethods.net_bg_enable(beagle, protocol);
 }
 
 /* Disable the Beagle monitor */
@@ -940,7 +938,7 @@ public static int bg_disable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_disable(beagle);
+    return NativeMethods.net_bg_disable(beagle);
 }
 
 /*
@@ -953,7 +951,7 @@ public static int bg_capture_stop (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_capture_stop(beagle);
+    return NativeMethods.net_bg_capture_stop(beagle);
 }
 
 public static int bg_capture_trigger (
@@ -961,7 +959,7 @@ public static int bg_capture_trigger (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_capture_trigger(beagle);
+    return NativeMethods.net_bg_capture_trigger(beagle);
 }
 
 /*
@@ -985,7 +983,7 @@ public static int bg_capture_trigger_wait (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_capture_trigger_wait(beagle, timeout_ms, ref status);
+    return NativeMethods.net_bg_capture_trigger_wait(beagle, timeout_ms, ref status);
 }
 
 /* Set the sample rate in kilohertz. */
@@ -995,7 +993,7 @@ public static int bg_samplerate (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_samplerate(beagle, samplerate_khz);
+    return NativeMethods.net_bg_samplerate(beagle, samplerate_khz);
 }
 
 /*
@@ -1010,7 +1008,7 @@ public static int bg_bit_timing_size (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_bit_timing_size(protocol, num_data_bytes);
+    return NativeMethods.net_bg_bit_timing_size(protocol, num_data_bytes);
 }
 
 
@@ -1027,7 +1025,7 @@ public static int bg_i2c_pullup (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_i2c_pullup(beagle, pullup_flag);
+    return NativeMethods.net_bg_i2c_pullup(beagle, pullup_flag);
 }
 
 public const ushort BG_I2C_MONITOR_DATA = 0x00ff;
@@ -1045,7 +1043,7 @@ public static int bg_i2c_read (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int data_in_max_bytes = (int)tp_min(max_bytes, data_in.Length);
-    return net_bg_i2c_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in);
+    return NativeMethods.net_bg_i2c_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in);
 }
 
 public static int bg_i2c_read_data_timing (
@@ -1063,7 +1061,7 @@ public static int bg_i2c_read_data_timing (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int data_in_max_bytes = (int)tp_min(max_bytes, data_in.Length);
     int data_timing_max_timing = (int)tp_min(max_timing, data_timing.Length);
-    return net_bg_i2c_read_data_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in, data_timing_max_timing, data_timing);
+    return NativeMethods.net_bg_i2c_read_data_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in, data_timing_max_timing, data_timing);
 }
 
 public static int bg_i2c_read_bit_timing (
@@ -1081,7 +1079,7 @@ public static int bg_i2c_read_bit_timing (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int data_in_max_bytes = (int)tp_min(max_bytes, data_in.Length);
     int bit_timing_max_timing = (int)tp_min(max_timing, bit_timing.Length);
-    return net_bg_i2c_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in, bit_timing_max_timing, bit_timing);
+    return NativeMethods.net_bg_i2c_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_in_max_bytes, data_in, bit_timing_max_timing, bit_timing);
 }
 
 
@@ -1108,7 +1106,7 @@ public static int bg_spi_configure (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_spi_configure(beagle, ss_polarity, sck_sampling_edge, bitorder);
+    return NativeMethods.net_bg_spi_configure(beagle, ss_polarity, sck_sampling_edge, bitorder);
 }
 
 public static int bg_spi_read (
@@ -1126,7 +1124,7 @@ public static int bg_spi_read (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int data_mosi_mosi_max_bytes = (int)tp_min(mosi_max_bytes, data_mosi.Length);
     int data_miso_miso_max_bytes = (int)tp_min(miso_max_bytes, data_miso.Length);
-    return net_bg_spi_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso);
+    return NativeMethods.net_bg_spi_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso);
 }
 
 public static int bg_spi_read_data_timing (
@@ -1147,7 +1145,7 @@ public static int bg_spi_read_data_timing (
     int data_mosi_mosi_max_bytes = (int)tp_min(mosi_max_bytes, data_mosi.Length);
     int data_miso_miso_max_bytes = (int)tp_min(miso_max_bytes, data_miso.Length);
     int data_timing_max_timing = (int)tp_min(max_timing, data_timing.Length);
-    return net_bg_spi_read_data_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso, data_timing_max_timing, data_timing);
+    return NativeMethods.net_bg_spi_read_data_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso, data_timing_max_timing, data_timing);
 }
 
 public static int bg_spi_read_bit_timing (
@@ -1168,7 +1166,7 @@ public static int bg_spi_read_bit_timing (
     int data_mosi_mosi_max_bytes = (int)tp_min(mosi_max_bytes, data_mosi.Length);
     int data_miso_miso_max_bytes = (int)tp_min(miso_max_bytes, data_miso.Length);
     int bit_timing_max_timing = (int)tp_min(max_timing, bit_timing.Length);
-    return net_bg_spi_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso, bit_timing_max_timing, bit_timing);
+    return NativeMethods.net_bg_spi_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, data_mosi_mosi_max_bytes, data_mosi, data_miso_miso_max_bytes, data_miso, bit_timing_max_timing, bit_timing);
 }
 
 
@@ -1324,7 +1322,7 @@ public static int bg_usb_features (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_features(beagle);
+    return NativeMethods.net_bg_usb_features(beagle);
 }
 
 /* License constants */
@@ -1342,7 +1340,7 @@ public static int bg_usb_license_read (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int license_key_length = (int)tp_min(length, license_key.Length);
-    return net_bg_usb_license_read(beagle, license_key_length, license_key);
+    return NativeMethods.net_bg_usb_license_read(beagle, license_key_length, license_key);
 }
 
 /*
@@ -1360,7 +1358,7 @@ public static int bg_usb_license_write (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int license_key_length = (int)tp_min(length, license_key.Length);
-    return net_bg_usb_license_write(beagle, license_key_length, license_key);
+    return NativeMethods.net_bg_usb_license_write(beagle, license_key_length, license_key);
 }
 
 /* Capture modes */
@@ -1379,7 +1377,7 @@ public static int bg_usb_configure (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_configure(beagle, cap_mask, trigger_mode);
+    return NativeMethods.net_bg_usb_configure(beagle, cap_mask, trigger_mode);
 }
 
 /* USB Target Power */
@@ -1393,7 +1391,7 @@ public static int bg_usb_target_power (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_target_power(beagle, power_flag);
+    return NativeMethods.net_bg_usb_target_power(beagle, power_flag);
 }
 
 /* USB 2 Configuration */
@@ -1409,7 +1407,7 @@ public static int bg_usb2_capture_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_capture_config(beagle, capture_mode);
+    return NativeMethods.net_bg_usb2_capture_config(beagle, capture_mode);
 }
 
 /* Target configs */
@@ -1424,7 +1422,7 @@ public static int bg_usb2_target_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_target_config(beagle, target_config);
+    return NativeMethods.net_bg_usb2_target_config(beagle, target_config);
 }
 
 /* General constants */
@@ -1438,7 +1436,7 @@ public static int bg_usb2_capture_buffer_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_capture_buffer_config(beagle, pretrig_kb, capture_kb);
+    return NativeMethods.net_bg_usb2_capture_buffer_config(beagle, pretrig_kb, capture_kb);
 }
 
 public static int bg_usb2_capture_buffer_config_query (
@@ -1448,7 +1446,7 @@ public static int bg_usb2_capture_buffer_config_query (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_capture_buffer_config_query(beagle, ref pretrig_kb, ref capture_kb);
+    return NativeMethods.net_bg_usb2_capture_buffer_config_query(beagle, ref pretrig_kb, ref capture_kb);
 }
 
 public static int bg_usb2_capture_status (
@@ -1461,7 +1459,7 @@ public static int bg_usb2_capture_status (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_capture_status(beagle, ref status, ref pretrig_remaining_kb, ref pretrig_total_kb, ref capture_remaining_kb, ref capture_total_kb);
+    return NativeMethods.net_bg_usb2_capture_status(beagle, ref status, ref pretrig_remaining_kb, ref pretrig_total_kb, ref capture_remaining_kb, ref capture_total_kb);
 }
 
 /* Digital output configuration */
@@ -1484,7 +1482,7 @@ public static int bg_usb2_digital_out_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_digital_out_config(beagle, out_enable_mask, out_polarity_mask);
+    return NativeMethods.net_bg_usb2_digital_out_config(beagle, out_enable_mask, out_polarity_mask);
 }
 
 /* Digital output match pin configuration */
@@ -1581,7 +1579,7 @@ public static int bg_usb2_digital_out_match (
     GCContext gcc = new GCContext();
     c_BeagleUsb2DataMatch c_data_match = new c_BeagleUsb2DataMatch();
     to_c_BeagleUsb2DataMatch(ref c_data_match, ref data_match, gcc, true);
-    int ret = net_bg_usb2_digital_out_match(beagle, pin_num, ref packet_match, ref c_data_match);
+    int ret = NativeMethods.net_bg_usb2_digital_out_match(beagle, pin_num, ref packet_match, ref c_data_match);
     gcc.free();
     return ret;
 }
@@ -1597,7 +1595,7 @@ public static int bg_usb2_digital_in_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_digital_in_config(beagle, in_enable_mask);
+    return NativeMethods.net_bg_usb2_digital_in_config(beagle, in_enable_mask);
 }
 
 /* Hardware filtering configuration */
@@ -1613,7 +1611,7 @@ public static int bg_usb2_hw_filter_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_hw_filter_config(beagle, filter_enable_mask);
+    return NativeMethods.net_bg_usb2_hw_filter_config(beagle, filter_enable_mask);
 }
 
 public static int bg_usb2_simple_match_config (
@@ -1624,7 +1622,7 @@ public static int bg_usb2_simple_match_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_simple_match_config(beagle, dig_in_pin_pos_edge_mask, dig_in_pin_neg_edge_mask, dig_out_match_pin_mask);
+    return NativeMethods.net_bg_usb2_simple_match_config(beagle, dig_in_pin_pos_edge_mask, dig_in_pin_neg_edge_mask, dig_out_match_pin_mask);
 }
 
 /* USB 2.0 Complex matching enable/disable */
@@ -1633,7 +1631,7 @@ public static int bg_usb2_complex_match_enable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_complex_match_enable(beagle);
+    return NativeMethods.net_bg_usb2_complex_match_enable(beagle);
 }
 
 public static int bg_usb2_complex_match_disable (
@@ -1641,7 +1639,7 @@ public static int bg_usb2_complex_match_disable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_complex_match_disable(beagle);
+    return NativeMethods.net_bg_usb2_complex_match_disable(beagle);
 }
 
 // enum BeagleUsbMatchType  (from declaration above)
@@ -1953,7 +1951,7 @@ public static int bg_usb2_complex_match_config (
     to_c_BeagleUsb2ComplexMatchState(ref c_state_6, ref state_6, gcc, true);
     c_BeagleUsb2ComplexMatchState c_state_7 = new c_BeagleUsb2ComplexMatchState();
     to_c_BeagleUsb2ComplexMatchState(ref c_state_7, ref state_7, gcc, true);
-    int ret = net_bg_usb2_complex_match_config(beagle, validate, digout, ref c_state_0, ref c_state_1, ref c_state_2, ref c_state_3, ref c_state_4, ref c_state_5, ref c_state_6, ref c_state_7);
+    int ret = NativeMethods.net_bg_usb2_complex_match_config(beagle, validate, digout, ref c_state_0, ref c_state_1, ref c_state_2, ref c_state_3, ref c_state_4, ref c_state_5, ref c_state_6, ref c_state_7);
     gcc.free();
     return ret;
 }
@@ -1969,7 +1967,7 @@ public static int bg_usb2_complex_match_config_single (
     GCContext gcc = new GCContext();
     c_BeagleUsb2ComplexMatchState c_state = new c_BeagleUsb2ComplexMatchState();
     to_c_BeagleUsb2ComplexMatchState(ref c_state, ref state, gcc, true);
-    int ret = net_bg_usb2_complex_match_config_single(beagle, validate, digout, ref c_state);
+    int ret = NativeMethods.net_bg_usb2_complex_match_config_single(beagle, validate, digout, ref c_state);
     gcc.free();
     return ret;
 }
@@ -1988,7 +1986,7 @@ public static int bg_usb2_extout_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_extout_config(beagle, extout_modulation);
+    return NativeMethods.net_bg_usb2_extout_config(beagle, extout_modulation);
 }
 
 // enum BeagleMemoryTestResult  (from declaration above)
@@ -2000,7 +1998,7 @@ public static int bg_usb2_memory_test (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_memory_test(beagle);
+    return NativeMethods.net_bg_usb2_memory_test(beagle);
 }
 
 /* USB 3 Configuration */
@@ -2012,7 +2010,7 @@ public static int bg_usb3_capture_buffer_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_capture_buffer_config(beagle, pretrig_kb, capture_kb);
+    return NativeMethods.net_bg_usb3_capture_buffer_config(beagle, pretrig_kb, capture_kb);
 }
 
 public static int bg_usb3_capture_buffer_config_query (
@@ -2022,7 +2020,7 @@ public static int bg_usb3_capture_buffer_config_query (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_capture_buffer_config_query(beagle, ref pretrig_kb, ref capture_kb);
+    return NativeMethods.net_bg_usb3_capture_buffer_config_query(beagle, ref pretrig_kb, ref capture_kb);
 }
 
 public static int bg_usb3_capture_status (
@@ -2035,7 +2033,7 @@ public static int bg_usb3_capture_status (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_capture_status(beagle, ref status, ref pretrig_remaining_kb, ref pretrig_total_kb, ref capture_remaining_kb, ref capture_total_kb);
+    return NativeMethods.net_bg_usb3_capture_status(beagle, ref status, ref pretrig_remaining_kb, ref pretrig_total_kb, ref capture_remaining_kb, ref capture_total_kb);
 }
 
 public const byte BG_USB3_PHY_CONFIG_POLARITY_NON_INVERT = 0x00;
@@ -2057,7 +2055,7 @@ public static int bg_usb3_phy_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_phy_config(beagle, tx, rx);
+    return NativeMethods.net_bg_usb3_phy_config(beagle, tx, rx);
 }
 
 public const byte BG_USB3_TRUNCATION_OFF = 0x00;
@@ -2071,7 +2069,7 @@ public static int bg_usb3_truncation_mode (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_truncation_mode(beagle, tx_truncation_mode, rx_truncation_mode);
+    return NativeMethods.net_bg_usb3_truncation_mode(beagle, tx_truncation_mode, rx_truncation_mode);
 }
 
 /* Channel Configuration */
@@ -2098,7 +2096,7 @@ public static int bg_usb3_link_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_link_config(beagle, ref tx, ref rx);
+    return NativeMethods.net_bg_usb3_link_config(beagle, ref tx, ref rx);
 }
 
 /* Simple match configuration */
@@ -2160,7 +2158,7 @@ public static int bg_usb3_simple_match_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_simple_match_config(beagle, trigger_mask, extout_mask, extout_mode, extin_edge_mask, tx_ips_type, rx_ips_type);
+    return NativeMethods.net_bg_usb3_simple_match_config(beagle, trigger_mask, extout_mask, extout_mode, extin_edge_mask, tx_ips_type, rx_ips_type);
 }
 
 /* USB 3.0 Complex matching enable/disable */
@@ -2169,7 +2167,7 @@ public static int bg_usb3_complex_match_enable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_complex_match_enable(beagle);
+    return NativeMethods.net_bg_usb3_complex_match_enable(beagle);
 }
 
 public static int bg_usb3_complex_match_disable (
@@ -2177,7 +2175,7 @@ public static int bg_usb3_complex_match_disable (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_complex_match_disable(beagle);
+    return NativeMethods.net_bg_usb3_complex_match_disable(beagle);
 }
 
 // enum BeagleUsbSource  (from declaration above)
@@ -2457,7 +2455,7 @@ public static int bg_usb3_complex_match_config (
     to_c_BeagleUsb3ComplexMatchState(ref c_state_6, ref state_6, gcc, true);
     c_BeagleUsb3ComplexMatchState c_state_7 = new c_BeagleUsb3ComplexMatchState();
     to_c_BeagleUsb3ComplexMatchState(ref c_state_7, ref state_7, gcc, true);
-    int ret = net_bg_usb3_complex_match_config(beagle, validate, extout, ref c_state_0, ref c_state_1, ref c_state_2, ref c_state_3, ref c_state_4, ref c_state_5, ref c_state_6, ref c_state_7);
+    int ret = NativeMethods.net_bg_usb3_complex_match_config(beagle, validate, extout, ref c_state_0, ref c_state_1, ref c_state_2, ref c_state_3, ref c_state_4, ref c_state_5, ref c_state_6, ref c_state_7);
     gcc.free();
     return ret;
 }
@@ -2474,7 +2472,7 @@ public static int bg_usb3_complex_match_config_single (
     GCContext gcc = new GCContext();
     c_BeagleUsb3ComplexMatchState c_state = new c_BeagleUsb3ComplexMatchState();
     to_c_BeagleUsb3ComplexMatchState(ref c_state, ref state, gcc, true);
-    int ret = net_bg_usb3_complex_match_config_single(beagle, validate, extout, ref c_state);
+    int ret = NativeMethods.net_bg_usb3_complex_match_config_single(beagle, validate, extout, ref c_state);
     gcc.free();
     return ret;
 }
@@ -2487,7 +2485,7 @@ public static int bg_usb3_ext_io_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_ext_io_config(beagle, extin_enable, extout_modulation);
+    return NativeMethods.net_bg_usb3_ext_io_config(beagle, extin_enable, extout_modulation);
 }
 
 // enum BeagleUsb3MemoryTestType  (from declaration above)
@@ -2501,7 +2499,7 @@ public static int bg_usb3_memory_test (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb3_memory_test(beagle, test);
+    return NativeMethods.net_bg_usb3_memory_test(beagle, test);
 }
 
 /* Read functions */
@@ -2518,7 +2516,7 @@ public static int bg_usb2_read (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_max_bytes = (int)tp_min(max_bytes, packet.Length);
-    return net_bg_usb2_read(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet);
+    return NativeMethods.net_bg_usb2_read(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet);
 }
 
 public static int bg_usb_read (
@@ -2538,7 +2536,7 @@ public static int bg_usb_read (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_max_bytes = (int)tp_min(max_bytes, packet.Length);
     int k_data_max_k_bytes = (int)tp_min(max_k_bytes, k_data.Length);
-    return net_bg_usb_read(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, ref source, packet_max_bytes, packet, k_data_max_k_bytes, k_data);
+    return NativeMethods.net_bg_usb_read(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, ref source, packet_max_bytes, packet, k_data_max_k_bytes, k_data);
 }
 
 /* | return / 8 */
@@ -2558,7 +2556,7 @@ public static int bg_usb2_read_data_timing (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_max_bytes = (int)tp_min(max_bytes, packet.Length);
     int data_timing_max_timing = (int)tp_min(max_timing, data_timing.Length);
-    return net_bg_usb2_read_data_timing(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet, data_timing_max_timing, data_timing);
+    return NativeMethods.net_bg_usb2_read_data_timing(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet, data_timing_max_timing, data_timing);
 }
 
 public static int bg_usb2_read_bit_timing (
@@ -2577,7 +2575,7 @@ public static int bg_usb2_read_bit_timing (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_max_bytes = (int)tp_min(max_bytes, packet.Length);
     int bit_timing_max_timing = (int)tp_min(max_timing, bit_timing.Length);
-    return net_bg_usb2_read_bit_timing(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet, bit_timing_max_timing, bit_timing);
+    return NativeMethods.net_bg_usb2_read_bit_timing(beagle, ref status, ref events, ref time_sop, ref time_duration, ref time_dataoffset, packet_max_bytes, packet, bit_timing_max_timing, bit_timing);
 }
 
 public static int bg_usb2_reconstruct_timing (
@@ -2591,7 +2589,7 @@ public static int bg_usb2_reconstruct_timing (
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_num_bytes = (int)tp_min(num_bytes, packet.Length);
     int bit_timing_max_timing = (int)tp_min(max_timing, bit_timing.Length);
-    return net_bg_usb2_reconstruct_timing(target_config, packet_num_bytes, packet, bit_timing_max_timing, bit_timing);
+    return NativeMethods.net_bg_usb2_reconstruct_timing(target_config, packet_num_bytes, packet, bit_timing_max_timing, bit_timing);
 }
 
 /* Hardware-based Statistics */
@@ -2612,7 +2610,7 @@ public static int bg_usb_stats_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_stats_config(beagle, ref config);
+    return NativeMethods.net_bg_usb_stats_config(beagle, ref config);
 }
 
 public static int bg_usb_stats_config_query (
@@ -2621,7 +2619,7 @@ public static int bg_usb_stats_config_query (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_stats_config_query(beagle, ref config);
+    return NativeMethods.net_bg_usb_stats_config_query(beagle, ref config);
 }
 
 public static int bg_usb_stats_reset (
@@ -2629,7 +2627,7 @@ public static int bg_usb_stats_reset (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_stats_reset(beagle);
+    return NativeMethods.net_bg_usb_stats_reset(beagle);
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -2693,7 +2691,7 @@ public static int bg_usb_stats_read (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb_stats_read(beagle, ref stats);
+    return NativeMethods.net_bg_usb_stats_read(beagle, ref stats);
 }
 
 public static int bg_usb2_stats_read (
@@ -2702,7 +2700,7 @@ public static int bg_usb2_stats_read (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_usb2_stats_read(beagle, ref stats);
+    return NativeMethods.net_bg_usb2_stats_read(beagle, ref stats);
 }
 
 
@@ -2737,7 +2735,7 @@ public static int bg5000_cross_analyzer_sync_config (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg5000_cross_analyzer_sync_config(beagle, cross_sync_mode, cross_trigger_mode, cross_stop_mode);
+    return NativeMethods.net_bg5000_cross_analyzer_sync_config(beagle, cross_sync_mode, cross_trigger_mode, cross_stop_mode);
 }
 
 public static int bg5000_cross_analyzer_sync_release (
@@ -2745,7 +2743,7 @@ public static int bg5000_cross_analyzer_sync_release (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg5000_cross_analyzer_sync_release(beagle);
+    return NativeMethods.net_bg5000_cross_analyzer_sync_release(beagle);
 }
 
 
@@ -2775,7 +2773,7 @@ public static int bg_mdio_read (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_mdio_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, ref data_in);
+    return NativeMethods.net_bg_mdio_read(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, ref data_in);
 }
 
 public static int bg_mdio_read_bit_timing (
@@ -2791,7 +2789,7 @@ public static int bg_mdio_read_bit_timing (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int bit_timing_max_timing = (int)tp_min(max_timing, bit_timing.Length);
-    return net_bg_mdio_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, ref data_in, bit_timing_max_timing, bit_timing);
+    return NativeMethods.net_bg_mdio_read_bit_timing(beagle, ref status, ref time_sop, ref time_duration, ref time_dataoffset, ref data_in, bit_timing_max_timing, bit_timing);
 }
 
 /*
@@ -2812,7 +2810,7 @@ public static int bg_mdio_parse (
 )
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
-    return net_bg_mdio_parse(packet, ref clause, ref opcode, ref addr1, ref addr2, ref data);
+    return NativeMethods.net_bg_mdio_parse(packet, ref clause, ref opcode, ref addr1, ref addr2, ref data);
 }
 
 
@@ -2830,272 +2828,278 @@ public static int bg_iv_mon_parse (
 {
     if (!BG_LIBRARY_LOADED) return (int)BeagleStatus.BG_INCOMPATIBLE_LIBRARY;
     int packet_length = (int)tp_min(length, packet.Length);
-    return net_bg_iv_mon_parse(packet_length, packet, ref voltage, ref current);
+    return NativeMethods.net_bg_iv_mon_parse(packet_length, packet, ref voltage, ref current);
 }
 
+        private class NativeMethods
+        {
+            /*=========================================================================
+            | NATIVE DLL BINDINGS
+             ========================================================================*/
+            [DllImport("beagle")]
+            public static extern int bg_c_version();
 
-/*=========================================================================
-| NATIVE DLL BINDINGS
- ========================================================================*/
-[DllImport ("beagle")]
-private static extern int net_bg_find_devices (int num_devices, [Out] ushort[] devices);
+            [DllImport("beagle")]
+            public static extern int net_bg_find_devices(int num_devices, [Out] ushort[] devices);
 
-[DllImport ("beagle")]
-private static extern int net_bg_find_devices_ext (int num_devices, [Out] ushort[] devices, int num_ids, [Out] uint[] unique_ids);
+            [DllImport("beagle")]
+            public static extern int net_bg_find_devices_ext(int num_devices, [Out] ushort[] devices, int num_ids, [Out] uint[] unique_ids);
 
-[DllImport ("beagle")]
-private static extern int net_bg_open (int port_number);
+            [DllImport("beagle")]
+            public static extern int net_bg_open(int port_number);
 
-[DllImport ("beagle")]
-private static extern int net_bg_open_ext (int port_number, ref BeagleExt bg_ext);
+            [DllImport("beagle")]
+            public static extern int net_bg_open_ext(int port_number, ref BeagleExt bg_ext);
 
-[DllImport ("beagle")]
-private static extern int net_bg_close (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_close(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_port (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_port(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_features (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_features(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_unique_id_to_features (uint unique_id);
+            [DllImport("beagle")]
+            public static extern int net_bg_unique_id_to_features(uint unique_id);
 
-[DllImport ("beagle")]
-private static extern uint net_bg_unique_id (int beagle);
+            [DllImport("beagle")]
+            public static extern uint net_bg_unique_id(int beagle);
 
-[DllImport ("beagle")]
-private static extern IntPtr net_bg_status_string (int status);
+            [DllImport("beagle")]
+            public static extern IntPtr net_bg_status_string(int status);
 
-[DllImport ("beagle")]
-private static extern int net_bg_version (int beagle, ref BeagleVersion version);
+            [DllImport("beagle")]
+            public static extern int net_bg_version(int beagle, ref BeagleVersion version);
 
-[DllImport ("beagle")]
-private static extern int net_bg_latency (int beagle, uint milliseconds);
+            [DllImport("beagle")]
+            public static extern int net_bg_latency(int beagle, uint milliseconds);
 
-[DllImport ("beagle")]
-private static extern int net_bg_timeout (int beagle, uint milliseconds);
+            [DllImport("beagle")]
+            public static extern int net_bg_timeout(int beagle, uint milliseconds);
 
-[DllImport ("beagle")]
-private static extern uint net_bg_sleep_ms (uint milliseconds);
+            [DllImport("beagle")]
+            public static extern uint net_bg_sleep_ms(uint milliseconds);
 
-[DllImport ("beagle")]
-private static extern int net_bg_target_power (int beagle, byte power_flag);
+            [DllImport("beagle")]
+            public static extern int net_bg_target_power(int beagle, byte power_flag);
 
-[DllImport ("beagle")]
-private static extern int net_bg_host_ifce_speed (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_host_ifce_speed(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_dev_addr (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_dev_addr(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_host_buffer_size (int beagle, uint num_bytes);
+            [DllImport("beagle")]
+            public static extern int net_bg_host_buffer_size(int beagle, uint num_bytes);
 
-[DllImport ("beagle")]
-private static extern int net_bg_host_buffer_free (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_host_buffer_free(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_host_buffer_used (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_host_buffer_used(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_commtest (int beagle, int num_samples, int delay_count);
+            [DllImport("beagle")]
+            public static extern int net_bg_commtest(int beagle, int num_samples, int delay_count);
 
-[DllImport ("beagle")]
-private static extern int net_bg_enable (int beagle, BeagleProtocol protocol);
+            [DllImport("beagle")]
+            public static extern int net_bg_enable(int beagle, BeagleProtocol protocol);
 
-[DllImport ("beagle")]
-private static extern int net_bg_disable (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_disable(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_capture_stop (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_capture_stop(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_capture_trigger (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_capture_trigger(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_capture_trigger_wait (int beagle, uint timeout_ms, ref BeagleCaptureStatus status);
+            [DllImport("beagle")]
+            public static extern int net_bg_capture_trigger_wait(int beagle, uint timeout_ms, ref BeagleCaptureStatus status);
 
-[DllImport ("beagle")]
-private static extern int net_bg_samplerate (int beagle, int samplerate_khz);
+            [DllImport("beagle")]
+            public static extern int net_bg_samplerate(int beagle, int samplerate_khz);
 
-[DllImport ("beagle")]
-private static extern int net_bg_bit_timing_size (BeagleProtocol protocol, int num_data_bytes);
+            [DllImport("beagle")]
+            public static extern int net_bg_bit_timing_size(BeagleProtocol protocol, int num_data_bytes);
 
-[DllImport ("beagle")]
-private static extern int net_bg_i2c_pullup (int beagle, byte pullup_flag);
+            [DllImport("beagle")]
+            public static extern int net_bg_i2c_pullup(int beagle, byte pullup_flag);
 
-[DllImport ("beagle")]
-private static extern int net_bg_i2c_read (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in);
+            [DllImport("beagle")]
+            public static extern int net_bg_i2c_read(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in);
 
-[DllImport ("beagle")]
-private static extern int net_bg_i2c_read_data_timing (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in, int max_timing, [Out] uint[] data_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_i2c_read_data_timing(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in, int max_timing, [Out] uint[] data_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_i2c_read_bit_timing (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in, int max_timing, [Out] uint[] bit_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_i2c_read_bit_timing(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] ushort[] data_in, int max_timing, [Out] uint[] bit_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_spi_configure (int beagle, BeagleSpiSSPolarity ss_polarity, BeagleSpiSckSamplingEdge sck_sampling_edge, BeagleSpiBitorder bitorder);
+            [DllImport("beagle")]
+            public static extern int net_bg_spi_configure(int beagle, BeagleSpiSSPolarity ss_polarity, BeagleSpiSckSamplingEdge sck_sampling_edge, BeagleSpiBitorder bitorder);
 
-[DllImport ("beagle")]
-private static extern int net_bg_spi_read (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso);
+            [DllImport("beagle")]
+            public static extern int net_bg_spi_read(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso);
 
-[DllImport ("beagle")]
-private static extern int net_bg_spi_read_data_timing (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso, int max_timing, [Out] uint[] data_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_spi_read_data_timing(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso, int max_timing, [Out] uint[] data_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_spi_read_bit_timing (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso, int max_timing, [Out] uint[] bit_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_spi_read_bit_timing(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int mosi_max_bytes, [Out] byte[] data_mosi, int miso_max_bytes, [Out] byte[] data_miso, int max_timing, [Out] uint[] bit_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_features (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_features(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_license_read (int beagle, int length, [Out] byte[] license_key);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_license_read(int beagle, int length, [Out] byte[] license_key);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_license_write (int beagle, int length, [In] byte[] license_key);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_license_write(int beagle, int length, [In] byte[] license_key);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_configure (int beagle, byte cap_mask, BeagleUsbTriggerMode trigger_mode);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_configure(int beagle, byte cap_mask, BeagleUsbTriggerMode trigger_mode);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_target_power (int beagle, BeagleUsbTargetPower power_flag);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_target_power(int beagle, BeagleUsbTargetPower power_flag);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_capture_config (int beagle, BeagleUsb2CaptureMode capture_mode);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_capture_config(int beagle, BeagleUsb2CaptureMode capture_mode);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_target_config (int beagle, uint target_config);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_target_config(int beagle, uint target_config);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_capture_buffer_config (int beagle, uint pretrig_kb, uint capture_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_capture_buffer_config(int beagle, uint pretrig_kb, uint capture_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_capture_buffer_config_query (int beagle, ref uint pretrig_kb, ref uint capture_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_capture_buffer_config_query(int beagle, ref uint pretrig_kb, ref uint capture_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_capture_status (int beagle, ref BeagleCaptureStatus status, ref uint pretrig_remaining_kb, ref uint pretrig_total_kb, ref uint capture_remaining_kb, ref uint capture_total_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_capture_status(int beagle, ref BeagleCaptureStatus status, ref uint pretrig_remaining_kb, ref uint pretrig_total_kb, ref uint capture_remaining_kb, ref uint capture_total_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_digital_out_config (int beagle, byte out_enable_mask, byte out_polarity_mask);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_digital_out_config(int beagle, byte out_enable_mask, byte out_polarity_mask);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_digital_out_match (int beagle, BeagleUsb2DigitalOutMatchPins pin_num, ref BeagleUsb2PacketMatch packet_match, ref c_BeagleUsb2DataMatch data_match);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_digital_out_match(int beagle, BeagleUsb2DigitalOutMatchPins pin_num, ref BeagleUsb2PacketMatch packet_match, ref c_BeagleUsb2DataMatch data_match);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_digital_in_config (int beagle, byte in_enable_mask);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_digital_in_config(int beagle, byte in_enable_mask);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_hw_filter_config (int beagle, byte filter_enable_mask);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_hw_filter_config(int beagle, byte filter_enable_mask);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_simple_match_config (int beagle, byte dig_in_pin_pos_edge_mask, byte dig_in_pin_neg_edge_mask, byte dig_out_match_pin_mask);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_simple_match_config(int beagle, byte dig_in_pin_pos_edge_mask, byte dig_in_pin_neg_edge_mask, byte dig_out_match_pin_mask);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_complex_match_enable (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_complex_match_enable(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_complex_match_disable (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_complex_match_disable(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_complex_match_config (int beagle, byte validate, byte digout, ref c_BeagleUsb2ComplexMatchState state_0, ref c_BeagleUsb2ComplexMatchState state_1, ref c_BeagleUsb2ComplexMatchState state_2, ref c_BeagleUsb2ComplexMatchState state_3, ref c_BeagleUsb2ComplexMatchState state_4, ref c_BeagleUsb2ComplexMatchState state_5, ref c_BeagleUsb2ComplexMatchState state_6, ref c_BeagleUsb2ComplexMatchState state_7);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_complex_match_config(int beagle, byte validate, byte digout, ref c_BeagleUsb2ComplexMatchState state_0, ref c_BeagleUsb2ComplexMatchState state_1, ref c_BeagleUsb2ComplexMatchState state_2, ref c_BeagleUsb2ComplexMatchState state_3, ref c_BeagleUsb2ComplexMatchState state_4, ref c_BeagleUsb2ComplexMatchState state_5, ref c_BeagleUsb2ComplexMatchState state_6, ref c_BeagleUsb2ComplexMatchState state_7);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_complex_match_config_single (int beagle, byte validate, byte digout, ref c_BeagleUsb2ComplexMatchState state);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_complex_match_config_single(int beagle, byte validate, byte digout, ref c_BeagleUsb2ComplexMatchState state);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_extout_config (int beagle, BeagleUsbExtoutType extout_modulation);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_extout_config(int beagle, BeagleUsbExtoutType extout_modulation);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_memory_test (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_memory_test(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_capture_buffer_config (int beagle, uint pretrig_kb, uint capture_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_capture_buffer_config(int beagle, uint pretrig_kb, uint capture_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_capture_buffer_config_query (int beagle, ref uint pretrig_kb, ref uint capture_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_capture_buffer_config_query(int beagle, ref uint pretrig_kb, ref uint capture_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_capture_status (int beagle, ref BeagleCaptureStatus status, ref uint pretrig_remaining_kb, ref uint pretrig_total_kb, ref uint capture_remaining_kb, ref uint capture_total_kb);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_capture_status(int beagle, ref BeagleCaptureStatus status, ref uint pretrig_remaining_kb, ref uint pretrig_total_kb, ref uint capture_remaining_kb, ref uint capture_total_kb);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_phy_config (int beagle, byte tx, byte rx);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_phy_config(int beagle, byte tx, byte rx);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_truncation_mode (int beagle, byte tx_truncation_mode, byte rx_truncation_mode);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_truncation_mode(int beagle, byte tx_truncation_mode, byte rx_truncation_mode);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_link_config (int beagle, ref BeagleUsb3Channel tx, ref BeagleUsb3Channel rx);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_link_config(int beagle, ref BeagleUsb3Channel tx, ref BeagleUsb3Channel rx);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_simple_match_config (int beagle, uint trigger_mask, uint extout_mask, BeagleUsb3ExtoutMode extout_mode, byte extin_edge_mask, BeagleUsb3IPSType tx_ips_type, BeagleUsb3IPSType rx_ips_type);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_simple_match_config(int beagle, uint trigger_mask, uint extout_mask, BeagleUsb3ExtoutMode extout_mode, byte extin_edge_mask, BeagleUsb3IPSType tx_ips_type, BeagleUsb3IPSType rx_ips_type);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_complex_match_enable (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_complex_match_enable(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_complex_match_disable (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_complex_match_disable(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_complex_match_config (int beagle, byte validate, byte extout, ref c_BeagleUsb3ComplexMatchState state_0, ref c_BeagleUsb3ComplexMatchState state_1, ref c_BeagleUsb3ComplexMatchState state_2, ref c_BeagleUsb3ComplexMatchState state_3, ref c_BeagleUsb3ComplexMatchState state_4, ref c_BeagleUsb3ComplexMatchState state_5, ref c_BeagleUsb3ComplexMatchState state_6, ref c_BeagleUsb3ComplexMatchState state_7);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_complex_match_config(int beagle, byte validate, byte extout, ref c_BeagleUsb3ComplexMatchState state_0, ref c_BeagleUsb3ComplexMatchState state_1, ref c_BeagleUsb3ComplexMatchState state_2, ref c_BeagleUsb3ComplexMatchState state_3, ref c_BeagleUsb3ComplexMatchState state_4, ref c_BeagleUsb3ComplexMatchState state_5, ref c_BeagleUsb3ComplexMatchState state_6, ref c_BeagleUsb3ComplexMatchState state_7);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_complex_match_config_single (int beagle, byte validate, byte extout, ref c_BeagleUsb3ComplexMatchState state);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_complex_match_config_single(int beagle, byte validate, byte extout, ref c_BeagleUsb3ComplexMatchState state);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_ext_io_config (int beagle, byte extin_enable, BeagleUsbExtoutType extout_modulation);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_ext_io_config(int beagle, byte extin_enable, BeagleUsbExtoutType extout_modulation);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb3_memory_test (int beagle, BeagleUsb3MemoryTestType test);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb3_memory_test(int beagle, BeagleUsb3MemoryTestType test);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_read (int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_read(int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_read (int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref BeagleUsbSource source, int max_bytes, [Out] byte[] packet, int max_k_bytes, [Out] byte[] k_data);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_read(int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref BeagleUsbSource source, int max_bytes, [Out] byte[] packet, int max_k_bytes, [Out] byte[] k_data);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_read_data_timing (int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet, int max_timing, [Out] uint[] data_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_read_data_timing(int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet, int max_timing, [Out] uint[] data_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_read_bit_timing (int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet, int max_timing, [Out] uint[] bit_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_read_bit_timing(int beagle, ref uint status, ref uint events, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, int max_bytes, [Out] byte[] packet, int max_timing, [Out] uint[] bit_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_reconstruct_timing (uint target_config, int num_bytes, [In] byte[] packet, int max_timing, [Out] uint[] bit_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_reconstruct_timing(uint target_config, int num_bytes, [In] byte[] packet, int max_timing, [Out] uint[] bit_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_stats_config (int beagle, ref BeagleUsbStatsConfig config);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_stats_config(int beagle, ref BeagleUsbStatsConfig config);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_stats_config_query (int beagle, ref BeagleUsbStatsConfig config);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_stats_config_query(int beagle, ref BeagleUsbStatsConfig config);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_stats_reset (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_stats_reset(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb_stats_read (int beagle, ref BeagleUsbStats stats);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb_stats_read(int beagle, ref BeagleUsbStats stats);
 
-[DllImport ("beagle")]
-private static extern int net_bg_usb2_stats_read (int beagle, ref BeagleUsb2Stats stats);
+            [DllImport("beagle")]
+            public static extern int net_bg_usb2_stats_read(int beagle, ref BeagleUsb2Stats stats);
 
-[DllImport ("beagle")]
-private static extern int net_bg5000_cross_analyzer_sync_config (int beagle, Beagle5000CrossAnalyzerSyncMode cross_sync_mode, Beagle5000CrossAnalyzerMode cross_trigger_mode, Beagle5000CrossAnalyzerMode cross_stop_mode);
+            [DllImport("beagle")]
+            public static extern int net_bg5000_cross_analyzer_sync_config(int beagle, Beagle5000CrossAnalyzerSyncMode cross_sync_mode, Beagle5000CrossAnalyzerMode cross_trigger_mode, Beagle5000CrossAnalyzerMode cross_stop_mode);
 
-[DllImport ("beagle")]
-private static extern int net_bg5000_cross_analyzer_sync_release (int beagle);
+            [DllImport("beagle")]
+            public static extern int net_bg5000_cross_analyzer_sync_release(int beagle);
 
-[DllImport ("beagle")]
-private static extern int net_bg_mdio_read (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref uint data_in);
+            [DllImport("beagle")]
+            public static extern int net_bg_mdio_read(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref uint data_in);
 
-[DllImport ("beagle")]
-private static extern int net_bg_mdio_read_bit_timing (int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref uint data_in, int max_timing, [Out] uint[] bit_timing);
+            [DllImport("beagle")]
+            public static extern int net_bg_mdio_read_bit_timing(int beagle, ref uint status, ref ulong time_sop, ref ulong time_duration, ref uint time_dataoffset, ref uint data_in, int max_timing, [Out] uint[] bit_timing);
 
-[DllImport ("beagle")]
-private static extern int net_bg_mdio_parse (uint packet, ref byte clause, ref byte opcode, ref byte addr1, ref byte addr2, ref ushort data);
+            [DllImport("beagle")]
+            public static extern int net_bg_mdio_parse(uint packet, ref byte clause, ref byte opcode, ref byte addr1, ref byte addr2, ref ushort data);
 
-[DllImport ("beagle")]
-private static extern int net_bg_iv_mon_parse (int length, [In] byte[] packet, ref float voltage, ref float current);
-
+            [DllImport("beagle")]
+            public static extern int net_bg_iv_mon_parse(int length, [In] byte[] packet, ref float voltage, ref float current);
+        }
 
 } // class BeagleApi
 
 } // namespace TotalPhase
+
+#pragma warning restore IDE1006

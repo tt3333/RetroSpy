@@ -112,10 +112,10 @@ namespace RetroSpy
             }
             var doc = XDocument.Load (Path.Combine (skinPath, "skin.xml"));
 
-            Name = readStringAttr (doc.Root, "name");
-            Author = readStringAttr (doc.Root, "author");
+            Name = ReadStringAttr (doc.Root, "name");
+            Author = ReadStringAttr (doc.Root, "author");
 
-            var typeStr = readStringAttr(doc.Root, ("type"));
+            var typeStr = ReadStringAttr(doc.Root, ("type"));
             var typesVec = typeStr.Split(';');
 
             List<InputSource> types = new List<InputSource>();
@@ -164,13 +164,13 @@ namespace RetroSpy
 
             foreach (var elem in bgElems)
             {
-                var imgPath = readStringAttr(elem, "image", false);
+                var imgPath = ReadStringAttr(elem, "image", false);
                 BitmapImage image = null;
                 uint width = 0;
                 uint height = 0;
                 if (!string.IsNullOrEmpty(imgPath))
                 {
-                    image = loadImage(skinPath, imgPath);
+                    image = LoadImage(skinPath, imgPath);
                     width = (uint)image.PixelWidth;
                     var widthAttr = elem.Attributes("width");
                     if (widthAttr.Count() > 0) width = uint.Parse(widthAttr.First().Value);
@@ -191,9 +191,9 @@ namespace RetroSpy
                 }
                 _backgrounds.Add(new Background
                 {
-                    Name = readStringAttr(elem, "name"),
+                    Name = ReadStringAttr(elem, "name"),
                     Image = image,
-                    Color = readColorAttr(elem, "color", false),
+                    Color = ReadColorAttr(elem, "color", false),
                     Width = width,
                     Height = height
                 });
@@ -203,8 +203,8 @@ namespace RetroSpy
             {
                 _details.Add(new Detail
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    Name = readStringAttr(elem, "name"),
+                    Config = ParseStandardConfig(skinPath, elem),
+                    Name = ReadStringAttr(elem, "name"),
                 });
             }
 
@@ -212,22 +212,22 @@ namespace RetroSpy
             {
                 _buttons.Add(new Button
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    Name = readStringAttr(elem, "name")
+                    Config = ParseStandardConfig(skinPath, elem),
+                    Name = ReadStringAttr(elem, "name")
                 });
             }
 
             foreach (var elem in doc.Root.Elements("rangebutton"))
             {
-                var from = readFloatConfig(elem, "from");
-                var to = readFloatConfig(elem, "to");
+                var from = ReadFloatConfig(elem, "from");
+                var to = ReadFloatConfig(elem, "to");
 
                 if (from > to) throw new ConfigParseException("Rangebutton 'from' field cannot be greater than 'to' field.");
 
                 _rangeButtons.Add(new RangeButton
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    Name = readStringAttr(elem, "name"),
+                    Config = ParseStandardConfig(skinPath, elem),
+                    Name = ReadStringAttr(elem, "name"),
                     From = from,
                     To = to
                 });
@@ -237,16 +237,16 @@ namespace RetroSpy
             {
                 _analogSticks.Add(new AnalogStick
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    XName = readStringAttr(elem, "xname"),
-                    YName = readStringAttr(elem, "yname"),
-                    VisibilityName = readStringAttr(elem, "visname", false),
-                    XRange = readUintAttr(elem, "xrange"),
-                    OriginalXRange = readUintAttr(elem, "xrange"),
-                    YRange = readUintAttr(elem, "yrange"),
-                    OriginalYRange = readUintAttr(elem, "yrange"),
-                    XReverse = readBoolAttr(elem, "xreverse"),
-                    YReverse = readBoolAttr(elem, "yreverse")
+                    Config = ParseStandardConfig(skinPath, elem),
+                    XName = ReadStringAttr(elem, "xname"),
+                    YName = ReadStringAttr(elem, "yname"),
+                    VisibilityName = ReadStringAttr(elem, "visname", false),
+                    XRange = ReadUintAttr(elem, "xrange"),
+                    OriginalXRange = ReadUintAttr(elem, "xrange"),
+                    YRange = ReadUintAttr(elem, "yrange"),
+                    OriginalYRange = ReadUintAttr(elem, "yrange"),
+                    XReverse = ReadBoolAttr(elem, "xreverse"),
+                    YReverse = ReadBoolAttr(elem, "yreverse")
                 });
             }
 
@@ -254,13 +254,13 @@ namespace RetroSpy
             {
                 _touchPads.Add(new TouchPad
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    XName = readStringAttr(elem, "xname"),
-                    YName = readStringAttr(elem, "yname"),
-                    XRange = readUintAttr(elem, "xrange"),
-                    OriginalXRange = readUintAttr(elem, "xrange"),
-                    YRange = readUintAttr(elem, "yrange"),
-                    OriginalYRange = readUintAttr(elem, "yrange"),
+                    Config = ParseStandardConfig(skinPath, elem),
+                    XName = ReadStringAttr(elem, "xname"),
+                    YName = ReadStringAttr(elem, "yname"),
+                    XRange = ReadUintAttr(elem, "xrange"),
+                    OriginalXRange = ReadUintAttr(elem, "xrange"),
+                    YRange = ReadUintAttr(elem, "yrange"),
+                    OriginalYRange = ReadUintAttr(elem, "yrange"),
                 });
             }
 
@@ -283,18 +283,18 @@ namespace RetroSpy
 
                 _analogTriggers.Add(new AnalogTrigger
                 {
-                    Config = parseStandardConfig(skinPath, elem),
-                    Name = readStringAttr(elem, "name"),
+                    Config = ParseStandardConfig(skinPath, elem),
+                    Name = ReadStringAttr(elem, "name"),
                     Direction = dir,
-                    IsReversed = readBoolAttr(elem, "reverse"),
-                    UseNegative = readBoolAttr(elem, "usenegative")
+                    IsReversed = ReadBoolAttr(elem, "reverse"),
+                    UseNegative = ReadBoolAttr(elem, "usenegative")
                 });
             }
 
 
         }
 
-        static string readStringAttr(XElement elem, string attrName, bool required = true)
+        static string ReadStringAttr(XElement elem, string attrName, bool required = true)
         {
             var attrs = elem.Attributes (attrName);
             if (attrs.Count() == 0)
@@ -311,7 +311,7 @@ namespace RetroSpy
             return attrs.First().Value;
         }
 
-        static List<string> getArrayAttr(XElement elem, string attrName, bool required = true)
+        static List<string> GetArrayAttr(XElement elem, string attrName, bool required = true)
         {
             var attrs = elem.Attributes(attrName);
             if (attrs.Count() == 0)
@@ -328,7 +328,7 @@ namespace RetroSpy
             return new List<string>(attrs.First().Value.Split(';'));
         }
 
-        static Color readColorAttr(XElement elem, string attrName, bool required)
+        static Color ReadColorAttr(XElement elem, string attrName, bool required)
         {
             Color result = new Color ();
            
@@ -352,25 +352,25 @@ namespace RetroSpy
             return result;
         }
 
-        static float readFloatConfig (XElement elem, string attrName)
+        static float ReadFloatConfig (XElement elem, string attrName)
         {
-            float ret;
-            if (! float.TryParse (readStringAttr (elem, attrName), out ret)) {
-                throw new ConfigParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
+            if (!float.TryParse(ReadStringAttr(elem, attrName), out float ret))
+            {
+                throw new ConfigParseException("Failed to parse number for property '" + attrName + "' in element '" + elem.Name + "'.");
             }
             return ret;
         }
 
-        static uint readUintAttr (XElement elem, string attrName)
+        static uint ReadUintAttr (XElement elem, string attrName)
         {
-            uint ret;
-            if (! uint.TryParse (readStringAttr (elem, attrName), out ret)) {
-                throw new ConfigParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
+            if (!uint.TryParse(ReadStringAttr(elem, attrName), out uint ret))
+            {
+                throw new ConfigParseException("Failed to parse number for property '" + attrName + "' in element '" + elem.Name + "'.");
             }
             return ret;
         }
 
-        static BitmapImage loadImage (string skinPath, string fileName)
+        static BitmapImage LoadImage (string skinPath, string fileName)
         {
             try {
                 return new BitmapImage (new Uri (Path.Combine (skinPath, fileName)));
@@ -379,12 +379,12 @@ namespace RetroSpy
             }
         }
 
-        static ElementConfig parseStandardConfig (string skinPath, XElement elem)
+        static ElementConfig ParseStandardConfig (string skinPath, XElement elem)
         {
             var imageAttr = elem.Attributes ("image");
             if (imageAttr.Count() == 0) throw new ConfigParseException ("Attribute 'image' missing for element '"+elem.Name+"'.");
 
-            var image = loadImage (skinPath, imageAttr.First().Value);
+            var image = LoadImage (skinPath, imageAttr.First().Value);
 
             uint width = (uint)image.PixelWidth;
             var widthAttr = elem.Attributes("width");
@@ -394,18 +394,18 @@ namespace RetroSpy
             var heightAttr = elem.Attributes("height");
             if (heightAttr.Count() > 0) height = uint.Parse (heightAttr.First().Value);
 
-            uint x = readUintAttr (elem, "x");
-            uint y = readUintAttr (elem, "y");
+            uint x = ReadUintAttr (elem, "x");
+            uint y = ReadUintAttr (elem, "y");
 
-            var targetBgs = getArrayAttr(elem, "target", false);
-            var ignoreBgs = getArrayAttr(elem, "ignore", false);
+            var targetBgs = GetArrayAttr(elem, "target", false);
+            var ignoreBgs = GetArrayAttr(elem, "ignore", false);
 
             return new ElementConfig {
                 X = x, Y = y, OriginalX = x, OriginalY = y, Image = image, Width = width, OriginalWidth = width, Height = height, OriginalHeight = height, TargetBackgrounds = targetBgs, IgnoreBackgrounds = ignoreBgs
             };
         }
 
-        static bool readBoolAttr (XElement elem, string attrName, bool dfault = false) {
+        static bool ReadBoolAttr (XElement elem, string attrName, bool dfault = false) {
             var attrs = elem.Attributes (attrName);
             if (attrs.Count() == 0) return dfault;
             if (attrs.First().Value == "true") return true;

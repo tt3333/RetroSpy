@@ -21,7 +21,7 @@ namespace RetroSpy.Readers
         };
 
 
-        static float readStick(byte input)
+        static float ReadStick(byte input)
         {
             if (input < 127)
                 return (float)input / 128;
@@ -29,7 +29,7 @@ namespace RetroSpy.Readers
             return (float)(255-input) / -128;
         }
 
-        static float readPokkenStick(byte input, bool invert)
+        static float ReadPokkenStick(byte input, bool invert)
         {
             return invert ? -1.0f*((float)(input - 128) / 128) : (float)(input - 128) / 128;
         }
@@ -63,10 +63,10 @@ namespace RetroSpy.Readers
                     outState.SetButton(PRO_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
 
-                outState.SetAnalog("rstick_x", readStick(polishedPacket[26]));
-                outState.SetAnalog("rstick_y", readStick(polishedPacket[27]));
-                outState.SetAnalog("lstick_x", readStick(polishedPacket[24]));
-                outState.SetAnalog("lstick_y", readStick(polishedPacket[25]));
+                outState.SetAnalog("rstick_x", ReadStick(polishedPacket[26]));
+                outState.SetAnalog("rstick_y", ReadStick(polishedPacket[27]));
+                outState.SetAnalog("lstick_x", ReadStick(polishedPacket[24]));
+                outState.SetAnalog("lstick_y", ReadStick(polishedPacket[25]));
 
                 return outState.Build();
             }
@@ -157,10 +157,10 @@ namespace RetroSpy.Readers
                         break;
                 }
 
-                outState.SetAnalog("lstick_x", readPokkenStick(polishedPacket[17], false));
-                outState.SetAnalog("lstick_y", readPokkenStick(polishedPacket[18], true));
-                outState.SetAnalog("rstick_x", readPokkenStick(polishedPacket[19], false));
-                outState.SetAnalog("rstick_y", readPokkenStick(polishedPacket[20], true));
+                outState.SetAnalog("lstick_x", ReadPokkenStick(polishedPacket[17], false));
+                outState.SetAnalog("lstick_y", ReadPokkenStick(polishedPacket[18], true));
+                outState.SetAnalog("rstick_x", ReadPokkenStick(polishedPacket[19], false));
+                outState.SetAnalog("rstick_y", ReadPokkenStick(polishedPacket[20], true));
                 
                 return outState.Build();
             }

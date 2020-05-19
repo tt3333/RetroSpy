@@ -33,7 +33,7 @@ namespace RetroSpy.Readers
  
    
 
-    static class XInputDLL {
+    static class NativeMethods {
             [DllImport("xinput9_1_0.dll")]
             static public extern uint XInputGetState (uint userIndex, ref XInputState inputState);
         }
@@ -44,7 +44,7 @@ namespace RetroSpy.Readers
             var dummy = new XInputState();
             for (uint i = 0; i < 4; i++) //Poll all 4 possible controllers to see which are connected, thats how it works :/
             {
-                if (XInputDLL.XInputGetState(i, ref dummy) == 0)
+                if (NativeMethods.XInputGetState(i, ref dummy) == 0)
                 {
                     result.Add(i);
                 }
@@ -57,21 +57,23 @@ namespace RetroSpy.Readers
         const double TIMER_MS = 30;
 
         DispatcherTimer _timer;
-        uint _id = 0;
+        readonly uint _id = 0;
         public XInputReader (uint id = 0)
         {
             _id = id;
-            _timer = new DispatcherTimer ();
-            _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS);
-            _timer.Tick += tick;
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
+            _timer.Tick += Tick;
             _timer.Start ();
         }
 
-        void tick (object sender, EventArgs e)
+        void Tick (object sender, EventArgs e)
         {
             var state = new XInputState ();
-            if (XInputDLL.XInputGetState (_id, ref state) > 0) {
-                if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+            if (NativeMethods.XInputGetState (_id, ref state) > 0) {
+                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
                 Finish ();
                 return;
             }
@@ -100,7 +102,7 @@ namespace RetroSpy.Readers
             outState.SetAnalog ("trig_l", (float)state.bLeftTrigger / 255);
             outState.SetAnalog ("trig_r", (float)state.bRightTrigger / 255);
 
-            if (ControllerStateChanged != null) ControllerStateChanged (this, outState.Build ());
+            ControllerStateChanged?.Invoke(this, outState.Build());
         }
 
         public void Finish ()

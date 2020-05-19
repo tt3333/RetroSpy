@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RetroSpy
 {
+    [Serializable]
     public class ConfigParseException : Exception {
         public ConfigParseException()
             : base () {}

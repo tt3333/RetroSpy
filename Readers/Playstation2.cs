@@ -15,16 +15,16 @@ namespace RetroSpy.Readers
             null, "select", "lstick", "rstick", "start", "up", "right", "down", "left", "l2", "r2", "l1", "r1", "triangle", "circle", "x", "square"
         };
 
-        static float readAnalogButton(byte input)
+        static float ReadAnalogButton(byte input)
         {
             return (float) input/256;
         }
-        static float readStick(byte input)
+        static float ReadStick(byte input)
         {
             return (float)(input - 128) / 128;
         }
 
-        static float readMouse(bool over, byte data)
+        static float ReadMouse(bool over, byte data)
         {
             float val = 0;
             if (over)
@@ -103,10 +103,10 @@ namespace RetroSpy.Readers
 
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79)
             {
-                state.SetAnalog("rstick_x", readStick(polishedPacket[17]));
-                state.SetAnalog("rstick_y", readStick(polishedPacket[18]));
-                state.SetAnalog("lstick_x", readStick(polishedPacket[19]));
-                state.SetAnalog("lstick_y", readStick(polishedPacket[20]));
+                state.SetAnalog("rstick_x", ReadStick(polishedPacket[17]));
+                state.SetAnalog("rstick_y", ReadStick(polishedPacket[18]));
+                state.SetAnalog("lstick_x", ReadStick(polishedPacket[19]));
+                state.SetAnalog("lstick_y", ReadStick(polishedPacket[20]));
             }
             else
             {
@@ -118,20 +118,20 @@ namespace RetroSpy.Readers
 
             if (polishedPacket[0] == 0x79)
             {
-                state.SetAnalog("analog_right", polishedPacket[6] != 0x00 ? readAnalogButton(polishedPacket[21]) : 0.0f);
-                state.SetAnalog("analog_left", polishedPacket[8] != 0x00 ? readAnalogButton(polishedPacket[22]) : 0.0f);
-                state.SetAnalog("analog_up", polishedPacket[5] != 0x00 ? readAnalogButton(polishedPacket[23]) : 0.0f);
-                state.SetAnalog("analog_down", polishedPacket[7] != 0x00 ? readAnalogButton(polishedPacket[24]) : 0.0f);
+                state.SetAnalog("analog_right", polishedPacket[6] != 0x00 ? ReadAnalogButton(polishedPacket[21]) : 0.0f);
+                state.SetAnalog("analog_left", polishedPacket[8] != 0x00 ? ReadAnalogButton(polishedPacket[22]) : 0.0f);
+                state.SetAnalog("analog_up", polishedPacket[5] != 0x00 ? ReadAnalogButton(polishedPacket[23]) : 0.0f);
+                state.SetAnalog("analog_down", polishedPacket[7] != 0x00 ? ReadAnalogButton(polishedPacket[24]) : 0.0f);
 
-                state.SetAnalog("analog_triangle", polishedPacket[13] != 0x00 ? readAnalogButton(polishedPacket[25]) : 0.0f);
-                state.SetAnalog("analog_circle", polishedPacket[14] != 0x00 ? readAnalogButton(polishedPacket[26]) : 0.0f);
-                state.SetAnalog("analog_x", polishedPacket[15] != 0x00 ? readAnalogButton(polishedPacket[27]) : 0.0f);
-                state.SetAnalog("analog_square", polishedPacket[16] != 0x00 ? readAnalogButton(polishedPacket[28]) : 0.0f);
+                state.SetAnalog("analog_triangle", polishedPacket[13] != 0x00 ? ReadAnalogButton(polishedPacket[25]) : 0.0f);
+                state.SetAnalog("analog_circle", polishedPacket[14] != 0x00 ? ReadAnalogButton(polishedPacket[26]) : 0.0f);
+                state.SetAnalog("analog_x", polishedPacket[15] != 0x00 ? ReadAnalogButton(polishedPacket[27]) : 0.0f);
+                state.SetAnalog("analog_square", polishedPacket[16] != 0x00 ? ReadAnalogButton(polishedPacket[28]) : 0.0f);
 
-                state.SetAnalog("analog_l1", polishedPacket[11] != 0x00 ? readAnalogButton(polishedPacket[29]) : 0.0f);
-                state.SetAnalog("analog_r1", polishedPacket[12] != 0x00 ? readAnalogButton(polishedPacket[30]) : 0.0f);
-                state.SetAnalog("analog_l2", polishedPacket[9] != 0x00 ? readAnalogButton(polishedPacket[31]) : 0.0f);
-                state.SetAnalog("analog_r2", polishedPacket[10] != 0x00 ? readAnalogButton(polishedPacket[32]) : 0.0f);
+                state.SetAnalog("analog_l1", polishedPacket[11] != 0x00 ? ReadAnalogButton(polishedPacket[29]) : 0.0f);
+                state.SetAnalog("analog_r1", polishedPacket[12] != 0x00 ? ReadAnalogButton(polishedPacket[30]) : 0.0f);
+                state.SetAnalog("analog_l2", polishedPacket[9] != 0x00 ? ReadAnalogButton(polishedPacket[31]) : 0.0f);
+                state.SetAnalog("analog_r2", polishedPacket[10] != 0x00 ? ReadAnalogButton(polishedPacket[32]) : 0.0f);
             }
             else
             {
@@ -153,8 +153,8 @@ namespace RetroSpy.Readers
 
             if (polishedPacket[0] == 0x12)
             {
-                float x = readMouse(polishedPacket[10] == 0x00, polishedPacket[17]);
-                float y = readMouse(polishedPacket[9] == 0x00, polishedPacket[18]);
+                float x = ReadMouse(polishedPacket[10] == 0x00, polishedPacket[17]);
+                float y = ReadMouse(polishedPacket[9] == 0x00, polishedPacket[18]);
                 SignalTool.SetMouseProperties(x, y, state);
             }
             else

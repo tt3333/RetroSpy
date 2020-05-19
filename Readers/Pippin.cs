@@ -15,7 +15,7 @@ namespace RetroSpy.Readers
             null, "1", "2", "blue", "yellow", "up", "left", "right", "down", "red", "green", "square", "circle", "diamond"
         };
 
-        static float readMouse(byte data)
+        static float ReadMouse(byte data)
         {
             if (data >= 64)
                 return (-1.0f * (128 - data)) / 64.0f;
@@ -59,8 +59,8 @@ namespace RetroSpy.Readers
             float y = 0;
             if (packet[29] == 1) // This is the "Has Data" bit.  Reset the mouse on cached results.
             {
-                y = readMouse(polishedPacket[14]);
-                x = readMouse(polishedPacket[15]);
+                y = ReadMouse(polishedPacket[14]);
+                x = ReadMouse(polishedPacket[15]);
             }
             SignalTool.SetMouseProperties(x, y, state);
 

@@ -6,9 +6,19 @@ using System.Windows.Threading;
 
 namespace RetroSpy
 {
-    public delegate void PacketEventHandler(object sender, byte[] packet);
+    public class PacketData : EventArgs
+    {
+        public PacketData(byte[] packet)
+        {
+            _packet = packet;
+        }
 
-    public class SerialMonitor
+        public byte[] _packet;
+    }
+
+    public delegate void PacketEventHandler(object sender, PacketData e);
+
+    public class SerialMonitor : IDisposable
     {
         const int BAUD_RATE = 115200;
         const int TIMER_MS = 1;
@@ -34,9 +44,11 @@ namespace RetroSpy
             _localBuffer.Clear();
             _datPort.Open();
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
-            _timer.Tick += tick;
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
+            _timer.Tick += Tick;
             _timer.Start();
         }
 
@@ -49,6 +61,7 @@ namespace RetroSpy
                     _datPort.Close();
                 }
                 catch (IOException) { }
+                _datPort.Dispose();
                 _datPort = null;
             }
             if (_timer != null)
@@ -58,7 +71,7 @@ namespace RetroSpy
             }
         }
 
-        void tick(object sender, EventArgs e)
+        void Tick(object sender, EventArgs e)
         {
             if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
 
@@ -76,7 +89,7 @@ namespace RetroSpy
             catch (IOException)
             {
                 Stop();
-                if (Disconnected != null) Disconnected(this, EventArgs.Empty);
+                Disconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -89,10 +102,25 @@ namespace RetroSpy
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
-            PacketReceived(this, _localBuffer.GetRange(packetStart, packetSize).ToArray());
+
+            PacketReceived(this, new PacketData(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 
             // Clear our buffer up until the last split character.
             _localBuffer.RemoveRange(0, lastSplitIndex);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Stop();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

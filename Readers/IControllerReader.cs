@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    public delegate void StateEventHandler (IControllerReader sender, ControllerState state);
+    public delegate void StateEventHandler (object sender, ControllerState e);
 
     public interface IControllerReader
     {

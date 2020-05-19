@@ -14,7 +14,7 @@ namespace RetroSpy.Readers
             "a", "b", "z", "start", "up", "down", "left", "right", null, null, "l", "r", "cup", "cdown", "cleft", "cright"
         };
 
-        static float readStick (byte input) {
+        static float ReadStick (byte input) {
             return (float)((sbyte)input) / 128;
         }
 
@@ -29,8 +29,8 @@ namespace RetroSpy.Readers
                 state.SetButton (BUTTONS[i], packet[i] != 0x00);
             }
 
-            float x = readStick(SignalTool.readByte(packet, BUTTONS.Length    ));
-            float y = readStick(SignalTool.readByte(packet, BUTTONS.Length + 8));
+            float x = ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length    ));
+            float y = ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length + 8));
             state.SetAnalog ("stick_x", x);
             state.SetAnalog ("stick_y", y);
 
