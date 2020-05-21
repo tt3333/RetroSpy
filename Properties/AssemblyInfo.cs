@@ -6,7 +6,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RetroSpy")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("RetroSpy Input Display Viewer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("RetroSpy Technologies")]
 [assembly: AssemblyProduct("RetroSpy")]
