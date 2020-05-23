@@ -60,7 +60,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
 
 ## MiSTer
- - [USB controllers](https://github.com/zoggins/RetroSpy/wiki/MiSTer-Getting-Started)
+ - [USB controllers](https://retro-spy.com/wiki/setting-up-retrospy-for-the-mister/)
 
 ## To-Do List
  - TurboGrafx-16 Mini (when its released)
