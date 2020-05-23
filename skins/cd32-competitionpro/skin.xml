@@ -12,12 +12,11 @@
 
   <button name="forward" image="circle2.png" x="618" y="90" width="40" height="40" />
   <button name="backward" image="circle2.png" x="82" y="75" width="40" height="40" />
-  
+
   <button name="up" image="circle2.png" x="124" y="172" width="25" height="25" />
   <button name="down" image="circle2.png" x="126" y="263" width="25" height="25" />
   <button name="left" image="circle2.png" x="81" y="218" width="25" height="25" />
   <button name="right" image="circle2.png" x="182" y="222" width="25" height="25" />
 
   <button name="pause" image="circle2.png" x="280" y="272" width="45" height="15" />
-	
 </skin>

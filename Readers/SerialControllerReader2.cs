@@ -1,84 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    sealed public class SerialControllerReader2 : IControllerReader 
+    public sealed class SerialControllerReader2 : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
+
         public event EventHandler ControllerDisconnected;
 
         public event EventHandler ControllerDisconnected2;
 
-        Func <byte[], ControllerState> _packetParser;
-        Func<byte[], ControllerState> _packet2Parser;
-        SerialMonitor _serialMonitor;
-        SerialMonitor _serialMonitor2;
+        private readonly Func<byte[], ControllerState> _packetParser;
+        private readonly Func<byte[], ControllerState> _packet2Parser;
+        private SerialMonitor _serialMonitor;
+        private SerialMonitor _serialMonitor2;
 
-        public SerialControllerReader2 (string portName, string port2Name, Func <byte[], ControllerState> packetParser, Func<byte[], ControllerState> packet2Parser) 
+        public SerialControllerReader2(string portName, string port2Name, Func<byte[], ControllerState> packetParser, Func<byte[], ControllerState> packet2Parser)
         {
             _packetParser = packetParser;
             _packet2Parser = packet2Parser;
 
-            _serialMonitor = new SerialMonitor (portName);
-            _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
-            _serialMonitor.Disconnected += serialMonitor_Disconnected;
+            _serialMonitor = new SerialMonitor(portName);
+            _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += SerialMonitor_Disconnected;
             _serialMonitor.Start();
 
             if (port2Name != "Not Connected")
             {
                 _serialMonitor2 = new SerialMonitor(port2Name);
-                _serialMonitor2.PacketReceived += serialMonitor2_PacketReceived;
-                _serialMonitor2.Disconnected += serialMonitor2_Disconnected;
+                _serialMonitor2.PacketReceived += SerialMonitor2_PacketReceived;
+                _serialMonitor2.Disconnected += SerialMonitor2_Disconnected;
                 _serialMonitor2.Start();
-
             }
             else
-                _serialMonitor2 = null;                
+            {
+                _serialMonitor2 = null;
+            }
         }
 
-        void serialMonitor_Disconnected(object sender, EventArgs e)
+        private void SerialMonitor_Disconnected(object sender, EventArgs e)
         {
-            Finish ();
-            if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+            Finish();
+            ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor_PacketReceived (object sender, byte[] packet)
+        private void SerialMonitor_PacketReceived(object sender, PacketData packet)
         {
-            if (ControllerStateChanged != null) {
-                var state = _packetParser (packet);
-                if (state != null) {
-                    ControllerStateChanged (this, state);
+            if (ControllerStateChanged != null)
+            {
+                ControllerState state = _packetParser(packet._packet);
+                if (state != null)
+                {
+                    ControllerStateChanged(this, state);
                 }
             }
         }
 
-        void serialMonitor2_Disconnected(object sender, EventArgs e)
+        private void SerialMonitor2_Disconnected(object sender, EventArgs e)
         {
             Finish();
-            if (ControllerDisconnected2 != null) ControllerDisconnected2(this, EventArgs.Empty);
+            ControllerDisconnected2?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor2_PacketReceived(object sender, byte[] packet)
+        private void SerialMonitor2_PacketReceived(object sender, PacketData packet)
         {
-            _packet2Parser(packet);
+            _packet2Parser(packet._packet);
         }
 
-        public void Finish ()
+        public void Finish()
         {
-            if (_serialMonitor != null) {
-                _serialMonitor.Stop ();
+            if (_serialMonitor != null)
+            {
+                _serialMonitor.Stop();
+                _serialMonitor.Dispose();
                 _serialMonitor = null;
             }
 
             if (_serialMonitor2 != null)
             {
                 _serialMonitor2.Stop();
+                _serialMonitor2.Dispose();
                 _serialMonitor2 = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

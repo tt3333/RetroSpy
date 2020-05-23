@@ -1,19 +1,25 @@
 #include "Arduino.h"
 
-#include "config.h"
+#if defined(__arm__) && defined(CORE_TEENSY)
+#include "config_teensy.h"
+#else
+#include "config_arduino.h"
+#endif
 
-#define N64_BITCOUNT  32
+// Uncomment this for serial debugging output
+//#define DEBUG
+
+#define N64_BITCOUNT		32
 #define SNES_BITCOUNT       16
 #define SNES_BITCOUNT_EXT   32
 #define NES_BITCOUNT         8
-#define GC_BITCOUNT  64
-#define ThreeDO_BITCOUNT  32
-#define PCFX_BITCOUNT     16
+#define GC_BITCOUNT			64
+#define GC_PREFIX           25
+#define ThreeDO_BITCOUNT	32
+#define PCFX_BITCOUNT		16
+#define CD32_BITCOUNT		 7
 
-#define PIN_READ( pin )  (PIND&(1<<(pin)))
-#define PINC_READ( pin ) (PINC&(1<<(pin)))
-#define PINB_READ( pin ) (PINB&(1<<(pin)))
-#define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+#define PIN_READ PIND_READ
 
 #define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
 #define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );

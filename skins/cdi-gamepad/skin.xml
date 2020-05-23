@@ -21,5 +21,4 @@
   <button name="wireless-down" image="circle2.png" x="105" y="136" width="30" height="30" />
   <button name="wireless-left" image="circle2.png" x="68" y="102" width="30" height="30" />
   <button name="wireless-right" image="circle2.png" x="148" y="104" width="30" height="30" />
-  
 </skin>

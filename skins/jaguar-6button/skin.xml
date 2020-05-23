@@ -36,5 +36,4 @@
   <button name="star" image="circle.png" x="210" y="382" width="30" height="30" />
   <button name="0" image="circle.png" x="289" y="382" width="30" height="30" />
   <button name="pound" image="circle.png" x="363" y="382" width="30" height="30" />
-
 </skin>

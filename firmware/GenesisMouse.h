@@ -30,18 +30,15 @@
 #include "ControllerSpy.h"
 
 class GenesisMouseSpy : public ControllerSpy {
-    public:
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[24];
-        const uint8_t TH = 0;  // Pin 8, 0 on PINB
-        const uint8_t TR = 7;  // Pin 7
-        const uint8_t TL = 6;  // Pin 6
+private:
+	unsigned char rawData[24];
 };
 
 #endif

@@ -1,42 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    static public class XboxReaderV2
+    public static class XboxReaderV2
     {
-        const int PACKET_SIZE = 41;
+        private const int PACKET_SIZE = 41;
 
-        static readonly string[] BUTTONS = {
+        private static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "start", "back", "l3", "r3"
         };
 
-        static readonly string[] ANALOG_BUTTONS = {
+        private static readonly string[] ANALOG_BUTTONS = {
             "a", "b", "x", "y", "black", "white", "trig_l", "trig_r"
         };
 
-        static readonly string[] STICKS = {
+        private static readonly string[] STICKS = {
             "lstick_x", "lstick_y", "rstick_x", "rstick_y"
         };
 
-        static float ReadTrigger(byte input)
+        private static float ReadTrigger(byte input)
         {
             return (float)(input) / 256;
         }
 
-        static float ReadStick(short input)
+        private static float ReadStick(short input)
         {
             return (float)input / short.MaxValue;
         }
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length != PACKET_SIZE) return null;
+            if (packet.Length != PACKET_SIZE)
+            {
+                return null;
+            }
 
-            var str = System.Text.Encoding.Default.GetString(packet, 0, 40);
+            string str = System.Text.Encoding.Default.GetString(packet, 0, 40);
 
             byte[] binaryPacket = new byte[20];
 
@@ -52,11 +51,10 @@ namespace RetroSpy.Readers
                 return null;
             }
 
-            var outState = new ControllerStateBuilder();
+            ControllerStateBuilder outState = new ControllerStateBuilder();
 
             for (int i = 0; i < 8; ++i)
             {
-
                 outState.SetButton(BUTTONS[i], (binaryPacket[2] & (1 << i)) != 0);
             }
 

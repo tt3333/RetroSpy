@@ -31,9 +31,8 @@
     <button name="right" image="Dpad-Right.png" x="127" y="207" width="18" height="18" />
 
     <stick xname="lstick_x" yname="lstick_y" image="Stick.png"
-           x="50" y="117" width="41" height="41" xrange="20" yrange="20"/>
+           x="50" y="117" width="41" height="41" xrange="20" yrange="20" />
 
     <stick xname="cstick_x" yname="cstick_y" image="C-stick.png"
-           x="222" y="201" width="31" height="31" xrange="16" yrange="16"/>
-
+           x="222" y="201" width="31" height="31" xrange="16" yrange="16" />
 </skin>

@@ -30,38 +30,38 @@
 #include "ControllerSpy.h"
 
 class SMSSpy : public ControllerSpy {
-    public:
-        void setup(uint8_t outputType);
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup(uint8_t outputType);
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-        enum outputTypes {
-            OUTPUT_SMS = 1,
-            OUTPUT_GENESIS  = 2,
-        };
+	enum outputTypes {
+		OUTPUT_SMS = 1,
+		OUTPUT_GENESIS = 2,
+	};
 
-    private:
-        enum buttonTypes {
-            CC_BTN_UP    = 1,
-            CC_BTN_DOWN  = 2,
-            CC_BTN_LEFT  = 4,
-            CC_BTN_RIGHT = 8,
-            CC_BTN_1     = 16,
-            CC_BTN_2     = 32
-        };
+private:
+	enum buttonTypes {
+		CC_BTN_UP = 1,
+		CC_BTN_DOWN = 2,
+		CC_BTN_LEFT = 4,
+		CC_BTN_RIGHT = 8,
+		CC_BTN_1 = 16,
+		CC_BTN_2 = 32
+	};
 
-        uint8_t outputType = OUTPUT_SMS;
+	uint8_t outputType = OUTPUT_SMS;
 
-        static const byte CC_INPUT_PINS = 6;
-        static const unsigned long CC_READ_DELAY_MS = 5;
+	static const byte CC_INPUT_PINS = 6;
+	static const unsigned long CC_READ_DELAY_MS = 5;
 
-        byte inputPins[CC_INPUT_PINS];
-        word currentState;
+	byte inputPins[CC_INPUT_PINS];
+	word currentState;
 	word lastState = -1;
-        unsigned long lastReadTime;
+	unsigned long lastReadTime;
 };
 
 #endif

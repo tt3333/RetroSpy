@@ -7,10 +7,10 @@
 	<button name="left" image="circle.png" x="113" y="108" width="30" height="30" />
 	<button name="down" image="circle.png" x="144" y="137" width="30" height="30" />
 	<button name="right" image="circle.png" x="183" y="108" width="30" height="30" />
-	
+
 	<button name="pause" image="circle.png" x="259" y="149" width="30" height="30" />
 	<button name="option" image="circle.png" x="302" y="149" width="30" height="30" />
-	
+
 	<button name="a" image="circle.png" x="456" y="91" width="40" height="40" />
 	<button name="b" image="circle.png" x="414" y="117" width="40" height="40" />
 	<button name="c" image="circle.png" x="372" y="150" width="40" height="40" />
@@ -30,5 +30,4 @@
 	<button name="star" image="circle.png" x="210" y="382" width="30" height="30" />
 	<button name="0" image="circle.png" x="289" y="382" width="30" height="30" />
 	<button name="pound" image="circle.png" x="363" y="382" width="30" height="30" />
-	
 </skin>
