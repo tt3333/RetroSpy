@@ -1,63 +1,63 @@
 # RetroSpy
 
-#### [Download the latest RetroSpy release here.](https://github.com/zoggins/RetroSpy/releases/latest)
+#### [Download the latest RetroSpy release here.](https://github.com/retrospy/RetroSpy/releases/latest)
 
 A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is designed to present controller inputs from a console or computer in a display window.  This allows you to show your controller inputs for things like speedrunning, game tutorials, and more.  You can also convert controller presses into keystrokes to control programs on your computer such as LiveSplit and OBS.  RetroSpy supports the following systems and their regional equivalents:
 
 ## Second Generation
-* Atari 2600 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started), [driving controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Driving-Controller-on-Arduino-Getting-Started), [keyboard controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Keyboard-Controller-on-Arduino-Getting-Started), the [Omega Race booster grip](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started) and [paddles](https://github.com/zoggins/RetroSpy/wiki/Atari-Paddles-on-Arduino-Getting-Started)
-* [Mattel Intellivision](https://github.com/zoggins/RetroSpy/wiki/Intellivision-on-Arduino-Getting-Started)
-* Coleco ColecoVision [standard and Super Action controllers](https://github.com/zoggins/RetroSpy/wiki/Coleco-ColecoVision-Controllers-on-Arduino-Getting-Started)
-* [Atari 5200](https://github.com/zoggins/RetroSpy/wiki/Atari-5200-Joysticks-on-Arduino-Getting-Started)
+* Atari 2600 [joysticks](https://retro-spy.com/wiki/retrospy-hardware-selection/), [driving](https://retro-spy.com/wiki/atari-driving-controller-on-arduino-getting-started/) & [keyboard](https://retro-spy.com/wiki/atari-keyboard-controller-on-arduino-getting-started/) controllers, the [Omega Race booster grip](https://retro-spy.com/wiki/atari-omega-race-booster-grip-on-arduino-getting-started/) and [paddles](https://retro-spy.com/wiki/atari-paddles-on-arduino-getting-started/) 
+* [Mattel Intellivision](https://retro-spy.com/wiki/intellivision-on-arduino-getting-started/) 
+* Coleco ColecoVision [standard and Super Action controllers](https://retro-spy.com/wiki/coleco-colecovision-controllers-on-arduino-getting-started/) 
+* [Atari 5200](https://retro-spy.com/wiki/coleco-colecovision-controllers-on-arduino-getting-started/)
 
 ## Third Generation
- - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
- - Atari 7800 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started) and [paddles](https://github.com/zoggins/RetroSpy/wiki/Atari-Paddles-on-Arduino-Getting-Started)
- - [Sega Master System](https://github.com/zoggins/RetroSpy/wiki/SMS-Controllers-on-Arduino-Getting-Started)
- - [Commodore 64 Games System](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
+ - [NES](https://retro-spy.com/wiki/retrospy-hardware-selection/)
+ - Atari 7800 [joysticks](https://retro-spy.com/wiki/atari-omega-race-booster-grip-on-arduino-getting-started/) and [paddles](https://retro-spy.com/wiki/atari-paddles-on-arduino-getting-started/)
+ - [Sega Master System](https://retro-spy.com/wiki/retrospy-hardware-selection/
+ - [Commodore 64 Games System](https://retro-spy.com/wiki/retrospy-hardware-selection/)
 
 ## Fourth Generation
- - NEC PC Engine/TurboGraphx-16/SuperGrafx [2, 3 and 6-button controllers](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
- - Sega Genesis [3/6-button controllers and the Mega Mouse](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
- - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
- - Commodore CDTV [wirelesss remotes](https://github.com/zoggins/RetroSpy/wiki/CDTV-Wireless-Remotes-on-Arduino-Getting-Started), [wired mice/joysticks](https://github.com/zoggins/RetroSpy/wiki/CDTV-Wired-Mouse-&-Joystick-on-Arduino-Getting-Started) and [keyboards](https://github.com/zoggins/RetroSpy/wiki/CDTV-Keyboard-on-Arduino-Getting-Started)
- - SNES [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
- - Philips CD-i [IR wireless controllers, wired controllers and mice](https://github.com/zoggins/RetroSpy/wiki/CDi-on-Arduino-Getting-Started)
+ - NEC PC Engine/TurboGraphx-16/SuperGrafx [2, 3 and 6-button controllers](https://retro-spy.com/wiki/turbografx-16-pc-engine-on-arduino-getting-started/)
+ - Sega Genesis [3/6-button controllers and the Mega Mouse](https://retro-spy.com/wiki/retrospy-hardware-selection/)
+ - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://retro-spy.com/wiki/neo-geo-on-arduino-getting-started/)
+ - Commodore CDTV [wirelesss remotes](https://retro-spy.com/wiki/cdtv-wireless-remotes-on-arduino-getting-started/), [wired mice/joysticks](https://retro-spy.com/wiki/cdtv-wired-mouse-joystick-on-arduino-getting-started/) and [keyboards](https://retro-spy.com/wiki/cdtv-keyboard-on-arduino-getting-started/)
+ - SNES [controllers and mice](https://retro-spy.com/wiki/retrospy-hardware-selection/)
+ - Philips CD-i [IR wireless controllers, wired controllers and mice](https://retro-spy.com/wiki/cdi-on-arduino-getting-started/)
 
 ## Fifth Generation
- - Fujitsu FM Towns Marty [controllers](https://github.com/zoggins/RetroSpy/wiki/Fm-Towns-Controllers-on-Arduino-Getting-Started), [mice](https://github.com/zoggins/RetroSpy/wiki/FM-Towns-Marty-Mouse-on-Teensy-Getting-Started) and [keyboards](https://github.com/zoggins/RetroSpy/wiki/FM-Towns-Marty-Keyboard-on-Teensy-Getting-Started)
- - Amiga CD32 [controllers](https://github.com/zoggins/RetroSpy/wiki/Amiga-CD32-on-Teensy-Getting-Started), [analog joysticks](https://github.com/zoggins/RetroSpy/wiki/Amiga-Analog-Joysticks-on-Arduino), [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started), [classic Atari-style joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [keyboards](https://github.com/zoggins/RetroSpy/wiki/CD32-Keyboard-on-Arduino-Getting-Started)
- - 3DO [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
- - Atari Jaguar [Standard and Pro controllers](https://github.com/zoggins/RetroSpy/wiki/Jaguar-on-Arduino-Getting-Started)
- - Sega Saturn [digital controllers, the 3D Control Pad and the Shuttle Mouse](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
- - Sony PlayStation [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
- - [NEC PC-FX](https://github.com/zoggins/RetroSpy/wiki/PC-FX-on-Arduino-Getting-Started)
- - [Bandai Pippin](https://github.com/zoggins/RetroSpy/wiki/Pippin-on-Arduino-Getting-Started)
- - Nintendo 64 [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
+ - Fujitsu FM Towns Marty [controllers](https://retro-spy.com/wiki/fm-towns-controllers-on-arduino-getting-started/), [mice](https://retro-spy.com/wiki/fm-towns-marty-mouse-on-teensy-getting-started/) and [keyboards](https://retro-spy.com/wiki/fm-towns-marty-keyboard-on-teensy-getting-started/)
+ - Amiga CD32 [controllers](https://retro-spy.com/wiki/amiga-cd32-on-teensy-getting-started/), [analog joysticks](https://retro-spy.com/wiki/amiga-analog-joysticks-on-arduino/), [mice](https://retro-spy.com/wiki/amiga-analog-joysticks-on-arduino/), [classic Atari-style joysticks](https://retro-spy.com/wiki/retrospy-hardware-selection/) and [keyboards](https://retro-spy.com/wiki/cd32-keyboard-on-arduino-getting-started/)
+ - 3DO [controllers and mice](https://retro-spy.com/wiki/3do-on-arduino-getting-started/)
+ - Atari Jaguar [Standard and Pro controllers](https://retro-spy.com/wiki/jaguar-on-arduino-getting-started/)
+ - Sega Saturn [digital controllers, the 3D Control Pad and the Shuttle Mouse](https://retro-spy.com/wiki/retrospy-hardware-selection/)
+ - Sony PlayStation [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://retro-spy.com/wiki/playstation-1-2-on-arduino-getting-started/)
+ - [NEC PC-FX](https://retro-spy.com/wiki/pc-fx-on-arduino-getting-started/)
+ - [Bandai Pippin](https://retro-spy.com/wiki/pippin-on-arduino-getting-started/)
+ - Nintendo 64 [controllers and mice](https://retro-spy.com/wiki/retrospy-hardware-selection/)
 
 ## Sixth Generation
- - Sega Dreamcast [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Dreamcast-on-Teensy-Getting-Started) 
- - Sony PlayStation 2 [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
- - Nintendo GameCube [controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection) 
- - Microsoft Xbox [controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
+ - Sega Dreamcast [controllers and mice](https://retro-spy.com/wiki/dreamcast-on-teensy-getting-started/) 
+ - Sony PlayStation 2 [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://retro-spy.com/wiki/playstation-1-2-on-arduino-getting-started/)
+ - Nintendo GameCube [controllers](https://retro-spy.com/wiki/retrospy-hardware-selection/) 
+ - Microsoft Xbox [controllers](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
 
 ## Seventh Generation
- - Microsoft Xbox 360 [wired controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - [PlayStation 3](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - Nintendo Wii [extension controllers](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started)
+ - Microsoft Xbox 360 [wired controllers](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - [PlayStation 3](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - Nintendo Wii [extension controllers](https://retro-spy.com/wiki/wii-on-teensy-getting-started/)
 
 ## Eigth Generation
- - Nintendo Wii U [extension controllers](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started) 
- - [PlayStation 4](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - Nintendo Switch [wired controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
+ - Nintendo Wii U [extension controllers](https://retro-spy.com/wiki/wii-on-teensy-getting-started/) 
+ - [PlayStation 4](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - Nintendo Switch [wired controllers](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
 
 ## Classic/Mini Consoles
- - [Nintendo NES Classic](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started)
- - [Nintendo SNES Classic](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started)
- - [The C64 Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - [Sony PlayStation Classic](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - [SNK Neo Geo Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
- - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
+ - [Nintendo NES Classic](https://retro-spy.com/wiki/wii-on-teensy-getting-started/)
+ - [Nintendo SNES Classic](https://retro-spy.com/wiki/wii-on-teensy-getting-started/)
+ - [The C64 Mini](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - [Sony PlayStation Classic](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - [SNK Neo Geo Mini](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
+ - [Sega Genesis Mini](https://retro-spy.com/wiki/retrospy-usb-based-controller-getting-started/)
 
 ## MiSTer
  - [USB controllers](https://retro-spy.com/wiki/setting-up-retrospy-for-the-mister/)
