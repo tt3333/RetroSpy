@@ -13,7 +13,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 ## Third Generation
  - [NES](https://retro-spy.com/wiki/retrospy-hardware-selection/)
  - Atari 7800 [joysticks](https://retro-spy.com/wiki/atari-omega-race-booster-grip-on-arduino-getting-started/) and [paddles](https://retro-spy.com/wiki/atari-paddles-on-arduino-getting-started/)
- - [Sega Master System](https://retro-spy.com/wiki/retrospy-hardware-selection/
+ - [Sega Master System](https://retro-spy.com/wiki/retrospy-hardware-selection/)
  - [Commodore 64 Games System](https://retro-spy.com/wiki/retrospy-hardware-selection/)
 
 ## Fourth Generation
