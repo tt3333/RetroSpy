@@ -1,19 +1,18 @@
-﻿using System;
+﻿using RetroSpy.Readers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.ComponentModel;
-
-using RetroSpy.Readers;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
+using System.Windows.Media;
 
 namespace RetroSpy
 {
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {
-        public void calculateMagic()
+        public void CalculateMagic()
         {
             _magicHeight = Height - _originalHeight;
             _magicWidth = Width - _originalWidth;
@@ -80,35 +79,34 @@ namespace RetroSpy
             double xRatio = GetWidth() / _originalWidth;
             double yRatio = GetHeight() / _originalHeight;
 
-
-            foreach (var detail in _detailsWithImages)
+            foreach (Tuple<Skin.Detail, Image> detail in _detailsWithImages)
             {
                 AdjustImage(detail.Item1.Config, detail.Item2, xRatio, yRatio);
             }
 
-            foreach (var trigger in _triggersWithGridImages)
+            foreach (Tuple<Skin.AnalogTrigger, Grid> trigger in _triggersWithGridImages)
             {
                 AdjustGrid(trigger.Item1.Config, trigger.Item2, xRatio, yRatio);
             }
 
-            foreach (var button in _buttonsWithImages)
+            foreach (Tuple<Skin.Button, Image> button in _buttonsWithImages)
             {
                 AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
             }
 
-            foreach (var button in _rangeButtonsWithImages)
+            foreach (Tuple<Skin.RangeButton, Image> button in _rangeButtonsWithImages)
             {
                 AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
             }
 
-            foreach (var stick in _sticksWithImages)
+            foreach (Tuple<Skin.AnalogStick, Image> stick in _sticksWithImages)
             {
                 AdjustImage(stick.Item1.Config, stick.Item2, xRatio, yRatio);
                 stick.Item1.XRange = (uint)(stick.Item1.OriginalXRange * xRatio);
                 stick.Item1.YRange = (uint)(stick.Item1.OriginalYRange * yRatio);
             }
 
-            foreach (var touchpad in _touchPadWithImages)
+            foreach (Tuple<Skin.TouchPad, Image> touchpad in _touchPadWithImages)
             {
                 AdjustImage(touchpad.Item1.Config, touchpad.Item2, xRatio, yRatio);
                 touchpad.Item1.XRange = (uint)(touchpad.Item1.OriginalXRange * xRatio);
@@ -116,21 +114,24 @@ namespace RetroSpy
             }
         }
 
+        private class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+            [DllImport("user32.dll")]
+            public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        }
 
         private const int GWL_STYLE = -16;
         private const int WS_MAXIMIZEBOX = 0x10000;
 
         private void Window_SourceInitialized(object sender, EventArgs ea)
-        {   
-            var hwnd = new WindowInteropHelper((Window)sender).Handle;
-            var value = GetWindowLong(hwnd, GWL_STYLE);
-            SetWindowLong(hwnd, GWL_STYLE, (int)(value & ~WS_MAXIMIZEBOX));
-       
+        {
+            IntPtr hwnd = new WindowInteropHelper((Window)sender).Handle;
+            int value = NativeMethods.GetWindowLong(hwnd, GWL_STYLE);
+            NativeMethods.SetWindowLong(hwnd, GWL_STYLE, value & ~WS_MAXIMIZEBOX);
+
             WindowAspectRatio.Register((ViewWindow)sender);
         }
 
@@ -138,174 +139,193 @@ namespace RetroSpy
         private double _originalWidth;
         private double _magicWidth;
         private double _magicHeight;
-
-        Skin _skin;
-        IControllerReader _reader;
-        Keybindings _keybindings;
-        BlinkReductionFilter _blinkFilter = new BlinkReductionFilter ();
-
-        List<Tuple<Skin.Detail, Image>> _detailsWithImages = new List<Tuple<Skin.Detail, Image>>();
-        List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
-        List<Tuple<Skin.TouchPad, Image>> _touchPadWithImages = new List<Tuple<Skin.TouchPad, Image>>();
-        List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
-        List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
+        private Skin _skin;
+        private IControllerReader _reader;
+        private Keybindings _keybindings;
+        private BlinkReductionFilter _blinkFilter = new BlinkReductionFilter();
+        private List<Tuple<Skin.Detail, Image>> _detailsWithImages = new List<Tuple<Skin.Detail, Image>>();
+        private List<Tuple<Skin.Button, Image>> _buttonsWithImages = new List<Tuple<Skin.Button, Image>>();
+        private List<Tuple<Skin.TouchPad, Image>> _touchPadWithImages = new List<Tuple<Skin.TouchPad, Image>>();
+        private List<Tuple<Skin.RangeButton, Image>> _rangeButtonsWithImages = new List<Tuple<Skin.RangeButton, Image>>();
+        private List<Tuple<Skin.AnalogStick, Image>> _sticksWithImages = new List<Tuple<Skin.AnalogStick, Image>>();
 
         // The triggers images are embedded inside of a Grid element so that we can properly mask leftwards and upwards
         // without the image aligning to the top left of its element.
-        List <Tuple <Skin.AnalogTrigger,Grid>> _triggersWithGridImages = new List <Tuple <Skin.AnalogTrigger,Grid>> ();
-
+        private List<Tuple<Skin.AnalogTrigger, Grid>> _triggersWithGridImages = new List<Tuple<Skin.AnalogTrigger, Grid>>();
 
         /// Expose the enabled status of the low-pass filter for data binding.
-        public bool ButtonBlinkReductionEnabled {
-            get { return _blinkFilter.ButtonEnabled; }
-            set {
-
+        public bool ButtonBlinkReductionEnabled
+        {
+            get => _blinkFilter.ButtonEnabled;
+            set
+            {
                 _blinkFilter.ButtonEnabled = value;
-                OnPropertyChanged ("ButtonBlinkReductionEnabled");
+                OnPropertyChanged("ButtonBlinkReductionEnabled");
             }
         }
+
         public bool MassBlinkReductionEnabled
         {
-            get { return _blinkFilter.MassEnabled; }
-            set {
+            get => _blinkFilter.MassEnabled;
+            set
+            {
                 _blinkFilter.MassEnabled = value;
                 OnPropertyChanged("MassBlinkReductionEnabled");
             }
         }
+
         public bool AnalogBlinkReductionEnabled
         {
-            get { return _blinkFilter.AnalogEnabled; }
-            set {
+            get => _blinkFilter.AnalogEnabled;
+            set
+            {
                 _blinkFilter.AnalogEnabled = value;
                 OnPropertyChanged("AnalogBlinkReductionEnabled");
             }
         }
+
         public bool AllBlinkReductionEnabled
         {
-            get { return ButtonBlinkReductionEnabled && AnalogBlinkReductionEnabled && MassBlinkReductionEnabled; }
-            set {
+            get => ButtonBlinkReductionEnabled && AnalogBlinkReductionEnabled && MassBlinkReductionEnabled;
+            set
+            {
                 ButtonBlinkReductionEnabled = AnalogBlinkReductionEnabled = MassBlinkReductionEnabled = value;
                 OnPropertyChanged("AllBlinkReductionEnabled");
             }
         }
 
-        public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader, bool staticViewerWindowName)
+        public ViewWindow(Skin skin, Skin.Background skinBackground, IControllerReader reader, bool staticViewerWindowName)
         {
-            
-            InitializeComponent ();
+            InitializeComponent();
             DataContext = this;
 
             _skin = skin;
             _reader = reader;
 
             if (staticViewerWindowName)
+            {
                 Title = "RetroSpy Viewer";
+            }
             else
+            {
                 Title = skin.Name;
+            }
 
             ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
             ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
-            var brush = new SolidColorBrush(skinBackground.Color);
+            SolidColorBrush brush = new SolidColorBrush(skinBackground.Color);
             ControllerGrid.Background = brush;
 
             if (skinBackground.Image != null)
             {
-                var img = new Image();
-                img.VerticalAlignment = VerticalAlignment.Top;
-                img.HorizontalAlignment = HorizontalAlignment.Left;
-                img.Source = skinBackground.Image;
-                img.Stretch = Stretch.Fill;
-                img.Margin = new Thickness(0, 0, 0, 0);
-                img.Width = skinBackground.Image.PixelWidth;
-                img.Height = skinBackground.Image.PixelHeight;
+                Image img = new Image
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Source = skinBackground.Image,
+                    Stretch = Stretch.Fill,
+                    Margin = new Thickness(0, 0, 0, 0),
+                    Width = skinBackground.Image.PixelWidth,
+                    Height = skinBackground.Image.PixelHeight
+                };
 
                 ControllerGrid.Children.Add(img);
             }
 
-            foreach (var detail in _skin.Details)
+            foreach (Skin.Detail detail in _skin.Details)
             {
-                if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
                     detail.Config.X = detail.Config.OriginalX;
                     detail.Config.Y = detail.Config.OriginalY;
-                    var image = getImageForElement(detail.Config);
+                    Image image = GetImageForElement(detail.Config);
                     _detailsWithImages.Add(new Tuple<Skin.Detail, Image>(detail, image));
                     ControllerGrid.Children.Add(image);
                 }
             }
 
-            foreach (var trigger in _skin.AnalogTriggers) {
-                if (bgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
+            foreach (Skin.AnalogTrigger trigger in _skin.AnalogTriggers)
+            {
+                if (BgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
                 {
                     trigger.Config.X = trigger.Config.OriginalX;
                     trigger.Config.Y = trigger.Config.OriginalY;
-                    var grid = getGridForAnalogTrigger(trigger);
+                    Grid grid = GetGridForAnalogTrigger(trigger);
                     _triggersWithGridImages.Add(new Tuple<Skin.AnalogTrigger, Grid>(trigger, grid));
                     ControllerGrid.Children.Add(grid);
                 }
             }
 
-            foreach (var button in _skin.Buttons) {
-                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+            foreach (Skin.Button button in _skin.Buttons)
+            {
+                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
-                    var image = getImageForElement(button.Config);
+                    Image image = GetImageForElement(button.Config);
                     _buttonsWithImages.Add(new Tuple<Skin.Button, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
 
-            foreach (var button in _skin.RangeButtons) {
-                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+            foreach (Skin.RangeButton button in _skin.RangeButtons)
+            {
+                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
-                    var image = getImageForElement(button.Config);
+                    Image image = GetImageForElement(button.Config);
                     _rangeButtonsWithImages.Add(new Tuple<Skin.RangeButton, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
-            
-            foreach (var stick in _skin.AnalogSticks) {
-                if (bgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
+
+            foreach (Skin.AnalogStick stick in _skin.AnalogSticks)
+            {
+                if (BgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
                 {
                     stick.Config.X = stick.Config.OriginalX;
                     stick.Config.Y = stick.Config.OriginalY;
                     stick.XRange = stick.OriginalXRange;
                     stick.YRange = stick.OriginalYRange;
-                    var image = getImageForElement(stick.Config);
+                    Image image = GetImageForElement(stick.Config);
                     _sticksWithImages.Add(new Tuple<Skin.AnalogStick, Image>(stick, image));
                     if (stick.VisibilityName != "")
+                    {
                         image.Visibility = Visibility.Hidden;
+                    }
+
                     ControllerGrid.Children.Add(image);
                 }
             }
 
-            foreach (var touchpad in _skin.TouchPads)
+            foreach (Skin.TouchPad touchpad in _skin.TouchPads)
             {
-                if (bgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
                 {
                     touchpad.Config.X = touchpad.Config.OriginalX;
                     touchpad.Config.Y = touchpad.Config.OriginalY;
                     touchpad.XRange = touchpad.OriginalXRange;
                     touchpad.YRange = touchpad.OriginalYRange;
-                    var image = getImageForElement(touchpad.Config);
+                    Image image = GetImageForElement(touchpad.Config);
                     _touchPadWithImages.Add(new Tuple<Skin.TouchPad, Image>(touchpad, image));
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
 
-            _reader.ControllerStateChanged += reader_ControllerStateChanged;
-            _reader.ControllerDisconnected += reader_ControllerDisconnected;
+            _reader.ControllerStateChanged += Reader_ControllerStateChanged;
+            _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
-            try {
-                _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);
-            } catch (ConfigParseException) {
-                MessageBox.Show ("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
+            try
+            {
+                _keybindings = new Keybindings(Keybindings.XML_FILE_PATH, _reader);
+            }
+            catch (ConfigParseException)
+            {
+                MessageBox.Show("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
             }
 
             MassBlinkReductionEnabled = Properties.Settings.Default.MassFilter;
@@ -314,8 +334,7 @@ namespace RetroSpy
             Topmost = Properties.Settings.Default.TopMost;
         }
 
-
-        static bool bgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
+        private static bool BgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
         {
             if (ignoreBgs.Contains(bgName))
             {
@@ -323,126 +342,138 @@ namespace RetroSpy
             }
             return eligableBgs.Count == 0 || eligableBgs.Contains(bgName);
         }
-        static Image getImageForElement (Skin.ElementConfig config)
+
+        private static Image GetImageForElement(Skin.ElementConfig config)
         {
-            var img = new Image ();
-            img.VerticalAlignment = VerticalAlignment.Top;
-            img.HorizontalAlignment = HorizontalAlignment.Left;
-            img.Source = config.Image;
-            img.Stretch = Stretch.Fill;
-            img.Margin = new Thickness (config.X, config.Y, 0, 0);
-            img.Width = config.Width;
-            img.Height = config.Height;
+            Image img = new Image
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Source = config.Image,
+                Stretch = Stretch.Fill,
+                Margin = new Thickness(config.X, config.Y, 0, 0),
+                Width = config.Width,
+                Height = config.Height
+            };
             return img;
         }
 
-        static Grid getGridForAnalogTrigger (Skin.AnalogTrigger trigger)
+        private static Grid GetGridForAnalogTrigger(Skin.AnalogTrigger trigger)
         {
-            var img = new Image ();
-            img.VerticalAlignment = VerticalAlignment.Top;
+            Image img = new Image
+            {
+                VerticalAlignment = VerticalAlignment.Top,
 
-            img.HorizontalAlignment = 
+                HorizontalAlignment =
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Left
                 ? HorizontalAlignment.Right
-                : HorizontalAlignment.Left;
+                : HorizontalAlignment.Left
+            };
 
-            img.VerticalAlignment = 
+            img.VerticalAlignment =
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Up
                 ? VerticalAlignment.Bottom
                 : VerticalAlignment.Top;
 
             img.Source = trigger.Config.Image;
             img.Stretch = Stretch.Fill;
-            img.Margin = new Thickness (0, 0, 0, 0);
+            img.Margin = new Thickness(0, 0, 0, 0);
             img.Width = trigger.Config.Width;
             img.Height = trigger.Config.Height;
-            
 
-            var grid = new Grid ();
+            Grid grid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(trigger.Config.X, trigger.Config.Y, 0, 0),
+                Width = trigger.Config.Width,
+                Height = trigger.Config.Height
+            };
 
-            grid.HorizontalAlignment = HorizontalAlignment.Left;
-            grid.VerticalAlignment = VerticalAlignment.Top;
-            grid.Margin = new Thickness (trigger.Config.X, trigger.Config.Y, 0, 0);
-            grid.Width = trigger.Config.Width;
-            grid.Height = trigger.Config.Height;
-
-            grid.Children.Add (img);
+            grid.Children.Add(img);
 
             return grid;
         }
 
-        void AlwaysOnTop_Click (object sender, RoutedEventArgs e) {
-            this.Topmost = !this.Topmost;
+        private void AlwaysOnTop_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = !Topmost;
             Properties.Settings.Default.TopMost = Topmost;
         }
-        void AllBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.ButtonBlinkReductionEnabled && this.AnalogBlinkReductionEnabled && this.MassBlinkReductionEnabled)
-            {
-                this.AllBlinkReductionEnabled = false;
 
+        private void AllBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (ButtonBlinkReductionEnabled && AnalogBlinkReductionEnabled && MassBlinkReductionEnabled)
+            {
+                AllBlinkReductionEnabled = false;
             }
             else
             {
-                this.AllBlinkReductionEnabled = true;
+                AllBlinkReductionEnabled = true;
             }
             Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
             Properties.Settings.Default.AnalogFilter = AnalogBlinkReductionEnabled;
             Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
         }
-        void ButtonBlinkReductionEnabled_Click (object sender, RoutedEventArgs e) {
-            this.ButtonBlinkReductionEnabled = !this.ButtonBlinkReductionEnabled;
+
+        private void ButtonBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonBlinkReductionEnabled = !ButtonBlinkReductionEnabled;
             Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
         }
-        void AnalogBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+
+        private void AnalogBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
         {
-            this.AnalogBlinkReductionEnabled = !this.AnalogBlinkReductionEnabled;
+            AnalogBlinkReductionEnabled = !AnalogBlinkReductionEnabled;
             Properties.Settings.Default.AnalogFilter = AnalogBlinkReductionEnabled;
         }
-        void MassBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+
+        private void MassBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
         {
-            this.MassBlinkReductionEnabled = !this.MassBlinkReductionEnabled;
+            MassBlinkReductionEnabled = !MassBlinkReductionEnabled;
             Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
         }
 
-
-        void reader_ControllerDisconnected (object sender, EventArgs e)
+        private void Reader_ControllerDisconnected(object sender, EventArgs e)
         {
-            if (this.Dispatcher.CheckAccess())
+            if (Dispatcher.CheckAccess())
+            {
                 Close();
+            }
             else
             {
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
                     Close();
                 });
             }
         }
 
-        void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
-            if (_keybindings != null) {
-                _keybindings.Finish ();
+            if (_keybindings != null)
+            {
+                _keybindings.Finish();
             }
-            _reader.Finish ();
+            _reader.Finish();
         }
 
-        void reader_ControllerStateChanged (IControllerReader reader, ControllerState newState)
+        private void Reader_ControllerStateChanged(object reader, ControllerState e)
         {
-            newState = _blinkFilter.Process (newState);
+            e = _blinkFilter.Process(e);
 
             // This assumes you can't press left/right and up/down at the same time.  The code gets more complicated otherwise.
-            var compassDirectionStates = new Dictionary<string, bool>();
-            if (newState.Buttons.ContainsKey("up") && newState.Buttons.ContainsKey("left") && newState.Buttons.ContainsKey("right") && newState.Buttons.ContainsKey("down"))
+            Dictionary<string, bool> compassDirectionStates = new Dictionary<string, bool>();
+            if (e.Buttons.ContainsKey("up") && e.Buttons.ContainsKey("left") && e.Buttons.ContainsKey("right") && e.Buttons.ContainsKey("down"))
             {
-                string[] compassDirections= { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
+                string[] compassDirections = { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
 
-                var compassDirectionStatesTemp = new bool[8];
-                compassDirectionStatesTemp[0] = newState.Buttons["up"];
-                compassDirectionStatesTemp[2] = newState.Buttons["right"];
-                compassDirectionStatesTemp[4] = newState.Buttons["down"];
-                compassDirectionStatesTemp[6] = newState.Buttons["left"];
+                bool[] compassDirectionStatesTemp = new bool[8];
+                compassDirectionStatesTemp[0] = e.Buttons["up"];
+                compassDirectionStatesTemp[2] = e.Buttons["right"];
+                compassDirectionStatesTemp[4] = e.Buttons["down"];
+                compassDirectionStatesTemp[6] = e.Buttons["left"];
 
                 if (compassDirectionStatesTemp[0] && compassDirectionStatesTemp[2])
                 {
@@ -465,30 +496,34 @@ namespace RetroSpy
                     compassDirectionStatesTemp[6] = compassDirectionStatesTemp[0] = false;
                 }
 
-                for(int i = 0; i < compassDirections.Length; ++i)
+                for (int i = 0; i < compassDirections.Length; ++i)
                 {
                     compassDirectionStates[compassDirections[i]] = compassDirectionStatesTemp[i];
                 }
             }
 
-            foreach (var button in _buttonsWithImages)
+            foreach (Tuple<Skin.Button, Image> button in _buttonsWithImages)
             {
-                if (newState.Buttons.ContainsKey(button.Item1.Name))
+                if (e.Buttons.ContainsKey(button.Item1.Name))
                 {
                     if (button.Item2.Dispatcher.CheckAccess())
-                        button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                    {
+                        button.Item2.Visibility = e.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                    }
                     else
                     {
                         button.Item2.Dispatcher.Invoke(() =>
                         {
-                            button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                            button.Item2.Visibility = e.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
                         });
                     }
                 }
                 else if (compassDirectionStates.ContainsKey(button.Item1.Name))
                 {
                     if (button.Item2.Dispatcher.CheckAccess())
+                    {
                         button.Item2.Visibility = compassDirectionStates[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                    }
                     else
                     {
                         button.Item2.Dispatcher.Invoke(() =>
@@ -497,39 +532,45 @@ namespace RetroSpy
                         });
                     }
                 }
-
             }
 
-            foreach (var button in _rangeButtonsWithImages) 
+            foreach (Tuple<Skin.RangeButton, Image> button in _rangeButtonsWithImages)
             {
-                if (!newState.Analogs.ContainsKey (button.Item1.Name)) continue;
+                if (!e.Analogs.ContainsKey(button.Item1.Name))
+                {
+                    continue;
+                }
 
-                var value = newState.Analogs [button.Item1.Name];
-                var visible = button.Item1.From <= value && value <= button.Item1.To;
+                float value = e.Analogs[button.Item1.Name];
+                bool visible = button.Item1.From <= value && value <= button.Item1.To;
                 button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
             }
 
-            foreach (var stick in _sticksWithImages)
+            foreach (Tuple<Skin.AnalogStick, Image> stick in _sticksWithImages)
             {
-                var skin = stick.Item1;
-                var image = stick.Item2;
+                Skin.AnalogStick skin = stick.Item1;
+                Image image = stick.Item2;
 
                 float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
                 float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                var x = newState.Analogs.ContainsKey(skin.XName)
-                      ? skin.Config.X + xrange * newState.Analogs[skin.XName]
+                float x = e.Analogs.ContainsKey(skin.XName)
+                      ? skin.Config.X + xrange * e.Analogs[skin.XName]
                       : skin.Config.X;
 
-                var y = newState.Analogs.ContainsKey(skin.YName)
-                      ? skin.Config.Y + yrange * newState.Analogs[skin.YName]
+                float y = e.Analogs.ContainsKey(skin.YName)
+                      ? skin.Config.Y + yrange * e.Analogs[skin.YName]
                       : skin.Config.Y;
 
                 Visibility visibility;
                 if (skin.VisibilityName != "")
-                    visibility = (newState.Buttons.ContainsKey(skin.VisibilityName) && newState.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
+                {
+                    visibility = (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
+                }
                 else
+                {
                     visibility = Visibility.Visible;
+                }
 
                 if (image.Dispatcher.CheckAccess())
                 {
@@ -546,17 +587,17 @@ namespace RetroSpy
                 }
             }
 
-            foreach (var touchpad in _touchPadWithImages)
+            foreach (Tuple<Skin.TouchPad, Image> touchpad in _touchPadWithImages)
             {
-                var skin = touchpad.Item1;
+                Skin.TouchPad skin = touchpad.Item1;
 
-                if (newState.Analogs.ContainsKey(skin.XName) && newState.Analogs.ContainsKey(skin.YName))
+                if (e.Analogs.ContainsKey(skin.XName) && e.Analogs.ContainsKey(skin.YName))
                 {
                     // Show
-                    var x = (newState.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width/2);
-                    var y = (newState.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height/2);
+                    double x = (e.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width / 2);
+                    double y = (e.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height / 2);
 
-                    if(touchpad.Item2.Dispatcher.CheckAccess())
+                    if (touchpad.Item2.Dispatcher.CheckAccess())
                     {
                         touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
                         touchpad.Item2.Visibility = Visibility.Visible;
@@ -586,18 +627,33 @@ namespace RetroSpy
                 }
             }
 
-            foreach (var trigger in _triggersWithGridImages)
+            foreach (Tuple<Skin.AnalogTrigger, Grid> trigger in _triggersWithGridImages)
             {
-                var skin = trigger.Item1;
-                var grid = trigger.Item2;
+                Skin.AnalogTrigger skin = trigger.Item1;
+                Grid grid = trigger.Item2;
 
-                if (!newState.Analogs.ContainsKey (skin.Name)) continue;
+                if (!e.Analogs.ContainsKey(skin.Name))
+                {
+                    continue;
+                }
 
-                var val = newState.Analogs [skin.Name];
-                if (skin.UseNegative) val *= -1;
-                if (skin.IsReversed) val = 1 - val;
-                if (val < 0) val = 0;
-                switch (skin.Direction) 
+                float val = e.Analogs[skin.Name];
+                if (skin.UseNegative)
+                {
+                    val *= -1;
+                }
+
+                if (skin.IsReversed)
+                {
+                    val = 1 - val;
+                }
+
+                if (val < 0)
+                {
+                    val = 0;
+                }
+
+                switch (skin.Direction)
                 {
                     case Skin.AnalogTrigger.DirectionValue.Right:
                         if (grid.Dispatcher.CheckAccess())
@@ -614,8 +670,8 @@ namespace RetroSpy
                         break;
 
                     case Skin.AnalogTrigger.DirectionValue.Left:
-                        var width = skin.Config.Width * val;
-                        var offx = skin.Config.Width - width;
+                        float width = skin.Config.Width * val;
+                        float offx = skin.Config.Width - width;
                         if (grid.Dispatcher.CheckAccess())
                         {
                             grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
@@ -646,8 +702,8 @@ namespace RetroSpy
                         break;
 
                     case Skin.AnalogTrigger.DirectionValue.Up:
-                        var height = skin.Config.Height * val;
-                        var offy = skin.Config.Height - height;
+                        float height = skin.Config.Height * val;
+                        float offy = skin.Config.Height - height;
                         if (grid.Dispatcher.CheckAccess())
                         {
                             grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
@@ -662,6 +718,7 @@ namespace RetroSpy
                             });
                         }
                         break;
+
                     case Skin.AnalogTrigger.DirectionValue.Fade:
                         if (grid.Dispatcher.CheckAccess())
                         {
@@ -679,21 +736,22 @@ namespace RetroSpy
                             });
                         }
                         break;
-
                 }
             }
         }
 
         // INotifyPropertyChanged interface implementation
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged (string propertyName) {
-            if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
-        }  
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     internal class WindowAspectRatio
     {
-        private double _ratio;
+        private readonly double _ratio;
         private ViewWindow _window;
         private bool _calculatedMagic;
 
@@ -737,22 +795,24 @@ namespace RetroSpy
         {
             if (!_calculatedMagic)
             {
-                _window.calculateMagic();
+                _window.CalculateMagic();
                 _calculatedMagic = true;
             }
 
             if ((WM)msg == WM.WINDOWPOSCHANGING)
             {
-
                 WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
 
                 if ((position.flags & (int)SWP.NoMove) != 0 ||
-                    HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
+                    HwndSource.FromHwnd(hwnd).RootVisual == null)
+                {
+                    return IntPtr.Zero;
+                }
 
                 double magicWidth = _window.GetMagicWidth();
                 double magicHeight = _window.GetMagicHeight();
 
-                position.cx = (int)( magicWidth + ((position.cy-magicHeight) * _ratio));
+                position.cx = (int)(magicWidth + ((position.cy - magicHeight) * _ratio));
 
                 Marshal.StructureToPtr(position, lParam, true);
                 handeled = true;

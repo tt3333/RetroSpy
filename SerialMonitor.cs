@@ -6,20 +6,30 @@ using System.Windows.Threading;
 
 namespace RetroSpy
 {
-    public delegate void PacketEventHandler(object sender, byte[] packet);
-
-    public class SerialMonitor
+    public class PacketData : EventArgs
     {
-        const int BAUD_RATE = 115200;
-        const int TIMER_MS = 1;
+        public PacketData(byte[] packet)
+        {
+            _packet = packet;
+        }
+
+        public byte[] _packet;
+    }
+
+    public delegate void PacketEventHandler(object sender, PacketData e);
+
+    public class SerialMonitor : IDisposable
+    {
+        private const int BAUD_RATE = 115200;
+        private const int TIMER_MS = 1;
 
         public event PacketEventHandler PacketReceived;
+
         public event EventHandler Disconnected;
 
-        SerialPort _datPort;
-        List<byte> _localBuffer;
-
-        DispatcherTimer _timer;
+        private SerialPort _datPort;
+        private List<byte> _localBuffer;
+        private DispatcherTimer _timer;
 
         public SerialMonitor(string portName)
         {
@@ -29,14 +39,19 @@ namespace RetroSpy
 
         public void Start()
         {
-            if (_timer != null) return;
+            if (_timer != null)
+            {
+                return;
+            }
 
             _localBuffer.Clear();
             _datPort.Open();
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
-            _timer.Tick += tick;
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
+            _timer.Tick += Tick;
             _timer.Start();
         }
 
@@ -49,6 +64,7 @@ namespace RetroSpy
                     _datPort.Close();
                 }
                 catch (IOException) { }
+                _datPort.Dispose();
                 _datPort = null;
             }
             if (_timer != null)
@@ -58,16 +74,23 @@ namespace RetroSpy
             }
         }
 
-        void tick(object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
         {
-            if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
+            if (_datPort == null || !_datPort.IsOpen || PacketReceived == null)
+            {
+                return;
+            }
 
             // Try to read some data from the COM port and append it to our localBuffer.
             // If there's an IOException then the device has been disconnected.
             try
             {
                 int readCount = _datPort.BytesToRead;
-                if (readCount < 1) return;
+                if (readCount < 1)
+                {
+                    return;
+                }
+
                 byte[] readBuffer = new byte[readCount];
                 _datPort.Read(readBuffer, 0, readCount);
                 _datPort.DiscardInBuffer();
@@ -76,23 +99,45 @@ namespace RetroSpy
             catch (IOException)
             {
                 Stop();
-                if (Disconnected != null) Disconnected(this, EventArgs.Empty);
+                Disconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
             // Try and find 2 splitting characters in our buffer.
             int lastSplitIndex = _localBuffer.LastIndexOf(0x0A);
-            if (lastSplitIndex <= 1) return;
+            if (lastSplitIndex <= 1)
+            {
+                return;
+            }
+
             int sndLastSplitIndex = _localBuffer.LastIndexOf(0x0A, lastSplitIndex - 1);
-            if (lastSplitIndex == -1) return;
+            if (lastSplitIndex == -1)
+            {
+                return;
+            }
 
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
-            PacketReceived(this, _localBuffer.GetRange(packetStart, packetSize).ToArray());
+
+            PacketReceived(this, new PacketData(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 
             // Clear our buffer up until the last split character.
             _localBuffer.RemoveRange(0, lastSplitIndex);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Stop();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

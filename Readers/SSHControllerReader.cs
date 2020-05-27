@@ -1,52 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    sealed public class SSHControllerReader : IControllerReader 
+    public sealed class SSHControllerReader : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
+
         public event EventHandler ControllerDisconnected;
 
-        Func <byte[], ControllerState> _packetParser;
-        SSHMonitor _serialMonitor;
+        private readonly Func<byte[], ControllerState> _packetParser;
+        private SSHMonitor _serialMonitor;
 
-        public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerState> packetParser, 
-            string username = "retrospy", string password = "retrospy", int delayInMilliseconds = 0) 
+        public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerState> packetParser,
+            string username = "retrospy", string password = "retrospy", int delayInMilliseconds = 0)
         {
             _packetParser = packetParser;
 
             _serialMonitor = new SSHMonitor(hostname, arguments, username, password, delayInMilliseconds);
-            _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
-            _serialMonitor.Disconnected += serialMonitor_Disconnected;
-            _serialMonitor.Start ();
+            _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += SerialMonitor_Disconnected;
+            _serialMonitor.Start();
         }
 
-        void serialMonitor_Disconnected(object sender, EventArgs e)
+        private void SerialMonitor_Disconnected(object sender, EventArgs e)
         {
-            Finish ();
-            if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+            Finish();
+            ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        void serialMonitor_PacketReceived (object sender, byte[] packet)
+        private void SerialMonitor_PacketReceived(object sender, PacketData packet)
         {
-            if (ControllerStateChanged != null) {
-                var state = _packetParser (packet);
-                if (state != null) {
-                    ControllerStateChanged (this, state);
+            if (ControllerStateChanged != null)
+            {
+                ControllerState state = _packetParser(packet._packet);
+                if (state != null)
+                {
+                    ControllerStateChanged(this, state);
                 }
             }
         }
 
-        public void Finish ()
+        public void Finish()
         {
-            if (_serialMonitor != null) {
-                _serialMonitor.Stop ();
+            if (_serialMonitor != null)
+            {
+                _serialMonitor.Stop();
+                _serialMonitor.Dispose();
                 _serialMonitor = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

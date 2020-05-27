@@ -28,7 +28,7 @@
 
 #include "axbtnmap.h"
 
-/* The following values come from include/joystick.h in the kernel source. */
+ /* The following values come from include/joystick.h in the kernel source. */
 #define JSIOCSBTNMAP_LARGE _IOW('j', 0x33, __u16[KEY_MAX_LARGE - BTN_MISC + 1])
 #define JSIOCSBTNMAP_SMALL _IOW('j', 0x33, __u16[KEY_MAX_SMALL - BTN_MISC + 1])
 #define JSIOCGBTNMAP_LARGE _IOR('j', 0x34, __u16[KEY_MAX_LARGE - BTN_MISC + 1])
@@ -44,7 +44,8 @@ int determine_ioctl(int fd, int *ioctls, int *ioctl_used, void *argp)
 			/* The ioctl did something. */
 			*ioctl_used = ioctls[i];
 			return retval;
-		} else if (errno != -EINVAL) {
+		}
+		else if (errno != -EINVAL) {
 			/* Some other error occurred. */
 			return retval;
 		}
@@ -60,7 +61,8 @@ int getbtnmap(int fd, uint16_t *btnmap)
 	if (jsiocgbtnmap != 0) {
 		/* We already know which ioctl to use. */
 		return ioctl(fd, jsiocgbtnmap, btnmap);
-	} else {
+	}
+	else {
 		return determine_ioctl(fd, ioctls, &jsiocgbtnmap, btnmap);
 	}
 }
@@ -73,7 +75,8 @@ int setbtnmap(int fd, uint16_t *btnmap)
 	if (jsiocsbtnmap != 0) {
 		/* We already know which ioctl to use. */
 		return ioctl(fd, jsiocsbtnmap, btnmap);
-	} else {
+	}
+	else {
 		return determine_ioctl(fd, ioctls, &jsiocsbtnmap, btnmap);
 	}
 }

@@ -1,37 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class Dreamcast
+    public static class Dreamcast
     {
-        const int FRAME_HEADER_SIZE = 32;
+        private const int FRAME_HEADER_SIZE = 32;
 
-        static readonly string[] BUTTONS = {
-            "right2", "left2", "down2", "up2", "d", "x", "y", "z", "right", "left", "down", "up", "start", "a", "b", "c"    
+        private static readonly string[] BUTTONS = {
+            "right2", "left2", "down2", "up2", "d", "x", "y", "z", "right", "left", "down", "up", "start", "a", "b", "c"
         };
 
-        static readonly string[] MOUSE_BUTTONS = {
+        private static readonly string[] MOUSE_BUTTONS = {
             null, null, null, null, "start", "left", "right", "middle"
         };
 
-        static float readTrigger(byte input)
+        private static float ReadTrigger(byte input)
         {
             return (float)(input) / 256;
         }
-        static float readStick(byte input)
+
+        private static float ReadStick(byte input)
         {
             return (float)(input - 128) / 128;
         }
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < FRAME_HEADER_SIZE) return null;
+            if (packet.Length < FRAME_HEADER_SIZE)
+            {
+                return null;
+            }
 
-            var state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
             int j = 0;
 
@@ -71,7 +69,6 @@ namespace RetroSpy.Readers
 
                 if (controllerType == 1 && numWords == 3)
                 {
-
                     byte ltrigger = 0;
                     for (int i = 0; i < 4; ++i)
                     {
@@ -89,12 +86,17 @@ namespace RetroSpy.Readers
                     }
 
                     int k = 0;
-                    for (int i = 0; i < BUTTONS.Length/2; ++i)
+                    for (int i = 0; i < BUTTONS.Length / 2; ++i)
                     {
                         if (!string.IsNullOrEmpty(BUTTONS[k]))
+                        {
                             state.SetButton(BUTTONS[k], (packet[j] & 0x2) == 0x0);
-                        if (!string.IsNullOrEmpty(BUTTONS[k+1]))
-                            state.SetButton(BUTTONS[k+1], (packet[j+1] & 0x1) == 0x0);
+                        }
+
+                        if (!string.IsNullOrEmpty(BUTTONS[k + 1]))
+                        {
+                            state.SetButton(BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+                        }
 
                         k += 2;
                         j += 2;
@@ -132,14 +134,12 @@ namespace RetroSpy.Readers
                         j += 2;
                     }
 
-                    state.SetAnalog("stick_x", readStick(joyx));
-                    state.SetAnalog("stick_y", readStick(joyy));
-                    state.SetAnalog("stick_x2", readStick(joyx2));
-                    state.SetAnalog("stick_y2", readStick(joyy2));
-                    state.SetAnalog("trig_r", readTrigger(rtrigger));
-                    state.SetAnalog("trig_l", readTrigger(ltrigger));
-
-
+                    state.SetAnalog("stick_x", ReadStick(joyx));
+                    state.SetAnalog("stick_y", ReadStick(joyy));
+                    state.SetAnalog("stick_x2", ReadStick(joyx2));
+                    state.SetAnalog("stick_y2", ReadStick(joyy2));
+                    state.SetAnalog("trig_r", ReadTrigger(rtrigger));
+                    state.SetAnalog("trig_l", ReadTrigger(ltrigger));
                 }
                 else if (controllerType == 0x200 && numWords == 6)
                 {
@@ -149,9 +149,14 @@ namespace RetroSpy.Readers
                     for (int i = 0; i < MOUSE_BUTTONS.Length / 2; ++i)
                     {
                         if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k]))
+                        {
                             state.SetButton(MOUSE_BUTTONS[k], (packet[j] & 0x2) == 0x0);
+                        }
+
                         if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k + 1]))
+                        {
                             state.SetButton(MOUSE_BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+                        }
 
                         k += 2;
                         j += 2;
@@ -194,18 +199,16 @@ namespace RetroSpy.Readers
 
                     float x = (axis2 - 512) / 512.0f;
                     float y = -1 * (axis1 - 512) / 512.0f;
-                    
+
                     SignalTool.SetMouseProperties(x, y, state);
 
                     state.SetButton("scroll_up", axis3 < 512);
                     state.SetButton("scroll_down", axis3 > 512);
-
                 }
                 return state.Build();
             }
 
             return null;
         }
-
     }
 }

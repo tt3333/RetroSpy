@@ -12,7 +12,7 @@
     <button name="r1" image="arrowU.png" x="1020" y="1000" width="150" height="30" />
     <button name="l2" image="arrowU.png" x="1020" y="1000" width="126" height="95" />
     <button name="r2" image="arrowU.png" x="1020" y="1000" width="126" height="95" />
-	
+
     <button name="start" image="arrowU.png" x="732" y="347" width="82" height="60" />
     <button name="select" image="arrowU.png" x="565" y="355" width="74" height="50" />
 
@@ -20,5 +20,4 @@
     <button name="left" image="arrowL.png" x="26" y="175" width="150" height="150" />
 	<button name="down" image="arrowD.png" x="175" y="323" width="150" height="150" />
     <button name="right" image="arrowR.png" x="323" y="175" width="150" height="150" />
-
 </skin>

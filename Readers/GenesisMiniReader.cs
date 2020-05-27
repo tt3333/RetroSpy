@@ -1,33 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class GenesisMiniReader
+    public static class GenesisMiniReader
     {
-        const int PACKET_SIZE = 58;
-        const int POLISHED_PACKET_SIZE = 28;
+        private const int PACKET_SIZE = 58;
+        private const int POLISHED_PACKET_SIZE = 28;
 
-        static readonly string[] THREE_BUTTONS = {
+        private static readonly string[] THREE_BUTTONS = {
             null, null, null, null, "y", "b", "a", "x", "z", "c", null, null, "mode", "start", null, null
         };
 
-        static readonly string[] SIX_BUTTONS = {
+        private static readonly string[] SIX_BUTTONS = {
             null, null, null, null, "x", "a", "b", "y", "c", "z", "l", "r", "mode", "start", null, null
         };
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
-          
             for (int i = 40; i < 56; ++i)
-                polishedPacket[i-40] = (byte)((packet[i] == 0x31) ? 1 : 0);
+            {
+                polishedPacket[i - 40] = (byte)((packet[i] == 0x31) ? 1 : 0);
+            }
 
             for (int i = 0; i < 2; ++i)
             {
@@ -40,10 +38,14 @@ namespace RetroSpy.Readers
 
             if (polishedPacket[0] == 1 && polishedPacket[1] == 1 && polishedPacket[2] == 1 && polishedPacket[3] == 1)
             {
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
                 for (int i = 0; i < THREE_BUTTONS.Length; ++i)
                 {
-                    if (string.IsNullOrEmpty(THREE_BUTTONS[i])) continue;
+                    if (string.IsNullOrEmpty(THREE_BUTTONS[i]))
+                    {
+                        continue;
+                    }
+
                     outState.SetButton(THREE_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
 
@@ -55,10 +57,14 @@ namespace RetroSpy.Readers
             }
             else if (polishedPacket[0] == 0 && polishedPacket[1] == 0 && polishedPacket[2] == 0 && polishedPacket[3] == 0)
             {
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
                 for (int i = 0; i < SIX_BUTTONS.Length; ++i)
                 {
-                    if (string.IsNullOrEmpty(SIX_BUTTONS[i])) continue;
+                    if (string.IsNullOrEmpty(SIX_BUTTONS[i]))
+                    {
+                        continue;
+                    }
+
                     outState.SetButton(SIX_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
 

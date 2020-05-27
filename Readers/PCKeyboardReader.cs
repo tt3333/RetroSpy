@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+﻿using SharpDX.DirectInput;
+using System;
 using System.IO;
-using SharpDX.DirectInput;
+using System.Windows.Threading;
 
 namespace RetroSpy.Readers
 {
-    sealed public class PCKeyboardReader : IControllerReader
+    public sealed class PCKeyboardReader : IControllerReader, IDisposable
     {
         public event StateEventHandler ControllerStateChanged;
+
         public event EventHandler ControllerDisconnected;
 
-        const double TIMER_MS = 1;
-
-        DirectInput _dinput;
-        DispatcherTimer _timer;
-        Keyboard _keyboard;
+        private const double TIMER_MS = 1;
+        private DirectInput _dinput;
+        private DispatcherTimer _timer;
+        private Keyboard _keyboard;
 
         public PCKeyboardReader(int dummy = 0)
         {
@@ -35,12 +31,15 @@ namespace RetroSpy.Readers
                 throw new IOException("Connected keyboard could not be acquired.");
             }
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
-            _timer.Tick += tick;
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(TIMER_MS)
+            };
+            _timer.Tick += Tick;
             _timer.Start();
         }
-        void tick(object sender, EventArgs e)
+
+        private void Tick(object sender, EventArgs e)
         {
             try
             {
@@ -49,14 +48,14 @@ namespace RetroSpy.Readers
             catch (Exception)
             {
                 Finish();
-                if (ControllerDisconnected != null) ControllerDisconnected(this, EventArgs.Empty);
+                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
-            var outState = new ControllerStateBuilder();
-            var state = _keyboard.GetCurrentState();
+            ControllerStateBuilder outState = new ControllerStateBuilder();
+            KeyboardState state = _keyboard.GetCurrentState();
 
-            foreach (var key in Enum.GetNames(typeof(Key)))
+            foreach (string key in Enum.GetNames(typeof(Key)))
             {
                 outState.SetButton(key, false);
             }
@@ -64,9 +63,9 @@ namespace RetroSpy.Readers
             for (int i = 0; i < state.PressedKeys.Count; i++)
             {
                 outState.SetButton(state.PressedKeys[i].ToString(), true);
-            }       
+            }
 
-            if (ControllerStateChanged != null) ControllerStateChanged(this, outState.Build());
+            ControllerStateChanged?.Invoke(this, outState.Build());
         }
 
         public void Finish()
@@ -77,11 +76,30 @@ namespace RetroSpy.Readers
                 _keyboard.Dispose();
                 _keyboard = null;
             }
+            if (_dinput != null)
+            {
+                _dinput.Dispose();
+                _dinput = null;
+            }
             if (_timer != null)
             {
                 _timer.Stop();
                 _timer = null;
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Finish();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

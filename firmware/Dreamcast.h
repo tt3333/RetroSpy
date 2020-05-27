@@ -4,17 +4,17 @@
 #include "ControllerSpy.h"
 
 class DreamcastSpy : public ControllerSpy {
-    public:
-		    void setup();
-        FASTRUN void loop();
-        FASTRUN void writeSerial();
-        FASTRUN void debugSerial();
-        FASTRUN void updateState();
+public:
+	void setup();
+	FASTRUN void loop();
+	FASTRUN void writeSerial();
+	FASTRUN void debugSerial();
+	FASTRUN void updateState();
 
-    private:
-		byte rawData[16000];
-		byte* p;
-    int byteCount;
+private:
+	byte rawData[16000];
+	byte* p;
+	int byteCount;
 };
 
 #endif

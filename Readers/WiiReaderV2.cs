@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace RetroSpy.Readers
 {
-    static public class WiiReaderV2
+    public static class WiiReaderV2
     {
-        static readonly string[] CLASSIC_BUTTONS = {
+        private static readonly string[] CLASSIC_BUTTONS = {
             "right", "down", "l", "select", "home", "start", "r", null, "zl", "b", "y", "a", "x", "zr", "left", "up"
         };
 
-        static private byte encryptionKeySet = 255;
+        private static byte encryptionKeySet = 255;
 
-        private static byte[] wm_rand;
-        private static byte[] wm_key;
-        private static byte[] wm_ft;
-        private static byte[] wm_sb;
+        private static readonly byte[] wm_rand;
+        private static readonly byte[] wm_key;
+        private static readonly byte[] wm_ft;
+        private static readonly byte[] wm_sb;
 
         static WiiReaderV2()
         {
@@ -27,16 +23,19 @@ namespace RetroSpy.Readers
             wm_sb = new byte[8];
         }
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length != 46 && packet.Length != 50) return null;
+            if (packet.Length != 46 && packet.Length != 50)
+            {
+                return null;
+            }
 
             byte[] data = new byte[1024];
             byte[] unencryptedData = new byte[1024];
 
             int j = 2;
             int numBytes = 0;
-            for(int i = 0; i < (packet.Length/2) - 1; ++i)
+            for (int i = 0; i < (packet.Length / 2) - 1; ++i)
             {
                 numBytes++;
                 data[i] = (byte)(packet[j] | (packet[j + 1] >> 4));
@@ -53,9 +52,9 @@ namespace RetroSpy.Readers
                 {
                     wm_key[5 - j] = data[10 + j];
                 }
-                if(!wm_gentabs())
+                if (!Wm_gentabs())
                 {
-                    var outState = new ControllerStateBuilder();
+                    ControllerStateBuilder outState = new ControllerStateBuilder();
 
                     outState.SetButton("lock", true);
                     outState.SetButton("disconnect", false);
@@ -65,19 +64,25 @@ namespace RetroSpy.Readers
                 encryptionKeySet = packet[1];
             }
             else if (packet[1] == 0xFF)
+            {
                 encryptionKeySet = 0xFF;
+            }
 
             for (int i = 16; i < numBytes; ++i)
             {
                 if (encryptionKeySet != 255)
+                {
                     unencryptedData[i - 16] = (byte)((data[i] ^ wm_sb[(i - 16) % 8]) + wm_ft[(i - 16) % 8]);
+                }
                 else
+                {
                     unencryptedData[i - 16] = data[i];
+                }
             }
 
             if (packet[0] == 0)  // Nunchuck
             {
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
 
                 byte stickX = unencryptedData[0];
                 byte stickY = unencryptedData[1];
@@ -99,9 +104,11 @@ namespace RetroSpy.Readers
             else if (packet[0] == 1) // Classic Controller
             {
                 if ((unencryptedData[4] & 0b00000001) == 0)
+                {
                     return null;
+                }
 
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
 
                 byte rightTrigger = (byte)(unencryptedData[3] & 0b00011111);
                 byte leftTrigger = (byte)(((unencryptedData[3] & 0b11100000) >> 5) | ((unencryptedData[2] & 0b01100000) >> 2));
@@ -144,11 +151,10 @@ namespace RetroSpy.Readers
                 outState.SetButton("lock", false);
 
                 return outState.Build();
-
             }
             else if (packet[0] == 2) // Unknown and its 6 bytes
             {
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
 
                 byte rightTrigger = (byte)(unencryptedData[3] & 0b00011111);
                 byte leftTrigger = (byte)(((unencryptedData[3] & 0b11100000) >> 5) | ((unencryptedData[2] & 0b01100000) >> 2));
@@ -203,14 +209,15 @@ namespace RetroSpy.Readers
                 outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
 
                 return outState.Build();
-
             }
             else if (packet[0] == 3) //8BitDo GBros. Adapter
             {
                 if ((unencryptedData[6] & 0b00000001) == 0)
+                {
                     return null;
+                }
 
-                var outState = new ControllerStateBuilder();
+                ControllerStateBuilder outState = new ControllerStateBuilder();
 
                 byte rightTrigger = unencryptedData[5];
                 byte leftTrigger = unencryptedData[4];
@@ -258,14 +265,13 @@ namespace RetroSpy.Readers
             return null;
         }
 
-
-        static byte wm_ror8(byte a, byte b)
+        private static byte Wm_ror8(byte a, byte b)
         {
             // bit shift with roll-over
             return (byte)((a >> b) | ((a << (8 - b)) & 0xFF));
         }
 
-        static private bool wm_gentabs()
+        private static bool Wm_gentabs()
         {
             byte idx;
 
@@ -286,19 +292,24 @@ namespace RetroSpy.Readers
                     t0[i] = (sboxes[0, wm_rand[i]]);
                 }
 
-                tkey[0] = (byte)((wm_ror8((byte)(ans[0] ^ t0[5]), (byte)(t0[2] % 8)) - t0[9]) ^ t0[4]);
-                tkey[1] = (byte)((wm_ror8((byte)(ans[1] ^ t0[1]), (byte)(t0[0] % 8)) - t0[5]) ^ t0[7]);
-                tkey[2] = (byte)((wm_ror8((byte)(ans[2] ^ t0[6]), (byte)(t0[8] % 8)) - t0[2]) ^ t0[0]);
-                tkey[3] = (byte)((wm_ror8((byte)(ans[3] ^ t0[4]), (byte)(t0[7] % 8)) - t0[3]) ^ t0[2]);
-                tkey[4] = (byte)((wm_ror8((byte)(ans[4] ^ t0[1]), (byte)(t0[6] % 8)) - t0[3]) ^ t0[4]);
-                tkey[5] = (byte)((wm_ror8((byte)(ans[5] ^ t0[7]), (byte)(t0[8] % 8)) - t0[5]) ^ t0[9]);
+                tkey[0] = (byte)((Wm_ror8((byte)(ans[0] ^ t0[5]), (byte)(t0[2] % 8)) - t0[9]) ^ t0[4]);
+                tkey[1] = (byte)((Wm_ror8((byte)(ans[1] ^ t0[1]), (byte)(t0[0] % 8)) - t0[5]) ^ t0[7]);
+                tkey[2] = (byte)((Wm_ror8((byte)(ans[2] ^ t0[6]), (byte)(t0[8] % 8)) - t0[2]) ^ t0[0]);
+                tkey[3] = (byte)((Wm_ror8((byte)(ans[3] ^ t0[4]), (byte)(t0[7] % 8)) - t0[3]) ^ t0[2]);
+                tkey[4] = (byte)((Wm_ror8((byte)(ans[4] ^ t0[1]), (byte)(t0[6] % 8)) - t0[3]) ^ t0[4]);
+                tkey[5] = (byte)((Wm_ror8((byte)(ans[5] ^ t0[7]), (byte)(t0[8] % 8)) - t0[5]) ^ t0[9]);
 
                 // compare with actual key
-                if (tkey.SequenceEqual(wm_key)) break; // if match, then use this idx
+                if (tkey.SequenceEqual(wm_key))
+                {
+                    break; // if match, then use this idx
+                }
             }
 
             if (idx == 7)
+            {
                 return false;
+            }
 
             // generate encryption from idx key and rand
 
@@ -323,7 +334,7 @@ namespace RetroSpy.Readers
             return true;
         }
 
-        static byte[,] ans_tbl = {
+        private static readonly byte[,] ans_tbl = {
             {0xA8,0x77,0xA6,0xE0,0xF7,0x43},
             {0x5A,0x35,0x85,0xE2,0x72,0x97},
             {0x8F,0xB7,0x1A,0x62,0x87,0x38},
@@ -333,7 +344,7 @@ namespace RetroSpy.Readers
             {0x30,0x7E,0x90, 0xE,0x85, 0xA},
         };
 
-        static byte[,] sboxes = {
+        private static readonly byte[,] sboxes = {
         {
             0x70,0x51,   3,0x86,0x40, 0xD,0x4F,0xEB,0x3E,0xCC,0xD1,0x87,0x35,0xBD,0xF5, 0xB,
             0x5E,0xD0,0xF8,0xF2,0xD5,0xE2,0x6C,0x31, 0xC,0xAD,0xFC,0x21,0xC3,0x78,0xC1,   6,

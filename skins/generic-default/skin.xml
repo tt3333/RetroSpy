@@ -31,5 +31,4 @@
            x="53" y="31" width="34" height="35" xrange="9" yrange="9" yreverse="true" />
     <stick xname="rx" yname="ry" image="stick.png"
            x="174" y="78" width="34" height="35" xrange="9" yrange="9" yreverse="true" />
-
 </skin>

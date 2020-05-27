@@ -22,7 +22,5 @@
 
   <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true" />
   <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true" />
-  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true"/>
-
-
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true" />
 </skin>

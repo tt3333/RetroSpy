@@ -1,27 +1,27 @@
 /*
- * retrospy.c  Version 1.0
+ * retrospy.c Version 1.0
  *
- * Copyright (c) 2020 Chris Mallery
+ * Copyright (c) 2020 RetroSpy Technologies
  *
  * Based on jstest.c Version 1.2
  */
 
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301 USA.
- */
+ /*
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+  * 02110-1301 USA.
+  */
 
 #include <sys/ioctl.h>
 #include <sys/time.h>
@@ -41,10 +41,10 @@
 #include "axbtnmap.h"
 
 char *axis_names[ABS_MAX + 1] = {
-"X", "Y", "Z", "Rx", "Ry", "Rz", "Throttle", "Rudder", 
+"X", "Y", "Z", "Rx", "Ry", "Rz", "Throttle", "Rudder",
 "Wheel", "Gas", "Brake", "?", "?", "?", "?", "?",
 "Hat0X", "Hat0Y", "Hat1X", "Hat1Y", "Hat2X", "Hat2Y", "Hat3X", "Hat3Y",
-"?", "?", "?", "?", "?", "?", "?", 
+"?", "?", "?", "?", "?", "?", "?",
 };
 
 char *button_names[KEY_MAX - BTN_MISC + 1] = {
@@ -52,13 +52,13 @@ char *button_names[KEY_MAX - BTN_MISC + 1] = {
 "LeftBtn", "RightBtn", "MiddleBtn", "SideBtn", "ExtraBtn", "ForwardBtn", "BackBtn", "TaskBtn", "?", "?", "?", "?", "?", "?", "?", "?",
 "Trigger", "ThumbBtn", "ThumbBtn2", "TopBtn", "TopBtn2", "PinkieBtn", "BaseBtn", "BaseBtn2", "BaseBtn3", "BaseBtn4", "BaseBtn5", "BaseBtn6", "BtnDead",
 "BtnA", "BtnB", "BtnC", "BtnX", "BtnY", "BtnZ", "BtnTL", "BtnTR", "BtnTL2", "BtnTR2", "BtnSelect", "BtnStart", "BtnMode", "BtnThumbL", "BtnThumbR", "?",
-"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", 
+"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
 "WheelBtn", "Gear up",
 };
 
 #define NAME_LENGTH 128
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int fd, i;
 	unsigned char axes = 2;
@@ -97,7 +97,8 @@ int main (int argc, char **argv)
 		puts("jstest is not fully compatible with your kernel. Unable to retrieve button map!");
 		printf("Joystick (%s) has %d axes ", name, axes);
 		printf("and %d buttons.\n", buttons);
-	} else {
+	}
+	else {
 		printf("Joystick (%s) has %d axes (", name, axes);
 		for (i = 0; i < axes; i++)
 			printf("%s%s", i > 0 ? ", " : "", axis_names[axmap[i]]);
@@ -112,7 +113,6 @@ int main (int argc, char **argv)
 
 	close(fd);
 
-
 	int *axis;
 	char *button;
 	int k = 0;
@@ -122,21 +122,20 @@ int main (int argc, char **argv)
 	button = calloc(buttons, sizeof(char));
 
 	while (1) {
-	
 		if ((fd = open(argv[argc - 1], O_RDONLY)) < 0) {
 			perror("jstest");
 			return 1;
 		}
 		k = 0;
-		
-		while(k < axes+buttons)
+
+		while (k < axes + buttons)
 		{
 			if (read(fd, &js, sizeof(struct js_event)) != sizeof(struct js_event)) {
 				perror("\njstest: error reading");
 				return 1;
 			}
 
-			switch(js.type & ~JS_EVENT_INIT) {
+			switch (js.type & ~JS_EVENT_INIT) {
 			case JS_EVENT_BUTTON:
 				button[js.number] = js.value;
 				break;
@@ -149,24 +148,23 @@ int main (int argc, char **argv)
 
 		close(fd);
 
-		
 		for (int j = 0; j < 8; ++j)
 			printf("%d", (axes & (1 << j)) != 0);
 
 		for (int j = 0; j < 8; ++j)
 			printf("%d", (buttons & (1 << j)) != 0);
-		
+
 		for (i = 0; i < buttons; ++i)
 		{
 			printf(button[i] != 0 ? "1" : "0");
 		}
-		
+
 		for (i = 0; i < axes; i++)
 		{
-			for (int j = 0; j < sizeof(int)*8; ++j)
+			for (int j = 0; j < sizeof(int) * 8; ++j)
 				printf("%d", (axis[i] & (1 << j)) != 0);
 		}
-		
+
 		//Probably could reduce the bandwidth by outputing the axes values directly,
 		//but can do it later.
 
@@ -178,10 +176,9 @@ int main (int argc, char **argv)
 		}
 		printf("|");
 		for (i = 0; i < axes; i++)
-		{	
+		{
 			printf("%d|", axis[i]);
 		}*/
 		printf("\n");
 	}
-
 }

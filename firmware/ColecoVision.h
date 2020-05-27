@@ -4,13 +4,13 @@
 #include "ControllerSpy.h"
 
 class ColecoVisionSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
+private:
 };
 
 #endif

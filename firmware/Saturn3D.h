@@ -4,14 +4,14 @@
 #include "ControllerSpy.h"
 
 class Saturn3DSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        unsigned char rawData[64];
+private:
+	unsigned char rawData[64];
 };
 
 #endif

@@ -48,43 +48,43 @@
 #define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
 #else
 #define WAIT_FOR_LINES_TO_SETTLE
-#endif 
+#endif
 
 class GenesisSpy : public ControllerSpy {
-    public:
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        enum buttonTypes {
-            SCS_CTL_ON    = 1, // The controller is connected
-            SCS_BTN_UP    = 2,
-            SCS_BTN_DOWN  = 4,
-            SCS_BTN_LEFT  = 8,
-            SCS_BTN_RIGHT = 16,
-            SCS_BTN_B     = 32,
-            SCS_BTN_C     = 64,
-            SCS_BTN_A     = 128,
-            SCS_BTN_START = 256,
-            SCS_BTN_Z     = 512,
-            SCS_BTN_Y     = 1024,
-            SCS_BTN_X     = 2048,
-            SCS_BTN_MODE  = 4096
+private:
+	enum buttonTypes {
+		SCS_CTL_ON = 1, // The controller is connected
+		SCS_BTN_UP = 2,
+		SCS_BTN_DOWN = 4,
+		SCS_BTN_LEFT = 8,
+		SCS_BTN_RIGHT = 16,
+		SCS_BTN_B = 32,
+		SCS_BTN_C = 64,
+		SCS_BTN_A = 128,
+		SCS_BTN_START = 256,
+		SCS_BTN_Z = 512,
+		SCS_BTN_Y = 1024,
+		SCS_BTN_X = 2048,
+		SCS_BTN_MODE = 4096
 	};
 
-        static const uint16_t MASK_PINS_FOUR_AND_FIVE       = 0x0030; // 0b0000000000110000
-        static const uint16_t MASK_PINS_TWO_AND_THREE       = 0x000C; // 0b0000000000001100
-        static const uint16_t MASK_PINS_TWO_THREE_FOUR_FIVE = 0x003C; // 0b0000000000111100
+	static const uint16_t MASK_PINS_FOUR_AND_FIVE = 0x0030; // 0b0000000000110000
+	static const uint16_t MASK_PINS_TWO_AND_THREE = 0x000C; // 0b0000000000001100
+	static const uint16_t MASK_PINS_TWO_THREE_FOUR_FIVE = 0x003C; // 0b0000000000111100
 
-        static const uint16_t TWOC_MASK_A_AND_START_CTRL    = 0xFE7E; // 0b1111111001111110
-        static const uint16_t TWOC_MASK_UPLRBC              = 0xFF81; // 0b1111111110000001
-        static const uint16_t TWOC_MASK_XYXM                = 0xE1FF; // 0b1110000111111111
+	static const uint16_t TWOC_MASK_A_AND_START_CTRL = 0xFE7E; // 0b1111111001111110
+	static const uint16_t TWOC_MASK_UPLRBC = 0xFF81; // 0b1111111110000001
+	static const uint16_t TWOC_MASK_XYXM = 0xE1FF; // 0b1110000111111111
 
-      	word currentState = 0;
-      	word lastState = -1;
+	word currentState = 0;
+	word lastState = -1;
 };
 
 #endif

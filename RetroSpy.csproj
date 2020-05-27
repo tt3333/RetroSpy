@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -43,6 +44,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -62,6 +64,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -72,7 +75,10 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Renci.SshNet">
@@ -105,7 +111,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="beagle.cs" />
+    <Compile Include="beagle.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\Amiga.cs" />
@@ -216,7 +224,7 @@
     <Content Include="experimental\cdtv-wired\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="experimental\legacy\ps2keyboard\ps2keyboard.ino" />
+    <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
     <Content Include="firmware\AmigaCd32.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -364,6 +372,7 @@
     <Content Include="firmware\Wii.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
     <Content Include="MiSTer\axbtnmap.c" />
     <Content Include="MiSTer\axbtnmap.h" />
     <Content Include="MiSTer\retrospy.c" />
@@ -1442,11 +1451,11 @@
     <Content Include="experimental\cdi\cdi.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="experimental\legacy\dreamcast\dreamcast.ino" />
+    <None Include="experimental\retired\dreamcast\dreamcast.ino" />
     <Content Include="experimental\AmigaMouse\AmigaMouse.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="experimental\legacy\Wii\Wii.ino" />
+    <None Include="experimental\retired\Wii\Wii.ino" />
     <Content Include="experimental\ColecoVision\ColecoVision.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1477,6 +1486,7 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </None>
     <AppDesigner Include="Properties\" />
     <Content Include="skins\classic-joystick\atari.png">

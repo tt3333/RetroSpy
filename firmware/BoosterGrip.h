@@ -30,34 +30,33 @@
 #include "ControllerSpy.h"
 
 class BoosterGripSpy : public ControllerSpy {
-    public:
-        void setup();
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        word currentState;
-        word lastState = -1;
+private:
+	word currentState;
+	word lastState = -1;
 
-        static const byte BG_INPUT_PINS = 7;
-        const unsigned long BG_READ_DELAY_MS = 5;
-  
-        unsigned long lastReadTime;
+	static const byte BG_INPUT_PINS = 7;
+	const unsigned long BG_READ_DELAY_MS = 5;
 
-        byte inputPins[BG_INPUT_PINS];
+	unsigned long lastReadTime;
 
-        enum buttonTypes {
-            BG_BTN_UP    = 1,
-            BG_BTN_DOWN  = 2,
-            BG_BTN_LEFT  = 4,
-            BG_BTN_RIGHT = 8,
-            BG_BTN_1     = 16,
-            BG_BTN_2     = 32,
-            BG_BTN_3     = 64
-        };
+	byte inputPins[BG_INPUT_PINS];
 
+	enum buttonTypes {
+		BG_BTN_UP = 1,
+		BG_BTN_DOWN = 2,
+		BG_BTN_LEFT = 4,
+		BG_BTN_RIGHT = 8,
+		BG_BTN_1 = 16,
+		BG_BTN_2 = 32,
+		BG_BTN_3 = 64
+	};
 };
 
 #endif

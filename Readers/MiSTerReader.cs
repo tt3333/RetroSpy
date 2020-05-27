@@ -1,44 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class MiSTerReader
+    public static class MiSTerReader
     {
-
-        static readonly string[] AXES_NAMES = {
+        private static readonly string[] AXES_NAMES = {
             "x", "y", "z", "rx", "ry", "rz", "s0", "s1"
         };
 
-
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < 16) return null;
+            if (packet.Length < 16)
+            {
+                return null;
+            }
 
             int axes = 0;
             for (byte j = 0; j < 8; ++j)
             {
-                axes |= (int)((packet[j] == 0x30 ? 0 : 1) << j);
+                axes |= (packet[j] == 0x30 ? 0 : 1) << j;
             }
 
             int buttons = 0;
             for (byte j = 0; j < 8; ++j)
             {
-                buttons |= (int)((packet[8+j] == 0x30 ? 0 : 1) << j);
+                buttons |= (packet[8 + j] == 0x30 ? 0 : 1) << j;
             }
 
             int packetSize = 16 + (axes * 32) + buttons + 1;
 
-            if (packet.Length != packetSize) return null;
+            if (packet.Length != packetSize)
+            {
+                return null;
+            }
 
             byte[] buttonValues = new byte[buttons];
             int[] axesValues = new int[axes];
 
             for (int i = 0; i < buttons; ++i)
-                buttonValues[i] = (byte)((packet[16+i] == 0x31) ? 1 : 0);
+            {
+                buttonValues[i] = (byte)((packet[16 + i] == 0x31) ? 1 : 0);
+            }
 
             for (int i = 0; i < axes; ++i)
             {
@@ -49,17 +49,19 @@ namespace RetroSpy.Readers
                 }
             }
 
-            var outState = new ControllerStateBuilder();
+            ControllerStateBuilder outState = new ControllerStateBuilder();
 
             for (int i = 0; i < buttonValues.Length; ++i)
             {
                 outState.SetButton("b" + i.ToString(), buttonValues[i] != 0x00);
             }
 
-            for(int i = 0; i < axesValues.Length; ++i)
+            for (int i = 0; i < axesValues.Length; ++i)
             {
                 if (i < AXES_NAMES.Length)
+                {
                     outState.SetAnalog(AXES_NAMES[i], axesValues[i] / (float)short.MaxValue);
+                }
 
                 outState.SetAnalog("a" + i.ToString(), axesValues[i] / (float)short.MaxValue);
             }
@@ -107,7 +109,6 @@ namespace RetroSpy.Readers
             }
 
             return outState.Build();
-
         }
     }
 }

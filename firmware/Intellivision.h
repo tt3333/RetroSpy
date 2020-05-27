@@ -10,17 +10,17 @@
 #define INT_SANE_BEHAVIOR true
 
 class IntellivisionSpy : public ControllerSpy {
-    public:
-        void loop();
-        void writeSerial();
-        void debugSerial();
-        void updateState();
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-    private:
-        byte intRawData;
-        unsigned char rawData[32];
+private:
+	byte intRawData;
+	unsigned char rawData[32];
 
-	  static const unsigned char buttonMasks[32];
+	static const unsigned char buttonMasks[32];
 };
 
 #endif

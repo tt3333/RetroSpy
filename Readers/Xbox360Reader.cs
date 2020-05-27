@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
-    static public class Xbox360Reader
+    public static class Xbox360Reader
     {
-        const int PACKET_SIZE = 96;
-        const int POLISHED_PACKET_SIZE = 18;
+        private const int PACKET_SIZE = 96;
+        private const int POLISHED_PACKET_SIZE = 18;
 
-        static readonly string[] BUTTONS = {
+        private static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "start", "back", "l3", "r3", "lb", "rb", "xbox", null, "a", "b", "x", "y"
         };
 
-        static float readTrigger(byte input)
+        private static float ReadTrigger(byte input)
         {
             return (float)input / 255;
         }
 
-        static float readStick(short input)
+        private static float ReadStick(short input)
         {
             return (float)input / 32768;
         }
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
             for (int i = 0; i < 16; ++i)
+            {
                 polishedPacket[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
+            }
 
             for (int i = 0; i < 2; ++i)
             {
@@ -54,21 +53,25 @@ namespace RetroSpy.Readers
                 }
             }
 
-            var outState = new ControllerStateBuilder();
+            ControllerStateBuilder outState = new ControllerStateBuilder();
 
             for (int i = 0; i < BUTTONS.Length; ++i)
             {
-                if (string.IsNullOrEmpty(BUTTONS[i])) continue;
+                if (string.IsNullOrEmpty(BUTTONS[i]))
+                {
+                    continue;
+                }
+
                 outState.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 
-            outState.SetAnalog("trig_l", readTrigger(polishedPacket[16]));
-            outState.SetAnalog("trig_r", readTrigger(polishedPacket[17]));
+            outState.SetAnalog("trig_l", ReadTrigger(polishedPacket[16]));
+            outState.SetAnalog("trig_r", ReadTrigger(polishedPacket[17]));
 
-            outState.SetAnalog("rstick_x", readStick(sticks[2]));
-            outState.SetAnalog("rstick_y", readStick(sticks[3]));
-            outState.SetAnalog("lstick_x", readStick(sticks[0]));
-            outState.SetAnalog("lstick_y", readStick(sticks[1]));
+            outState.SetAnalog("rstick_x", ReadStick(sticks[2]));
+            outState.SetAnalog("rstick_y", ReadStick(sticks[3]));
+            outState.SetAnalog("lstick_x", ReadStick(sticks[0]));
+            outState.SetAnalog("lstick_y", ReadStick(sticks[1]));
 
             return outState.Build();
         }

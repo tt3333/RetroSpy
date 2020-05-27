@@ -38,5 +38,5 @@
     <button name="left" image="../n64-highres/button-dpad.png" x="118" y="266" width="56" height="56" />
     <button name="right" image="../n64-highres/button-dpad.png" x="200" y="261" width="56" height="56" />
 
-    <stick xname="x" yname="y" image="../n64-highres/stick.png" x="406" y="429" width="80" height="80" xrange="60" yrange="+60" yreverse="true"/>
+    <stick xname="x" yname="y" image="../n64-highres/stick.png" x="406" y="429" width="80" height="80" xrange="60" yrange="+60" yreverse="true" />
 </skin>
