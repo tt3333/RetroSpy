@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="TG16 2 Button Controller" author="zoggins" type="tg16">
+<skin name="TG16 2 Button Controller" author="zoggins" type="tg16;tg16mini">
 
     <background name="Default" image="tg16.png" />
 
