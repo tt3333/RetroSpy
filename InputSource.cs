@@ -31,9 +31,9 @@ namespace RetroSpy
         public static readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket));
         public static readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket));
 
-        static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
+        static public readonly InputSource TG16 = new InputSource("tg16", "NEC TurboGrafx-16", true, false, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
         static public readonly InputSource PCFX = new InputSource("pcfx", "NEC PC-FX", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_PCFX));
-        static public readonly InputSource TG16MINI = new InputSource("tg16mini", "NEC Turbographx 16 Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -j", Tg16Mini.ReadFromPacket));
+        static public readonly InputSource TG16MINI = new InputSource("tg16mini", "NEC TurboGrafx-16 Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -j", Tg16Mini.ReadFromPacket));
 
         public static readonly InputSource NES = new InputSource("nes", "Nintendo NES", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_NES));
         public static readonly InputSource SNES = new InputSource("snes", "Nintendo SNES", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_SNES));
