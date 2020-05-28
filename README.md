@@ -64,7 +64,6 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [USB controllers](https://retro-spy.com/wiki/setting-up-retrospy-for-the-mister/)
 
 ## To-Do List
- - TurboGrafx-16 Mini (when its released)
  - NEOGEO Arcade Stick Pro
  - CD-i Keyboard and Trackball
  - Dreamcast Keyboard
