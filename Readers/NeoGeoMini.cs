@@ -7,7 +7,8 @@ namespace RetroSpy.Readers
         private const int PACKET_SIZE = 25;
 
         private static readonly string[] BUTTONS = {
-            "A", "B", null, "C", "D", null, null, null, null, null, "select", "start"
+            "A", "B", "G1", "C", "D", "G2", "W1", "W2", null, "options", "select", "start"
+          
         };
 
         public static ControllerState ReadFromPacket(byte[] packet)
