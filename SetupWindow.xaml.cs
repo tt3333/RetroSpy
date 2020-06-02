@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
+using System.Management;
 
 namespace RetroSpy
 {
@@ -127,18 +128,109 @@ namespace RetroSpy
             MessageBox.Show(msg.ToString(), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+
         private void UpdatePortList()
         {
-            string[] ports = SerialPort.GetPortNames();
-            _vm.Ports.UpdateContents(ports);
-            string[] ports2 = new string[ports.Length + 1];
-            ports2[0] = "Not Connected";
-            for (int i = 0; i < ports.Length; ++i)
+
+            List<string> arduinoPorts = GetArduinoPorts();
+            GetTeensyPorts(arduinoPorts);
+
+            string[] ports = arduinoPorts.ToArray<string>();
+            if (ports.Length == 0)
             {
-                ports2[i + 1] = ports[i];
+                ports = new string[1];
+                ports[0] = "No Arduino/Teensy Found";
+                _vm.Ports.UpdateContents(ports);
+                _vm.Ports2.UpdateContents(ports);
+            }
+            else
+            {
+                _vm.Ports.UpdateContents(ports);
+                string[] ports2 = new string[ports.Length + 1];
+                ports2[0] = "Not Connected";
+                for (int i = 0; i < ports.Length; ++i)
+                {
+                    ports2[i + 1] = ports[i];
+                }
+                _vm.Ports2.UpdateContents(ports2);
+            }
+        }
+
+        private static void GetTeensyPorts(List<string> arduinoPorts)
+        {
+            const uint vid = 0x16C0;
+            const uint serPid = 0x483;
+            string vidStr = "'%USB_VID[_]" + vid.ToString("X") + "%'";
+            using (var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr))
+            {
+                foreach (var mgmtObject in searcher.Get())
+                {
+                    var DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
+                    if (DeviceIdParts[0] != "USB") break;
+
+                    int start = DeviceIdParts[1].IndexOf("PID_") + 4;
+                    uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
+                    if (pid == serPid)
+                    {
+                        uint serNum = Convert.ToUInt32(DeviceIdParts[2]);
+                        string port = (((string)mgmtObject["Caption"]).Split("()".ToArray()))[1];
+
+                        var hwid = ((string[])mgmtObject["HardwareID"])[0];
+                        switch (hwid.Substring(hwid.IndexOf("REV_") + 4, 4))
+                        {
+                            case "0273":
+                                //board = PJRC_Board.Teensy_LC;
+                                break;
+                            case "0274":
+                                //board = PJRC_Board.Teensy_30;
+                                break;
+                            case "0275":
+                                //board = PJRC_Board.Teensy_31_2;
+                                break;
+                            case "0276":
+                                arduinoPorts.Add(port + " (Teensy 3.5)");
+                                break;
+                            case "0277":
+                                arduinoPorts.Add(port + " (Teensy 3.6)");
+                                break;
+                            case "0279":
+                                //board = PJRC_Board.Teensy_40;
+                                break;
+                            default:
+                                //board = PJRC_Board.unknown;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static List<string> GetArduinoPorts()
+        {
+            List<string> arduinoPorts = new List<string>();
+            ManagementScope connectionScope = new ManagementScope();
+            SelectQuery serialQuery = new SelectQuery("SELECT * FROM Win32_SerialPort");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(connectionScope, serialQuery);
+
+            try
+            {
+                foreach (ManagementObject item in searcher.Get())
+                {
+                    string desc = item["Description"].ToString();
+                    string deviceId = item["DeviceID"].ToString();
+
+                    if (desc.Contains("Arduino"))
+                    {
+                        arduinoPorts.Add(deviceId + " (" + desc + ")");
+                    }
+                }
+            }
+            catch (ManagementException)
+            {
+                /* Do Nothing */
             }
 
-            _vm.Ports2.UpdateContents(ports2);
+            return arduinoPorts;
         }
 
         private void UpdateGamepadList()

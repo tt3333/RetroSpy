@@ -34,7 +34,7 @@ namespace RetroSpy
         public SerialMonitor(string portName)
         {
             _localBuffer = new List<byte>();
-            _datPort = new SerialPort(portName, BAUD_RATE);
+            _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", BAUD_RATE);
         }
 
         public void Start()
