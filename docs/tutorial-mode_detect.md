@@ -26,7 +26,7 @@ if( !PINC_READ( MODEPIN_SNES ) ) {
 ```	
 This means that if ``MODEPIN_SNES`` is grounded, which we defined as A0, then the ``loop_SNES`` loop initializes. The following ``else if`` statements will be the rest of the analog pins you defined earlier. Then finally, the ``else`` statement is the mode that is initialized if no analog pins are grounded, allowing a total of 7 possible modes to be used in the manner.
 
-Now that our ``MODE_DETECT`` loop is setup, uncomment ``MODE_DETECT`` at the top, and upload your firmware. The firmware will now run the mode based on which, if any analog pins are grounded. Just connect one end of your wire in a GND pin on the POWER section of the board, and the other end to your desired analog pin. Note that upon switching analog pins, you will need to reset the board.
+Now that our ``MODE_DETECT`` loop is setup, uncomment ``MODE_DETECT`` and all the console modes you have configured in your ``MODE_DETECT`` loop at the top, and upload your firmware. The firmware will now run the mode based on which, if any analog pins are grounded. Just connect one end of your wire in a GND pin on the POWER section of the board, and the other end to your desired analog pin. Note that upon switching analog pins, you will need to reset the board.
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/mode_detect-tutorial/UNCOMMENT.png)
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/mode_detect-tutorial/WIRE.jpg)

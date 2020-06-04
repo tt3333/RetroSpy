@@ -22,7 +22,7 @@
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
 //#define MODE_NEOGEO
-//#define MODE_ThreeDO
+//#define MODE_3DO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
 //#define MODE_FMTOWNS
@@ -70,57 +70,72 @@
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
-#elif defined(MODE_SNES)
+#endif
+#if defined(MODE_SNES)
 SNESSpy SNESSpy;
-#elif defined(MODE_N64)
+#endif
+#if defined(MODE_N64)
 N64Spy N64Spy;
-#elif defined(MODE_GC)
+#endif
+#if defined(MODE_GC)
 GCSpy GCSpy;
-#elif defined(MODE_BOOSTER_GRIP)
+#endif
+#if defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
-#elif defined(MODE_GENESIS)
+#endif
+#if defined(MODE_GENESIS)
 GenesisSpy GenesisSpy;
-#elif defined(MODE_GENESIS_MOUSE)
+#endif
+#if defined(MODE_GENESIS_MOUSE)
 GenesisMouseSpy GenesisMouseSpy;
-#elif defined(MODE_SMS)
+#endif
+#if defined(MODE_SMS)
 SMSSpy SMSSpy;
-#elif defined(MODE_SMS_ON_GENESIS)
+#endif
+#if defined(MODE_SMS_ON_GENESIS)
 SMSSpy SMSOnGenesisSpy;
-#elif defined(MODE_SATURN)
+#endif
+#if defined(MODE_SATURN)
 SaturnSpy SaturnSpy;
-#elif defined(MODE_SATURN3D)
+#endif
+#if defined(MODE_SATURN3D)
 Saturn3DSpy Saturn3DSpy;
-#elif defined(MODE_COLECOVISION)
+#endif
+#if defined(MODE_COLECOVISION)
 ColecoVisionSpy ColecoVisionSpy;
-#elif defined(MODE_FMTOWNS)
+#endif
+#if defined(MODE_FMTOWNS)
 FMTownsSpy FMTownsSpy;
-#elif defined(MODE_INTELLIVISION)
+#endif
+#if defined(MODE_INTELLIVISION)
 IntellivisionSpy IntelliVisionSpy;
-#elif defined(MODE_JAGUAR)
+#endif
+#if defined(MODE_JAGUAR)
 JaguarSpy JaguarSpy;
-#elif defined(MODE_NEOGEO)
+#endif
+#if defined(MODE_NEOGEO)
 NeoGeoSpy NeoGeoSpy;
-#elif defined(MODE_PCFX)
+#endif
+#if defined(MODE_PCFX)
 PCFXSpy PCFXSpy;
-#elif defined(MODE_PLAYSTATION)
+#endif
+#if  defined(MODE_PLAYSTATION)
 PlayStationSpy PlayStationSpy;
-#elif defined(MODE_TG16)
+#endif
+#if defined(MODE_TG16)
 TG16Spy TG16Spy;
-#elif defined(MODE_ThreeDO)
+#endif
+#if defined(MODE_3DO)
 ThreeDOSpy ThreeDOSpy;
-#elif defined(MODE_DREAMCAST)
+#endif
+#if defined(MODE_DREAMCAST)
 DreamcastSpy DCSpy;
-#elif defined(MODE_WII)
+#endif
+#if defined(MODE_WII)
 WiiSpy WiiSpy;
-#elif defined(MODE_CD32)
+#endif
+#if defined(MODE_CD32)
 AmigaCd32Spy Cd32Spy;
-#elif defined(MODE_DETECT)
-NESSpy NESSpy;
-SNESSpy SNESSpy;
-N64Spy N64Spy;
-GCSpy GCSpy;
-DreamcastSpy DCSpy;
-WiiSpy WiiSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +152,25 @@ void setup()
     DDRC  = 0x00;
 #endif
 
-#if defined(MODE_NES)
+#if defined(MODE_DETECT)
+    if ( !PINC_READ(MODEPIN_SNES)) {
+        SNESSpy.setup();
+    } else if ( !PINC_READ(MODEPIN_N64))  {
+        N64Spy.setup();
+    } else if ( !PINC_READ(MODEPIN_GC)) {
+        GCSpy.setup();
+    }
+#if defined(__arm__) && defined(CORE_TEENSY)
+  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+       DCSpy.setup();
+    } else if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.setup()();
+    }
+#endif 
+    else {
+        NESSpy.setup();
+    }
+#elif defined(MODE_NES)
     NESSpy.setup();
 #elif defined(MODE_SNES)
     SNESSpy.setup();
@@ -175,7 +208,7 @@ void setup()
     PlayStationSpy.setup();
 #elif defined(MODE_TG16)
     TG16Spy.setup();
-#elif defined(MODE_ThreeDO)
+#elif defined(MODE_3DO)
     ThreeDOSpy.setup();
 #elif defined(MODE_DREAMCAST)
     DCSpy.setup();
@@ -183,24 +216,6 @@ void setup()
     WiiSpy.setup();
 #elif defined(MODE_CD32)
     Cd32Spy.setup();    
-#elif defined(MODE_DETECT)
-    if ( !PINC_READ(MODEPIN_SNES)) {
-        SNESSpy.setup();
-    } else if ( !PINC_READ(MODEPIN_N64))  {
-        N64Spy.setup();
-    } else if ( !PINC_READ(MODEPIN_GC)) {
-        GCSpy.setup();
-    }
-#if defined(__arm__) && defined(CORE_TEENSY)
-  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-       DCSpy.setup();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
-        WiiSpy.setup()();
-    }
-#endif 
-    else {
-        NESSpy.setup();
-    }
 #endif
 
   T_DELAY(5000);
@@ -212,7 +227,25 @@ void setup()
 // Arduino sketch main loop definition.
 void loop()
 {
-#if defined(MODE_GC)
+#if defined(MODE_DETECT)
+    if( !PINC_READ( MODEPIN_SNES ) ) {
+        SNESSpy.loop();
+    } else if( !PINC_READ( MODEPIN_N64 ) ) {
+        N64Spy.loop();
+    } else if( !PINC_READ( MODEPIN_GC ) ) {
+        GCSpy.loop();
+    } 
+#if defined(__arm__) && defined(CORE_TEENSY)
+  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+        DreamcastSpy.loop();
+    } else if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.loop();
+    }
+#endif
+  else {
+        NESSpy.loop();
+    }
+#elif defined(MODE_GC)
     GCSpy.loop();
 #elif defined(MODE_N64)
     N64Spy.loop();
@@ -250,7 +283,7 @@ void loop()
     PlayStationSpy.loop();
 #elif defined(MODE_TG16)
     TG16Spy.loop();
-#elif defined(MODE_ThreeDO)
+#elif defined(MODE_3DO)
     ThreeDOSpy.loop();
 #elif defined(MODE_DREAMCAST)
     DCSpy.loop();
@@ -258,23 +291,5 @@ void loop()
     WiiSpy.loop();
 #elif defined(MODE_CD32)
    Cd32Spy.loop();
-#elif defined(MODE_DETECT)
-    if( !PINC_READ( MODEPIN_SNES ) ) {
-        SNESSpy.loop();
-    } else if( !PINC_READ( MODEPIN_N64 ) ) {
-        N64Spy.loop();
-    } else if( !PINC_READ( MODEPIN_GC ) ) {
-        GCSpy.loop();
-    } 
-#if defined(__arm__) && defined(CORE_TEENSY)
-	else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-        DreamcastSpy.loop();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
-        WiiSpy.loop();
-    }
-#endif
-	else {
-        NESSpy.loop();
-    }
 #endif
 }
