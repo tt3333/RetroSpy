@@ -9,6 +9,7 @@
             <Menu Width="Auto" Height="20">
                 <MenuItem Header="_Options">
                     <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click" />
+                    <MenuItem x:Name="FilterCOM" Header="Don't Filter COM Ports" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" IsCheckable="True" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click" />
@@ -31,7 +32,7 @@
         <ComboBox Name="ComPortCombo" Margin="145,71,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
                   ItemsSource="{Binding Ports.Items}"
                   SelectedValue="{Binding Ports.SelectedItem}"
-                  Visibility="{Binding ComPortOptionVisibility}" />
+                  Visibility="{Binding ComPortOptionVisibility}" SelectionChanged="ComPortCombo_SelectionChanged" />
         <ComboBox Name="ControllerIdCombo" Margin="145,71,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
                   ItemsSource="{Binding XIAndGamepad.Items}"
                   SelectedValue="{Binding XIAndGamepad.SelectedItem}"
@@ -57,6 +58,6 @@
         <ComboBox Name="ComPort2Combo" Margin="145,105,10.333,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
                   ItemsSource="{Binding Ports2.Items}"
                   SelectedValue="{Binding Ports2.SelectedItem}"
-                  Visibility="{Binding ComPort2OptionVisibility}" />
+                  Visibility="{Binding ComPort2OptionVisibility}" SelectionChanged="ComPortCombo_SelectionChanged" />
     </Grid>
 </Window>

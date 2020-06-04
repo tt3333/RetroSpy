@@ -191,5 +191,20 @@ namespace RetroSpy.Properties {
                 this["HiddleConsoleList"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FilterCOMPorts
+        {
+            get
+            {
+                return ((bool)(this["FilterCOMPorts"]));
+            }
+            set
+            {
+                this["FilterCOMPorts"] = value;
+            }
+        }
     }
 }

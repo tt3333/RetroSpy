@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using System.Management;
+using System.Threading;
 
 namespace RetroSpy
 {
@@ -22,6 +23,12 @@ namespace RetroSpy
         private DispatcherTimer _xiAndGamepadListUpdateTimer;
         private List<Skin> _skins;
         private List<string> _excludedSources;
+
+        private void UpdatePortListThread()
+        {
+            Thread thread = new Thread(UpdatePortList);
+            thread.Start();
+        }
 
         public SetupWindow()
         {
@@ -57,11 +64,13 @@ namespace RetroSpy
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
+            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
+
             _portListUpdateTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            _portListUpdateTimer.Tick += (sender, e) => UpdatePortList();
+            _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
             _portListUpdateTimer.Start();
 
             _xiAndGamepadListUpdateTimer = new DispatcherTimer
@@ -128,31 +137,45 @@ namespace RetroSpy
             MessageBox.Show(msg.ToString(), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        private object updatePortLock = new object();
 
         private void UpdatePortList()
         {
-
-            List<string> arduinoPorts = GetArduinoPorts();
-            GetTeensyPorts(arduinoPorts);
-
-            string[] ports = arduinoPorts.ToArray<string>();
-            if (ports.Length == 0)
+            if (Monitor.TryEnter(updatePortLock))
             {
-                ports = new string[1];
-                ports[0] = "No Arduino/Teensy Found";
-                _vm.Ports.UpdateContents(ports);
-                _vm.Ports2.UpdateContents(ports);
-            }
-            else
-            {
-                _vm.Ports.UpdateContents(ports);
-                string[] ports2 = new string[ports.Length + 1];
-                ports2[0] = "Not Connected";
-                for (int i = 0; i < ports.Length; ++i)
+                try
                 {
-                    ports2[i + 1] = ports[i];
+                    var arduinoPorts = SetupCOMPortInformation();
+                    //List<string> arduinoPorts = GetArduinoPorts();
+                    GetTeensyPorts(arduinoPorts);
+
+                    arduinoPorts.Sort();
+
+                    string[] ports = arduinoPorts.ToArray<string>();
+
+                    if (ports.Length == 0)
+                    {
+                        ports = new string[1];
+                        ports[0] = "No Arduino/Teensy Found";
+                        _vm.Ports.UpdateContents(ports);
+                        _vm.Ports2.UpdateContents(ports);
+                    }
+                    else
+                    {
+                        _vm.Ports.UpdateContents(ports);
+                        string[] ports2 = new string[ports.Length + 1];
+                        ports2[0] = "Not Connected";
+                        for (int i = 0; i < ports.Length; ++i)
+                        {
+                            ports2[i + 1] = ports[i];
+                        }
+                        _vm.Ports2.UpdateContents(ports2);
+                    }
                 }
-                _vm.Ports2.UpdateContents(ports2);
+                finally
+                {
+                    Monitor.Exit(updatePortLock);
+                }
             }
         }
 
@@ -205,8 +228,92 @@ namespace RetroSpy
             }
         }
 
+
+        static string[] GetUSBCOMDevices()
+        {
+            List<string> list = new List<string>();
+
+            ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+            foreach (ManagementObject mo2 in searcher2.Get())
+            {
+                if (mo2["Name"] != null)
+                {
+                    string name = mo2["Name"].ToString();
+                    // Name will have a substring like "(COM12)" in it.
+                    if (name.Contains("(COM"))
+                    {
+
+                        list.Add(name);
+                    }
+                }
+            }
+            // remove duplicates, sort alphabetically and convert to array
+            string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
+            return usbDevices;
+        }
+
+        public class COMPortInfo
+        {
+            public String portName;
+            public String friendlyName;
+        }
+
+        private List<string> SetupCOMPortInformation()
+        {
+            List<COMPortInfo> comPortInformation = new List<COMPortInfo>();
+
+            String[] portNames = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (String s in portNames)
+            {
+                // s is like "COM14"
+                COMPortInfo ci = new COMPortInfo();
+                ci.portName = s;
+                ci.friendlyName = s;
+                comPortInformation.Add(ci);
+            }
+
+            String[] usbDevs = GetUSBCOMDevices();
+            foreach (String s in usbDevs)
+            {
+                // Name will be like "USB Bridge (COM14)"
+                int start = s.IndexOf("(COM") + 1;
+                if (start >= 0)
+                {
+                    int end = s.IndexOf(")", start + 3);
+                    if (end >= 0)
+                    {
+                        // cname is like "COM14"
+                        String cname = s.Substring(start, end - start);
+                        for (int i = 0; i < comPortInformation.Count; i++)
+                        {
+                            if (comPortInformation[i].portName == cname)
+                            {
+                                comPortInformation[i].friendlyName = s.Remove(start - 1).TrimEnd();
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<string> ports = new List<string>();
+            foreach (var port in comPortInformation)
+            {
+                if (_vm.FilterCOMPorts || port.friendlyName.Contains("Arduino"))
+                {
+                    ports.Add(String.Format("{0} ({1})", port.portName, port.friendlyName));
+                }
+                else if (port.friendlyName.Contains("CH340") || port.friendlyName.Contains("CH341"))
+                {
+                    ports.Add(String.Format("{0} (Generic Arduino)", port.portName));
+                }
+            }
+
+            return ports;
+        }
+
         private static List<string> GetArduinoPorts()
         {
+
             List<string> arduinoPorts = new List<string>();
             ManagementScope connectionScope = new ManagementScope();
             SelectQuery serialQuery = new SelectQuery("SELECT * FROM Win32_SerialPort");
@@ -264,6 +371,7 @@ namespace RetroSpy
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
             Properties.Settings.Default.Hostname = _vm.Hostname;
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
+            Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
             Properties.Settings.Default.Save();
 
             try
@@ -345,7 +453,7 @@ namespace RetroSpy
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname ? Visibility.Visible : Visibility.Hidden;
             UpdateGamepadList();
             UpdateXIList();
-            UpdatePortList();
+            UpdatePortListThread();
             UpdateBeagleList();
             UpdateBeagleI2CList();
             _vm.Skins.UpdateContents(_skins.Where(x => x.Type == _vm.Sources.SelectedItem));
@@ -371,10 +479,21 @@ namespace RetroSpy
             }
         }
 
+        private void ComPortCombo_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            UpdatePortList();
+        }
+        
         private void About_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(string.Format("RetroSpy Version {0}", Assembly.GetEntryAssembly().GetName().Version), "About",
                 MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void FilterCOM_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.FilterCOMPorts = FilterCOM.IsChecked;
+            Properties.Settings.Default.FilterCOMPorts = FilterCOM.IsChecked;
         }
 
         private void AddRemove_Click(object sender, RoutedEventArgs e)
@@ -413,7 +532,18 @@ namespace RetroSpy
             {
                 _items.Clear();
                 _items.AddRange(items);
-                Items.Refresh();
+
+                if (Items.Dispatcher.CheckAccess())
+                {
+                    Items.Refresh();
+                }
+                else
+                {
+                    Items.Dispatcher.Invoke(() =>
+                    {
+                        Items.Refresh();
+                    });
+                }
             }
 
             public void SelectFirst()
@@ -461,6 +591,7 @@ namespace RetroSpy
         public int DelayInMilliseconds { get; set; }
         public bool StaticViewerWindowName { get; set; }
         public string Hostname { get; set; }
+        public bool FilterCOMPorts { get; set; }
 
         private Visibility _comPortOptionVisibility;
 
