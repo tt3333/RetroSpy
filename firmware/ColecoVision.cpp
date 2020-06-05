@@ -26,10 +26,12 @@
 
 #include "ColecoVision.h"
 
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterrupt.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptBoards.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptPins.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptSettings.h"
+#if !defined(__arm__) || !defined(CORE_TEENSY)
+
+#include <PinChangeInterrupt.h>
+#include <PinChangeInterruptBoards.h>
+#include <PinChangeInterruptPins.h>
+#include <PinChangeInterruptSettings.h>
 
 static volatile byte rawData[2];
 static volatile byte currentState;
@@ -137,3 +139,11 @@ void ColecoVisionSpy::debugSerial() {
 	Serial.print(currentState);
 	Serial.print("\n");
 }
+
+#else
+void ColecoVisionSpy::loop() {}
+void ColecoVisionSpy::setup() {}
+void ColecoVisionSpy::writeSerial() {}
+void ColecoVisionSpy::debugSerial() {}
+void ColecoVisionSpy::updateState() {}
+#endif

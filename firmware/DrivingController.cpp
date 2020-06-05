@@ -26,10 +26,12 @@
 
 #include "DrivingController.h"
 
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterrupt.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptBoards.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptPins.h"
-#include "src\\PinChangeInterrupt-1.2.7\\src\\PinChangeInterruptSettings.h"
+#if !defined(__arm__) || !defined(CORE_TEENSY)
+
+#include <PinChangeInterrupt.h>
+#include <PinChangeInterruptBoards.h>
+#include <PinChangeInterruptPins.h>
+#include <PinChangeInterruptSettings.h>
 
 // Turn this one for some pretty output.  Do not use with DEBUG!
 //#define PRETTY_PRINT
@@ -125,3 +127,11 @@ void DrivingControllerSpy::loop() {
 void DrivingControllerSpy::writeSerial() {}
 void DrivingControllerSpy::debugSerial() {}
 void DrivingControllerSpy::updateState() {}
+
+#else
+void DrivingControllerSpy::loop() {}
+void DrivingControllerSpy::setup() {}
+void DrivingControllerSpy::writeSerial() {}
+void DrivingControllerSpy::debugSerial() {}
+void DrivingControllerSpy::updateState() {}
+#endif

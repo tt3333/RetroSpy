@@ -30,17 +30,24 @@
 //#define MODE_COLECOVISION
 //#define MODE_DRIVING_CONTROLLER
 //#define MODE_PIPPIN
+//#define MODE_AMIGA_KEYBOARD
+//#define MODE_AMIGA_MOUSE
+//#define MODE_CDTV_WIRED
 
 //--- Teensy Only
 //#define MODE_DREAMCAST
 //#define MODE_WII
 //#define MODE_CD32
+#define FMTOWNS_KEYBOARD_AND_MOUSE
 
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 
 // Pippin Controller Configuration
 #define PIPPIN_SPY_ADDRESS 0xF
+
+// Amiga Mouse Video Output Mode
+#define AMIGA_MOUSE_VIDEO_OUTPUT AmigaMouseSpy::VIDEO_PAL
 
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
@@ -74,9 +81,13 @@
 #include "Dreamcast.h"
 #include "AmigaCD32.h"
 #include "Wii.h"
+#include "FMTownsKeyboardAndMouse.h"
 
 #include "DrivingController.h"
 #include "Pippin.h"
+#include "AmigaKeyboard.h"
+#include "AmigaMouse.h"
+#include "CDTVWired.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -152,6 +163,18 @@ DrivingControllerSpy DrivingControllerSpy;
 #endif
 #if defined(MODE_PIPPIN)
 PippinSpy PippinSpy;
+#endif
+#if defined(MODE_AMIGA_KEYBOARD)
+AmigaKeyboardSpy AmigaKeyboardSpy;
+#endif
+#if defined(MODE_AMIGA_MOUSE)
+AmigaMouseSpy AmigaMouseSpy;
+#endif
+#if defined(MODE_CDTV_WIRED)
+CDTVWiredSpy CDTVWiredSpy;
+#endif
+#if defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+FMTownsKeyboardAndMouseSpy FMTownsKeyboardAndMouseSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +259,14 @@ void setup()
 	DrivingControllerSpy.setup();
 #elif defined(MODE_PIPPIN)
 	PippinSpy.setup(PIPPIN_SPY_ADDRESS);
+#elif defined(MODE_AMIGA_KEYBOARD)
+	AmigaKeyboardSpy.setup();
+#elif defined(MODE_AMIGA_MOUSE)
+	AmigaMouseSpy.setup(AMIGA_MOUSE_VIDEO_OUTPUT);
+#elif defined(MODE_CDTV_WIRED)
+	CDTVWiredSpy.setup();
+#elif defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+	FMTownsKeyboardAndMouseSpy.setup();
 #endif
 
   T_DELAY(5000);
@@ -316,5 +347,13 @@ void loop()
    DrivingControllerSpy.loop();
 #elif defined(MODE_PIPPIN)
 	PippinSpy.loop();
+#elif defined(MODE_AMIGA_KEYBOARD)
+	AmigaKeyboardSpy.loop();
+#elif defined(MODE_AMIGA_MOUSE)
+	AmigaMouseSpy.loop();
+#elif defined(MODE_CDTV_WIRED)
+	CDTVWiredSpy.loop();
+#elif defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+	FMTownsKeyboardAndMouseSpy.loop();
 #endif
 }

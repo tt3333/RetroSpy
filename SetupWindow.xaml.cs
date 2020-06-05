@@ -37,14 +37,19 @@ namespace RetroSpy
             DataContext = _vm;
             _excludedSources = new List<string>();
 
-            if (!Directory.Exists("skins"))
+            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+
+            string skinsDirectory = Path.Combine(strWorkPath, "skins");
+
+            if (!Directory.Exists(skinsDirectory))
             {
                 MessageBox.Show("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
 
-            Skin.LoadResults results = Skin.LoadAllSkinsFromParentFolder("skins");
+            Skin.LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory);
             _skins = results.SkinsLoaded;
 
             _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));

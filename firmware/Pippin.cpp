@@ -29,7 +29,9 @@
 
 #include "Pippin.h"
 
-#include "TimerOne.h"// https://code.google.com/archive/p/arduino-timerone/downloads
+#if !defined(__arm__) || !defined(CORE_TEENSY)
+
+#include <TimerOne.h> // https://code.google.com/archive/p/arduino-timerone/downloads
 
 #define BUFFER_SIZE 45
 
@@ -44,7 +46,7 @@
 #define READING_DATA_BITS 6
 #define COULD_BE_DATA_STOP_BIT 7
 
-struct packet
+struct Pippin_packet
 {
 	byte commandType = 0;
 	byte commandAddress = 0;
@@ -59,11 +61,11 @@ struct packet
 	int syncTiming = 0;
 };
 
-static volatile packet* buffer[BUFFER_SIZE];
+static volatile Pippin_packet* buffer[BUFFER_SIZE];
 static uint8_t head, tail;
-static volatile packet* currentReadPacket = NULL;
+static volatile Pippin_packet* currentReadPacket = NULL;
 
-static volatile packet* currentWritePacket = NULL;
+static volatile Pippin_packet* currentWritePacket = NULL;
 static volatile unsigned long diff;
 static volatile unsigned int count = 0, state = WAITING_FOR_ATTENTION;
 static volatile unsigned char command;
@@ -78,7 +80,7 @@ void PippinSpy::loop()
 		if (_diff > 260)
 		{
 			currentWritePacket->HasData = false;
-			volatile packet* donePacket = currentWritePacket;
+			volatile Pippin_packet* donePacket = currentWritePacket;
 			state = WAITING_FOR_ATTENTION;
 			currentWritePacket = NULL;
 			uint8_t i = head + 1;
@@ -95,7 +97,7 @@ void PippinSpy::loop()
 		if (_diff > 50)
 		{
 			currentWritePacket->dataStop = true;
-			volatile packet* donePacket = currentWritePacket;
+			volatile Pippin_packet* donePacket = currentWritePacket;
 			state = WAITING_FOR_ATTENTION;
 			currentWritePacket = NULL;
 			uint8_t i = head + 1;
@@ -183,7 +185,7 @@ void adbStateChanged()
 	if (state == WAITING_FOR_ATTENTION) {
 		if (diff < 850 && diff > 750) {
 			if (currentWritePacket == NULL)
-				currentWritePacket = new packet();
+				currentWritePacket = new Pippin_packet();
 			state = WAITING_FOR_SYNC;
 		}
 	}
@@ -280,3 +282,11 @@ void PippinSpy::setup(byte controllerAddress)
 	Timer1.restart();
 	Timer1.detachInterrupt();
 }
+
+#else
+void PippinSpy::loop() {}
+void PippinSpy::setup(byte controllerAddress) {}
+void PippinSpy::writeSerial() {}
+void PippinSpy::debugSerial() {}
+void PippinSpy::updateState() {}
+#endif
