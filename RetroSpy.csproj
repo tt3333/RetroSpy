@@ -207,13 +207,13 @@
     <Content Include="beagle.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\pippin\config\known_16bit_timers.h">
+    <Content Include="experimental\retired\pippin\config\known_16bit_timers.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\pippin\TimerOne.cpp">
+    <Content Include="experimental\retired\pippin\TimerOne.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\pippin\TimerOne.h">
+    <Content Include="experimental\retired\pippin\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\cdtv-wired\config\known_16bit_timers.h">
@@ -225,6 +225,7 @@
     <Content Include="experimental\cdtv-wired\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="experimental\retired\DrivingController\DrivingController.ino" />
     <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
     <Content Include="firmware\AmigaCd32.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -265,6 +266,8 @@
     <Content Include="firmware\Dreamcast.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="firmware\DrivingController.cpp" />
+    <Content Include="firmware\DrivingController.h" />
     <Content Include="firmware\FMTowns.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -301,6 +304,9 @@
     <Content Include="firmware\Jaguar.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="firmware\known_16bit_timers.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="firmware\N64.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -325,6 +331,8 @@
     <Content Include="firmware\PCFX.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="firmware\Pippin.cpp" />
+    <Content Include="firmware\Pippin.h" />
     <Content Include="firmware\PlayStation.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -365,6 +373,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="firmware\ThreeDO.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="firmware\TimerOne.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="firmware\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="firmware\Wii.cpp">
@@ -1440,9 +1454,6 @@
     <Content Include="firmware\firmware.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\DrivingController\DrivingController.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="experimental\KeyboardController\KeyboardController.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1457,7 +1468,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="experimental\retired\Wii\Wii.ino" />
-    <Content Include="experimental\ColecoVision\ColecoVision.ino">
+    <Content Include="experimental\retired\ColecoVision\ColecoVision.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\cdtv-remote\cdtv-remote.ino">
@@ -1475,7 +1486,7 @@
     <Content Include="experimental\AmigaAnalog\AmigaAnalog.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\pippin\pippin.ino">
+    <Content Include="experimental\retired\pippin\pippin.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\FMTownsMarty\FMTownsMarty.ino">

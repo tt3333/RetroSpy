@@ -2,9 +2,9 @@
 // SMS.h
 //
 // Author:
-//       Christopher Mallery <christopher.mallery@gmail.com>
+//       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
 //
-// Copyright (c) 2018 Christopher Mallery <christopher.mallery@gmail.com>
+// Copyright (c) 2020 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal

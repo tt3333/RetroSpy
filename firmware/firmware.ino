@@ -28,6 +28,8 @@
 //#define MODE_FMTOWNS
 //#define MODE_PCFX
 //#define MODE_COLECOVISION
+//#define MODE_DRIVING_CONTROLLER
+//#define MODE_PIPPIN
 
 //--- Teensy Only
 //#define MODE_DREAMCAST
@@ -40,6 +42,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
 ///////////////////////////////////////////////////////////////////////////////
+
+
 #include "common.h"
 
 #include "NES.h"
@@ -67,6 +71,9 @@
 #include "Dreamcast.h"
 #include "AmigaCD32.h"
 #include "Wii.h"
+
+#include "DrivingController.h"
+#include "Pippin.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -136,6 +143,12 @@ WiiSpy WiiSpy;
 #endif
 #if defined(MODE_CD32)
 AmigaCd32Spy Cd32Spy;
+#endif
+#if defined(MODE_DRIVING_CONTROLLER)
+DrivingControllerSpy DrivingControllerSpy;
+#endif
+#if defined(MODE_PIPPIN)
+PippinSpy PippinSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,6 +229,10 @@ void setup()
     WiiSpy.setup();
 #elif defined(MODE_CD32)
     Cd32Spy.setup();    
+#elif defined(MODE_DRIVING_CONTROLLER)
+	DrivingControllerSpy.setup();
+#elif defined(MODE_PIPPIN)
+	PippinSpy.setup(0xF);
 #endif
 
   T_DELAY(5000);
@@ -291,5 +308,9 @@ void loop()
     WiiSpy.loop();
 #elif defined(MODE_CD32)
    Cd32Spy.loop();
+#elif defined(MODE_DRIVING_CONTROLLER)
+   DrivingControllerSpy.loop();
+#elif defined(MODE_PIPPIN)
+	PippinSpy.loop();
 #endif
 }
