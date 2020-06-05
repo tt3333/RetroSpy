@@ -39,6 +39,9 @@
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 
+// Pippin Controller Configuration
+#define PIPPIN_SPY_ADDRESS 0xF
+
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
 ///////////////////////////////////////////////////////////////////////////////
@@ -232,10 +235,11 @@ void setup()
 #elif defined(MODE_DRIVING_CONTROLLER)
 	DrivingControllerSpy.setup();
 #elif defined(MODE_PIPPIN)
-	PippinSpy.setup(0xF);
+	PippinSpy.setup(PIPPIN_SPY_ADDRESS);
 #endif
 
   T_DELAY(5000);
+  A_DELAY(200);
 
   Serial.begin( 115200 );
 }
