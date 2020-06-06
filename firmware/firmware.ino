@@ -46,7 +46,7 @@
 //#define MODE_COLECOVISION
 //#define MODE_DRIVING_CONTROLLER
 //#define MODE_PIPPIN
-//#define MODE_KEYBOARD_CONTROLLER_NORMAL
+//#define MODE_KEYBOARD_CONTROLLER
 //#define MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS
 //#define MODE_KEYBOARD_CONTROLLER_BIG_BIRD
 
@@ -205,7 +205,7 @@ AmigaAnalogSpy AmigaAnalogSpy;
 #if defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 Atari5200Spy Atari5200Spy;
 #endif
-#if defined(MODE_KEYBOARD_CONTROLLER_NORMAL) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+#if defined(MODE_KEYBOARD_CONTROLLER) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 KeyboardControllerSpy KeyboardControllerSpy;
 #endif
 
@@ -310,7 +310,7 @@ void setup()
 	Atari5200Spy.setup(false);
 #elif defined(MODE_ATARI5200_2)
 	Atari5200Spy.setup(true);
-#elif defined(MODE_KEYBOARD_CONTROLLER_STAR_NORMAL)
+#elif defined(MODE_KEYBOARD_CONTROLLER)
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_NORMAL);
 #elif defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS)
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
@@ -412,7 +412,7 @@ void loop()
 	AmigaAnalogSpy.loop();
 #elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 	Atari5200Spy.loop();
-#elif defined(MODE_KEYBOARD_CONTROLLER_NORMAL) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+#elif defined(MODE_KEYBOARD_CONTROLLER) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 	KeyboardControllerSpy.loop();
 #endif
 
