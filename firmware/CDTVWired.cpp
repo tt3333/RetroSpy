@@ -26,9 +26,8 @@
 
 #include "CDTVWired.h"
 
-#if !defined(__arm__) || !defined(CORE_TEENSY)
-
-#include <TimerOne.h> // https://code.google.com/archive/p/arduino-timerone/downloads
+#if defined(TP_TIMERONE) && !(defined(__arm__) && defined(CORE_TEENSY))
+#include <TimerOne.h>
 
 #define BUFFER_SIZE 45
 

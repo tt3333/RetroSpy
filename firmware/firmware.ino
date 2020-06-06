@@ -27,21 +27,34 @@
 //#define MODE_JAGUAR
 //#define MODE_FMTOWNS
 //#define MODE_PCFX
-//#define MODE_COLECOVISION
-//#define MODE_DRIVING_CONTROLLER
-//#define MODE_PIPPIN
 //#define MODE_AMIGA_KEYBOARD
 //#define MODE_AMIGA_MOUSE
-//#define MODE_CDTV_WIRED
 
 //--- Teensy Only
 //#define MODE_DREAMCAST
 //#define MODE_WII
 //#define MODE_CD32
-#define FMTOWNS_KEYBOARD_AND_MOUSE
+//#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
 
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
+
+//--- Require 3rd Party Libraries.  Setup is slightly more complicated
+//#define MODE_CDI
+//#define MODE_CDTV_WIRED
+//#define MODE_CDTV_WIRELESS
+//#define MODE_COLECOVISION
+//#define MODE_DRIVING_CONTROLLER
+//#define MODE_PIPPIN
+//#define MODE_KEYBOARD_CONTROLLER_NORMAL
+//#define MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS
+//#define MODE_KEYBOARD_CONTROLLER_BIG_BIRD
+
+//--- Require 2 Arduinos.  Setup is A LOT more complicated.
+//#define MODE_AMIGA_ANALOG_1
+//#define MODE_AMIGA_ANALOG_2
+//#define MODE_ATARI5200_1
+//#define MODE_ATARI5200_2
 
 // Pippin Controller Configuration
 #define PIPPIN_SPY_ADDRESS 0xF
@@ -52,7 +65,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 #include "common.h"
 
@@ -88,6 +100,11 @@
 #include "AmigaKeyboard.h"
 #include "AmigaMouse.h"
 #include "CDTVWired.h"
+#include "CDTVWireless.h"
+#include "CDi.h"
+#include "AmigaAnalog.h"
+#include "Atari5200.h"
+#include "KeyboardController.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -173,15 +190,29 @@ AmigaMouseSpy AmigaMouseSpy;
 #if defined(MODE_CDTV_WIRED)
 CDTVWiredSpy CDTVWiredSpy;
 #endif
-#if defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+#if defined(MODE_CDTV_WIRELESS)
+CDTVWirelessSpy CDTVWirelessSpy;
+#endif
+#if defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
 FMTownsKeyboardAndMouseSpy FMTownsKeyboardAndMouseSpy;
+#endif
+#if defined(MODE_CDI)
+CDiSpy CDiSpy;
+#endif
+#if defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
+AmigaAnalogSpy AmigaAnalogSpy;
+#endif
+#if defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
+Atari5200Spy Atari5200Spy;
+#endif
+#if defined(MODE_KEYBOARD_CONTROLLER_NORMAL) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+KeyboardControllerSpy KeyboardControllerSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-
   // for MODE_DETECT
 #if defined(__arm__) && defined(CORE_TEENSY)
   for(int i = 33; i < 40; ++i)
@@ -265,8 +296,26 @@ void setup()
 	AmigaMouseSpy.setup(AMIGA_MOUSE_VIDEO_OUTPUT);
 #elif defined(MODE_CDTV_WIRED)
 	CDTVWiredSpy.setup();
-#elif defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+#elif defined(MODE_CDTV_WIRELESS)
+	CDTVWirelessSpy.setup();
+#elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
 	FMTownsKeyboardAndMouseSpy.setup();
+#elif defined(MODE_CDI)
+	CDiSpy.setup();
+#elif defined(MODE_AMIGA_ANALOG_1)
+	AmigaAnalogSpy.setup(false);
+#elif defined(MODE_AMIGA_ANALOG_2)
+	AmigaAnalogSpy.setup(true);
+#elif defined(MODE_ATARI5200_1)
+	Atari5200Spy.setup(false);
+#elif defined(MODE_ATARI5200_2)
+	Atari5200Spy.setup(true);
+#elif defined(MODE_KEYBOARD_CONTROLLER_STAR_NORMAL)
+	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_NORMAL);
+#elif defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS)
+	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
+#elif defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_BIG_BIRD);
 #endif
 
   T_DELAY(5000);
@@ -353,7 +402,18 @@ void loop()
 	AmigaMouseSpy.loop();
 #elif defined(MODE_CDTV_WIRED)
 	CDTVWiredSpy.loop();
-#elif defined(FMTOWNS_KEYBOARD_AND_MOUSE)
+#elif defined(MODE_CDTV_WIRELESS)
+	CDTVWirelessSpy.loop();
+#elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
 	FMTownsKeyboardAndMouseSpy.loop();
+#elif defined(MODE_CDI)
+	CDiSpy.loop();
+#elif defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
+	AmigaAnalogSpy.loop();
+#elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
+	Atari5200Spy.loop();
+#elif defined(MODE_KEYBOARD_CONTROLLER_NORMAL) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+	KeyboardControllerSpy.loop();
 #endif
+
 }

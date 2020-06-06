@@ -26,8 +26,7 @@
 
 #include "ColecoVision.h"
 
-#if !defined(__arm__) || !defined(CORE_TEENSY)
-
+#if defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY))
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h>
 #include <PinChangeInterruptPins.h>

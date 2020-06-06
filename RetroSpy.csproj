@@ -215,6 +215,9 @@
     <None Include="experimental\retired\cdtv-wired\TimerOne.h" />
     <None Include="experimental\retired\DrivingController\DrivingController.ino" />
     <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
+    <Content Include="firmware\Atari5200.cpp" />
+    <Content Include="firmware\Atari5200.h" />
+    <Content Include="firmware\AmigaAnalog.h" />
     <Content Include="firmware\AmigaCd32.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -225,14 +228,19 @@
     <Content Include="firmware\AmigaKeyboard.h" />
     <Content Include="firmware\AmigaMouse.cpp" />
     <Content Include="firmware\AmigaMouse.h" />
+    <Content Include="firmware\AmigaAnalog.cpp" />
     <Content Include="firmware\BoosterGrip.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="firmware\BoosterGrip.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="firmware\CDi.cpp" />
+    <Content Include="firmware\CDi.h" />
     <Content Include="firmware\CDTVWired.cpp" />
     <Content Include="firmware\CDTVWired.h" />
+    <Content Include="firmware\CDTVWireless.cpp" />
+    <Content Include="firmware\CDTVWireless.h" />
     <Content Include="firmware\ColecoVision.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -300,6 +308,8 @@
     <Content Include="firmware\Jaguar.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="firmware\KeyboardController.cpp" />
+    <Content Include="firmware\KeyboardController.h" />
     <Content Include="firmware\N64.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1441,9 +1451,7 @@
     <Content Include="firmware\firmware.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\KeyboardController\KeyboardController.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\retired\KeyboardController\KeyboardController.ino" />
     <Content Include="experimental\Paddles\Paddles.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1454,17 +1462,11 @@
     <None Include="experimental\retired\AmigaMouse\AmigaMouse.ino" />
     <None Include="experimental\retired\Wii\Wii.ino" />
     <None Include="experimental\retired\ColecoVision\ColecoVision.ino" />
-    <Content Include="experimental\cdtv-remote\cdtv-remote.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\retired\cdtv-remote\cdtv-remote.ino" />
     <None Include="experimental\retired\AmigaKeyboard\AmigaKeyboard.ino" />
     <None Include="experimental\retired\cdtv-wired\cdtv-wired.ino" />
-    <Content Include="experimental\Atari5200\Atari5200.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="experimental\AmigaAnalog\AmigaAnalog.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\retired\Atari5200\Atari5200.ino" />
+    <None Include="experimental\retired\AmigaAnalog\AmigaAnalog.ino" />
     <None Include="experimental\retired\pippin\pippin.ino" />
     <None Include="experimental\retired\FMTownsMarty\FMTownsMarty.ino" />
     <Content Include="MiSTer\retrospy">

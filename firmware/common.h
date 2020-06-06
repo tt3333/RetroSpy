@@ -32,18 +32,29 @@
 #include "config_arduino.h"
 #endif
 
+// Uncomment these to enable 3rd party libraries once installed
+//#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
+//#define TP_IRLIB2               // Used by MODE_CDI
+//#define TP_TIMERONE             // Used by MODE_PIPPIN & MODE_CDTV_WIRED
+//#define TP_PINCHANGEINTERRUPT   // Used by MODE_COLECOVISION & MODE_DRIVING_CONTROLLER
+
+// Uncomment these out to enable the necessary ADC interrupt handler.
+// They cannot co-exist when linked even when not active
+//#define AMIGA_ANALOG_ADC_INT_HANDLER
+//#define ATARI5200_ADC_INT_HANDLER
+
 // Uncomment this for serial debugging output
 //#define DEBUG
 
-#define N64_BITCOUNT		32
+#define N64_BITCOUNT		    32
 #define SNES_BITCOUNT       16
 #define SNES_BITCOUNT_EXT   32
 #define NES_BITCOUNT         8
-#define GC_BITCOUNT			64
+#define GC_BITCOUNT			    64
 #define GC_PREFIX           25
-#define ThreeDO_BITCOUNT	32
-#define PCFX_BITCOUNT		16
-#define CD32_BITCOUNT		 7
+#define ThreeDO_BITCOUNT	  32
+#define PCFX_BITCOUNT		    16
+#define CD32_BITCOUNT		     7
 
 #define PIN_READ PIND_READ
 
@@ -61,3 +72,5 @@ void common_pin_setup();
 void read_shiftRegister_2wire(unsigned char rawData[], unsigned char latch, unsigned char data, unsigned char longWait, unsigned char bits);
 void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigned char count);
 void sendRawDataDebug(unsigned char rawControllerData[], unsigned char first, unsigned char count);
+int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax);
+int middleOfThree(int a, int b, int c);

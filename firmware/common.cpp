@@ -120,3 +120,39 @@ void sendRawDataDebug(unsigned char rawControllerData[], unsigned char first, un
 	}
 	Serial.print("\n");
 }
+
+int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
+{
+	float newValue = ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
+	if (newValue > newMax)
+		return newMax;
+	if (newValue < newMin)
+		return newMin;
+
+	return newValue;
+}
+
+int middleOfThree(int a, int b, int c)
+{
+	// Compare each three number to find middle  
+	// number. Enter only if a > b 
+	if (a > b)
+	{
+		if (b > c)
+			return b;
+		else if (a > c)
+			return c;
+		else
+			return a;
+	}
+	else
+	{
+		// Decided a is not greater than b. 
+		if (a > c)
+			return a;
+		else if (b > c)
+			return c;
+		else
+			return b;
+	}
+}

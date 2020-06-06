@@ -257,6 +257,7 @@ English=
 1=<ProgramGroup>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal
 2=<ProgramGroup>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal
 3=<Desktop>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal
+4=<Desktop>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal
 
 [Commands]
 0=<InstallDir>\drivers\dpinst-amd64.exe*?*?Normal*?After Installation*?Yes*?64-bit*?Yes
