@@ -1,16 +1,26 @@
 <?xml version="1.0"?>
 <VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ConfigurationName>Release</ConfigurationName>
-  <Project xsi:type="com.visualgdb.project.windows">
+  <Project xsi:type="com.visualgdb.project.linux">
     <CustomSourceDirectories>
       <Directories />
       <PathStyle>Unknown</PathStyle>
     </CustomSourceDirectories>
-    <MainSourceDirectory>$(ProjectDir)</MainSourceDirectory>
+    <DeploymentHost>
+      <HostName>192.168.1.121</HostName>
+      <Transport>SSH</Transport>
+      <UserName>root</UserName>
+    </DeploymentHost>
+    <AllowChangingHostForMainCommands>false</AllowChangingHostForMainCommands>
+    <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
+    <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
+    <RemoveRemoteDirectoryOnClean>false</RemoveRemoteDirectoryOnClean>
+    <SkipDeploymentTests>false</SkipDeploymentTests>
+    <MainSourceDirectoryForLocalBuilds>$(ProjectDir)</MainSourceDirectoryForLocalBuilds>
   </Project>
   <Build xsi:type="com.visualgdb.build.make">
     <ToolchainID>
-      <ID>com.sysprogs.imported.mingw</ID>
+      <ID>com.sysprogs.imported.arm-linux-gnueabihf</ID>
       <Version>
         <GCC>7.5.0</GCC>
         <Revision>0</Revision>
@@ -48,7 +58,6 @@
     <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
   </CustomShortcuts>
   <UserDefinedVariables />
-  <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
     <ExtraSettings>
@@ -61,9 +70,7 @@
       <Enabled>false</Enabled>
     </CodeAnalyzerSettings>
   </CodeSense>
-  <Configurations />
-  <ProgramArgumentsSuggestions />
-  <Debug xsi:type="com.visualgdb.debug.local">
+  <Debug xsi:type="com.visualgdb.debug.remote">
     <AdditionalStartupCommands />
     <AdditionalGDBSettings>
       <Features>
@@ -101,5 +108,12 @@
       <ProgramArguments />
     </LaunchGDBSettings>
     <GenerateCtrlBreakInsteadOfCtrlC>false</GenerateCtrlBreakInsteadOfCtrlC>
+    <DeploymentTargetPath>/media/fat/retrospy/$(TargetFileName)</DeploymentTargetPath>
+    <X11WindowMode>Local</X11WindowMode>
+    <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+    <RunGDBUnderSudo>false</RunGDBUnderSudo>
+    <DeploymentMode>Auto</DeploymentMode>
+    <DeployWhenLaunchedWithoutDebugging>true</DeployWhenLaunchedWithoutDebugging>
+    <SuppressTTYCreation>false</SuppressTTYCreation>
   </Debug>
 </VisualGDBProjectSettings2>

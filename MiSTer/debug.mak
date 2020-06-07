@@ -8,12 +8,12 @@ BINARYDIR := Debug
 CC := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-gcc.exe
 CXX := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-g++.exe
 LD := $(CXX)
-AR := $(TOOLCHAIN_ROOT)/arm-linux-gnueabihf/bin/ar.exe
-OBJCOPY := $(TOOLCHAIN_ROOT)/arm-linux-gnueabihf/bin/objcopy.exe
+AR := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-ar.exe
+OBJCOPY := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-objcopy.exe
 
 #Additional flags
 PREPROCESSOR_MACROS := DEBUG=1
-INCLUDE_DIRS := $(ToolchainDir)/arm-linux-gnueabihf/include/c++/7.5.0 $(ToolchainDir)/arm-linux-gnueabihf/libc/usr/include $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/include/c++/7.5.0/arm-linux-gnueabihf $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/include/c++/7.5.0/tr1 $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/include/bits $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/lib/gcc/arm-linux-gnueabihf/7.5.0/include
+INCLUDE_DIRS := 
 LIBRARY_DIRS := 
 LIBRARY_NAMES := 
 ADDITIONAL_LINKER_INPUTS := 
@@ -33,3 +33,4 @@ END_GROUP := -Wl,--end-group
 #Additional options detected from testing the toolchain
 USE_DEL_TO_CLEAN := 1
 CP_NOT_AVAILABLE := 1
+IS_LINUX_PROJECT := 1

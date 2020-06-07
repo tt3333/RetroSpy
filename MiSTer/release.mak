@@ -8,8 +8,8 @@ BINARYDIR := Release
 CC := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-gcc.exe
 CXX := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-g++.exe
 LD := $(CXX)
-AR := $(TOOLCHAIN_ROOT)/arm-linux-gnueabihf/bin/ar.exe
-OBJCOPY := $(TOOLCHAIN_ROOT)/arm-linux-gnueabihf/bin/objcopy.exe
+AR := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-ar.exe
+OBJCOPY := $(TOOLCHAIN_ROOT)/bin/arm-linux-gnueabihf-objcopy.exe
 
 #Additional flags
 PREPROCESSOR_MACROS := NDEBUG=1 RELEASE=1
@@ -33,3 +33,4 @@ END_GROUP := -Wl,--end-group
 #Additional options detected from testing the toolchain
 USE_DEL_TO_CLEAN := 1
 CP_NOT_AVAILABLE := 1
+IS_LINUX_PROJECT := 1

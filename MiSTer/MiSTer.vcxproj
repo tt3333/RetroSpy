@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{95215A6D-FCC0-4634-B6E7-A5A1ED10C878}</ProjectGuid>
+    <ProjectGuid>{472167A6-3C74-42A7-85DC-13E7F1BD69D1}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -26,7 +26,7 @@
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="VisualGDBPackageDefinitions">
-    <ToolchainID>com.sysprogs.imported.mingw</ToolchainID>
+    <ToolchainID>com.sysprogs.imported.arm-linux-gnueabihf</ToolchainID>
     <ToolchainVersion>7.5.0//r0</ToolchainVersion>
   </PropertyGroup>
   <ImportGroup Label="VisualGDBFindComponents">
@@ -46,6 +46,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -53,11 +54,10 @@
     <IncludePath />
     <ReferencePath />
     <LibraryPath />
-    <NMakeIncludeSearchPath>$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include\linux;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf</NMakeIncludeSearchPath>
-    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -65,8 +65,6 @@
     <IncludePath />
     <ReferencePath />
     <LibraryPath />
-    <NMakeIncludeSearchPath>$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\lib\gcc\arm-linux-gnueabihf\7.5.0\include</NMakeIncludeSearchPath>
-    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
