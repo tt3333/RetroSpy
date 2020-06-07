@@ -145,7 +145,7 @@ CustomComboBox=0
 CustomComboBoxName=
 CustomComboBoxItems=
 CustomComboDefItem=
-CustomComponents=1
+CustomComponents=0
 CustomComponentsText=Select Components
 CustomComponentsDesc=
 CustomComponentsFull=0
@@ -239,10 +239,6 @@ LogoProportional=0
 63=E:\src\Repos\RetroSpy\drivers\x86\libusb0.sys?<InstallDir>\drivers\x86\libusb0.sys?1?1
 64=E:\src\Repos\RetroSpy\drivers\x86\libusb0_x86.dll?<InstallDir>\drivers\x86\libusb0_x86.dll?1?1
 65=E:\src\Repos\RetroSpy\serial_install.exe?<InstallDir>\serial_install.exe?1?1
-
-[Components]
-0=Arduino Drivers*?USB Drivers for Arduino Developement Boards*?<InstallDir>\drivers*?*?Yes*?Yes
-1=Teensy Drivers*?USB Drivers for Teensy  Developement Boards*?<InstallDir>\serial_install.exe*?*?Yes*?Yes
 
 [License]
 (Default)=
