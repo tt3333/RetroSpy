@@ -122,3 +122,8 @@ Backup*/
 /RetroSpy-release
 /RetroSpy-release.zip.tmp1
 /RetroSpy-Setup.exe
+/CodeDB
+/firmware/Output
+/firmware/VisualGDBCache
+/MiSTer/Release
+/MiSTer/Debug

@@ -81,6 +81,9 @@
   <PropertyGroup>
     <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Renci.SshNet">
       <HintPath>.\Renci.SshNet.dll</HintPath>
@@ -215,179 +218,7 @@
     <None Include="experimental\retired\cdtv-wired\TimerOne.h" />
     <None Include="experimental\retired\DrivingController\DrivingController.ino" />
     <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
-    <Content Include="firmware\Atari5200.cpp" />
-    <Content Include="firmware\Atari5200.h" />
-    <Content Include="firmware\AmigaAnalog.h" />
-    <Content Include="firmware\AmigaCd32.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\AmigaCd32.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\AmigaKeyboard.cpp" />
-    <Content Include="firmware\AmigaKeyboard.h" />
-    <Content Include="firmware\AmigaMouse.cpp" />
-    <Content Include="firmware\AmigaMouse.h" />
-    <Content Include="firmware\AmigaAnalog.cpp" />
-    <Content Include="firmware\BoosterGrip.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\BoosterGrip.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\CDi.cpp" />
-    <Content Include="firmware\CDi.h" />
-    <Content Include="firmware\CDTVWired.cpp" />
-    <Content Include="firmware\CDTVWired.h" />
-    <Content Include="firmware\CDTVWireless.cpp" />
-    <Content Include="firmware\CDTVWireless.h" />
-    <Content Include="firmware\ColecoVision.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\ColecoVision.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\common.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\common.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\config_arduino.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\config_teensy.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\ControllerSpy.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Dreamcast.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Dreamcast.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\DrivingController.cpp" />
-    <Content Include="firmware\DrivingController.h" />
-    <Content Include="firmware\FMTowns.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\FMTowns.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\FMTownsKeyboardAndMouse.cpp" />
-    <Content Include="firmware\FMTownsKeyboardAndMouse.h" />
-    <Content Include="firmware\GC.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\GC.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Genesis.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Genesis.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\GenesisMouse.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\GenesisMouse.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Intellivision.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Intellivision.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Jaguar.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Jaguar.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\KeyboardController.cpp" />
-    <Content Include="firmware\KeyboardController.h" />
-    <Content Include="firmware\N64.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\N64.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\NeoGeo.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\NeoGeo.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\NES.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\NES.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\PCFX.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\PCFX.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Pippin.cpp" />
-    <Content Include="firmware\Pippin.h" />
-    <Content Include="firmware\PlayStation.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\PlayStation.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Saturn.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Saturn.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Saturn3D.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Saturn3D.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\SMS.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\SMS.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\SNES.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\SNES.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\TG16.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\TG16.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\ThreeDO.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\ThreeDO.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Wii.cpp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="firmware\Wii.h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
-    <Content Include="MiSTer\axbtnmap.c" />
-    <Content Include="MiSTer\axbtnmap.h" />
-    <Content Include="MiSTer\retrospy.c" />
     <Content Include="skins\3do-controller\3dobackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1448,9 +1279,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="firmware\firmware.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="experimental\retired\KeyboardController\KeyboardController.ino" />
     <Content Include="experimental\Paddles\Paddles.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1469,9 +1297,6 @@
     <None Include="experimental\retired\AmigaAnalog\AmigaAnalog.ino" />
     <None Include="experimental\retired\pippin\pippin.ino" />
     <None Include="experimental\retired\FMTownsMarty\FMTownsMarty.ino" />
-    <Content Include="MiSTer\retrospy">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1932,6 +1757,10 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rmdir /S /Q $(ProjectDir)$(OutDir)firmware\
+xcopy /y /e /s  $(ProjectDir)firmware\sketches\*.* $(ProjectDir)$(OutDir)firmware\</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

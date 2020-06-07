@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ConfigurationName>Debug</ConfigurationName>
+  <Project xsi:type="com.visualgdb.project.external.arduino">
+    <CustomSourceDirectories>
+      <Directories />
+      <PathStyle>Unknown</PathStyle>
+    </CustomSourceDirectories>
+    <ProjectModeSettings>
+      <ProjectGUID>73ea1611-b8a4-4879-8d2a-a2620f1326f9</ProjectGUID>
+      <GroupSourcesByTypes>true</GroupSourcesByTypes>
+      <GroupSourcesByPaths>true</GroupSourcesByPaths>
+      <SketchSubdirectory>sketches</SketchSubdirectory>
+      <MainSketchFile>firmware.ino</MainSketchFile>
+      <RootSketchFolder>
+        <Subfolders />
+        <Files>
+          <string>firmware.ino</string>
+        </Files>
+      </RootSketchFolder>
+      <OtherFiles>
+        <string>sketches\AmigaAnalog.h</string>
+        <string>sketches\AmigaCd32.h</string>
+        <string>sketches\AmigaKeyboard.h</string>
+        <string>sketches\AmigaMouse.h</string>
+        <string>sketches\Atari5200.h</string>
+        <string>sketches\BoosterGrip.h</string>
+        <string>sketches\CDi.h</string>
+        <string>sketches\CDTVWired.h</string>
+        <string>sketches\CDTVWireless.h</string>
+        <string>sketches\ColecoVision.h</string>
+        <string>sketches\common.h</string>
+        <string>sketches\config_arduino.h</string>
+        <string>sketches\config_teensy.h</string>
+        <string>sketches\ControllerSpy.h</string>
+        <string>sketches\Dreamcast.h</string>
+        <string>sketches\DrivingController.h</string>
+        <string>sketches\FMTowns.h</string>
+        <string>sketches\FMTownsKeyboardAndMouse.h</string>
+        <string>sketches\GC.h</string>
+        <string>sketches\Genesis.h</string>
+        <string>sketches\GenesisMouse.h</string>
+        <string>sketches\Intellivision.h</string>
+        <string>sketches\Jaguar.h</string>
+        <string>sketches\KeyboardController.h</string>
+        <string>sketches\N64.h</string>
+        <string>sketches\NeoGeo.h</string>
+        <string>sketches\NES.h</string>
+        <string>sketches\PCFX.h</string>
+        <string>sketches\Pippin.h</string>
+        <string>sketches\PlayStation.h</string>
+        <string>sketches\Saturn.h</string>
+        <string>sketches\Saturn3D.h</string>
+        <string>sketches\SMS.h</string>
+        <string>sketches\SNES.h</string>
+        <string>sketches\TG16.h</string>
+        <string>sketches\ThreeDO.h</string>
+        <string>sketches\Wii.h</string>
+      </OtherFiles>
+    </ProjectModeSettings>
+  </Project>
+  <Build xsi:type="com.visualgdb.build.external.arduino">
+    <IgnoreNormalLibraryDirectories>false</IgnoreNormalLibraryDirectories>
+    <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
+    <EnableVerboseBuild>false</EnableVerboseBuild>
+    <PreprocessorMacros />
+  </Build>
+  <CustomBuild>
+    <PreSyncActions />
+    <PreBuildActions />
+    <PostBuildActions />
+    <PreCleanActions />
+    <PostCleanActions />
+  </CustomBuild>
+  <CustomDebug>
+    <PreDebugActions />
+    <PostDebugActions />
+    <DebugStopActions />
+    <BreakMode>Default</BreakMode>
+  </CustomDebug>
+  <CustomShortcuts>
+    <Shortcuts />
+    <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
+  </CustomShortcuts>
+  <UserDefinedVariables />
+  <ImportedPropertySheets />
+  <CodeSense>
+    <Enabled>True</Enabled>
+    <ExtraSettings>
+      <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
+      <SupportLightweightReferenceAnalysis>true</SupportLightweightReferenceAnalysis>
+      <DiscoverySettings>
+        <Mode>Enabled</Mode>
+        <SearchInProjectDir>true</SearchInProjectDir>
+        <SearchInSourceDirs>true</SearchInSourceDirs>
+        <SearchInIncludeSubdirs>true</SearchInIncludeSubdirs>
+      </DiscoverySettings>
+      <CheckForClangFormatFiles>true</CheckForClangFormatFiles>
+      <FormattingEngine xsi:nil="true" />
+    </ExtraSettings>
+    <CodeAnalyzerSettings>
+      <Enabled>false</Enabled>
+      <SelectedAnalyzers>
+        <string>apiModeling.google.GTest</string>
+        <string>core.builtin.BuiltinFunctions</string>
+        <string>core.builtin.NoReturnFunctions</string>
+        <string>core.CallAndMessage</string>
+        <string>core.DivideZero</string>
+        <string>core.DynamicTypePropagation</string>
+        <string>core.NonnilStringConstants</string>
+        <string>core.NonNullParamChecker</string>
+        <string>core.NullDereference</string>
+        <string>core.StackAddressEscape</string>
+        <string>core.UndefinedBinaryOperatorResult</string>
+        <string>core.uninitialized.ArraySubscript</string>
+        <string>core.uninitialized.Assign</string>
+        <string>core.uninitialized.Branch</string>
+        <string>core.uninitialized.CapturedBlockVariable</string>
+        <string>core.uninitialized.UndefReturn</string>
+        <string>core.VLASize</string>
+        <string>cplusplus.NewDelete</string>
+        <string>cplusplus.NewDeleteLeaks</string>
+        <string>cplusplus.SelfAssignment</string>
+        <string>deadcode.DeadStores</string>
+        <string>nullability.NullPassedToNonnull</string>
+        <string>nullability.NullReturnedFromNonnull</string>
+        <string>security.insecureAPI.getpw</string>
+        <string>security.insecureAPI.gets</string>
+        <string>security.insecureAPI.mkstemp</string>
+        <string>security.insecureAPI.mktemp</string>
+        <string>security.insecureAPI.UncheckedReturn</string>
+        <string>security.insecureAPI.vfork</string>
+        <string>unix.API</string>
+        <string>unix.cstring.BadSizeArg</string>
+        <string>unix.cstring.NullArg</string>
+        <string>unix.Malloc</string>
+        <string>unix.MallocSizeof</string>
+        <string>unix.MismatchedDeallocator</string>
+        <string>unix.StdCLibraryFunctions</string>
+        <string>unix.Vfork</string>
+      </SelectedAnalyzers>
+      <ExtraArguments>
+        <string>-analyzer-store=region</string>
+        <string>-analyzer-opt-analyze-nested-blocks</string>
+        <string>-analyzer-eagerly-assume</string>
+      </ExtraArguments>
+    </CodeAnalyzerSettings>
+  </CodeSense>
+  <Configurations>
+    <VisualGDBConfiguration>
+      <PlatformName>Arduino_Uno</PlatformName>
+      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
+        <AdditionalStartupCommands />
+        <AdditionalGDBSettings>
+          <Features>
+            <DisableAutoDetection>false</DisableAutoDetection>
+            <UseFrameParameter>false</UseFrameParameter>
+            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
+            <ListLocalsSupported>false</ListLocalsSupported>
+            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
+            <ThreadInfoSupported>false</ThreadInfoSupported>
+            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
+            <SupportTargetCommand>false</SupportTargetCommand>
+            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+          </Features>
+          <EnableSmartStepping>false</EnableSmartStepping>
+          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
+          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+          <UseAppleExtensions>false</UseAppleExtensions>
+          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
+          <MakeLogFile>false</MakeLogFile>
+          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
+          <UseRelativePathsOnly>false</UseRelativePathsOnly>
+          <ExitAction>None</ExitAction>
+          <DisableDisassembly>false</DisableDisassembly>
+          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
+          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+          <DisableSignals>false</DisableSignals>
+          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+          <EnableNonStopMode>false</EnableNonStopMode>
+          <MaxBreakpointLimit>0</MaxBreakpointLimit>
+        </AdditionalGDBSettings>
+        <DebugMethod>
+          <ID>gdbsim</ID>
+          <Configuration>
+            <Entries />
+          </Configuration>
+        </DebugMethod>
+        <AutoDetectRTOS>true</AutoDetectRTOS>
+        <SemihostingSupport>Auto</SemihostingSupport>
+        <SemihostingPollingDelay>0</SemihostingPollingDelay>
+        <StepIntoEntryPoint>false</StepIntoEntryPoint>
+        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
+        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
+        <StopAtEntryPoint>false</StopAtEntryPoint>
+        <EnableVirtualHalts>false</EnableVirtualHalts>
+        <DynamicAnalysisSettings />
+        <EndOfStackSymbol>_estack</EndOfStackSymbol>
+        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
+        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
+      </DebugSettingsOverride>
+      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
+        <BoardID>arduino:avr:uno</BoardID>
+        <Properties>
+          <Entries />
+        </Properties>
+        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+      </BuildSettingsExtension>
+    </VisualGDBConfiguration>
+    <VisualGDBConfiguration>
+      <PlatformName>Teensy_3 5</PlatformName>
+      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
+        <AdditionalStartupCommands>
+          <GDBPreStartupCommands />
+          <GDBStartupCommands />
+          <GDBFinalizationCommands />
+        </AdditionalStartupCommands>
+        <AdditionalGDBSettings>
+          <Features>
+            <DisableAutoDetection>false</DisableAutoDetection>
+            <UseFrameParameter>false</UseFrameParameter>
+            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
+            <ListLocalsSupported>false</ListLocalsSupported>
+            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
+            <ThreadInfoSupported>false</ThreadInfoSupported>
+            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
+            <SupportTargetCommand>false</SupportTargetCommand>
+            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+          </Features>
+          <EnableSmartStepping>false</EnableSmartStepping>
+          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
+          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+          <UseAppleExtensions>false</UseAppleExtensions>
+          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
+          <MakeLogFile>false</MakeLogFile>
+          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
+          <UseRelativePathsOnly>false</UseRelativePathsOnly>
+          <ExitAction>None</ExitAction>
+          <DisableDisassembly>false</DisableDisassembly>
+          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
+          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+          <DisableSignals>false</DisableSignals>
+          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+          <EnableNonStopMode>false</EnableNonStopMode>
+          <MaxBreakpointLimit>0</MaxBreakpointLimit>
+        </AdditionalGDBSettings>
+        <DebugMethod>
+          <ID>gdbsim</ID>
+          <Configuration>
+            <Entries />
+          </Configuration>
+        </DebugMethod>
+        <AutoDetectRTOS>true</AutoDetectRTOS>
+        <SemihostingSupport>Auto</SemihostingSupport>
+        <SemihostingPollingDelay>0</SemihostingPollingDelay>
+        <StepIntoEntryPoint>false</StepIntoEntryPoint>
+        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
+        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
+        <StopAtEntryPoint>false</StopAtEntryPoint>
+        <EnableVirtualHalts>false</EnableVirtualHalts>
+        <DynamicAnalysisSettings />
+        <EndOfStackSymbol>_estack</EndOfStackSymbol>
+        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
+        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
+      </DebugSettingsOverride>
+      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
+        <BoardID>teensy:avr:teensy35</BoardID>
+        <Properties>
+          <Entries>
+            <KeyValue>
+              <Key>usb</Key>
+              <Value>serial</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>speed</Key>
+              <Value>168</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>opt</Key>
+              <Value>o3purelto</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>keys</Key>
+              <Value>en-us</Value>
+            </KeyValue>
+          </Entries>
+        </Properties>
+        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+      </BuildSettingsExtension>
+    </VisualGDBConfiguration>
+  </Configurations>
+  <ProgramArgumentsSuggestions />
+</VisualGDBProjectSettings2>
