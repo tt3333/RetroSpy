@@ -58,7 +58,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -66,6 +65,8 @@
     <IncludePath />
     <ReferencePath />
     <LibraryPath />
+    <NMakeIncludeSearchPath>$(ToolchainDir)\arm-linux-gnueabihf\include\c++\7.5.0;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\include\c++\7.5.0\arm-linux-gnueabihf;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\include\c++\7.5.0\tr1;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\arm-linux-gnueabihf\libc\usr\include\bits;$(ToolchainDir)\opt\gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf\lib\gcc\arm-linux-gnueabihf\7.5.0\include</NMakeIncludeSearchPath>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>

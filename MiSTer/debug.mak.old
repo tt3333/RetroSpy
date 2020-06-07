@@ -13,7 +13,7 @@ OBJCOPY := $(TOOLCHAIN_ROOT)/arm-linux-gnueabihf/bin/objcopy.exe
 
 #Additional flags
 PREPROCESSOR_MACROS := DEBUG=1
-INCLUDE_DIRS := $(ToolchainDir)/arm-linux-gnueabihf/include/c++/7.5.0 $(ToolchainDir)/arm-linux-gnueabihf/libc/usr/include $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/include/c++/7.5.0/arm-linux-gnueabihf $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/include/c++/7.5.0/tr1 $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/include/bits $(ToolchainDir)/opt/gcc-linaro-7.5.0-2019.12-i686-mingw32_arm-linux-gnueabihf/lib/gcc/arm-linux-gnueabihf/7.5.0/include
+INCLUDE_DIRS := 
 LIBRARY_DIRS := 
 LIBRARY_NAMES := 
 ADDITIONAL_LINKER_INPUTS := 

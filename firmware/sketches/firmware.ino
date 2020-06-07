@@ -184,7 +184,7 @@ PippinSpy PippinSpy;
 #if defined(MODE_AMIGA_KEYBOARD)
 AmigaKeyboardSpy AmigaKeyboardSpy;
 #endif
-#if defined(MODE_AMIGA_MOUSE)
+#if defined(MODE_AMIGA_MOUSE)                                                  
 AmigaMouseSpy AmigaMouseSpy;
 #endif
 #if defined(MODE_CDTV_WIRED)
