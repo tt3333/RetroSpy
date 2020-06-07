@@ -271,9 +271,11 @@ namespace RetroSpy
             foreach (String s in portNames)
             {
                 // s is like "COM14"
-                COMPortInfo ci = new COMPortInfo();
-                ci.portName = s;
-                ci.friendlyName = s;
+                COMPortInfo ci = new COMPortInfo
+                {
+                    portName = s,
+                    friendlyName = s
+                };
                 comPortInformation.Add(ci);
             }
 
