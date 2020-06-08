@@ -83,10 +83,10 @@ cd ..\..\..
 ;xcopy /y /e /s skins\ RetroSpy-release\skins\
 ;cd bin\Release\
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip firmware
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip experimental
 ;cd ..\..
 ;xcopy /y /e /s bin\Release\firmware\ RetroSpy-release\firmware\
-;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip experimental
-;xcopy /y /e /s experimental\ RetroSpy-release\experimental\
+;xcopy /y /e /s bin\Release\experimental\ RetroSpy-release\experimental\
 mkdir RetroSpy-release\MiSTer
 ;copy MiSTer\Release\retrospy RetroSpy-release\MiSTer
 ;cd RetroSpy-release
@@ -98,6 +98,7 @@ mkdir RetroSpy-release\MiSTer
 ;mkdir RetroSpy-release\drivers\
 ;xcopy /y /e /s drivers\ RetroSpy-release\drivers\
 ;copy serial_install.exe RetroSpy-release\
+;copy CH34x_Install_Windows_v3_4.EXE RetroSpy-release\
 
 if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
 "C:\Program Files (x86)\Actual Installer\actinst.exe" /S RetroSpy.aip

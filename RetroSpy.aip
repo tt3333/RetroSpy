@@ -259,4 +259,5 @@ English=
 0=<InstallDir>\drivers\dpinst-amd64.exe*?*?Normal*?After Installation*?Yes*?64-bit*?Yes
 1=<InstallDir>\drivers\dpinst-x86.exe*?*?Normal*?After Installation*?Yes*?32-bit*?Yes
 2=<InstallDir>\serial_install.exe*?*?Normal*?After Installation*?Yes*?Any*?Yes
+3=<InstallDir>\CH34x_Install_Windows_v3_4.EXE*?*?Normal*?After Installation*?Yes*?Any*?Yes
 
