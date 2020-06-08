@@ -1,10 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5
 // v3.8
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
-// ---------- Uncomment one of these options to select operation mode --------------
+// ---------- Uncomment one of these options to select operation mode ---------
 // 
 //#define MODE_NES
 //#define MODE_SNES
@@ -12,7 +12,8 @@
 //#define MODE_GC
 //#define MODE_SMS
 //#define MODE_GENESIS
-//#define MODE_SMS_ON_GENESIS // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
+//#define MODE_SMS_ON_GENESIS // For using a Genesis cable and the Genesis 
+							  // reader in the exe while playing SMS games.
 //#define MODE_GENESIS_MOUSE
 //#define MODE_SATURN
 //#define MODE_SATURN3D
@@ -36,10 +37,10 @@
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
 
-//Bridge one of the analog GND to the right analog IN to enable your selected mode
+//Bridge GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 
-//--- Require 3rd Party Libraries.  Setup is slightly more complicated
+//--- Require 3rd Party Libraries.  Setup is more complicated
 //#define MODE_CDI
 //#define MODE_CDTV_WIRED
 //#define MODE_CDTV_WIRELESS
@@ -205,7 +206,9 @@ AmigaAnalogSpy AmigaAnalogSpy;
 #if defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 Atari5200Spy Atari5200Spy;
 #endif
-#if defined(MODE_KEYBOARD_CONTROLLER) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+#if defined(MODE_KEYBOARD_CONTROLLER) \
+	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
+	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 KeyboardControllerSpy KeyboardControllerSpy;
 #endif
 
@@ -412,7 +415,9 @@ void loop()
 	AmigaAnalogSpy.loop();
 #elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 	Atari5200Spy.loop();
-#elif defined(MODE_KEYBOARD_CONTROLLER) || defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) || defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+#elif defined(MODE_KEYBOARD_CONTROLLER) \
+	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
+	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 
 	KeyboardControllerSpy.loop();
 #endif
 

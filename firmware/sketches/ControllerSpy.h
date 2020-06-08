@@ -35,10 +35,10 @@ public:
 	{
 		common_pin_setup();
 	}
-	virtual void loop();
-	virtual void writeSerial();
-	virtual void debugSerial();
-	virtual void updateState();
+	virtual void loop() = 0;
+	virtual void writeSerial() = 0;
+	virtual void debugSerial() = 0;
+	virtual void updateState() = 0;
 };
 
 #endif

@@ -51,7 +51,7 @@ void row1_isr()
 		return;
 	else if (PIN_READ(7) == 0)
 		currentState = 3;
-	else if (PIN_READB(0) == 0)
+	else if (PINB_READ(0) == 0)
 		currentState = 2;
 	else if (PIN_READ(6) == 0)
 		currentState = 1;
@@ -67,7 +67,7 @@ void row2_isr()
 		return;
 	else if (PIN_READ(7) == 0)
 		currentState = 6;
-	else if (PIN_READB(0) == 0)
+	else if (PINB_READ(0) == 0)
 		currentState = 5;
 	else if (PIN_READ(6) == 0)
 		currentState = 4;
@@ -83,7 +83,7 @@ void row3_isr()
 		return;
 	else if (PIN_READ(7) == 0)
 		currentState = 9;
-	else if (PIN_READB(0) == 0)
+	else if (PINB_READ(0) == 0)
 		currentState = 8;
 	else if (PIN_READ(6) == 0)
 		currentState = 7;
@@ -97,7 +97,7 @@ void row4_isr()
 	byte cachedCurrentState = currentState;
 	if (PIN_READ(7) == 0)
 		currentState = 12;
-	else if (PIN_READB(0) == 0)
+	else if (PINB_READ(0) == 0)
 		currentState = 11;
 	else if (PIN_READ(6) == 0)
 		currentState = 10;
@@ -227,9 +227,9 @@ void KeyboardControllerSpy::loop()
 #endif
 }
 
-void KeyboardControllerSpy::writeSerial();
-void KeyboardControllerSpy::debugSerial();
-void KeyboardControllerSpy::updateState();
+void KeyboardControllerSpy::writeSerial() {}
+void KeyboardControllerSpy::debugSerial() {}
+void KeyboardControllerSpy::updateState() {}
 
 #else
 
