@@ -48,12 +48,15 @@ char *axis_names[ABS_MAX + 1] = {
 };
 
 char *button_names[KEY_MAX - BTN_MISC + 1] = {
-"Btn0", "Btn1", "Btn2", "Btn3", "Btn4", "Btn5", "Btn6", "Btn7", "Btn8", "Btn9", "?", "?", "?", "?", "?", "?",
-"LeftBtn", "RightBtn", "MiddleBtn", "SideBtn", "ExtraBtn", "ForwardBtn", "BackBtn", "TaskBtn", "?", "?", "?", "?", "?", "?", "?", "?",
-"Trigger", "ThumbBtn", "ThumbBtn2", "TopBtn", "TopBtn2", "PinkieBtn", "BaseBtn", "BaseBtn2", "BaseBtn3", "BaseBtn4", "BaseBtn5", "BaseBtn6", "BtnDead",
-"BtnA", "BtnB", "BtnC", "BtnX", "BtnY", "BtnZ", "BtnTL", "BtnTR", "BtnTL2", "BtnTR2", "BtnSelect", "BtnStart", "BtnMode", "BtnThumbL", "BtnThumbR", "?",
-"?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
-"WheelBtn", "Gear up",
+"Btn0", "Btn1", "Btn2", "Btn3", "Btn4", "Btn5", "Btn6", "Btn7", "Btn8", "Btn9",
+"?", "?", "?", "?", "?", "?","LeftBtn", "RightBtn", "MiddleBtn", "SideBtn", 
+"ExtraBtn", "ForwardBtn", "BackBtn", "TaskBtn", "?", "?", "?", "?", "?", "?", 
+"?", "?", "Trigger", "ThumbBtn", "ThumbBtn2", "TopBtn", "TopBtn2", "PinkieBtn",
+"BaseBtn", "BaseBtn2", "BaseBtn3", "BaseBtn4", "BaseBtn5", "BaseBtn6", 
+"BtnDead", "BtnA", "BtnB", "BtnC", "BtnX", "BtnY", "BtnZ", "BtnTL", "BtnTR", 
+"BtnTL2", "BtnTR2", "BtnSelect", "BtnStart", "BtnMode", "BtnThumbL", 
+"BtnThumbR", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", 
+"?", "?", "?", "?", "WheelBtn", "Gear up",
 };
 
 #define NAME_LENGTH 128
@@ -130,7 +133,9 @@ int main(int argc, char **argv)
 
 		while (k < axes + buttons)
 		{
-			if (read(fd, &js, sizeof(struct js_event)) != sizeof(struct js_event)) {
+			if (read(fd, &js, sizeof(struct js_event)) 
+				!= sizeof(struct js_event)) 
+			{
 				perror("\njstest: error reading");
 				return 1;
 			}
@@ -165,8 +170,8 @@ int main(int argc, char **argv)
 				printf("%d", (axis[i] & (1 << j)) != 0);
 		}
 
-		//Probably could reduce the bandwidth by outputing the axes values directly,
-		//but can do it later.
+		//Probably could reduce the bandwidth by outputing the axes values 
+		//directly, but can do it later.
 
 		/*
 		printf("%d|%d|", axes, buttons);
