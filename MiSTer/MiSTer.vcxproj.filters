@@ -2,35 +2,35 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source files">
-      <UniqueIdentifier>{6d9a9ce6-a175-4a91-af39-27c413d07332}</UniqueIdentifier>
+      <UniqueIdentifier>{d6e83db9-c9de-4841-8a9e-69e73eda7127}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Header files">
-      <UniqueIdentifier>{09f12ad7-89d2-4b83-a54d-4a0f5327442b}</UniqueIdentifier>
+      <UniqueIdentifier>{9aee1dba-20cb-4686-beba-77675c2ecbba}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource files">
-      <UniqueIdentifier>{0300be14-66c8-4929-b42a-da63ab42a2e8}</UniqueIdentifier>
+      <UniqueIdentifier>{7a639513-4cf2-4364-b2ef-1463ac102b11}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
     <Filter Include="Make files">
-      <UniqueIdentifier>{cb07a486-acf6-4f11-ad43-3e4bb64fc283}</UniqueIdentifier>
+      <UniqueIdentifier>{c0c09397-2dec-4828-9e4b-2d34475a6b2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="VisualGDB settings">
-      <UniqueIdentifier>{3ff589d2-6da3-466e-ac9c-c7ef1a1659ab}</UniqueIdentifier>
+      <UniqueIdentifier>{b7a62ede-f69c-4ff0-8986-ca678b6d726a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="release.mak">
-      <Filter>Make files</Filter>
-    </None>
     <None Include="debug.mak">
       <Filter>Make files</Filter>
     </None>
-    <None Include="MiSTer-Release.vgdbsettings">
-      <Filter>VisualGDB settings</Filter>
+    <None Include="release.mak">
+      <Filter>Make files</Filter>
     </None>
     <None Include="MiSTer-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="MiSTer-Release.vgdbsettings">
       <Filter>VisualGDB settings</Filter>
     </None>
   </ItemGroup>
