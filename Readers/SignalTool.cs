@@ -79,11 +79,11 @@ namespace RetroSpy.Readers
         {
             windowX[windowPositionX] = x;
             windowPositionX += 1;
-            windowPositionX = (windowPositionX % 3);
+            windowPositionX %= 3;
 
             windowY[windowPositionY] = y;
             windowPositionY += 1;
-            windowPositionY = (windowPositionY % 3);
+            windowPositionY %= 3;
 
             y = MiddleOfThree(windowY[0], windowY[1], windowY[2]);
             x = MiddleOfThree(windowX[0], windowX[1], windowX[2]);

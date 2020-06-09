@@ -1,4 +1,7 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+using System.Globalization;
+
+namespace RetroSpy.Readers
 {
     public static class Amiga
     {
@@ -17,10 +20,19 @@
             null, "2", "1", "right", "left", "down", "up", "Joy22", "Joy22", "Joy2Right", "Joy2Left", "Joy2Down", "Joy2Up", null, null, null, null, null, null, null, null, null, null, null, null, null
         };
 
+        static readonly string[] BUTTONS_AMIGA_ANALOG =
+{
+            "1", "2", "3", "4", null
+        };
+
+
         private static float AmigaAnalogXAxisData;
 
-        public static ControllerState ReadFromPacket2(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket2(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length == 6)
             {
                 AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
@@ -28,12 +40,26 @@
             return null;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             ControllerStateBuilder state = null;
             if (packet.Length == 13)
             {
                 return Classic.ReadFromPacket(packet);
+            }
+            else if (packet.Length == 6)
+            {
+                for (int i = 0; i < BUTTONS_AMIGA_ANALOG.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_AMIGA_ANALOG[i])) continue;
+                    state.SetButton(BUTTONS_AMIGA_ANALOG[i], packet[i] != 0x00);
+                }
+
+                state.SetAnalog("y", (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f);
+                state.SetAnalog("x", AmigaAnalogXAxisData);
             }
             if (packet.Length == BUTTONS_CD32.Length)
             {
@@ -192,7 +218,7 @@
 
                     for (int i = 0; i < 128; ++i)
                     {
-                        string scanCode = i.ToString("X").ToUpper(); ;
+                        string scanCode = i.ToString("X", CultureInfo.CurrentCulture).ToUpper(CultureInfo.CurrentUICulture); ;
                         state.SetButton(scanCode, polishedPacket[i] != 0x00);
                     }
                 }

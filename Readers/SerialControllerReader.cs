@@ -8,10 +8,10 @@ namespace RetroSpy.Readers
 
         public event EventHandler ControllerDisconnected;
 
-        private readonly Func<byte[], ControllerState> _packetParser;
+        private readonly Func<byte[], ControllerStateEventArgs> _packetParser;
         private SerialMonitor _serialMonitor;
 
-        public SerialControllerReader(string portName, Func<byte[], ControllerState> packetParser)
+        public SerialControllerReader(string portName, Func<byte[], ControllerStateEventArgs> packetParser)
         {
             _packetParser = packetParser;
 
@@ -27,11 +27,11 @@ namespace RetroSpy.Readers
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SerialMonitor_PacketReceived(object sender, PacketData packet)
+        private void SerialMonitor_PacketReceived(object sender, PacketDataEventArgs packet)
         {
             if (ControllerStateChanged != null)
             {
-                ControllerState state = _packetParser(packet._packet);
+                ControllerStateEventArgs state = _packetParser(packet.GetPacket());
                 if (state != null)
                 {
                     ControllerStateChanged(this, state);

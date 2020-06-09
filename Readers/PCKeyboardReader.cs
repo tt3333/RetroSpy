@@ -1,6 +1,10 @@
-﻿using SharpDX.DirectInput;
+﻿using SharpDX;
+using SharpDX.DirectInput;
 using System;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Windows.Threading;
 
 namespace RetroSpy.Readers
@@ -16,11 +20,13 @@ namespace RetroSpy.Readers
         private DispatcherTimer _timer;
         private Keyboard _keyboard;
 
-        public PCKeyboardReader(int dummy = 0)
+        public PCKeyboardReader()
         {
             _dinput = new DirectInput();
 
             _keyboard = new Keyboard(_dinput);
+
+            ResourceManager stringManager = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
 
             try
             {
@@ -28,7 +34,7 @@ namespace RetroSpy.Readers
             }
             catch (Exception)
             {
-                throw new IOException("Connected keyboard could not be acquired.");
+                throw new IOException(stringManager.GetString("KeyboardCouldNotBeAcquired", CultureInfo.CurrentUICulture));
             }
 
             _timer = new DispatcherTimer
@@ -45,7 +51,7 @@ namespace RetroSpy.Readers
             {
                 _keyboard.Poll();
             }
-            catch (Exception)
+            catch (SharpDXException)
             {
                 Finish();
                 ControllerDisconnected?.Invoke(this, EventArgs.Empty);

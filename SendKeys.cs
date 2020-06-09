@@ -6,15 +6,15 @@ namespace RetroSpy
     // Keycodes: http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
     // Letter keys map to 0x41.. etc. (i.e. capital ASCII letters)
 
-    public class SendKeys
+    public static class SendKeys
     {
-        private const int INPUT_MOUSE = 0;
+        //private const int INPUT_MOUSE = 0;
         private const int INPUT_KEYBOARD = 1;
-        private const int INPUT_HARDWARE = 2;
-        private const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
+        //private const int INPUT_HARDWARE = 2;
+        //private const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
         private const uint KEYEVENTF_KEYUP = 0x0002;
-        private const uint KEYEVENTF_UNICODE = 0x0004;
-        private const uint KEYEVENTF_SCANCODE = 0x0008;
+        //private const uint KEYEVENTF_UNICODE = 0x0004;
+        //private const uint KEYEVENTF_SCANCODE = 0x0008;
 
         private struct INPUT
         {
@@ -112,7 +112,7 @@ namespace RetroSpy
 
         private static void SendInputs(params INPUT[] inputs)
         {
-            NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+            _ = NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
         }
 
         public static void PressKey(ushort key)

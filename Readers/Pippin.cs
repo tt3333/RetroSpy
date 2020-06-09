@@ -21,7 +21,7 @@
             }
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet.Length != PACKET_SIZE)
             {

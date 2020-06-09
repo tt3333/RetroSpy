@@ -1,7 +1,11 @@
-﻿using SharpDX.DirectInput;
+﻿using SharpDX;
+using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Windows.Threading;
 
 namespace RetroSpy.Readers
@@ -19,9 +23,12 @@ namespace RetroSpy.Readers
         private Joystick _joystick;
 
         public static List<uint> GetDevices()
-        {
-            int amount = new DirectInput().GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
+        { 
+            var input = new DirectInput();
+            int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
+            input.Dispose();
             List<uint> result = new List<uint>(amount);
+           
             for (uint i = 0; i < amount; i++)
             {
                 result.Add(i);
@@ -31,12 +38,14 @@ namespace RetroSpy.Readers
 
         public GamepadReader(int id = 0)
         {
+            ResourceManager stringManager = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
+
             _dinput = new DirectInput();
 
             IList<DeviceInstance> devices = _dinput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
             if (devices.Count - 1 < id)
             {
-                throw new IOException("GamepadReader could not find a connected gamepad with the given id.");
+                throw new IOException(stringManager.GetString("CouldNotConnectToGamePad", CultureInfo.CurrentUICulture));
             }
             _joystick = new Joystick(_dinput, devices[id].InstanceGuid);
 
@@ -54,7 +63,7 @@ namespace RetroSpy.Readers
             }
             catch (Exception)
             {
-                throw new IOException("Connected gamepad could not be acquired.");
+                throw new IOException(stringManager.GetString("GamepadCouldNotBeAcquired", CultureInfo.CurrentUICulture));
             }
 
             _timer = new DispatcherTimer
@@ -73,8 +82,10 @@ namespace RetroSpy.Readers
         private void Tick(object sender, EventArgs e)
         {
             try
-            { _joystick.Poll(); }
-            catch (Exception)
+            { 
+                _joystick.Poll(); 
+            }
+            catch (SharpDXException)
             {
                 Finish();
                 ControllerDisconnected?.Invoke(this, EventArgs.Empty);
@@ -86,7 +97,7 @@ namespace RetroSpy.Readers
 
             for (int i = 0; i < _joystick.Capabilities.ButtonCount; ++i)
             {
-                outState.SetButton("b" + i.ToString(), state.Buttons[i]);
+                outState.SetButton("b" + i.ToString(CultureInfo.CurrentCulture), state.Buttons[i]);
             }
 
             int[] pov = state.PointOfViewControllers;

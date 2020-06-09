@@ -1,4 +1,7 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+
+namespace RetroSpy.Readers
 {
     public static class Tg16
     {
@@ -8,8 +11,11 @@
             "up", "right", "down", "left", "1", "2", "select", "run", "3", "4", "5", "6"
         };
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

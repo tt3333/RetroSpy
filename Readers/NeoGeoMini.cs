@@ -10,8 +10,11 @@ namespace RetroSpy.Readers
             "A", "B", null, "C", "D", null, null, null, null, null, "select", "start"
         };
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

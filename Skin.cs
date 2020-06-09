@@ -1,101 +1,171 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 
 namespace RetroSpy
 {
+    public class ElementConfig
+    {
+        public BitmapImage Image { get; set; }
+        public uint X { get; set; }
+        public uint Y { get; set; }
+        public uint OriginalX { get; set; }
+        public uint OriginalY { get; set; }
+        public uint Width { get; set; }
+        public uint Height { get; set; }
+        public uint OriginalWidth { get; set; }
+        public uint OriginalHeight { get; set; }
+        public List<string> TargetBackgrounds { get; private set; }
+        public List<string> IgnoreBackgrounds { get; private set; }
+        public void SetTargetBackgrounds(List<string> list)
+        {
+            if (TargetBackgrounds == null)
+                TargetBackgrounds = list;
+            else
+            {
+                TargetBackgrounds.Clear();
+                TargetBackgrounds.AddRange(list);
+            }
+        }
+
+        public void SetIgnoreBackgrounds(List<string> list)
+        {
+            if (IgnoreBackgrounds == null)
+                IgnoreBackgrounds = list;
+            else
+            {
+                IgnoreBackgrounds.Clear();
+                IgnoreBackgrounds.AddRange(list);
+            }
+        }
+    }
+
+    public class Background
+    {
+        public string Name { get; set; }
+        public BitmapImage Image { get; set; }
+        public Color Color { get; set; }
+        public uint Width { get; set; }
+        public uint Height { get; set; }
+    }
+
+    public class Detail
+    {
+        public string Name { get; set; }
+        public ElementConfig Config { get; set; }
+    }
+
+    public class Button
+    {
+        public ElementConfig Config { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class RangeButton
+    {
+        public ElementConfig Config { get; set; }
+        public string Name { get; set; }
+        public float From { get; set; }
+        public float To { get; set; }
+    }
+
+    public class AnalogStick
+    {
+        public ElementConfig Config { get; set; }
+        public string XName { get; set; }
+        public string YName { get; set; }
+        public string VisibilityName { get; set; }
+        public uint XRange { get; set; }
+        public uint YRange { get; set; }
+        public uint OriginalXRange { get; set; }
+        public uint OriginalYRange { get; set; }
+        public bool XReverse { get; set; }
+        public bool YReverse { get; set; }
+    }
+
+    public class AnalogTrigger
+    {
+        public enum DirectionValue { Up, Down, Left, Right, Fade }
+
+        public ElementConfig Config { get; set; }
+        public string Name { get; set; }
+        public DirectionValue Direction { get; set; }
+        public bool IsReversed { get; set; }
+        public bool UseNegative { get; set; }
+    }
+
+    public class TouchPad
+    {
+        public ElementConfig Config { get; set; }
+        public string XName { get; set; }
+        public string YName { get; set; }
+        public uint XRange { get; set; }
+        public uint YRange { get; set; }
+        public uint OriginalXRange { get; set; }
+        public uint OriginalYRange { get; set; }
+    }
+
+    public class LoadResults
+    {
+        public List<Skin> SkinsLoaded { get; private set; }
+        public List<string> ParseErrors { get; private set; }
+
+        public void SetSkinsLoaded(List<Skin> list)
+        {
+            if (SkinsLoaded == null)
+                SkinsLoaded = list;
+            else
+            {
+                SkinsLoaded.Clear();
+                SkinsLoaded.AddRange(list);
+            }
+        }
+
+        public void SetParseErrors(List<string> list)
+        {
+            if (ParseErrors == null)
+                ParseErrors = list;
+            else
+            {
+                ParseErrors.Clear();
+                ParseErrors.AddRange(list);
+            }
+        }
+    }
+
     public class Skin
     {
-        public class ElementConfig
-        {
-            public BitmapImage Image;
-            public uint X, Y, OriginalX, OriginalY, Width, Height, OriginalWidth, OriginalHeight;
-            public List<string> TargetBackgrounds { get; set; }
-            public List<string> IgnoreBackgrounds { get; set; }
-        }
-
-        public class Background
-        {
-            public string Name { get; set; }
-            public BitmapImage Image { get; set; }
-            public Color Color { get; set; }
-            public uint Width, Height;
-        }
-
-        public class Detail
-        {
-            public string Name { get; set; }
-            public ElementConfig Config;
-        }
-
-        public class Button
-        {
-            public ElementConfig Config;
-            public string Name;
-        }
-
-        public class RangeButton
-        {
-            public ElementConfig Config;
-            public string Name;
-            public float From, To;
-        }
-
-        public class AnalogStick
-        {
-            public ElementConfig Config;
-            public string XName, YName, VisibilityName;
-            public uint XRange, YRange;
-            public uint OriginalXRange, OriginalYRange;
-            public bool XReverse, YReverse;
-        }
-
-        public class AnalogTrigger
-        {
-            public enum DirectionValue { Up, Down, Left, Right, Fade }
-
-            public ElementConfig Config;
-            public string Name;
-            public DirectionValue Direction;
-            public bool IsReversed;
-            public bool UseNegative;
-        }
-
-        public class TouchPad
-        {
-            public ElementConfig Config;
-            public string XName, YName;
-            public uint XRange, YRange;
-            public uint OriginalXRange, OriginalYRange;
-        }
-
+        private readonly ResourceManager _resources;
         public string Name { get; private set; }
         public string Author { get; private set; }
         public InputSource Type { get; private set; }
 
-        private List<Background> _backgrounds = new List<Background>();
+        private readonly List<Background> _backgrounds = new List<Background>();
         public IReadOnlyList<Background> Backgrounds => _backgrounds;
 
-        private List<Detail> _details = new List<Detail>();
+        private readonly List<Detail> _details = new List<Detail>();
         public IReadOnlyList<Detail> Details => _details;
 
-        private List<Button> _buttons = new List<Button>();
+        private readonly List<Button> _buttons = new List<Button>();
         public IReadOnlyList<Button> Buttons => _buttons;
 
-        private List<RangeButton> _rangeButtons = new List<RangeButton>();
+        private readonly List<RangeButton> _rangeButtons = new List<RangeButton>();
         public IReadOnlyList<RangeButton> RangeButtons => _rangeButtons;
 
-        private List<AnalogStick> _analogSticks = new List<AnalogStick>();
+        private readonly List<AnalogStick> _analogSticks = new List<AnalogStick>();
         public IReadOnlyList<AnalogStick> AnalogSticks => _analogSticks;
 
-        private List<AnalogTrigger> _analogTriggers = new List<AnalogTrigger>();
+        private readonly List<AnalogTrigger> _analogTriggers = new List<AnalogTrigger>();
         public IReadOnlyList<AnalogTrigger> AnalogTriggers => _analogTriggers;
 
-        private List<TouchPad> _touchPads = new List<TouchPad>();
+        private readonly List<TouchPad> _touchPads = new List<TouchPad>();
         public IReadOnlyList<TouchPad> TouchPads => _touchPads;
 
         // ----------------------------------------------------------------------------------------------------------------
@@ -105,6 +175,7 @@ namespace RetroSpy
 
         private Skin(string folder, List<Skin> generatedSkins)
         {
+            _resources = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
             string skinPath = Path.Combine(Environment.CurrentDirectory, folder);
 
             if (!File.Exists(Path.Combine(skinPath, "skin.xml")))
@@ -128,7 +199,7 @@ namespace RetroSpy
 
                 if (TempType == null)
                 {
-                    throw new ConfigParseException("Illegal value specified for skin attribute 'type'.");
+                    throw new ConfigParseException(_resources.GetString("IllegalSkinType", CultureInfo.CurrentUICulture));
                 }
                 types.Add(TempType);
             }
@@ -158,11 +229,14 @@ namespace RetroSpy
             Author = author;
             Type = type;
 
+            if (doc == null)
+                throw new NullReferenceException();
+
             IEnumerable<XElement> bgElems = doc.Root.Elements("background");
 
-            if (bgElems.Count() < 1)
+            if (!bgElems.Any())
             {
-                throw new ConfigParseException("Skin must contain at least one background.");
+                throw new ConfigParseException(_resources.GetString("OneBackground", CultureInfo.CurrentUICulture));
             }
 
             foreach (XElement elem in bgElems)
@@ -176,35 +250,35 @@ namespace RetroSpy
                     image = LoadImage(skinPath, imgPath);
                     width = (uint)image.PixelWidth;
                     IEnumerable<XAttribute> widthAttr = elem.Attributes("width");
-                    if (widthAttr.Count() > 0)
+                    if (widthAttr.Any())
                     {
-                        width = uint.Parse(widthAttr.First().Value);
+                        width = uint.Parse(widthAttr.First().Value, CultureInfo.CurrentCulture);
                     }
 
                     height = (uint)image.PixelHeight;
                     IEnumerable<XAttribute> heightAttr = elem.Attributes("height");
-                    if (heightAttr.Count() > 0)
+                    if (heightAttr.Any())
                     {
-                        height = uint.Parse(heightAttr.First().Value);
+                        height = uint.Parse(heightAttr.First().Value, CultureInfo.CurrentCulture);
                     }
                 }
                 else
                 {
                     IEnumerable<XAttribute> widthAttr = elem.Attributes("width");
-                    if (widthAttr.Count() > 0)
+                    if (widthAttr.Any())
                     {
-                        width = uint.Parse(widthAttr.First().Value);
+                        width = uint.Parse(widthAttr.First().Value, CultureInfo.CurrentCulture);
                     }
 
                     IEnumerable<XAttribute> heightAttr = elem.Attributes("height");
-                    if (heightAttr.Count() > 0)
+                    if (heightAttr.Any())
                     {
-                        height = uint.Parse(heightAttr.First().Value);
+                        height = uint.Parse(heightAttr.First().Value, CultureInfo.CurrentCulture);
                     }
 
                     if (width == 0 || height == 0)
                     {
-                        throw new ConfigParseException("Element 'background' should either define 'image' with optionally 'width' and 'height' or both 'width' and 'height'.");
+                        throw new ConfigParseException(_resources.GetString("BothWidthAndHeight", CultureInfo.CurrentUICulture));
                     }
                 }
                 _backgrounds.Add(new Background
@@ -242,7 +316,7 @@ namespace RetroSpy
 
                 if (from > to)
                 {
-                    throw new ConfigParseException("Rangebutton 'from' field cannot be greater than 'to' field.");
+                    throw new ConfigParseException(_resources.GetString("FromCannotBeGreaterThanTo", CultureInfo.CurrentUICulture));
                 }
 
                 _rangeButtons.Add(new RangeButton
@@ -288,9 +362,9 @@ namespace RetroSpy
             foreach (XElement elem in doc.Root.Elements("analog"))
             {
                 IEnumerable<XAttribute> directionAttrs = elem.Attributes("direction");
-                if (directionAttrs.Count() < 1)
+                if (!directionAttrs.Any())
                 {
-                    throw new ConfigParseException("Element 'analog' needs attribute 'direction'.");
+                    throw new ConfigParseException(_resources.GetString("AnalogNeedsDirection", CultureInfo.CurrentUICulture));
                 }
 
                 AnalogTrigger.DirectionValue dir;
@@ -302,7 +376,7 @@ namespace RetroSpy
                     case "left": dir = AnalogTrigger.DirectionValue.Left; break;
                     case "right": dir = AnalogTrigger.DirectionValue.Right; break;
                     case "fade": dir = AnalogTrigger.DirectionValue.Fade; break;
-                    default: throw new ConfigParseException("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right', 'fade'.");
+                    default: throw new ConfigParseException(_resources.GetString("IllegalDirection", CultureInfo.CurrentUICulture));
                 }
 
                 _analogTriggers.Add(new AnalogTrigger
@@ -319,7 +393,7 @@ namespace RetroSpy
         private static string ReadStringAttr(XElement elem, string attrName, bool required = true)
         {
             IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
-            if (attrs.Count() == 0)
+            if (!attrs.Any())
             {
                 if (required)
                 {
@@ -336,7 +410,7 @@ namespace RetroSpy
         private static List<string> GetArrayAttr(XElement elem, string attrName, bool required = true)
         {
             IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
-            if (attrs.Count() == 0)
+            if (!attrs.Any())
             {
                 if (required)
                 {
@@ -355,7 +429,7 @@ namespace RetroSpy
             Color result = new Color();
 
             IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
-            if (attrs.Count() == 0)
+            if (!attrs.Any())
             {
                 if (required)
                 {
@@ -407,7 +481,7 @@ namespace RetroSpy
         private static ElementConfig ParseStandardConfig(string skinPath, XElement elem)
         {
             IEnumerable<XAttribute> imageAttr = elem.Attributes("image");
-            if (imageAttr.Count() == 0)
+            if (!imageAttr.Any())
             {
                 throw new ConfigParseException("Attribute 'image' missing for element '" + elem.Name + "'.");
             }
@@ -416,16 +490,16 @@ namespace RetroSpy
 
             uint width = (uint)image.PixelWidth;
             IEnumerable<XAttribute> widthAttr = elem.Attributes("width");
-            if (widthAttr.Count() > 0)
+            if (widthAttr.Any())
             {
-                width = uint.Parse(widthAttr.First().Value);
+                width = uint.Parse(widthAttr.First().Value, CultureInfo.CurrentCulture);
             }
 
             uint height = (uint)image.PixelHeight;
             IEnumerable<XAttribute> heightAttr = elem.Attributes("height");
-            if (heightAttr.Count() > 0)
+            if (heightAttr.Any())
             {
-                height = uint.Parse(heightAttr.First().Value);
+                height = uint.Parse(heightAttr.First().Value, CultureInfo.CurrentCulture);
             }
 
             uint x = ReadUintAttr(elem, "x");
@@ -434,7 +508,7 @@ namespace RetroSpy
             List<string> targetBgs = GetArrayAttr(elem, "target", false);
             List<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
 
-            return new ElementConfig
+            var ec = new ElementConfig
             {
                 X = x,
                 Y = y,
@@ -445,15 +519,17 @@ namespace RetroSpy
                 OriginalWidth = width,
                 Height = height,
                 OriginalHeight = height,
-                TargetBackgrounds = targetBgs,
-                IgnoreBackgrounds = ignoreBgs
             };
+            ec.SetTargetBackgrounds(targetBgs);
+            ec.SetIgnoreBackgrounds(ignoreBgs);
+
+            return ec;
         }
 
         private static bool ReadBoolAttr(XElement elem, string attrName, bool dfault = false)
         {
             IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
-            if (attrs.Count() == 0)
+            if (!attrs.Any())
             {
                 return dfault;
             }
@@ -473,14 +549,11 @@ namespace RetroSpy
 
         // ----------------------------------------------------------------------------------------------------------------
 
-        public class LoadResults
-        {
-            public List<Skin> SkinsLoaded;
-            public List<string> ParseErrors;
-        }
-
         public static void LoadAllSkinsFromSubFolder(string path, List<Skin> skins, List<string> errs)
         {
+            if (skins == null || errs == null)
+                throw new NullReferenceException();
+
             foreach (string skinDir in Directory.GetDirectories(path))
             {
                 try
@@ -491,7 +564,7 @@ namespace RetroSpy
                     {
                         skin = new Skin(skinDir, generatedSkins);
                     }
-                    catch (Exception e)
+                    catch (ConfigParseException e)
                     {
                         errs.Add(skinDir + " :: " + e.Message);
                         continue;
@@ -516,11 +589,10 @@ namespace RetroSpy
 
             LoadAllSkinsFromSubFolder(path, skins, errs);
 
-            return new LoadResults
-            {
-                SkinsLoaded = skins,
-                ParseErrors = errs
-            };
+            var lr = new LoadResults();
+            lr.SetSkinsLoaded(skins);
+            lr.SetParseErrors(errs);
+            return lr;
         }
     }
 }

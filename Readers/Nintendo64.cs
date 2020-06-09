@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class Nintendo64
     {
@@ -13,8 +15,11 @@
             return (float)((sbyte)input) / 128;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != PACKET_SIZE)
             {
                 return null;

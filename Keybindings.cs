@@ -1,6 +1,7 @@
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
@@ -24,10 +25,10 @@ namespace RetroSpy
             }
         }
 
-        public const string XML_FILE_PATH = "keybindings.xml";
+        public const string XmlFilePath = "keybindings.xml";
 
-        private IControllerReader _reader;
-        private List<Binding> _bindings = new List<Binding>();
+        private readonly IControllerReader _reader;
+        private readonly List<Binding> _bindings = new List<Binding>();
 
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
@@ -35,7 +36,7 @@ namespace RetroSpy
 
             if (!File.Exists(xmlPath))
             {
-                throw new ConfigParseException("Could not find " + XML_FILE_PATH);
+                throw new ConfigParseException(String.Format(CultureInfo.CurrentCulture, "Could not find {0}", XmlFilePath));
             }
 
             XDocument doc = XDocument.Load(xmlPath);
@@ -62,7 +63,7 @@ namespace RetroSpy
                 _bindings.Add(new Binding(outputKey, requiredButtons));
             }
 
-            _reader = reader;
+            _reader = reader ?? throw new NullReferenceException();
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
         }
 
@@ -71,7 +72,7 @@ namespace RetroSpy
             _reader.ControllerStateChanged -= Reader_ControllerStateChanged;
         }
 
-        private void Reader_ControllerStateChanged(object reader, ControllerState e)
+        private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
         {
             foreach (Binding binding in _bindings)
             {

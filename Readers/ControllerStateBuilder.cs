@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System;
+using System.Globalization;
 
 namespace RetroSpy.Readers
 {
@@ -9,9 +11,12 @@ namespace RetroSpy.Readers
 
         public void SetButton(string name, bool value)
         {
+            if (name == null)
+                throw new NullReferenceException();
+
             _buttons[name] = value;
-            _buttons[name.ToLower()] = value;
-            _buttons[name.ToUpper()] = value;
+            _buttons[name.ToLower(CultureInfo.CurrentUICulture)] = value;
+            _buttons[name.ToUpper(CultureInfo.CurrentUICulture)] = value;
         }
 
         public void SetAnalog(string name, float value)
@@ -19,9 +24,9 @@ namespace RetroSpy.Readers
             _analogs[name] = value;
         }
 
-        public ControllerState Build()
+        public ControllerStateEventArgs Build()
         {
-            return new ControllerState(_buttons, _analogs);
+            return new ControllerStateEventArgs(_buttons, _analogs);
         }
     }
 }

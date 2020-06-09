@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class Xbox360Reader
     {
@@ -19,8 +21,11 @@
             return (float)input / 32768;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

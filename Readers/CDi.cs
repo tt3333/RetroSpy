@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class CDi
     {
@@ -14,15 +16,18 @@
             return (float)(input) / 256;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;
             }
 
             byte[] cleanedData = new byte[12];
-            for (int i = 0; i < 24; i = i + 2)
+            for (int i = 0; i < 24; i += 2)
             {
                 cleanedData[i / 2] = (byte)((packet[i]) | ((packet[i + 1]) >> 4));
             }

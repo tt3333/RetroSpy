@@ -59,5 +59,113 @@ namespace RetroSpy.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element &apos;analog&apos; needs attribute &apos;direction&apos;..
+        /// </summary>
+        internal static string AnalogNeedsDirection {
+            get {
+                return ResourceManager.GetString("AnalogNeedsDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element &apos;background&apos; should either define &apos;image&apos; with optionally &apos;width&apos; and &apos;height&apos; or both &apos;width&apos; and &apos;height&apos;..
+        /// </summary>
+        internal static string BothWidthAndHeight {
+            get {
+                return ResourceManager.GetString("BothWidthAndHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GamepadReader could not find a connected gamepad with the given id..
+        /// </summary>
+        internal static string CouldNotConnectToGamePad {
+            get {
+                return ResourceManager.GetString("CouldNotConnectToGamePad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rangebutton &apos;from&apos; field cannot be greater than &apos;to&apos; field..
+        /// </summary>
+        internal static string FromCannotBeGreaterThanTo {
+            get {
+                return ResourceManager.GetString("FromCannotBeGreaterThanTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected gamepad could not be acquired..
+        /// </summary>
+        internal static string GamepadCouldNotBeAcquired {
+            get {
+                return ResourceManager.GetString("GamepadCouldNotBeAcquired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element &apos;analog&apos; attribute &apos;direction&apos; has illegal value. Valid values are &apos;up&apos;, &apos;down&apos;, &apos;left&apos;, &apos;right&apos;, &apos;fade&apos;..
+        /// </summary>
+        internal static string IllegalDirection {
+            get {
+                return ResourceManager.GetString("IllegalDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Illegal value specified for skin attribute &apos;type&apos;..
+        /// </summary>
+        internal static string IllegalSkinType {
+            get {
+                return ResourceManager.GetString("IllegalSkinType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected keyboard could not be acquired..
+        /// </summary>
+        internal static string KeyboardCouldNotBeAcquired {
+            get {
+                return ResourceManager.GetString("KeyboardCouldNotBeAcquired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skin must contain at least one background..
+        /// </summary>
+        internal static string OneBackground {
+            get {
+                return ResourceManager.GetString("OneBackground", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port 1 and Port 2 cannot be the same!.
+        /// </summary>
+        internal static string Port1And2CannotBeTheSame {
+            get {
+                return ResourceManager.GetString("Port1And2CannotBeTheSame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RetroSpy.
+        /// </summary>
+        internal static string RetroSpy {
+            get {
+                return ResourceManager.GetString("RetroSpy", resourceCulture);
+            }
+        }
     }
 }

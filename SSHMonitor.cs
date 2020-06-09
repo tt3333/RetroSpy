@@ -11,7 +11,6 @@ namespace RetroSpy
 
     public class SSHMonitor : IDisposable
     {
-        private const int BAUD_RATE = 115200;
         private const int TIMER_MS = 1;
 
         public event PacketEventHandler PacketReceived;
@@ -20,7 +19,7 @@ namespace RetroSpy
 
         private SshClient _client;
         private ShellStream _data;
-        private List<byte> _localBuffer;
+        private readonly List<byte> _localBuffer;
         private readonly string _command;
         private readonly int _delayInMilliseconds;
         private DispatcherTimer _timer;
@@ -28,7 +27,6 @@ namespace RetroSpy
         public SSHMonitor(string hostname, string command, string username, string password, int delayInMilliseconds)
         {
             _localBuffer = new List<byte>();
-            //_datPort = new SerialPort (portName, BAUD_RATE);
             _client = new SshClient(hostname, username, password);
             _command = command;
             _delayInMilliseconds = delayInMilliseconds;
@@ -42,7 +40,6 @@ namespace RetroSpy
             }
 
             _localBuffer.Clear();
-            //_datPort.Open ();
             _client.Connect();
             _data = _client.CreateShellStream("", 0, 0, 0, 0, 0);
             if (_delayInMilliseconds > 0)
@@ -128,13 +125,13 @@ namespace RetroSpy
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
-            PacketReceived(this, new PacketData(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
+            PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 
             // Clear our buffer up until the last split character.
             _localBuffer.RemoveRange(0, lastSplitIndex);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {

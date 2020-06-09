@@ -28,8 +28,11 @@ namespace RetroSpy.Readers
             return (float)input / short.MaxValue;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != PACKET_SIZE)
             {
                 return null;
@@ -46,7 +49,15 @@ namespace RetroSpy.Readers
                     binaryPacket[i / 2] = Convert.ToByte(str.Substring(i, 2), 16);
                 }
             }
-            catch (Exception)
+            catch (ArgumentException)
+            {
+                return null;
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+            catch (OverflowException)
             {
                 return null;
             }

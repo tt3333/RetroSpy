@@ -1,8 +1,10 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class SuperNESandNES
     {
-        private static ControllerState ReadPacketButtons(byte[] packet, string[] buttons)
+        private static ControllerStateEventArgs ReadPacketButtons(byte[] packet, string[] buttons)
         {
             if (packet.Length < buttons.Length)
             {
@@ -24,7 +26,7 @@
             return state.Build();
         }
 
-        private static ControllerState ReadPacketButtons_ascii(byte[] packet, string[] buttons)
+        private static ControllerStateEventArgs ReadPacketButtons_ascii(byte[] packet, string[] buttons)
         {
             if (packet.Length < buttons.Length)
             {
@@ -82,18 +84,27 @@
             null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
         };
 
-        public static ControllerState ReadFromPacket_Intellivision(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketIntellivision(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             return ReadPacketButtons(packet, BUTTONS_INTELLIVISION);
         }
 
-        public static ControllerState ReadFromPacket_NES(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketNES(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             return ReadPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
         }
 
-        public static ControllerState ReadFromPacket_PCFX(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketPCFX(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != BUTTONS_PCFX.Length)
             {
                 return null;
@@ -102,13 +113,19 @@
             return ReadPacketButtons(packet, BUTTONS_PCFX);
         }
 
-        public static ControllerState ReadFromPacket_PSClassic(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketPSClassic(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             return ReadPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
         }
 
-        public static ControllerState ReadFromPacket_SNES(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketSNES(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < BUTTONS_SNES.Length)
             {
                 return null;
@@ -136,8 +153,11 @@
             return state.Build();
         }
 
-        public static ControllerState ReadFromPacket_Jaguar(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketJaguar(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < 4)
             {
                 return null;
@@ -200,8 +220,11 @@
             null, null, null, null, "EXT1", null, null, null, "EXT2", null, null, null, null, null, null, null
         };
 
-        public static ControllerState ReadFromPacket_FMTowns(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketFMTowns(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != 9 && packet.Length != 70)
             {
                 return null;
@@ -273,8 +296,11 @@
 
         private static float atari5200_y;
 
-        public static ControllerState ReadFromPacket_Atari5200_2(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketAtari52002(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != BUTTONS_ATARI5200.Length)
             {
                 return null;
@@ -285,8 +311,11 @@
             return null;
         }
 
-        public static ControllerState ReadFromPacket_Atari5200_1(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacketAtari52001(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != BUTTONS_ATARI5200.Length)
             {
                 return null;

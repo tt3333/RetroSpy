@@ -29,11 +29,11 @@ namespace RetroSpy.Readers
             ControllerDisconnected?.Invoke(this, e);
         }
 
-        private async void BaseControllerReader_ControllerStateChanged(object sender, ControllerState e)
+        private async void BaseControllerReader_ControllerStateChanged(object sender, ControllerStateEventArgs e)
         {
             if (!disposedValue)
             {
-                await Task.Delay(delayInMilliseconds);
+                await Task.Delay(delayInMilliseconds).ConfigureAwait(true);
 
                 ControllerStateChanged?.Invoke(this, e);
             }
@@ -45,6 +45,7 @@ namespace RetroSpy.Readers
             {
                 BaseControllerReader.Finish();
             }
+            Dispose();
         }
 
         #region IDisposable Support
