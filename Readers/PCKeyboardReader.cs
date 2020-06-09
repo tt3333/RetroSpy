@@ -26,13 +26,13 @@ namespace RetroSpy.Readers
 
             _keyboard = new Keyboard(_dinput);
 
-            ResourceManager stringManager = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
+            ResourceManager stringManager = Properties.Resources.ResourceManager;
 
             try
             {
                 _keyboard.Acquire();
             }
-            catch (Exception)
+            catch (SharpDXException)
             {
                 throw new IOException(stringManager.GetString("KeyboardCouldNotBeAcquired", CultureInfo.CurrentUICulture));
             }

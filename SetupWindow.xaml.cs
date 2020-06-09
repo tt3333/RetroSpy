@@ -111,7 +111,7 @@ namespace RetroSpy
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
             _excludedSources = new List<string>();
-            _resources = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
+            _resources = Properties.Resources.ResourceManager;
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
 
@@ -453,7 +453,7 @@ namespace RetroSpy
                 {
                     if (_vm.Ports.SelectedItem == _vm.Ports2.SelectedItem)
                     {
-                        throw new Exception(_resources.GetString("Port1And2CannotBeTheSame", CultureInfo.CurrentUICulture));
+                        throw new ConfigParseException(_resources.GetString("Port1And2CannotBeTheSame", CultureInfo.CurrentUICulture));
                     }
 
                     reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem);

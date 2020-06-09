@@ -175,7 +175,7 @@ namespace RetroSpy
 
         private Skin(string folder, List<Skin> generatedSkins)
         {
-            _resources = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
+            _resources = Properties.Resources.ResourceManager;
             string skinPath = Path.Combine(Environment.CurrentDirectory, folder);
 
             if (!File.Exists(Path.Combine(skinPath, "skin.xml")))

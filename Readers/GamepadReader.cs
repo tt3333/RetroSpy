@@ -38,7 +38,7 @@ namespace RetroSpy.Readers
 
         public GamepadReader(int id = 0)
         {
-            ResourceManager stringManager = new ResourceManager("en-US", Assembly.GetExecutingAssembly());
+            ResourceManager stringManager = Properties.Resources.ResourceManager;
 
             _dinput = new DirectInput();
 
@@ -61,7 +61,7 @@ namespace RetroSpy.Readers
             {
                 _joystick.Acquire();
             }
-            catch (Exception)
+            catch (SharpDXException)
             {
                 throw new IOException(stringManager.GetString("GamepadCouldNotBeAcquired", CultureInfo.CurrentUICulture));
             }
