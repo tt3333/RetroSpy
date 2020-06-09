@@ -18,9 +18,9 @@ namespace RetroSpy
 {
     public partial class AddRemoveWindow : Window
     {
-        private List<string> _excludedList;
-        IReadOnlyList<InputSource> _allSources;
-        List<string> _originalExcludedList;
+        private readonly List<string> _excludedList;
+        readonly IReadOnlyList<InputSource> _allSources;
+        readonly List<string> _originalExcludedList;
 
         public AddRemoveWindow(IReadOnlyList<InputSource> allSources, List<string> excludedList)
         {
@@ -70,10 +70,9 @@ namespace RetroSpy
             if (IncludedListBox.SelectedIndex != -1)
             {
                 var selectedIndex = IncludedListBox.SelectedIndex;
-                var item = IncludedListBox.SelectedItem;
 
                 if (IncludedListBox.SelectedIndex == IncludedListBox.Items.Count - 1 && IncludedListBox.Items.Count > 1)
-                    selectedIndex = selectedIndex - 1;
+                    selectedIndex -= 1;
                 else if (IncludedListBox.Items.Count == 1)
                     selectedIndex = -1;
 
@@ -89,9 +88,9 @@ namespace RetroSpy
             if (ExcludedListBox.SelectedIndex != -1)
             {
                 var selectedIndex = ExcludedListBox.SelectedIndex;
-                var item = ExcludedListBox.SelectedItem;
+
                 if (ExcludedListBox.SelectedIndex == ExcludedListBox.Items.Count - 1 && ExcludedListBox.Items.Count > 1)
-                    selectedIndex = selectedIndex - 1;
+                    selectedIndex -= 1;
                 else if (ExcludedListBox.Items.Count == 1)
                     selectedIndex = -1;
 
