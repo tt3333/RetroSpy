@@ -111,11 +111,8 @@ if exist "E:\src\certs\codesign.pfx" (
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
 copy RetroSpy-release.zip RetroSpy-Upload
-;cd MiSTer
-"C:\Program Files\7-Zip\7z.exe" a ../RetroSpy-Upload/RetroSpy-Mister.zip update-retrospy-installer.sh
-;cd Release
-"C:\Program Files\7-Zip\7z.exe" a ../../RetroSpy-Upload/RetroSpy-Mister.zip retrospy
-;cd ..\..
+;copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload
+;copy MiSTer\Release\retrospy RetroSpy-Upload
 FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & EXIT
 :end
 pause
