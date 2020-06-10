@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Github URL
-RETROSPY_URL=https://github.com/retrospy/RetroSpy/raw/master/MiSter/retrospy
+RETROSPY_URL=https://github.com/retrospy/RetroSpy/releases/latest/download/retrospy
 
 #Base directory for all script tasks
 BASE_PATH="/media/fat"
@@ -21,7 +21,6 @@ echo "Installing RetroSpy for MiSTer Server..."
 echo ""
 
 #Sync Files
-#wget -q -nc -t 3 --no-check-certificate --show-progress "${RETROSPY_URL}" -P "${RETROSPY_PATH}"
-cp -f /tmp/retrospy/retrospy "${RETROSPY_PATH}"
+wget -q -nc -t 3 --no-check-certificate --show-progress "${RETROSPY_URL}" -P "${RETROSPY_PATH}"
 
 echo "Complete! Please go to http://www.retro-spy.com to download the newest Windows client application."
