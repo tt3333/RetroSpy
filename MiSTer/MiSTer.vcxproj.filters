@@ -33,6 +33,8 @@
     <None Include="MiSTer-Release.vgdbsettings">
       <Filter>VisualGDB settings</Filter>
     </None>
+    <None Include="update-retrospy.sh" />
+    <None Include="update-retrospy-installer.sh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
