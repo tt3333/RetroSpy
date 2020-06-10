@@ -68,9 +68,9 @@ SetupFolder=E:\src\Repos\RetroSpy
 SetupFileName=RetroSpy-Setup
 SetupFile=E:\src\Repos\RetroSpy\RetroSpy-Setup.exe
 IconFile=Default
-SourceDir=E:\src\Repos\RetroSpy\RetroSpy-release
+SourceDir=E:\src\Repos\RetroSpy\RetroSpy-Setup
 InstallationPath=<ProgramFiles>\<AppName>
-MainExecutable=<InstallDir>\RetroSpy.exe
+MainExecutable=
 ProgramGroup=<AppName>
 Uninstall=1
 ShowAddRemove=1
@@ -254,10 +254,12 @@ English=
 2=<ProgramGroup>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal
 3=<Desktop>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal
 4=<Desktop>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal
+5=<ProgramGroup>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal
+6=<Desktop>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal
 
 [Commands]
 0=<InstallDir>\drivers\dpinst-amd64.exe*?*?Normal*?After Installation*?Yes*?64-bit*?Yes
 1=<InstallDir>\drivers\dpinst-x86.exe*?*?Normal*?After Installation*?Yes*?32-bit*?Yes
 2=<InstallDir>\serial_install.exe*?*?Normal*?After Installation*?Yes*?Any*?Yes
-3=<InstallDir>\CH34x_Install_Windows_v3_4.EXE*?*?Normal*?After Installation*?Yes*?Any*?Yes
+3=<InstallDir>\CH341SER\SETUP.BAT*?*?Hide*?After Installation*?Yes*?Any*?Yes
 

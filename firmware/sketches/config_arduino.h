@@ -149,7 +149,7 @@
 
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
-#define T_DELAY
+#define T_DELAY( ms ) delay(0)
 #define A_DELAY( ms ) delay(ms)
 
 #define FASTRUN

@@ -321,9 +321,12 @@ void setup()
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_BIG_BIRD);
 #endif
 
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wunused-value"
   T_DELAY(5000);
   A_DELAY(200);
-
+  #pragma GCC diagnostic pop
+  
   Serial.begin( 115200 );
 }
 

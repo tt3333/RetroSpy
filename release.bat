@@ -31,10 +31,11 @@ goto end
 :buildOK
 del RetroSpy-release.zip
 del RetroSpy-release.zip.*
-rmdir /S /Q RetroSpy-release
+rmdir /S /Q RetroSpy-Setup
 del RetroSpy-Setup.exe
+rmdir /S /Q RetroSpy-Upload
 
-mkdir RetroSpy-release
+mkdir RetroSpy-Setup
 
 if exist "E:\src\certs\codesignpasswd.txt" (
     set /p codesignpasswd=<"E:\src\certs\codesignpasswd.txt"
@@ -45,7 +46,7 @@ if exist "E:\src\certs\codesign.pfx" (
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "E:\src\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.exe
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip RetroSpy.exe
-copy RetroSpy.exe ..\..\RetroSpy-release
+copy RetroSpy.exe ..\..\RetroSpy-Setup
 cd ..\..
 
 cd bin\x64\Release
@@ -54,7 +55,7 @@ if exist "E:\src\certs\codesign.pfx" (
 )
 copy RetroSpy.exe RetroSpy.x64.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x64.exe
-copy RetroSpy.x64.exe ..\..\..\RetroSpy-release\
+copy RetroSpy.x64.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 cd bin\x86\Release
@@ -63,42 +64,42 @@ if exist "E:\src\certs\codesign.pfx" (
 )
 copy RetroSpy.exe RetroSpy.x86.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x86.exe
-copy RetroSpy.x86.exe ..\..\..\RetroSpy-release\
+copy RetroSpy.x86.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 ;cd SharpDX\net45
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip SharpDX.dll
-;copy SharpDX.dll ..\..\RetroSpy-release
+;copy SharpDX.dll ..\..\RetroSpy-Setup
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip SharpDX.DirectInput.dll
-;copy SharpDX.DirectInput.dll ..\..\RetroSpy-release
+;copy SharpDX.DirectInput.dll ..\..\RetroSpy-Setup
 ;cd ..\..
 
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip Renci.SshNet.dll
-;copy Renci.SshNet.dll RetroSpy-release
+;copy Renci.SshNet.dll RetroSpy-Setup
 
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip beagle.dll
-;copy beagle.dll RetroSpy-release\
+;copy beagle.dll RetroSpy-Setup\
 
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins
-;xcopy /y /e /s skins\ RetroSpy-release\skins\
+;xcopy /y /e /s skins\ RetroSpy-Setup\skins\
 ;cd bin\Release\
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip firmware
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip experimental
 ;cd ..\..
-;xcopy /y /e /s bin\Release\firmware\ RetroSpy-release\firmware\
-;xcopy /y /e /s bin\Release\experimental\ RetroSpy-release\experimental\
-mkdir RetroSpy-release\MiSTer
-;copy MiSTer\Release\retrospy RetroSpy-release\MiSTer
-;cd RetroSpy-release
-;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-release.zip MiSTer\retrospy
+;xcopy /y /e /s bin\Release\firmware\ RetroSpy-Setup\firmware\
+;xcopy /y /e /s bin\Release\experimental\ RetroSpy-Setup\experimental\
+mkdir RetroSpy-Setup\MiSTer
+;copy MiSTer\update-retrospy.sh RetroSpy-Setup\MiSTer
+;cd RetroSpy-Setup
+;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-release.zip MiSTer\update-retrospy.sh
 ;cd ..
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
-;copy keybindings.xml RetroSpy-release
+;copy keybindings.xml RetroSpy-Setup
 
-;mkdir RetroSpy-release\drivers\
-;xcopy /y /e /s drivers\ RetroSpy-release\drivers\
-;copy serial_install.exe RetroSpy-release\
-;copy CH34x_Install_Windows_v3_4.EXE RetroSpy-release\
+;mkdir RetroSpy-Setup\drivers\
+;xcopy /y /e /s drivers\ RetroSpy-Setup\drivers\
+;xcopy /y /e /s CH341SER\ RetroSpy-Setup\CH341SER\
+;copy serial_install.exe RetroSpy-Setup\
 
 if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
 "C:\Program Files (x86)\Actual Installer\actinst.exe" /S RetroSpy.aip
@@ -107,5 +108,14 @@ if exist "E:\src\certs\codesign.pfx" (
 )
 )
 
+;mkdir RetroSpy-Upload
+copy RetroSpy-Setup.exe RetroSpy-Upload
+copy RetroSpy-release.zip RetroSpy-Upload
+;cd MiSTer
+"C:\Program Files\7-Zip\7z.exe" a ../RetroSpy-Upload/RetroSpy-Mister.zip update-retrospy-installer.sh
+;cd Release
+"C:\Program Files\7-Zip\7z.exe" a ../../RetroSpy-Upload/RetroSpy-Mister.zip retrospy
+;cd ..\..
+FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & EXIT
 :end
 pause
