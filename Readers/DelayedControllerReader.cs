@@ -12,6 +12,8 @@ namespace RetroSpy.Readers
 
         public event StateEventHandler ControllerStateChanged;
 
+        public event StateEventHandler ControllerStateChangedNoDelay;
+
         public IControllerReader BaseControllerReader => baseControllerReader;
         public int DelayInMilliseconds => delayInMilliseconds;
 
@@ -33,6 +35,8 @@ namespace RetroSpy.Readers
         {
             if (!disposedValue)
             {
+                ControllerStateChangedNoDelay?.Invoke(this, e);
+
                 await Task.Delay(delayInMilliseconds);
 
                 ControllerStateChanged?.Invoke(this, e);
