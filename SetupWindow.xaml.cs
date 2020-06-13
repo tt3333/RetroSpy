@@ -56,6 +56,8 @@ namespace RetroSpy
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
+            _vm.LegacyKeybindingBehavior = Properties.Settings.Default.LegacyKeybindingBehavior;
+
             _portListUpdateTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -172,6 +174,7 @@ namespace RetroSpy
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
             Properties.Settings.Default.Hostname = _vm.Hostname;
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
+            Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.Save();
 
             try
@@ -220,7 +223,7 @@ namespace RetroSpy
                 }
                 if (_vm.DelayInMilliseconds > 0)
                 {
-                    reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds);
+                    reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds, _vm.LegacyKeybindingBehavior);
                 }
 
                 new ViewWindow(_vm.Skins.SelectedItem,
@@ -300,6 +303,12 @@ namespace RetroSpy
             Properties.Settings.Default.HiddleConsoleList = hiddenConsoleList;
             Properties.Settings.Default.Save();
         }
+
+        private void KeybindingBehavior_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
+            Properties.Settings.Default.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
+        }
     }
 
     public class SetupWindowViewModel : INotifyPropertyChanged
@@ -368,6 +377,7 @@ namespace RetroSpy
         public ListView<InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
         public bool StaticViewerWindowName { get; set; }
+        public bool LegacyKeybindingBehavior { get; set; }
         public string Hostname { get; set; }
 
         private Visibility _comPortOptionVisibility;
@@ -439,5 +449,6 @@ namespace RetroSpy
 
             PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
     }
 }

@@ -7,6 +7,7 @@ namespace RetroSpy.Readers
     {
         private readonly IControllerReader baseControllerReader;
         private readonly int delayInMilliseconds;
+        private readonly bool legacyKeybindingBehavior;
 
         public event EventHandler ControllerDisconnected;
 
@@ -16,11 +17,12 @@ namespace RetroSpy.Readers
 
         public IControllerReader BaseControllerReader => baseControllerReader;
         public int DelayInMilliseconds => delayInMilliseconds;
-
-        public DelayedControllerReader(IControllerReader baseControllerReader, int delayInMilliseconds)
+        public bool LegacyKeybindingBehavior => legacyKeybindingBehavior;
+        public DelayedControllerReader(IControllerReader baseControllerReader, int delayInMilliseconds, bool legacyKeybindingBehavior)
         {
             this.baseControllerReader = baseControllerReader;
             this.delayInMilliseconds = delayInMilliseconds;
+            this.legacyKeybindingBehavior = legacyKeybindingBehavior;
 
             BaseControllerReader.ControllerStateChanged += BaseControllerReader_ControllerStateChanged;
             BaseControllerReader.ControllerDisconnected += BaseControllerReader_ControllerDisconnected;
@@ -35,9 +37,13 @@ namespace RetroSpy.Readers
         {
             if (!disposedValue)
             {
-                ControllerStateChangedNoDelay?.Invoke(this, e);
+                if (!legacyKeybindingBehavior)
+                    ControllerStateChangedNoDelay?.Invoke(this, e);
 
                 await Task.Delay(delayInMilliseconds);
+
+                if(legacyKeybindingBehavior)
+                    ControllerStateChangedNoDelay?.Invoke(this, e);
 
                 ControllerStateChanged?.Invoke(this, e);
             }
