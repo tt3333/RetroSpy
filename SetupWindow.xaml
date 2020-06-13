@@ -9,8 +9,9 @@
             <Menu Width="Auto" Height="20">
                 <MenuItem Header="_Options">
                     <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click" />
+                    <MenuItem x:Name="KeybindingBehavior" Header="Legacy Keybinding Behavior" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding LegacyKeybindingBehavior}" Checked="KeybindingBehavior_Checked" Unchecked="KeybindingBehavior_Checked" IsCheckable="True" />
                 </MenuItem>
-                <MenuItem Header="_Help">
+                 <MenuItem Header="_Help">
                     <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click" />
                 </MenuItem>
             </Menu>
