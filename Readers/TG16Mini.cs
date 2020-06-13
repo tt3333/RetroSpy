@@ -14,8 +14,11 @@ namespace RetroSpy.Readers
             "2", "1", "select", "run", "up", "right", "down", "left"
         };
 
-        static public ControllerState ReadFromPacket (byte[] packet)
+        static public ControllerStateEventArgs ReadFromPacket (byte[] packet)
         {
+            if(packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE) return null;
 
             var state = new ControllerStateBuilder ();
