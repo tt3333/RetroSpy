@@ -113,6 +113,8 @@ copy RetroSpy-Setup.exe RetroSpy-Upload
 copy RetroSpy-release.zip RetroSpy-Upload
 ;copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
-FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & EXIT
+if exist "..\..\beaglebone\" (
+FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload
+)
 :end
 pause
