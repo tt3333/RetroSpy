@@ -190,5 +190,17 @@ namespace RetroSpy.Properties {
                 this["Port2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LegacyKeybindingBehavior {
+            get {
+                return ((bool)(this["LegacyKeybindingBehavior"]));
+            }
+            set {
+                this["LegacyKeybindingBehavior"] = value;
+            }
+        }
     }
 }

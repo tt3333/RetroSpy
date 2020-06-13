@@ -64,7 +64,10 @@ namespace RetroSpy
             }
 
             _reader = reader ?? throw new NullReferenceException();
-            _reader.ControllerStateChanged += Reader_ControllerStateChanged;
+            if (_reader.GetType() == typeof(DelayedControllerReader))
+                ((DelayedControllerReader)_reader).ControllerStateChangedNoDelay += Reader_ControllerStateChanged;
+            else
+                _reader.ControllerStateChanged += Reader_ControllerStateChanged;
         }
 
         public void Finish()

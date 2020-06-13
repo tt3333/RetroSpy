@@ -144,6 +144,8 @@ namespace RetroSpy
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
+            _vm.LegacyKeybindingBehavior = Properties.Settings.Default.LegacyKeybindingBehavior;
+
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
             _portListUpdateTimer = new DispatcherTimer
@@ -423,6 +425,7 @@ namespace RetroSpy
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
             Properties.Settings.Default.Hostname = _vm.Hostname;
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
+            Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
             Properties.Settings.Default.Save();
 
@@ -474,7 +477,7 @@ namespace RetroSpy
                 if (_vm.DelayInMilliseconds > 0)
                 {
 #pragma warning disable CA2000 // Dispose objects before losing scope
-                    reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds);
+                    reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds, _vm.LegacyKeybindingBehavior);
 #pragma warning restore CA2000 // Dispose objects before losing scope
                 }
 
@@ -562,6 +565,12 @@ namespace RetroSpy
             Properties.Settings.Default.HiddleConsoleList = hiddenConsoleList;
             Properties.Settings.Default.Save();
         }
+
+        private void KeybindingBehavior_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
+            Properties.Settings.Default.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
+        }
     }
 
     public class SetupWindowViewModel : INotifyPropertyChanged
@@ -574,6 +583,7 @@ namespace RetroSpy
         public ListView<InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
         public bool StaticViewerWindowName { get; set; }
+        public bool LegacyKeybindingBehavior { get; set; }
         public string Hostname { get; set; }
         public bool FilterCOMPorts { get; set; }
 
@@ -646,5 +656,6 @@ namespace RetroSpy
 
             PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
     }
 }
