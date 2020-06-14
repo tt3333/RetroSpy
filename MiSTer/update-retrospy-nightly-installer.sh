@@ -17,7 +17,7 @@ mkdir -p "${RETROSPY_PATH}"
 
 #RetroSpy file downloading
 echo ""
-echo "Installing RetroSpy for MiSTer Server..."
+echo "Installing Nightly Build of RetroSpy for MiSTer Server..."
 echo ""
 
 #Sync Files
