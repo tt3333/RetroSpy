@@ -43,7 +43,6 @@ if exist "..\..\certs\codesignpasswd.txt" (
 
 cd bin\Release
 if exist "..\..\..\..\certs\codesign.pfx" (
-echo "here"
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.exe
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip RetroSpy.exe
