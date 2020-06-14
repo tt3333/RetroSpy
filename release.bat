@@ -82,13 +82,13 @@ cd ..\..\..
 ;copy beagle.dll RetroSpy-Setup\
 
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins
-;xcopy /y /e /s skins\ RetroSpy-Setup\skins\
+;xcopy /y /e /s skins RetroSpy-Setup\skins\
 ;cd bin\Release\
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip firmware
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip experimental
 ;cd ..\..
-;xcopy /y /e /s bin\Release\firmware\ RetroSpy-Setup\firmware\
-;xcopy /y /e /s bin\Release\experimental\ RetroSpy-Setup\experimental\
+;xcopy /y /e /s bin\Release\firmware RetroSpy-Setup\firmware\
+;xcopy /y /e /s bin\Release\experimental RetroSpy-Setup\experimental\
 mkdir RetroSpy-Setup\MiSTer
 ;copy MiSTer\update-retrospy.sh RetroSpy-Setup\MiSTer
 ;cd RetroSpy-Setup
@@ -98,8 +98,8 @@ mkdir RetroSpy-Setup\MiSTer
 ;copy keybindings.xml RetroSpy-Setup
 
 ;mkdir RetroSpy-Setup\drivers\
-;xcopy /y /e /s drivers\ RetroSpy-Setup\drivers\
-;xcopy /y /e /s CH341SER\ RetroSpy-Setup\CH341SER\
+;xcopy /y /e /s drivers RetroSpy-Setup\drivers\
+;xcopy /y /e /s CH341SER RetroSpy-Setup\CH341SER\
 ;copy serial_install.exe RetroSpy-Setup\
 
 if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
