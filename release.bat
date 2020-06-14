@@ -42,16 +42,16 @@ if exist "E:\src\certs\codesignpasswd.txt" (
 )
 
 cd bin\Release
-if exist "E:\src\certs\codesign.pfx" (
-"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "E:\src\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.exe
+if exist "..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.exe
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip RetroSpy.exe
 copy RetroSpy.exe ..\..\RetroSpy-Setup
 cd ..\..
 
 cd bin\x64\Release
-if exist "E:\src\certs\codesign.pfx" (
-"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "E:\src\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x64.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x64.exe
 )
 copy RetroSpy.exe RetroSpy.x64.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x64.exe
@@ -59,8 +59,8 @@ copy RetroSpy.x64.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 cd bin\x86\Release
-if exist "E:\src\certs\codesign.pfx" (
-"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "E:\src\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x86.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x86.exe
 )
 copy RetroSpy.exe RetroSpy.x86.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x86.exe
@@ -103,8 +103,8 @@ mkdir RetroSpy-Setup\MiSTer
 
 if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
 "C:\Program Files (x86)\Actual Installer\actinst.exe" /S RetroSpy.aip
-if exist "E:\src\certs\codesign.pfx" (
-"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "E:\src\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy-Setup.exe
+if exist "..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86\SignTool" sign /f "..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy-Setup.exe
 )
 )
 
