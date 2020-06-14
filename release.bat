@@ -117,4 +117,3 @@ if exist "..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload
 )
 :end
-pause
