@@ -38,7 +38,7 @@ rmdir /S /Q RetroSpy-Upload
 mkdir RetroSpy-Setup
 
 if exist "E:\src\certs\codesignpasswd.txt" (
-    set /p codesignpasswd=<"E:\src\certs\codesignpasswd.txt"
+    set /p codesignpasswd=<"..\..\certs\codesignpasswd.txt"
 )
 
 cd bin\Release
