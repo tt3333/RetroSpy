@@ -35,6 +35,8 @@
     </None>
     <None Include="update-retrospy.sh" />
     <None Include="update-retrospy-installer.sh" />
+    <None Include="update-retrospy-nightly.sh" />
+    <None Include="update-retrospy-nightly-installer.sh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

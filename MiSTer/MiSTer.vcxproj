@@ -87,6 +87,8 @@
     <None Include="MiSTer-Debug.vgdbsettings" />
     <None Include="MiSTer-Release.vgdbsettings" />
     <None Include="update-retrospy-installer.sh" />
+    <None Include="update-retrospy-nightly-installer.sh" />
+    <None Include="update-retrospy-nightly.sh" />
     <None Include="update-retrospy.sh" />
   </ItemGroup>
   <ItemGroup>
