@@ -1,4 +1,10 @@
 @echo off
+
+IF "%~1"=="" GOTO release
+
+IF "%~1"=="nightly" set nightly=1
+
+:release
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" RetroSpy.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=bin\x86\Release
 
 if errorlevel 0 goto x64Build
@@ -89,7 +95,7 @@ cd ..\..\..
 ;xcopy /y /e /s bin\Release\firmware RetroSpy-Setup\firmware\
 ;xcopy /y /e /s bin\Release\experimental RetroSpy-Setup\experimental\
 mkdir RetroSpy-Setup\MiSTer
-;copy MiSTer\update-retrospy.sh RetroSpy-Setup\MiSTer
+if "%nightly%" == "1" (copy MiSTer\update-retrospy-nightly.sh RetroSpy-Setup\MiSTer\update-retrospy.sh) else (copy MiSTer\update-retrospy.sh RetroSpy-Setup\MiSTer)
 ;cd RetroSpy-Setup
 ;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-release.zip MiSTer\update-retrospy.sh
 ;cd ..
@@ -111,7 +117,7 @@ if exist "..\..\certs\codesign.pfx" (
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
 copy RetroSpy-release.zip RetroSpy-Upload
-;copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload
+if "%nightly%" == "1" (copy MiSTer\update-retrospy-nightly-installer.sh RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
 if exist "..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload
