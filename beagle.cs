@@ -48,6 +48,15 @@
 |      beagle_net.dll   --  Compiled .NET binding
  ========================================================================*/
 #pragma warning disable IDE1006
+#pragma warning disable CA1707
+#pragma warning disable CA1717
+#pragma warning disable CA1028
+#pragma warning disable CA1052
+#pragma warning disable CA1810
+#pragma warning disable CA1815
+#pragma warning disable CA1034
+#pragma warning disable CA1051
+#pragma warning disable CA1062
 
 using System;
 using System.Runtime.InteropServices;

@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class Sega
     {
@@ -32,8 +34,11 @@
             return val * (sign ? -1 : 1) / 255;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length != PACKET_SIZE && packet.Length != MOUSE_PACKET_SIZE)
             {
                 return null;

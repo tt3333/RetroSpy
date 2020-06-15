@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,45 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AnalogNeedsDirection" xml:space="preserve">
+    <value>Element 'analog' needs attribute 'direction'.</value>
+  </data>
+  <data name="BothWidthAndHeight" xml:space="preserve">
+    <value>Element 'background' should either define 'image' with optionally 'width' and 'height' or both 'width' and 'height'.</value>
+  </data>
+  <data name="CouldNotConnectToGamePad" xml:space="preserve">
+    <value>GamepadReader could not find a connected gamepad with the given id.</value>
+  </data>
+  <data name="FromCannotBeGreaterThanTo" xml:space="preserve">
+    <value>Rangebutton 'from' field cannot be greater than 'to' field.</value>
+  </data>
+  <data name="GamepadCouldNotBeAcquired" xml:space="preserve">
+    <value>Connected gamepad could not be acquired.</value>
+  </data>
+  <data name="IllegalDirection" xml:space="preserve">
+    <value>Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right', 'fade'.</value>
+  </data>
+  <data name="IllegalSkinType" xml:space="preserve">
+    <value>Illegal value specified for skin attribute 'type'.</value>
+  </data>
+  <data name="KeyboardCouldNotBeAcquired" xml:space="preserve">
+    <value>Connected keyboard could not be acquired.</value>
+  </data>
+  <data name="OneBackground" xml:space="preserve">
+    <value>Skin must contain at least one background.</value>
+  </data>
+  <data name="Port1And2CannotBeTheSame" xml:space="preserve">
+    <value>Port 1 and Port 2 cannot be the same!</value>
+  </data>
+  <data name="RetroSpy" xml:space="preserve">
+    <value>RetroSpy</value>
+  </data>
 </root>

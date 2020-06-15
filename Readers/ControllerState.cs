@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace RetroSpy.Readers
 {
-    public class ControllerState : EventArgs
+    public class ControllerStateEventArgs : EventArgs
     {
-        public static readonly ControllerState Zero = new ControllerState
+        public static readonly ControllerStateEventArgs Zero = new ControllerStateEventArgs
             (new Dictionary<string, bool>(), new Dictionary<string, float>());
 
         public IReadOnlyDictionary<string, bool> Buttons { get; private set; }
         public IReadOnlyDictionary<string, float> Analogs { get; private set; }
 
-        public ControllerState(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs)
+        public ControllerStateEventArgs(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs)
         {
             Buttons = buttons;
             Analogs = analogs;

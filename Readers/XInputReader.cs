@@ -110,5 +110,6 @@ namespace RetroSpy.Readers
                 _timer = null;
             }
         }
+
     }
 }

@@ -9,18 +9,18 @@ namespace RetroSpy.Readers
         public bool AnalogEnabled { get; set; }
         public bool MassEnabled { get; set; }
 
-        private List<ControllerState> _states = new List<ControllerState>();
-        private ControllerState _lastUnfiltered = ControllerState.Zero;
+        private readonly List<ControllerStateEventArgs> _states = new List<ControllerStateEventArgs>();
+        private ControllerStateEventArgs _lastUnfiltered = ControllerStateEventArgs.Zero;
 
         public BlinkReductionFilter()
         {
             MassEnabled = AnalogEnabled = ButtonEnabled = false;
-            _states.Add(ControllerState.Zero);
-            _states.Add(ControllerState.Zero);
-            _states.Add(ControllerState.Zero);
+            _states.Add(ControllerStateEventArgs.Zero);
+            _states.Add(ControllerStateEventArgs.Zero);
+            _states.Add(ControllerStateEventArgs.Zero);
         }
 
-        public ControllerState Process(ControllerState state)
+        public ControllerStateEventArgs Process(ControllerStateEventArgs state)
         {
             if (!ButtonEnabled && !AnalogEnabled && !MassEnabled)
             {

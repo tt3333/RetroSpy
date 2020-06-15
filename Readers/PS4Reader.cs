@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class PS4Reader
     {
@@ -14,12 +16,6 @@
         {
             return (float)(input - 128) / 128;
         }
-
-        private static float ReadAnalogButton(byte input)
-        {
-            return (float)input / 256;
-        }
-
         private static float ReadTouchPad(int input, int maxValue)
         {
             if (input > maxValue)
@@ -35,8 +31,11 @@
             return input / (float)maxValue;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

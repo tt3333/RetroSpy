@@ -10,12 +10,12 @@ namespace RetroSpy.Readers
 
         public event EventHandler ControllerDisconnected2;
 
-        private readonly Func<byte[], ControllerState> _packetParser;
-        private readonly Func<byte[], ControllerState> _packet2Parser;
+        private readonly Func<byte[], ControllerStateEventArgs> _packetParser;
+        private readonly Func<byte[], ControllerStateEventArgs> _packet2Parser;
         private SerialMonitor _serialMonitor;
         private SerialMonitor _serialMonitor2;
 
-        public SerialControllerReader2(string portName, string port2Name, Func<byte[], ControllerState> packetParser, Func<byte[], ControllerState> packet2Parser)
+        public SerialControllerReader2(string portName, string port2Name, Func<byte[], ControllerStateEventArgs> packetParser, Func<byte[], ControllerStateEventArgs> packet2Parser)
         {
             _packetParser = packetParser;
             _packet2Parser = packet2Parser;
@@ -44,11 +44,11 @@ namespace RetroSpy.Readers
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SerialMonitor_PacketReceived(object sender, PacketData packet)
+        private void SerialMonitor_PacketReceived(object sender, PacketDataEventArgs packet)
         {
             if (ControllerStateChanged != null)
             {
-                ControllerState state = _packetParser(packet._packet);
+                ControllerStateEventArgs state = _packetParser(packet.GetPacket());
                 if (state != null)
                 {
                     ControllerStateChanged(this, state);
@@ -62,9 +62,9 @@ namespace RetroSpy.Readers
             ControllerDisconnected2?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SerialMonitor2_PacketReceived(object sender, PacketData packet)
+        private void SerialMonitor2_PacketReceived(object sender, PacketDataEventArgs packet)
         {
-            _packet2Parser(packet._packet);
+            _packet2Parser(packet.GetPacket());
         }
 
         public void Finish()

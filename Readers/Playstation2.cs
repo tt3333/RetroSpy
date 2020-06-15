@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class Playstation2
     {
@@ -21,7 +23,7 @@
 
         private static float ReadMouse(bool over, byte data)
         {
-            float val = 0;
+            float val;
             if (over)
             {
                 if (data >= 128)
@@ -48,8 +50,11 @@
             return val;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

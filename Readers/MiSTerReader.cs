@@ -1,4 +1,7 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+using System.Globalization;
+
+namespace RetroSpy.Readers
 {
     public static class MiSTerReader
     {
@@ -6,8 +9,11 @@
             "x", "y", "z", "rx", "ry", "rz", "s0", "s1"
         };
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < 16)
             {
                 return null;
@@ -53,7 +59,7 @@
 
             for (int i = 0; i < buttonValues.Length; ++i)
             {
-                outState.SetButton("b" + i.ToString(), buttonValues[i] != 0x00);
+                outState.SetButton("b" + i.ToString(CultureInfo.CurrentCulture), buttonValues[i] != 0x00);
             }
 
             for (int i = 0; i < axesValues.Length; ++i)
@@ -63,7 +69,7 @@
                     outState.SetAnalog(AXES_NAMES[i], axesValues[i] / (float)short.MaxValue);
                 }
 
-                outState.SetAnalog("a" + i.ToString(), axesValues[i] / (float)short.MaxValue);
+                outState.SetAnalog("a" + i.ToString(CultureInfo.CurrentCulture), axesValues[i] / (float)short.MaxValue);
             }
 
             if (axes >= 2)

@@ -6,17 +6,18 @@ using System.Windows.Threading;
 
 namespace RetroSpy
 {
-    public class PacketData : EventArgs
+    public class PacketDataEventArgs : EventArgs
     {
-        public PacketData(byte[] packet)
+        public PacketDataEventArgs(byte[] packet)
         {
-            _packet = packet;
+            Packet = packet;
         }
+        public byte[] GetPacket() { return Packet; }
 
-        public byte[] _packet;
+        private readonly byte[] Packet;
     }
 
-    public delegate void PacketEventHandler(object sender, PacketData e);
+    public delegate void PacketEventHandler(object sender, PacketDataEventArgs e);
 
     public class SerialMonitor : IDisposable
     {
@@ -28,13 +29,13 @@ namespace RetroSpy
         public event EventHandler Disconnected;
 
         private SerialPort _datPort;
-        private List<byte> _localBuffer;
+        private readonly List<byte> _localBuffer;
         private DispatcherTimer _timer;
 
         public SerialMonitor(string portName)
         {
             _localBuffer = new List<byte>();
-            _datPort = new SerialPort(portName, BAUD_RATE);
+            _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", BAUD_RATE);
         }
 
         public void Start()
@@ -120,13 +121,13 @@ namespace RetroSpy
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
 
-            PacketReceived(this, new PacketData(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
+            PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 
             // Clear our buffer up until the last split character.
             _localBuffer.RemoveRange(0, lastSplitIndex);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {

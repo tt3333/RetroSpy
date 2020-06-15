@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RetroSpy
 {
@@ -12,12 +13,15 @@ namespace RetroSpy
             : base(message) { }
 
         public ConfigParseException(string format, params object[] args)
-            : base(string.Format(format, args)) { }
+            : base(string.Format(CultureInfo.CurrentCulture, format, args)) { }
 
         public ConfigParseException(string message, Exception innerException)
             : base(message, innerException) { }
 
         public ConfigParseException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException) { }
+            : base(string.Format(CultureInfo.CurrentCulture, format, args), innerException) { }
+
+        protected ConfigParseException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
+            : base(serializationInfo, streamingContext) { }
     }
 }

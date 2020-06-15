@@ -32,7 +32,7 @@ namespace RetroSpy.Readers
             null, null, null, null, "PageDown", null, "PrtScr", "PageUp", null, null
         };
 
-        static public ControllerState ReadFromPacket(byte[] packet)
+        static public ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet.Length < PACKET_SIZE) return null;
 

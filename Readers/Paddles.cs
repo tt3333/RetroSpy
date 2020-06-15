@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class Paddles
     {
@@ -12,8 +14,11 @@
         private static bool SecondButton;
         private static float SecondPaddle;
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;
@@ -34,8 +39,11 @@
             return state.Build();
         }
 
-        public static ControllerState ReadFromSecondPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromSecondPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;

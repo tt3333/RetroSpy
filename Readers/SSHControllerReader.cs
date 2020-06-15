@@ -8,10 +8,10 @@ namespace RetroSpy.Readers
 
         public event EventHandler ControllerDisconnected;
 
-        private readonly Func<byte[], ControllerState> _packetParser;
+        private readonly Func<byte[], ControllerStateEventArgs> _packetParser;
         private SSHMonitor _serialMonitor;
 
-        public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerState> packetParser,
+        public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerStateEventArgs> packetParser,
             string username = "retrospy", string password = "retrospy", int delayInMilliseconds = 0)
         {
             _packetParser = packetParser;
@@ -28,11 +28,11 @@ namespace RetroSpy.Readers
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SerialMonitor_PacketReceived(object sender, PacketData packet)
+        private void SerialMonitor_PacketReceived(object sender, PacketDataEventArgs packet)
         {
             if (ControllerStateChanged != null)
             {
-                ControllerState state = _packetParser(packet._packet);
+                ControllerStateEventArgs state = _packetParser(packet.GetPacket());
                 if (state != null)
                 {
                     ControllerStateChanged(this, state);

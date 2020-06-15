@@ -1,4 +1,6 @@
-﻿namespace RetroSpy.Readers
+﻿using System;
+
+namespace RetroSpy.Readers
 {
     public static class SwitchReader
     {
@@ -29,8 +31,11 @@
             return invert ? -1.0f * ((float)(input - 128) / 128) : (float)(input - 128) / 128;
         }
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PRO_PACKET_SIZE)
             {
                 return null;

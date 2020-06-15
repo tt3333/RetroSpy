@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RetroSpy.Readers
 {
@@ -10,8 +11,11 @@ namespace RetroSpy.Readers
             "up", "down", "left", "right", "L", null, null, null, null, "R"
         };
 
-        public static ControllerState ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
+            if (packet == null)
+                throw new NullReferenceException();
+
             if (packet.Length < PACKET_SIZE)
             {
                 return null;
@@ -84,7 +88,7 @@ namespace RetroSpy.Readers
 
             for (int i = 0; i < 64; ++i)
             {
-                state.SetButton("E" + i.ToString(), i == (packet[10] - 11));
+                state.SetButton("E" + i.ToString(CultureInfo.CurrentCulture), i == (packet[10] - 11));
             }
 
             return state.Build();
