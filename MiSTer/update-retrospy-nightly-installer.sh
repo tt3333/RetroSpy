@@ -22,5 +22,3 @@ echo ""
 
 #Sync Files
 wget -q -nc -t 3 --no-check-certificate --show-progress "${RETROSPY_URL}" -P "${RETROSPY_PATH}"
-
-echo "Complete! Please go to http://www.retro-spy.com to download the newest Windows client application."
