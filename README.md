@@ -79,4 +79,3 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Game Cube Keyboard Controller
  - PlayStation Analog Joystick
  - Master System Sports Pad
- - CDTV Trackball
