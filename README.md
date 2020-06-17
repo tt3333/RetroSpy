@@ -81,5 +81,3 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Master System Sports Pad
  - CDTV Trackball
  - CD-i Thumbstick controller
- - Playstation Namco NegCon	
- - Genesis XE-1 AP 
