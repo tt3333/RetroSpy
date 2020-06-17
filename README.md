@@ -80,4 +80,3 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - PlayStation Analog Joystick
  - Master System Sports Pad
  - CDTV Trackball
- - CD-i Thumbstick controller
