@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#Github URL
-RETROSPY_URL=https://github.com/retrospy/RetroSpy/releases/download/nightly/retrospy
+[ $# -ne 1 ] && { echo "Usage: $0 [GitHub Personal Access Token]"; exit 1; }
+
+GITHUB_API_TOKEN=$1
 
 #Base directory for all script tasks
 BASE_PATH="/media/fat"
@@ -21,4 +22,12 @@ echo "Installing Nightly Build of RetroSpy for MiSTer Server..."
 echo ""
 
 #Sync Files
-wget -q -nc -t 3 --no-check-certificate --show-progress "${RETROSPY_URL}" -P "${RETROSPY_PATH}"
+response=$(curl -k -sH "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/nightly)
+
+eval $(echo "$response" | grep -C3 "name.:.\+retrospy\"" | grep -w id | tr : = | tr -cd '[[:alnum:]]=')
+[ "$id" ] || { echo "Error: Failed to get asset id, response: $response" | awk 'length($0)<100' >&2; exit 1; }
+
+RETROSPY_URL="https://${GITHUB_API_TOKEN}:@api.github.com/repos/retrospy/RetroSpy-private/releases/assets/${id}"
+
+wget -P "${RETROSPY_PATH}" -q -nc -t 3 --no-check-certificate --show-progress --auth-no-challenge --header "Accept:application/octet-stream" ${RETROSPY_URL}
+mv ${RETROSPY_PATH}/${id} ${RETROSPY_PATH}/retrospy
