@@ -18,11 +18,11 @@ mkdir -p "${RETROSPY_PATH}"
 
 #RetroSpy file downloading
 echo ""
-echo "Installing Nightly Build of RetroSpy for MiSTer Server..."
+echo "Installing RELEASE_TAG Build of RetroSpy for MiSTer Server..."
 echo ""
 
 #Sync Files
-response=$(curl -k -sH "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/nightly)
+response=$(curl -k -sH "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/RELEASE_TAG)
 
 eval $(echo "$response" | grep -C3 "name.:.\+retrospy\"" | grep -w id | tr : = | tr -cd '[[:alnum:]]=')
 [ "$id" ] || { echo "Error: Failed to get asset id, response: $response" | awk 'length($0)<100' >&2; exit 1; }

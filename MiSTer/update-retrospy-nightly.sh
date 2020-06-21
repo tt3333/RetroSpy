@@ -3,13 +3,13 @@
 # https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
 GITHUB_API_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                  
-echo "Installing Nightly Build of RetroSpy for MiSTer"
+echo "Installing RELEASE_TAG Build of RetroSpy for MiSTer"
 echo " "
 
 echo "Updating and executing the RetroSpy installer script."
 echo " "
 
-response=$(curl -k -sH "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/nightly)
+response=$(curl -k -sH "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/RELEASE_TAG
 
 eval $(echo "$response" | grep -C3 "name.:.\+update-retrospy-installer.sh" | grep -w id | tr : = | tr -cd '[[:alnum:]]=')
 [ "$id" ] || { echo "Error: Failed to get asset id, response: $response" | awk 'length($0)<100' >&2; exit 1; }
