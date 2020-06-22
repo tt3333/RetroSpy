@@ -78,4 +78,3 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Steel Battalion Xbox Controller
  - Game Cube Keyboard Controller
  - PlayStation Analog Joystick
- - Testing
