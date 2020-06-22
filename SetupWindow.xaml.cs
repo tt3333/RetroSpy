@@ -98,6 +98,7 @@ namespace RetroSpy
         private readonly List<Skin> _skins;
         private readonly List<string> _excludedSources;
         private readonly ResourceManager _resources;
+        private bool isClosing;
 
         private void UpdatePortListThread()
         {
@@ -108,6 +109,7 @@ namespace RetroSpy
         public SetupWindow()
         {
             InitializeComponent();
+            isClosing = false;
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
             _excludedSources = new List<string>();
@@ -223,7 +225,7 @@ namespace RetroSpy
 
         private void UpdatePortList()
         {
-            if (Monitor.TryEnter(updatePortLock))
+            if (!isClosing && Monitor.TryEnter(updatePortLock))
             {
                 try
                 {
@@ -570,6 +572,11 @@ namespace RetroSpy
         {
             _vm.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
             Properties.Settings.Default.LegacyKeybindingBehavior = KeybindingBehavior.IsChecked;
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            isClosing = true;
         }
     }
 
