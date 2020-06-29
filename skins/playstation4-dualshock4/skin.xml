@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="PlayStation DualShock 4" author="zoggins" type="playstation4">
+<skin name="PlayStation DualShock 4" author="zoggins" type="playstation4;playstation3">
 
   <background name="Default" image="dualshock4.png" />
 
@@ -17,8 +17,10 @@
           direction="down" reverse="true" />
 
   <button name="share" image="circle2.png" x="274" y="186" width="30" height="50" />
+  <button name="select" image="circle2.png" x="274" y="186" width="30" height="50" />
   <button name="options" image="circle2.png" x="688" y="186" width="30" height="50" />
-
+  <button name="start" image="circle2.png" x="688" y="186" width="30" height="50" />
+  
   <button name="ps" image="circle2.png" x="471" y="432" width="50" height="50" />
 
   <button name="up" image="circle2.png" x="160" y="237" width="40" height="40" />
