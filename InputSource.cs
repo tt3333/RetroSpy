@@ -23,14 +23,14 @@ namespace RetroSpy
 
         public static readonly InputSource CDTV = new InputSource("cdtv", "Commodore CDTV", true, false, false, false, port => new SerialControllerReader(port, Amiga.ReadFromPacket));
         public static readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, false, (port, port2) => new SerialControllerReader2(port, port2, Amiga.ReadFromPacket, Amiga.ReadFromPacket2));
-        public static readonly InputSource C64MINI = new InputSource("c64mini", "The C64 Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "-z", C64mini.ReadFromPacket));
+        public static readonly InputSource C64MINI = new InputSource("c64mini", "The C64 Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -z", C64mini.ReadFromPacket));
 
         public static readonly InputSource FMTOWNS = new InputSource("fmtowns", "Fujitsu FM Towns Marty", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketFMTowns));
 
         public static readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketIntellivision));
 
         public static readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket));
-        public static readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket));
+        public static readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket, "retrospy", "retrospy", 5000));
 
         static public readonly InputSource TG16 = new InputSource("tg16", "NEC TurboGrafx-16", true, false, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
         static public readonly InputSource PCFX = new InputSource("pcfx", "NEC PC-FX", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketPCFX));
