@@ -430,7 +430,6 @@ namespace RetroSpy
             Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
             Properties.Settings.Default.Save();
-
             try
             {
                 IControllerReader reader;
@@ -491,6 +490,11 @@ namespace RetroSpy
             catch (ConfigParseException ex)
             {
                 MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (System.Net.Sockets.SocketException)
+            {
+                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                   
             }
 
             Show();
