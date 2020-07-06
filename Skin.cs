@@ -582,12 +582,14 @@ namespace RetroSpy
             }
         }
 
-        public static LoadResults LoadAllSkinsFromParentFolder(string path)
+        public static LoadResults LoadAllSkinsFromParentFolder(string path, string customPath)
         {
             List<Skin> skins = new List<Skin>();
             List<string> errs = new List<string>();
 
             LoadAllSkinsFromSubFolder(path, skins, errs);
+            if (!string.IsNullOrEmpty(customPath))
+                LoadAllSkinsFromSubFolder(customPath, skins, errs);
 
             var lr = new LoadResults();
             lr.SetSkinsLoaded(skins);

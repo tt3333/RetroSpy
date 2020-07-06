@@ -9,6 +9,7 @@
             <Menu Width="Auto" Height="20">
                 <MenuItem Header="_Options">
                     <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click" />
+                    <MenuItem x:Name="CustomSkinPath" Header="Custom Skin Path..." HorizontalAlignment="Left" Width="Auto"  Click="CustomSkinPath_Click"/>
                     <Separator/>
                     <MenuItem x:Name="KeybindingBehavior" Header="Legacy Keybinding Behavior" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding LegacyKeybindingBehavior}" Checked="KeybindingBehavior_Checked" Unchecked="KeybindingBehavior_Checked" IsCheckable="True" />
                     <MenuItem x:Name="FilterCOM" Header="Don't Filter COM Ports" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" Unchecked="FilterCOM_Checked" IsCheckable="True" />

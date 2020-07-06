@@ -1,4 +1,5 @@
-﻿using RetroSpy.Readers;
+﻿using Ookii.Dialogs.Wpf;
+using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,7 @@ using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -95,7 +97,7 @@ namespace RetroSpy
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
         private readonly DispatcherTimer _xiAndGamepadListUpdateTimer;
-        private readonly List<Skin> _skins;
+        private List<Skin> _skins;
         private readonly List<string> _excludedSources;
         private readonly ResourceManager _resources;
         private bool isClosing;
@@ -126,7 +128,7 @@ namespace RetroSpy
                 return;
             }
 
-            LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory);
+            LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
             _skins = results.SkinsLoaded;
 
             _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
@@ -255,6 +257,10 @@ namespace RetroSpy
                         }
                         _vm.Ports2.UpdateContents(ports2);
                     }
+                }
+                catch(TaskCanceledException)
+                {
+                    // Closing the window can cause this due to a race condition
                 }
                 finally
                 {
@@ -570,6 +576,34 @@ namespace RetroSpy
 
             Properties.Settings.Default.HiddleConsoleList = hiddenConsoleList;
             Properties.Settings.Default.Save();
+        }
+
+
+        private void CustomSkinPath_Click(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            dialog.Description = _resources.GetString("PleaseSelectAFolder", CultureInfo.CurrentUICulture);
+            dialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.CustomSkinPath))
+            {
+                dialog.SelectedPath = Properties.Settings.Default.CustomSkinPath;
+            }
+            if ((bool)dialog.ShowDialog(this))
+            {
+                Properties.Settings.Default.CustomSkinPath = dialog.SelectedPath;
+                Properties.Settings.Default.Save();
+            }
+
+            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+
+            string skinsDirectory = Path.Combine(strWorkPath, "skins");
+            LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
+            _skins = results.SkinsLoaded;
+
+            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == _vm.Sources.SelectedItem));
+
+            PopulateSources();
         }
 
         private void KeybindingBehavior_Checked(object sender, RoutedEventArgs e)

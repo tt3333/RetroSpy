@@ -92,6 +92,9 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>.\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>.\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -123,6 +126,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddRemoveWindow.xaml.cs">
+      <DependentUpon>AddRemoveWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="beagle.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
@@ -173,9 +179,6 @@
     <Compile Include="Readers\SuperNESandNES.cs" />
     <Compile Include="Readers\XInputReader.cs" />
     <Compile Include="SendKeys.cs" />
-    <Compile Include="AddRemoveWindow.xaml.cs">
-      <DependentUpon>AddRemoveWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SSHMonitor.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="Readers\SignalTool.cs" />

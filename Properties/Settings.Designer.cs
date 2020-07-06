@@ -202,5 +202,17 @@ namespace RetroSpy.Properties {
                 this["LegacyKeybindingBehavior"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CustomSkinPath {
+            get {
+                return ((string)(this["CustomSkinPath"]));
+            }
+            set {
+                this["CustomSkinPath"] = value;
+            }
+        }
     }
 }

@@ -86,6 +86,9 @@ cd ..\..\..
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip beagle.dll
 ;copy beagle.dll RetroSpy-Setup\
 
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip Ookii.Dialogs.Wpf.dll
+;copy Ookii.Dialogs.Wpf.dll RetroSpy-Setup\
+
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins
 ;xcopy /y /e /s skins RetroSpy-Setup\skins\
 ;cd bin\Release\
