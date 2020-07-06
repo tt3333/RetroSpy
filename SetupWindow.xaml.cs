@@ -581,9 +581,11 @@ namespace RetroSpy
 
         private void CustomSkinPath_Click(object sender, RoutedEventArgs e)
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
-            dialog.Description = _resources.GetString("PleaseSelectAFolder", CultureInfo.CurrentUICulture);
-            dialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog
+            {
+                Description = _resources.GetString("PleaseSelectAFolder", CultureInfo.CurrentUICulture),
+                UseDescriptionForTitle = true // This applies to the Vista style dialog only, not the old dialog.
+            };
             if (!string.IsNullOrEmpty(Properties.Settings.Default.CustomSkinPath))
             {
                 dialog.SelectedPath = Properties.Settings.Default.CustomSkinPath;
