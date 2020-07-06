@@ -92,7 +92,7 @@
 #include "ThreeDO.h"
 
 #include "Dreamcast.h"
-#include "AmigaCD32.h"
+#include "AmigaCd32.h"
 #include "Wii.h"
 #include "FMTownsKeyboardAndMouse.h"
 
