@@ -44,9 +44,11 @@ namespace RetroSpy.Readers
                 state.SetButton(BUTTONS[i], cleanedData[i] != 0x00);
             }
 
-            // Set double 1 buttons
+            // Set double buttons
             state.SetButton("wired-1a", cleanedData[4] != 0x00);
+            state.SetButton("wired-2a", cleanedData[5] != 0x00);
             state.SetButton("wireless-1a", cleanedData[10] != 0x00);
+            state.SetButton("wireless-2a", cleanedData[11] != 0x00);
 
             // Handle 3 overriding other pushes
             if (cleanedData[4] != 0x00 && cleanedData[5] != 0x00)
