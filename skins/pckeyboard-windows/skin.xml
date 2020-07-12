@@ -98,7 +98,7 @@
 	<button name="End" image="circle2.png" x="861" y="127" width="40" height="40" />
 	<button name="PageDown" image="circle2.png" x="915" y="127" width="40" height="40" />
 
-	<button name="Up" image="circle2.png" x="861" y="230" width="40" height="40" />
+	<button name="Up" image="circle2.png" x="861" y="230" width="40" height="40" /> 
 
 	<button name="Left" image="circle2.png" x="807" y="280" width="40" height="40" />
 	<button name="Down" image="circle2.png" x="861" y="280" width="40" height="40" />
