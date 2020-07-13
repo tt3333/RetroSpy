@@ -47,7 +47,7 @@ namespace RetroSpy
 
         public static readonly InputSource PC360 = new InputSource("pc360", "PC 360 Controller", false, true, false, false, controllerId => new XInputReader(uint.Parse(controllerId, CultureInfo.CurrentCulture)));
         public static readonly InputSource PAD = new InputSource("generic", "PC Generic Gamepad", false, true, false, false, controllerId => new GamepadReader(int.Parse(controllerId, CultureInfo.CurrentCulture)));
-        public static readonly InputSource PCKEYBOARD = new InputSource("pckeyboard", "PC Keyboard", false, false, false, false, new PCKeyboardReader());
+        public static readonly InputSource PCKEYBOARD = new InputSource("pckeyboard", "PC Keyboard & Mouse", false, false, false, false, new PCKeyboardReader());
 
         public static readonly InputSource CDI = new InputSource("cdi", "Phillips CD-i", true, false, false, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
 

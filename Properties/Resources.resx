@@ -144,6 +144,9 @@
   <data name="KeyboardCouldNotBeAcquired" xml:space="preserve">
     <value>Connected keyboard could not be acquired.</value>
   </data>
+  <data name="MouseCouldNotBeAcquired" xml:space="preserve">
+    <value>Connected mouse could not be acquired.</value>
+  </data>
   <data name="OneBackground" xml:space="preserve">
     <value>Skin must contain at least one background.</value>
   </data>

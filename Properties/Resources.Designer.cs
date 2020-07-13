@@ -142,6 +142,15 @@ namespace RetroSpy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected mouse could not be acquired..
+        /// </summary>
+        internal static string MouseCouldNotBeAcquired {
+            get {
+                return ResourceManager.GetString("MouseCouldNotBeAcquired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skin must contain at least one background..
         /// </summary>
         internal static string OneBackground {

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Resources;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace RetroSpy.Readers
@@ -19,12 +20,18 @@ namespace RetroSpy.Readers
         private DirectInput _dinput;
         private DispatcherTimer _timer;
         private Keyboard _keyboard;
+        private Mouse _mouse;
+
+        private static readonly string[] MOUSE_BUTTONS = {
+            "MouseLeft", "MouseRight", "MouseMiddle", "MouseXButton1", "MouseXButton2"
+        };
 
         public PCKeyboardReader()
         {
             _dinput = new DirectInput();
 
             _keyboard = new Keyboard(_dinput);
+            _mouse = new Mouse(_dinput);
 
             ResourceManager stringManager = Properties.Resources.ResourceManager;
 
@@ -35,6 +42,15 @@ namespace RetroSpy.Readers
             catch (SharpDXException)
             {
                 throw new IOException(stringManager.GetString("KeyboardCouldNotBeAcquired", CultureInfo.CurrentUICulture));
+            }
+
+            try
+            {
+                _mouse.Acquire();
+            }
+            catch (SharpDXException)
+            {
+                throw new IOException(stringManager.GetString("MouseCouldNotBeAcquired", CultureInfo.CurrentUICulture));
             }
 
             _timer = new DispatcherTimer
@@ -50,6 +66,7 @@ namespace RetroSpy.Readers
             try
             {
                 _keyboard.Poll();
+                _mouse.Poll();
             }
             catch (SharpDXException)
             {
@@ -60,6 +77,30 @@ namespace RetroSpy.Readers
 
             ControllerStateBuilder outState = new ControllerStateBuilder();
             KeyboardState state = _keyboard.GetCurrentState();
+            MouseState mouseState = _mouse.GetCurrentState();
+
+            SignalTool.SetMouseProperties(mouseState.X / 255.0f, -mouseState.Y / 255.0f, outState);
+
+            if (mouseState.Z > 0)
+            {
+                outState.SetButton("MouseScrollUp", true);
+                outState.SetButton("MouseScrollDown", false);
+            }
+            else if (mouseState.Z < 0)
+            {
+                outState.SetButton("MouseScrollDown", true);
+                outState.SetButton("MouseScrollUp", false);
+            }
+            else
+            {
+                outState.SetButton("MouseScrollDown", false);
+                outState.SetButton("MouseScrollUp", false);
+            }
+
+            for (int i = 0; i < MOUSE_BUTTONS.Length; ++i)
+            {
+                outState.SetButton(MOUSE_BUTTONS[i], mouseState.Buttons[i]);
+            }
 
             foreach (string key in Enum.GetNames(typeof(Key)))
             {
@@ -81,6 +122,9 @@ namespace RetroSpy.Readers
                 _keyboard.Unacquire();
                 _keyboard.Dispose();
                 _keyboard = null;
+                _mouse.Unacquire();
+                _mouse.Dispose();
+                _mouse = null;
             }
             if (_dinput != null)
             {

@@ -146,6 +146,15 @@
 //            outState.SetButton("blue_2", buttonsOn);
 //            outState.SetButton("purple_2", buttonsOn);
 
+
+//            outState.SetButton("MouseLeft", buttonsOn);
+//            outState.SetButton("MouseMiddle", buttonsOn);
+//            outState.SetButton("MouseRight", buttonsOn);
+//            outState.SetButton("MouseScrollUp", buttonsOn);
+//            outState.SetButton("MouseScrollDown", buttonsOn);
+//            outState.SetButton("MouseSideOne", buttonsOn);
+//            outState.SetButton("MouseSideTwo", buttonsOn);
+
 //            outState.SetButton("mouse_center", true);
 
 //            outState.SetAnalog("stick_x", x1);
