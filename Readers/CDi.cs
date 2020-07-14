@@ -4,11 +4,12 @@ namespace RetroSpy.Readers
 {
     public static class CDi
     {
-        private const int PACKET_SIZE = 24;
+        private const int PACKET_SIZE = 42;
 
         private static readonly string[] BUTTONS = {
             "wired-up", "wired-down", "wired-left", "wired-right", "wired-1", "wired-2",
-            "wireless-up", "wireless-down", "wireless-left", "wireless-right", "wireless-1", "wireless-2"
+            "wireless-up", "wireless-down", "wireless-left", "wireless-right", "wireless-1", "wireless-2",
+            "pause", "standby", "stop", "previous", "play", "next", "tv-cable", "volume-down", "volume-up"
         };
 
         private static float ReadAnalogButton(byte input)
@@ -26,8 +27,8 @@ namespace RetroSpy.Readers
                 return null;
             }
 
-            byte[] cleanedData = new byte[12];
-            for (int i = 0; i < 24; i += 2)
+            byte[] cleanedData = new byte[21];
+            for (int i = 0; i < 42; i += 2)
             {
                 cleanedData[i / 2] = (byte)((packet[i]) | ((packet[i + 1]) >> 4));
             }
@@ -78,17 +79,8 @@ namespace RetroSpy.Readers
             state.SetAnalog("wireless-analog_up", ReadAnalogButton(cleanedData[6]));
             state.SetAnalog("wireless-analog_down", ReadAnalogButton(cleanedData[7]));
 
-            float x = 0;
-            float y = 0;
-
-            if (cleanedData[2] > 0)
-            {
-                x = -1 * ReadAnalogButton(cleanedData[2]);
-            }
-            else if (cleanedData[3] > 0)
-            {
-                x = ReadAnalogButton(cleanedData[3]);
-            }
+            float x = 0, x_wireless = 0;
+            float y = 0, y_wireless = 0;
 
             if (cleanedData[0] > 0)
             {
@@ -98,6 +90,36 @@ namespace RetroSpy.Readers
             {
                 y = -1 * ReadAnalogButton(cleanedData[1]);
             }
+            if (cleanedData[2] > 0)
+            {
+                x = -1 * ReadAnalogButton(cleanedData[2]);
+            }
+            else if (cleanedData[3] > 0)
+            {
+                x = ReadAnalogButton(cleanedData[3]);
+            }
+
+            if (cleanedData[6] > 0)
+            {
+                y_wireless = ReadAnalogButton(cleanedData[6]);
+            }
+            else if (cleanedData[7] > 0)
+            {
+                y_wireless = -1 * ReadAnalogButton(cleanedData[7]);
+            }
+
+            if (cleanedData[8] > 0)
+            {
+                x_wireless = -1 * ReadAnalogButton(cleanedData[8]);
+            }
+            else if (cleanedData[9] > 0)
+            {
+                x_wireless = ReadAnalogButton(cleanedData[9]);
+            }
+
+
+            state.SetAnalog("wireless_stick_x", x_wireless);
+            state.SetAnalog("wireless_stick_y", y_wireless);
 
             state.SetAnalog("stick_x", x);
             state.SetAnalog("stick_y", y);

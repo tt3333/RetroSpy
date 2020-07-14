@@ -20,7 +20,7 @@ SoftwareSerial vSerial(9, 10, true);
 #include "IRLibAll.h"
 IRdecode myDecoder; 
 //Create a receiver object to listen on pin 2
-IRrecvPCI myReceiver(2);
+IRrecv myReceiver(2);
 
 // Uncomment 1 of these for different levels of debugging output
 // I would not recomend using more than 1 at a time!
@@ -31,26 +31,19 @@ IRrecvPCI myReceiver(2);
 
 // These values may need adjusting based on the controller used.
 #define WIRED_TIMEOUT 50
-#define WIRED_NORMALIZE_ANALOG false
-#define WIRED_MAX_LEFT  136
-#define WIRED_MAX_RIGHT 8
-#define WIRED_MAX_UP    136
-#define WIRED_MAX_DOWN  8
 
 #define WIRELESS_TIMEOUT 100
-#define WIRELESS_NORMALIZE_ANALOG false
-#define WIRELESS_MAX_LEFT         173
-#define WIRELESS_MAX_RIGHT         45
-#define WIRELESS_MAX_UP           173
-#define WIRELESS_MAX_DOWN          45
-
-// You can normalize the analog values with the IR remote, which is way faster than a controller if desired.
-#define WIRED_NORMALIZE_ANALOG_WITH_REMOTE false
 
 unsigned long wireless_timeout;
-byte wireless_rawData[6];
+unsigned long wireless_remote_timeout;
+byte wireless_rawData[15];
 byte wireless_yaxis;
 byte wireless_xaxis;
+
+byte max_right;
+byte max_left;
+byte max_up;
+byte max_down;
 
 byte wired_rawData[6];
 byte wired_yAxis;
@@ -61,6 +54,8 @@ void setup() {
   vSerial.begin(1200); 
   wired_rawData[4] = wired_rawData[5] = 0;
 
+  max_right = max_left = max_up = max_down = 0;
+
   Serial.begin( 115200 );
   delay(2000); while (!Serial); //delay for Leonardo
   
@@ -68,7 +63,7 @@ void setup() {
 #ifdef WIRELESS_DEBUG
   Serial.println(F("Ready to receive IR signals"));
 #endif
-  wireless_timeout = wired_timeout = millis();
+  wireless_timeout = wired_timeout = wireless_remote_timeout = millis();
 }
 
 void printRawData()
@@ -85,7 +80,7 @@ void printRawData()
   Serial.print(wired_xAxis > 128 ? 256-wired_xAxis+128 : wired_xAxis);
   Serial.print("\n"); 
 #elif defined WIRELESS_PRETTY_PRINT
-  for(int i = 0; i < 6; ++i)
+  for(int i = 0; i < 15; ++i)
   {
     Serial.print(wireless_rawData[i]);
     Serial.print("|"); 
@@ -101,7 +96,7 @@ void printRawData()
     Serial.write(wired_rawData[i] & 0xF0);
     Serial.write((wired_rawData[i] & 0x0F) << 4);
   }
-  for(int i = 0; i < 6; ++i)
+  for(int i = 0; i < 15; ++i)
   {
     Serial.write(wireless_rawData[i] & 0xF0);
     Serial.write((wireless_rawData[i] & 0x0F) << 4);
@@ -151,12 +146,18 @@ void HandleSerial()
         }
         else if (wired_yAxis > 128)
         {
-          wired_rawData[0] =  ScaleInteger(256-wired_yAxis+128, 128,  WIRED_NORMALIZE_ANALOG_WITH_REMOTE ? WIRELESS_MAX_UP : WIRED_NORMALIZE_ANALOG ? WIRED_MAX_UP : 255, 0, 255);
+          if (wired_yAxis > max_up)
+            max_up = wired_yAxis;
+          
+          wired_rawData[0] =  ScaleInteger(256-wired_yAxis+128, 128,  max_up, 0, 255);
           wired_rawData[1] = 0;
         }
         else
         {
-          wired_rawData[1] =  ScaleInteger(wired_yAxis, 0,  WIRED_NORMALIZE_ANALOG_WITH_REMOTE ? WIRELESS_MAX_DOWN : WIRED_NORMALIZE_ANALOG ? WIRED_MAX_DOWN : 127, 0, 255);
+          if (wired_yAxis > max_down)
+            max_down = wired_yAxis;
+          
+          wired_rawData[1] =  ScaleInteger(wired_yAxis, 0,  max_down, 0, 255);
           wired_rawData[0] = 0;
         }
   
@@ -167,12 +168,18 @@ void HandleSerial()
         }
         else if (wired_xAxis > 128)
         {
-          wired_rawData[2] = ScaleInteger(256-wired_xAxis+128, 128, WIRED_NORMALIZE_ANALOG_WITH_REMOTE ? WIRELESS_MAX_LEFT : WIRED_NORMALIZE_ANALOG ? WIRED_MAX_LEFT : 255, 0, 255);
+           if (wired_xAxis > max_left)
+             max_left = wired_xAxis;
+             
+          wired_rawData[2] = ScaleInteger(256-wired_xAxis+128, 128, max_left, 0, 255);
           wired_rawData[3] = 0;
         }
         else
         {
-          wired_rawData[3] = ScaleInteger(wired_xAxis, 0,  WIRED_NORMALIZE_ANALOG_WITH_REMOTE ? WIRELESS_MAX_RIGHT : WIRED_NORMALIZE_ANALOG ? WIRED_MAX_RIGHT : 127, 0, 255);
+          if (wired_xAxis > max_right)
+             max_right = wired_xAxis;
+             
+          wired_rawData[3] = ScaleInteger(wired_xAxis, 0,  max_right, 0, 255);
           wired_rawData[2] = 0;
         }
   
@@ -206,26 +213,88 @@ void HandleSerial()
 
 void HandleIR()
 {
-
     if (myReceiver.getResults()) {
       myDecoder.decode();   //Decode it
-      if (myDecoder.protocolNum == 4 
-          && myDecoder.address == 0 
-          && myDecoder.bits == 32 
-          && (myDecoder.value & 0b11111111111111000000000000000000) == 0x19100000)
-      {
+
+    if (myDecoder.bits == 29)
+    {
+      myDecoder.value = myDecoder.value >> 1;
+    }
+    
+    if (myDecoder.protocolNum == 3
+        && myDecoder.address == 0 
+        && myDecoder.bits == 29
+        && (myDecoder.value & 0b11111111111100000000000000000000) == 0b00001001001000000000000000000000
+       )                     
+    {
 #ifdef WIRELESS_DEBUG
         for(int32_t i = 31; i >=0;--i)
-          Serial.print((myDecoder.value & ((int32_t)1 << i)) != 0 ? "1" : "0");
+        {  Serial.print((myDecoder.value & ((int32_t)1 << i)) != 0 ? "1" : "0");
+          if (i % 8 == 0)
+            Serial.print("|");
+        }
         Serial.print("\n");
-      }
-  }
+    }
+#else
+        char button_pushed = 0;
+        for (int i = 0; i < 8;++i)
+        {
+            button_pushed |= (myDecoder.value & (1 << i));
+        }
+
+        switch(button_pushed)
+        {
+          case 0x03: // Pause
+            wireless_rawData[6] = 1;
+            break;
+          case 0x02: // Stop
+            wireless_rawData[8] = 1;
+            break;
+          case 0x014: // Previous Track
+            wireless_rawData[9] = 1;
+            break;
+          case 0x04: // Play
+            wireless_rawData[10] = 1;
+            break;
+          case 0x10: // Next Track
+            wireless_rawData[11] = 1;
+            break;
+          case 0x17: // TV/CDI
+            wireless_rawData[12] = 1;
+            break;
+          case 0x18: // Volume Down
+            wireless_rawData[13] = 1;
+            break;
+          case 0x19: // Volume Up
+            wireless_rawData[14] = 1;
+            break;
+        }
+        wireless_remote_timeout = millis();
+    }
+
+#endif          
+      if ((myDecoder.protocolNum == 3 || myDecoder.protocolNum == 4) 
+          && myDecoder.address == 0 
+          && (myDecoder.bits == 32 || (myDecoder.bits == 29 && (myDecoder.value & 0b11111111111100000000000000000000) != 0b00001001001000000000000000000000))
+         )                       
+      {
+#ifdef WIRELESS_DEBUG
+
+        for(int32_t i = 31; i >=0;--i)
+        {  Serial.print((myDecoder.value & ((int32_t)1 << i)) != 0 ? "1" : "0");
+          if (i % 8 == 0)
+            Serial.print("|");
+        }
+        Serial.print("\n");
+        }
+    }
 #else
         wireless_yaxis = 0;
         for (int i = 0; i < 8;++i)
         {
             wireless_yaxis |= (myDecoder.value & (1 << i));
         }
+          
         if (wireless_yaxis == 0 || wireless_yaxis == 128)
         {
           wireless_rawData[0] = 0;
@@ -233,12 +302,21 @@ void HandleIR()
         }
         else if (wireless_yaxis > 128)
         {
-          wireless_rawData[0] =  ScaleInteger(wireless_yaxis, 128, WIRELESS_NORMALIZE_ANALOG ? WIRELESS_MAX_UP : 255, 0, 255);
+          if (myDecoder.bits == 29)
+            wireless_yaxis = 128 + 256 - wireless_yaxis;
+
+          if (wireless_yaxis > max_up)
+            max_up = wireless_yaxis;
+          
+          wireless_rawData[0] =  ScaleInteger(wireless_yaxis, 128, max_up, 0, 255);
           wireless_rawData[1] = 0;
         }
         else
         {
-          wireless_rawData[1] =  ScaleInteger(wireless_yaxis, 0, WIRELESS_NORMALIZE_ANALOG ? WIRELESS_MAX_DOWN : 127, 0, 255);
+          if (wireless_yaxis > max_down)
+            max_down = wireless_yaxis;
+          
+          wireless_rawData[1] =  ScaleInteger(wireless_yaxis, 0, max_down, 0, 255);
           wireless_rawData[0] = 0;
         }
         
@@ -247,6 +325,7 @@ void HandleIR()
         {
             wireless_xaxis |= ((myDecoder.value & (1 << i)) >> 8);
         } 
+        
         if (wireless_xaxis == 0 || wireless_xaxis == 128)
         {
           wireless_rawData[2] = 0;
@@ -254,12 +333,22 @@ void HandleIR()
         }
         else if (wireless_xaxis > 128)
         {
-          wireless_rawData[2] = ScaleInteger(wireless_xaxis, 128, WIRELESS_NORMALIZE_ANALOG ? WIRELESS_MAX_LEFT : 255, 0, 255);
+          if (myDecoder.bits == 29)
+            wireless_xaxis = 128 + 256 - wireless_xaxis;
+
+
+          if (wireless_xaxis > max_left)
+            max_left = wireless_xaxis;
+            
+          wireless_rawData[2] = ScaleInteger(wireless_xaxis, 128, max_left, 0, 255);
           wireless_rawData[3] = 0;
         }
         else
         {
-          wireless_rawData[3] = ScaleInteger(wireless_xaxis, 0, WIRELESS_NORMALIZE_ANALOG ? WIRELESS_MAX_RIGHT : 127, 0, 255);
+          if (wireless_xaxis > max_right)
+            max_right = wireless_xaxis;
+            
+          wireless_rawData[3] = ScaleInteger(wireless_xaxis, 0, max_right, 0, 255);
           wireless_rawData[2] = 0;
         }
 
@@ -268,14 +357,24 @@ void HandleIR()
                       
         wireless_timeout = millis();
       }
+
     }
-    else if (((millis() - wireless_timeout) >= WIRELESS_TIMEOUT))
+
+#endif
+    
+    if (((millis() - wireless_timeout) >= WIRELESS_TIMEOUT))
     {
       for(int i = 0; i < 6; ++i)
         wireless_rawData[i] = 0;
       wireless_xaxis = wireless_yaxis = 0;
     }
-#endif
+  
+    if (((millis() - wireless_remote_timeout) >= WIRELESS_TIMEOUT))
+    {
+      for(int i = 6; i < 15; ++i)
+        wireless_rawData[i] = 0;
+    }
+    
     myReceiver.enableIRIn();      //Restart receiver
 }
 
@@ -288,4 +387,4 @@ void loop() {
     printRawData();
 #endif
 #endif
-}
+} 

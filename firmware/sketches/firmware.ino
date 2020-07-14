@@ -63,6 +63,10 @@
 // Amiga Mouse Video Output Mode
 #define AMIGA_MOUSE_VIDEO_OUTPUT AmigaMouseSpy::VIDEO_PAL
 
+// CD-i controller timeouts (ms)
+#define CDI_WIRED_TIMEOUT 50
+#define CDI_WIRELESS_TIMEOUT 100
+
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,7 +202,7 @@ CDTVWirelessSpy CDTVWirelessSpy;
 FMTownsKeyboardAndMouseSpy FMTownsKeyboardAndMouseSpy;
 #endif
 #if defined(MODE_CDI)
-CDiSpy CDiSpy;
+CDiSpy CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
 #endif
 #if defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
 AmigaAnalogSpy AmigaAnalogSpy;

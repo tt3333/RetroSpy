@@ -1415,7 +1415,7 @@
     <Content Include="experimental\Paddles\Paddles.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\cdi\cdi.ino">
+    <Content Include="experimental\retired\cdi\cdi.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="experimental\retired\dreamcast\dreamcast.ino" />

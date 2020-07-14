@@ -28,9 +28,28 @@
 #define CDi_h
 
 #include "ControllerSpy.h"
+#include <SoftwareSerial.h>
+
+// Uncomment 1 of these for different levels of debugging output
+// I would not recomend using more than 1 at a time!
+//#define WIRED_PRETTY_PRINT
+//#define WIRELESS_PRETTY_PRINT
+//#define WIRED_DEBUG
+//#define WIRELESS_DEBUG
+
+#if defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
+
+#include <IRLibAll.h>
 
 class CDiSpy : public ControllerSpy {
 public:
+	CDiSpy(int wired_timeout, int wireless_timeout)
+		: myReceiver(2)
+		, vSerial(9, 10, true)
+		, _wired_timeout(wired_timeout)
+		, _wireless_timeout(wireless_timeout)
+	{}
+
 	void setup();
 	void loop();
 	void writeSerial();
@@ -38,7 +57,33 @@ public:
 	void updateState();
 
 private:
+	
+	void HandleSerial();
+	void HandleIR();
+	void printRawData();
+	
+	int _wired_timeout;
+	int _wireless_timeout;
+	IRrecv myReceiver;
+	SoftwareSerial vSerial;
+	IRdecode myDecoder; 
+};
+#else
 
+class CDiSpy : public ControllerSpy {
+public:
+	CDiSpy(int wired_timeout, int wireless_timeout) {}
+
+	void setup(){}
+	
+	void loop() {}
+	void writeSerial() {}
+	void debugSerial() {}
+	void updateState() {}
+
+private:
+	
 };
 
+#endif
 #endif
