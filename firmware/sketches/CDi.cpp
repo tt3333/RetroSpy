@@ -100,8 +100,8 @@ void CDiSpy::HandleSerial()
 			}
 			else if (wired_yAxis > 128)
 			{
-				if (wired_yAxis > max_up)
-					max_up = wired_yAxis;
+				if (256 - wired_yAxis + 128 > max_up)
+					max_up = 256 - wired_yAxis + 128;
           
 				wired_rawData[0] =  ScaleInteger(256 - wired_yAxis + 128, 128, max_up, 0, 255);
 				wired_rawData[1] = 0;
@@ -122,8 +122,8 @@ void CDiSpy::HandleSerial()
 			}
 			else if (wired_xAxis > 128)
 			{
-				if (wired_xAxis > max_left)
-					max_left = wired_xAxis;
+				if (256 - wired_xAxis + 128 > max_left)
+					max_left = 256 - wired_xAxis + 128;
              
 				wired_rawData[2] = ScaleInteger(256 - wired_xAxis + 128, 128, max_left, 0, 255);
 				wired_rawData[3] = 0;
