@@ -64,7 +64,7 @@ private:
 	
 	int _wired_timeout;
 	int _wireless_timeout;
-	IRrecv myReceiver;
+	IRrecvPCI myReceiver;
 	SoftwareSerial vSerial;
 	IRdecode myDecoder; 
 };

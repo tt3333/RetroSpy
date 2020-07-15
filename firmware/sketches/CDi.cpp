@@ -30,7 +30,7 @@
 
 static unsigned long wireless_timeout;
 static unsigned long wireless_remote_timeout;
-static byte wireless_rawData[15];
+static byte wireless_rawData[4];
 static byte wireless_yaxis;
 static byte wireless_xaxis;
 
@@ -39,14 +39,13 @@ static byte max_left;
 static byte max_up;
 static byte max_down;
 
-static byte wired_rawData[6];
+static byte wired_rawData[3];
 static byte wired_yAxis;
 static byte wired_xAxis;
 static unsigned long wired_timeout;
 
 void CDiSpy::setup() {
 	vSerial.begin(1200); 
-	wired_rawData[4] = wired_rawData[5] = 0;
 
 	max_right = max_left = max_up = max_down = 0;
   
@@ -81,10 +80,9 @@ void CDiSpy::HandleSerial()
    
 #ifndef WIRED_DEBUG     
   
-			wired_rawData[4] = (c & 0b00100000) != 0 ? 1 : 0;   // Button 1
-			wired_rawData[5] = (c & 0b00010000) != 0 ? 1 : 0;   // Button 2
-  
-			 wired_yAxis = ((c & 0b00001100) << 4);
+			wired_rawData[2] = (c & 0b00100000) != 0 ? (wired_rawData[2] | 0x01) : (wired_rawData[2] & ~0x01);    // Button 1
+			wired_rawData[2] = (c & 0b00010000) != 0 ? (wired_rawData[2] | 0x04) : (wired_rawData[2] & ~0x04);    // Button 2
+			wired_yAxis = ((c & 0b00001100) << 4);
 			wired_xAxis = ((c & 0b00000011) << 6);
   
 			c = vSerial.read();
@@ -96,7 +94,6 @@ void CDiSpy::HandleSerial()
 			if (wired_yAxis == 0 || wired_yAxis == 128)
 			{
 				wired_rawData[0] = 0;
-				wired_rawData[1] = 0;
 			}
 			else if (wired_yAxis > 128)
 			{
@@ -104,37 +101,36 @@ void CDiSpy::HandleSerial()
 					max_up = 256 - wired_yAxis + 128;
           
 				wired_rawData[0] =  ScaleInteger(256 - wired_yAxis + 128, 128, max_up, 0, 255);
-				wired_rawData[1] = 0;
+				wired_rawData[2] &= ~0b00001000;
 			}
 			else
 			{
 				if (wired_yAxis > max_down)
 					max_down = wired_yAxis;
           
-				wired_rawData[1] =  ScaleInteger(wired_yAxis, 0, max_down, 0, 255);
-				wired_rawData[0] = 0;
+				wired_rawData[0] =  ScaleInteger(wired_yAxis, 0, max_down, 0, 255);
+				wired_rawData[2] |= 0b00001000;
 			}
   
 			if (wired_xAxis == 0 || wired_xAxis == 128)
 			{
-				wired_rawData[2] = 0;
-				wired_rawData[3] = 0;
+				wired_rawData[1] = 0;
 			}
 			else if (wired_xAxis > 128)
 			{
 				if (256 - wired_xAxis + 128 > max_left)
 					max_left = 256 - wired_xAxis + 128;
              
-				wired_rawData[2] = ScaleInteger(256 - wired_xAxis + 128, 128, max_left, 0, 255);
-				wired_rawData[3] = 0;
+				wired_rawData[1] = ScaleInteger(256 - wired_xAxis + 128, 128, max_left, 0, 255);
+				wired_rawData[2] &= ~0b00010000;
 			}
 			else
 			{
 				if (wired_xAxis > max_right)
 					max_right = wired_xAxis;
              
-				wired_rawData[3] = ScaleInteger(wired_xAxis, 0, max_right, 0, 255);
-				wired_rawData[2] = 0;
+				wired_rawData[1] = ScaleInteger(wired_xAxis, 0, max_right, 0, 255);
+				wired_rawData[2] |= 0b00010000;
 			}
   
 			wired_timeout = millis();
@@ -158,7 +154,7 @@ void CDiSpy::HandleSerial()
 	}
 	else if (((millis() - wired_timeout) >= _wired_timeout))
 	{
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < 2; ++i)
 			wired_rawData[i] = 0;
 		wired_xAxis = wired_yAxis = 0;
 
@@ -178,8 +174,7 @@ void CDiSpy::HandleIR()
 		if ((myDecoder.protocolNum == 13
 		    && myDecoder.address == 0 
 		    && (myDecoder.bits == 29 && (myDecoder.value & 0b11111111111100000000000000000000) == 0b00001001001000000000000000000000))
-			|| (myDecoder.protocolNum == 4 && myDecoder.address == 0 && myDecoder.bits == 20)
-			)                     
+			|| (myDecoder.protocolNum == 4 && myDecoder.address == 0 && myDecoder.bits == 20))                     
 		{
 #ifdef WIRELESS_DEBUG
 			for (int32_t i = 31; i >= 0; --i)
@@ -191,66 +186,52 @@ void CDiSpy::HandleIR()
 			Serial.print("\n");
 		}
 #else
-		char button_pushed = 0;
-		for (int i = 0; i < 8; ++i)
-		{
-			button_pushed |= (myDecoder.value & (1 << i));
-		}
-
+			char button_pushed = 0;
+			for (int i = 0; i < 8; ++i)
+			{
+				button_pushed |= (myDecoder.value & (1 << i));
+			}
+			
 		switch (button_pushed)
 		{
 		case 0x03: // Pause
-		  wireless_rawData[6] = 1;
-			break;
-		case 0x02: // Stop
-		  wireless_rawData[8] = 1;
-			break;
-		case 0x014: // Previous Track
-		  wireless_rawData[9] = 1;
-			break;
-		case 0x04: // Play
-		  wireless_rawData[10] = 1;
-			break;
-		case 0x10: // Next Track
-			Serial.println(myDecoder.value, BIN);
-			if((myDecoder.value & 0b00001111111100000000) == 0b00000001100100000000)
-				wireless_rawData[14] = 1;
-			else
-				wireless_rawData[11] = 1;
-			break;
-		case 0x17: // TV/CDI
-		  wireless_rawData[12] = 1;
-			break;
-		case 0x18: // Volume Down
-		  wireless_rawData[13] = 1;
-			break;
-		case 0x19: // Volume Up
-		  wireless_rawData[14] = 1;
-			break;
-			
-		case 0x30: // Pause
-		  wireless_rawData[6] = 1;
+		case 0x30:
+		  wireless_rawData[2] |= 0b00001000;
 			break;
 		case 0x0C: // Standby
-		  wireless_rawData[7] = 1;
+		  wireless_rawData[2] |= 0b00010000;
 			break;
-		case 0x31: // Stop
-		  wireless_rawData[8] = 1;
+		case 0x02: // Stop
+		case 0x31:
+		  wireless_rawData[2] |= 0b00100000;
 			break;
-		case 0x21: // Previous Track
-		  wireless_rawData[9] = 1;
+		case 0x014: // Previous Track
+		case 0x21:
+		  wireless_rawData[2] |= 0b01000000;
 			break;
-		case 0x2C: // Play
-		  wireless_rawData[10] = 1;
+		case 0x04: // Play
+		case 0x2C:
+		  wireless_rawData[2] |= 0b10000000;
 			break;
 		case 0x20: // Next Track
-		  wireless_rawData[11] = 1;
+		  wireless_rawData[3] |= 0b00000001;
 			break;
-		case 0x43: // TV/CDI
-		  wireless_rawData[12] = 1;
+		case 0x10: // Next Track / Volume Up
+			if((myDecoder.value & 0b00001111111100000000) == 0b00000001100100000000)
+				wireless_rawData[3] |= 0b00010000;
+			else
+				wireless_rawData[3] |= 0b00000001;
 			break;
-		case 0x11: // Volume Down
-		  wireless_rawData[13] = 1;
+		case 0x17: // TV/CDI
+		case 0x43: 
+		  wireless_rawData[3] |= 0b00000100;
+			break;
+		case 0x18: // Volume Down
+		case 0x11:
+		  wireless_rawData[3] |= 0b00001000;
+			break;
+		case 0x19: // Volume Up
+		  wireless_rawData[3] |= 0b00010000;
 			break;
 		}
 		wireless_remote_timeout = millis();
@@ -282,7 +263,6 @@ for (int i = 0; i < 8; ++i)
 if (wireless_yaxis == 0 || wireless_yaxis == 128)
 {
 	wireless_rawData[0] = 0;
-	wireless_rawData[1] = 0;
 }
 else if (wireless_yaxis > 128)
 {
@@ -293,15 +273,15 @@ else if (wireless_yaxis > 128)
 		max_up = wireless_yaxis;
           
 	wireless_rawData[0] =  ScaleInteger(wireless_yaxis, 128, max_up, 0, 255);
-	wireless_rawData[1] = 0;
+	wireless_rawData[3] &= ~0b00100000;
 }
 else
 {
 	if (wireless_yaxis > max_down)
 		max_down = wireless_yaxis;
           
-	wireless_rawData[1] =  ScaleInteger(wireless_yaxis, 0, max_down, 0, 255);
-	wireless_rawData[0] = 0;
+	wireless_rawData[0] =  ScaleInteger(wireless_yaxis, 0, max_down, 0, 255);
+	wireless_rawData[3] |= 0b00100000;
 }
         
 wireless_xaxis = 0;
@@ -312,8 +292,7 @@ for (int i = 8; i < 16; ++i)
         
 if (wireless_xaxis == 0 || wireless_xaxis == 128)
 {
-	wireless_rawData[2] = 0;
-	wireless_rawData[3] = 0;
+	wireless_rawData[1] = 0;
 }
 else if (wireless_xaxis > 128)
 {
@@ -324,20 +303,20 @@ else if (wireless_xaxis > 128)
 	if (wireless_xaxis > max_left)
 		max_left = wireless_xaxis;
             
-	wireless_rawData[2] = ScaleInteger(wireless_xaxis, 128, max_left, 0, 255);
-	wireless_rawData[3] = 0;
+	wireless_rawData[1] = ScaleInteger(wireless_xaxis, 128, max_left, 0, 255);
+	wireless_rawData[3] &= ~0b01000000;
 }
 else
 {
 	if (wireless_xaxis > max_right)
 		max_right = wireless_xaxis;
             
-	wireless_rawData[3] = ScaleInteger(wireless_xaxis, 0, max_right, 0, 255);
-	wireless_rawData[2] = 0;
+	wireless_rawData[1] = ScaleInteger(wireless_xaxis, 0, max_right, 0, 255);
+	wireless_rawData[3] |= 0b01000000;
 }
 
-wireless_rawData[5] = (myDecoder.value & 0b00000000000000100000000000000000) != 0 ? 1 : 0;
-wireless_rawData[4] = (myDecoder.value & 0b00000000000000010000000000000000) != 0 ? 1 : 0;
+wireless_rawData[2] = (myDecoder.value & 0b00000000000000100000000000000000) != 0 ? (wireless_rawData[2] | 0x04) : (wireless_rawData[2] & ~0x04);
+wireless_rawData[2] = (myDecoder.value & 0b00000000000000010000000000000000) != 0 ? (wireless_rawData[2] | 0x01) : (wireless_rawData[2] & ~0x01);
                       
 wireless_timeout = millis();
 }
@@ -348,15 +327,16 @@ wireless_timeout = millis();
     
 if (((millis() - wireless_timeout) >= _wireless_timeout))
 {
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 2; ++i)
 		wireless_rawData[i] = 0;
+	wireless_rawData[2] &= 0b11111010;
 	wireless_xaxis = wireless_yaxis = 0;
 }
   
 if (((millis() - wireless_remote_timeout) >= _wireless_timeout))
 {
-	for (int i = 6; i < 15; ++i)
-		wireless_rawData[i] = 0;
+	wireless_rawData[2] &= 0b00000101;
+	wireless_rawData[3] &= 0b01100000;
 }
     
 myReceiver.enableIRIn();       //Restart receiver
@@ -365,7 +345,7 @@ myReceiver.enableIRIn();       //Restart receiver
 void CDiSpy::printRawData()
 {
 #ifdef WIRED_PRETTY_PRINT
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		Serial.print(wired_rawData[i]);
 		Serial.print("|"); 
@@ -387,16 +367,22 @@ void CDiSpy::printRawData()
 	Serial.print("\n");
 #else
 	int j = 0;
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
-		Serial.write(wired_rawData[i] & 0xF0);
-		Serial.write((wired_rawData[i] & 0x0F) << 4);
+		if (wired_rawData[i] == 10)
+			wired_rawData[i] = 11;
+		Serial.write(wired_rawData[i]);
 	}
-	for (int i = 0; i < 15; ++i)
+	Serial.write(wired_rawData[2]);
+	for (int i = 0; i < 2; ++i)
 	{
-		Serial.write(wireless_rawData[i] & 0xF0);
-		Serial.write((wireless_rawData[i] & 0x0F) << 4);
+		if (wireless_rawData[i] == 10)
+			wireless_rawData[i] = 11;
+		
+		Serial.write(wireless_rawData[i]);
 	}
+	Serial.write(wireless_rawData[2]);
+	Serial.write(wireless_rawData[3]);
 	Serial.write("\n");
 #endif
 }

@@ -79,7 +79,7 @@ namespace RetroSpy.Readers
             KeyboardState state = _keyboard.GetCurrentState();
             MouseState mouseState = _mouse.GetCurrentState();
 
-            SignalTool.SetMouseProperties(mouseState.X / 255.0f, -mouseState.Y / 255.0f, outState);
+            SignalTool.SetPCMouseProperties(mouseState.X / 255.0f, -mouseState.Y / 255.0f, outState, 1.0f);
 
             if (mouseState.Z > 0)
             {

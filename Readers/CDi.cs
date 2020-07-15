@@ -4,12 +4,12 @@ namespace RetroSpy.Readers
 {
     public static class CDi
     {
-        private const int PACKET_SIZE = 42;
+        private const int PACKET_SIZE = 7;
 
         private static readonly string[] BUTTONS = {
             "wired-up", "wired-down", "wired-left", "wired-right", "wired-1", "wired-2",
             "wireless-up", "wireless-down", "wireless-left", "wireless-right", "wireless-1", "wireless-2",
-            "pause", "standby", "stop", "previous", "play", "next", "tv-cable", "volume-down", "volume-up"
+             "pause", "standby", "stop", "previous", "play", "next", "tv-cable", "volume-down", "volume-up"
         };
 
         private static float ReadAnalogButton(byte input)
@@ -22,16 +22,70 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
-            if (packet.Length < PACKET_SIZE)
+            if (packet.Length != PACKET_SIZE)
             {
                 return null;
             }
 
             byte[] cleanedData = new byte[21];
-            for (int i = 0; i < 42; i += 2)
+            if ((packet[2] & 0b00001000) == 0x0)
             {
-                cleanedData[i / 2] = (byte)((packet[i]) | ((packet[i + 1]) >> 4));
+                cleanedData[0] = packet[0];
+                cleanedData[1] = 0;
             }
+            else
+            {
+                cleanedData[1] = packet[0];
+                cleanedData[0] = 0;
+            }
+
+            if ((packet[2] & 0b00010000) == 0x0)
+            {
+                cleanedData[2] = packet[1];
+                cleanedData[3] = 0;
+            }
+            else
+            {
+                cleanedData[3] = packet[1];
+                cleanedData[2] = 0;
+            }
+            
+            cleanedData[4] = (byte)((packet[2] & 0x01) != 0 ? 0x01 : 0x00);
+            cleanedData[5] = (byte)((packet[2] & 0x04) != 0 ? 0x01 : 0x00);
+
+            if ((packet[6] & 0b00100000) == 0x0)
+            {
+                cleanedData[6] = packet[3];
+                cleanedData[7] = 0;
+            }
+            else
+            {
+                cleanedData[7] = packet[3];
+                cleanedData[6] = 0;
+            }
+
+            if ((packet[6] & 0b01000000) == 0x0)
+            {
+                cleanedData[8] = packet[4];
+                cleanedData[9] = 0;
+            }
+            else
+            {
+                cleanedData[9] = packet[4];
+                cleanedData[8] = 0;
+            }
+            
+            cleanedData[10] = (byte)((packet[5] & 0x01) != 0 ? 0x01 : 0x00);
+            cleanedData[11] = (byte)((packet[5] & 0x04) != 0 ? 0x01 : 0x00);
+            cleanedData[12] = (byte)((packet[5] & 0x08) != 0 ? 0x01 : 0x00);
+            cleanedData[13] = (byte)((packet[5] & 0x10) != 0 ? 0x01 : 0x00);
+            cleanedData[14] = (byte)((packet[5] & 0x20) != 0 ? 0x01 : 0x00);
+            cleanedData[15] = (byte)((packet[5] & 0x40) != 0 ? 0x01 : 0x00);
+            cleanedData[16] = (byte)((packet[5] & 0x80) != 0 ? 0x01 : 0x00);
+            cleanedData[17] = (byte)((packet[6] & 0x01) != 0 ? 0x01 : 0x00);
+            cleanedData[18] = (byte)((packet[6] & 0x04) != 0 ? 0x01 : 0x00);
+            cleanedData[19] = (byte)((packet[6] & 0x08) != 0 ? 0x01 : 0x00);
+            cleanedData[20] = (byte)((packet[6] & 0x10) != 0 ? 0x01 : 0x00);
 
             ControllerStateBuilder state = new ControllerStateBuilder();
 
