@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RetroSpy.Readers
 {
@@ -70,23 +71,51 @@ namespace RetroSpy.Readers
             }
         }
 
-        private static readonly float[] windowX = new float[3];
-        private static int windowPositionX = 0;
-        private static readonly float[] windowY = new float[3];
-        private static int windowPositionY = 0;
+        class SlidingWindow
+        {
+            public SlidingWindow()
+            {
+                windowX = new float[3];
+                windowPositionX = 0;
+                windowY = new float[3];
+                windowPositionY = 0;
+            }
+
+            public float[] windowX;
+            public int windowPositionX;
+            public float[] windowY;
+            public int windowPositionY;
+        }
+
+        static Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
 
         public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
-            windowX[windowPositionX] = x;
-            windowPositionX += 1;
-            windowPositionX %= 3;
+            if (!windows.ContainsKey(""))
+                windows[""] = new SlidingWindow();
+            SetMouseProperties(x, y, state, maxCircleSize, windows[""], "");
+        }
 
-            windowY[windowPositionY] = y;
-            windowPositionY += 1;
-            windowPositionY %= 3;
+        public static void SetPCMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
+        {
+            if (!windows.ContainsKey("PC_"))
+                windows["PC_"] = new SlidingWindow();
+            SetMouseProperties(x, y, state, maxCircleSize, windows["PC_"], "PC_");
+        }
 
-            y = MiddleOfThree(windowY[0], windowY[1], windowY[2]);
-            x = MiddleOfThree(windowX[0], windowX[1], windowX[2]);
+        private static void SetMouseProperties(float x, float y, ControllerStateBuilder state, 
+            float maxCircleSize, SlidingWindow window, string prefix)
+        {
+            window.windowX[window.windowPositionX] = x;
+            window.windowPositionX += 1;
+            window.windowPositionX %= 3;
+
+            window.windowY[window.windowPositionY] = y;
+            window.windowPositionY += 1;
+            window.windowPositionY %= 3;
+
+            y = MiddleOfThree(window.windowY[0], window.windowY[1], window.windowY[2]);
+            x = MiddleOfThree(window.windowX[0], window.windowX[1], window.windowX[2]);
 
             float y1 = y;
             float x1 = x;
@@ -106,12 +135,12 @@ namespace RetroSpy.Readers
                 }
             }
 
-            state.SetAnalog("mouse_center_x", 0);
-            state.SetAnalog("mouse_center_y", 0);
-            state.SetAnalog("mouse_direction_x", x1);
-            state.SetAnalog("mouse_direction_y", y1);
-            state.SetAnalog("mouse_magnitude_x", x);
-            state.SetAnalog("mouse_magnitude_y", y);
+            state.SetAnalog(prefix + "mouse_center_x", 0);
+            state.SetAnalog(prefix + "mouse_center_y", 0);
+            state.SetAnalog(prefix + "mouse_direction_x", x1);
+            state.SetAnalog(prefix + "mouse_direction_y", y1);
+            state.SetAnalog(prefix + "mouse_magnitude_x", x);
+            state.SetAnalog(prefix + "mouse_magnitude_y", y);
         }
 
         public static void FakeAnalogStick(byte up, byte down, byte left, byte right, ControllerStateBuilder state, string xName, string yName)

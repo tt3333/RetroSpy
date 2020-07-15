@@ -24,7 +24,7 @@
   <button name="next" image="circle2.png" x="107" y="202" width="15" height="15" />
   <button name="volume-up" image="circle2.png" x="107" y="230" width="15" height="15" />
 
-  <stick xname="stick_x" yname="stick_y" image="cdi-thumbstick-stick.png"
+  <stick xname="wireless_stick_x" yname="wireless_stick_y" image="cdi-thumbstick-stick.png"
 	   x="48" y="62" width="55" height="55" xrange="15" yrange="15" />
 
 </skin>

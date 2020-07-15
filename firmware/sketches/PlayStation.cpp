@@ -68,8 +68,11 @@ void PlayStationSpy::updateState() {
 	} while (++bits < 16);
 
 	//Read analog sticks for Analog Controller in Red Mode
-	if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0 && rawData[6] != 0 && rawData[7] == 0) {
-		// controllerType == 0x73 (DualShock 1)
+	if((rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0 && rawData[6] != 0 && rawData[7] == 0)    // controllerType == 0x73 (DualShock 1)
+	   || (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] != 0 && rawData[6] == 0 && rawData[7] == 0) // controllerType == 0x23 (NegCon)
+	   || (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] == 0 && rawData[6] != 0 && rawData[7] == 0) // controllerType == 0x53 (Analogue Controller)
+		) 
+	{
 		for (int i = 0; i < 4; ++i)
 		{
 			bits = 0;

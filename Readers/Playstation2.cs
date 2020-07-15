@@ -11,6 +11,14 @@ namespace RetroSpy.Readers
             null, "select", "lstick", "rstick", "start", "up", "right", "down", "left", "l2", "r2", "l1", "r1", "triangle", "circle", "x", "square"
         };
 
+        private static readonly string[] ANALOG_BUTTONS = {
+            null, null, null, null, "start", "up", "right", "down", "left", "l2", "l1", "square", "triangle", "r1", "circle", "x", "r2"
+        };
+
+        private static readonly string[] NEGCON_BUTTONS = {
+            null, null, null, null, "start", "up", "right", "down", "left", null, null, null, "r1", "a", "b", null, null
+        };
+
         private static float ReadAnalogButton(byte input)
         {
             return (float)input / 256;
@@ -19,6 +27,10 @@ namespace RetroSpy.Readers
         private static float ReadStick(byte input)
         {
             return (float)(input - 128) / 128;
+        }
+        private static float ReadNegConSteering(byte input)
+        {
+            return (input - 128.0f) / -128.0f;
         }
 
         private static float ReadMouse(bool over, byte data)
@@ -74,7 +86,8 @@ namespace RetroSpy.Readers
             }
 
             int nextNumBytes = 0;
-            if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79)
+            if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79
+                    || polishedPacket[0] == 0x53 || polishedPacket[0] == 0x23)
             {
                 nextNumBytes = 4;
             }
@@ -109,29 +122,56 @@ namespace RetroSpy.Readers
                 return null;
             }
 
-            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 && polishedPacket[0] != 0x12)
+            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 
+                    && polishedPacket[0] != 0x12 && polishedPacket[0] != 0x23 && polishedPacket[0] != 0x53)
             {
                 return null;
             }
 
             ControllerStateBuilder state = new ControllerStateBuilder();
 
-            for (int i = 0; i < BUTTONS.Length; ++i)
+            if (polishedPacket[0] == 0x53)
             {
-                if (string.IsNullOrEmpty(BUTTONS[i]))
-                {
-                    continue;
-                }
-
-                state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
+                SetButtons(ANALOG_BUTTONS, polishedPacket, state);
+            }
+            else if (polishedPacket[0] == 0x23)
+            {
+                SetButtons(NEGCON_BUTTONS, polishedPacket, state);
+            }
+            else
+            {
+                SetButtons(BUTTONS, polishedPacket, state);
             }
 
-            if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79)
+            if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79 || polishedPacket[0] == 0x53)
             {
                 state.SetAnalog("rstick_x", ReadStick(polishedPacket[17]));
                 state.SetAnalog("rstick_y", ReadStick(polishedPacket[18]));
                 state.SetAnalog("lstick_x", ReadStick(polishedPacket[19]));
                 state.SetAnalog("lstick_y", ReadStick(polishedPacket[20]));
+            }
+            else if (polishedPacket[0] == 0x23)
+            {
+                float steering = ReadNegConSteering(polishedPacket[17]);
+                if (steering < 0)
+                {
+                    state.SetAnalog("l_steering", steering * -1);
+                    state.SetAnalog("r_steering", 0.0f);
+                }
+                else if (steering > 0)
+                { 
+                    state.SetAnalog("l_steering", 0.0f);
+                    state.SetAnalog("r_steering", steering);
+                }
+                else
+                {
+                    state.SetAnalog("l_steering", 0.0f);
+                    state.SetAnalog("r_steering", 0.0f);
+                }
+
+                state.SetAnalog("I", ReadAnalogButton(polishedPacket[18]));
+                state.SetAnalog("II", ReadAnalogButton(polishedPacket[19]));
+                state.SetAnalog("l1", ReadAnalogButton(polishedPacket[20]));
             }
             else
             {
@@ -188,6 +228,19 @@ namespace RetroSpy.Readers
             }
 
             return state.Build();
+        }
+
+        private static void SetButtons(string[] buttons, byte[] polishedPacket, ControllerStateBuilder state)
+        {
+            for (int i = 0; i < buttons.Length; ++i)
+            {
+                if (string.IsNullOrEmpty(buttons[i]))
+                {
+                    continue;
+                }
+
+                state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
+            }
         }
     }
 }
