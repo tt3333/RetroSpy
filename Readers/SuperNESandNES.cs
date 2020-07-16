@@ -84,6 +84,11 @@ namespace RetroSpy.Readers
             null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
         };
 
+        private static readonly string[] BUTTONS_VIRTUALBOY =
+{
+            "r_down", "r_left", "select", "start", "up", "down", "left", "right", "r_right", "r_up", "lt", "rt", "b", "a", null, null
+        };
+
         public static ControllerStateEventArgs ReadFromPacketIntellivision(byte[] packet)
         {
             if (packet == null)
@@ -98,6 +103,14 @@ namespace RetroSpy.Readers
                 throw new NullReferenceException();
 
             return ReadPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
+        }
+
+        public static ControllerStateEventArgs ReadFromPacketVB(byte[] packet)
+        {
+            if (packet == null)
+                throw new NullReferenceException();
+
+            return ReadPacketButtons(packet, BUTTONS_VIRTUALBOY);
         }
 
         public static ControllerStateEventArgs ReadFromPacketPCFX(byte[] packet)
