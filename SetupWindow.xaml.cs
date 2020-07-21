@@ -499,8 +499,11 @@ namespace RetroSpy
             }
             catch (System.Net.Sockets.SocketException)
             {
-                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
-                   
+                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);  
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             Show();

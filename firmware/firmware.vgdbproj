@@ -56,6 +56,7 @@
         <string>sketches\TG16.h</string>
         <string>sketches\ThreeDO.h</string>
         <string>sketches\Wii.h</string>
+        <string>sketches\CDiKeyboard.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
