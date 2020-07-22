@@ -22,7 +22,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://retro-spy.com/wiki/neo-geo-on-arduino-getting-started/)
  - Commodore CDTV [wirelesss remotes](https://retro-spy.com/wiki/cdtv-wireless-remotes-on-arduino-getting-started/), [wired mice/joysticks](https://retro-spy.com/wiki/cdtv-wired-mouse-joystick-on-arduino-getting-started/) and [keyboards](https://retro-spy.com/wiki/cdtv-keyboard-on-arduino-getting-started/)
  - SNES [controllers and mice](https://retro-spy.com/wiki/retrospy-hardware-selection/)
- - Philips CD-i [IR wireless controllers, wired controllers and mice](https://retro-spy.com/wiki/cdi-on-arduino-getting-started/)
+ - Philips CD-i [wireless remotes](https://retro-spy.com/wiki/cdi-wireless-remotes-on-arduino-getting-started/) and [wired controllers](https://retro-spy.com/wiki/cdi-wired-controllers-on-arduino-getting-started/)
 
 ## Fifth Generation
  - Fujitsu FM Towns Marty [controllers](https://retro-spy.com/wiki/fm-towns-controllers-on-arduino-getting-started/), [mice](https://retro-spy.com/wiki/fm-towns-marty-mouse-on-teensy-getting-started/) and [keyboards](https://retro-spy.com/wiki/fm-towns-marty-keyboard-on-teensy-getting-started/)
@@ -33,6 +33,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Sony PlayStation [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://retro-spy.com/wiki/playstation-1-2-on-arduino-getting-started/)
  - [NEC PC-FX](https://retro-spy.com/wiki/pc-fx-on-arduino-getting-started/)
  - [Bandai Pippin](https://retro-spy.com/wiki/pippin-on-arduino-getting-started/)
+ - [Nintendo VirtualBoy](https://retro-spy.com/wiki/retrospy-hardware-selection/)
  - Nintendo 64 [controllers and mice](https://retro-spy.com/wiki/retrospy-hardware-selection/)
 
 ## Sixth Generation
