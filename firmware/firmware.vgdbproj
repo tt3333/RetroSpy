@@ -57,6 +57,8 @@
         <string>sketches\ThreeDO.h</string>
         <string>sketches\Wii.h</string>
         <string>sketches\CDiKeyboard.h</string>
+        <string>sketches\GameBoyPrinterEmulator.h</string>
+        <string>sketches\gameboy_printer_protocol.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>

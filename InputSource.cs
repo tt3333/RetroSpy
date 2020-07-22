@@ -38,7 +38,7 @@ namespace RetroSpy
 
         public static readonly InputSource NES = new InputSource("nes", "Nintendo NES", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketNES));
         public static readonly InputSource SNES = new InputSource("snes", "Nintendo SNES", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketSNES));
-        public static readonly InputSource PRINTER = new InputSource("printer", "Nintendo GameBoy Printer", true, false, false, false, port => new SerialControllerReaderPrinter(port, GameBoyPrinter.ReadFromPacket));
+        public static readonly InputSource PRINTER = new InputSource("printer", "Nintendo GameBoy Printer", true, false, false, false, port => new GameBoyPrinterReader(port, GameBoyPrinter.ReadFromPacket));
         public static readonly InputSource VIRTUALBOY = new InputSource("virtualboy", "Nintendo VirtualBoy", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketVB));
         public static readonly InputSource N64 = new InputSource("n64", "Nintendo 64", true, false, false, false, port => new SerialControllerReader(port, Nintendo64.ReadFromPacket));
         public static readonly InputSource GAMECUBE = new InputSource("gamecube", "Nintendo GameCube", true, false, false, false, port => new SerialControllerReader(port, GameCube.ReadFromPacket));

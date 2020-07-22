@@ -7,19 +7,20 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace howto_wpf_pixelmaker
+namespace RetroSpy
 {
-    // A class to represent WriteableBitmap pixels in Bgra32 format.
+
     public class BitmapPixelMaker
     {
         // The bitmap's size.
-        private int Width, Height;
+        private readonly int Width;
+        private readonly int Height;
 
         // The pixel array.
-        private byte[] Pixels;
+        private readonly byte[] Pixels;
 
         // The number of bytes per row.
-        private int Stride;
+        private readonly int Stride;
 
         // Constructor. Width and height required.
         public BitmapPixelMaker(int width, int height)
@@ -44,6 +45,7 @@ namespace howto_wpf_pixelmaker
             red = Pixels[index++];
             alpha = Pixels[index];
         }
+
         public byte GetBlue(int x, int y)
         {
             return Pixels[y * Stride + x * 4];
@@ -87,15 +89,15 @@ namespace howto_wpf_pixelmaker
             Pixels[y * Stride + x * 4 + 3] = alpha;
         }
 
-        public void SetRect(int x1, int y1, int width, int height, byte color)
+        public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
         {
             for (int i = x1; i < width + x1; ++i)
                 for (int j = y1; j < height + y1; ++j)
                 {
                     SetAlpha(i, j, 255);
-                    SetRed(i, j, color);
-                    SetGreen(i, j, color);
-                    SetBlue(i, j, color);
+                    SetRed(i, j, red);
+                    SetGreen(i, j, green);
+                    SetBlue(i, j, blue);
 
                 }
         }

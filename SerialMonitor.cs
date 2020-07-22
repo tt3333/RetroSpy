@@ -32,7 +32,7 @@ namespace RetroSpy
         private SerialPort _datPort;
         private readonly List<byte> _localBuffer;
         private DispatcherTimer _timer;
-        private bool _printerMode;
+        private readonly bool _printerMode;
 
         public SerialMonitor(string portName, bool printerMode = false)
         {
@@ -49,6 +49,8 @@ namespace RetroSpy
             }
 
             _localBuffer.Clear();
+            if (_printerMode)
+                _datPort.ReadBufferSize = 1000000;
             _datPort.Open();
 
             _timer = new DispatcherTimer
@@ -97,7 +99,7 @@ namespace RetroSpy
 
                 byte[] readBuffer = new byte[readCount];
                 _datPort.Read(readBuffer, 0, readCount);
-                _datPort.DiscardInBuffer();
+                //_datPort.DiscardInBuffer();
                 _localBuffer.AddRange(readBuffer);
             }
             catch (IOException)

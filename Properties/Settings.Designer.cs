@@ -214,5 +214,17 @@ namespace RetroSpy.Properties {
                 this["CustomSkinPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DMGPaletteEnabled {
+            get {
+                return ((bool)(this["DMGPaletteEnabled"]));
+            }
+            set {
+                this["DMGPaletteEnabled"] = value;
+            }
+        }
     }
 }

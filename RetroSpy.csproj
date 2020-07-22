@@ -133,8 +133,8 @@
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="BitmapPixelMaker.cs" />
-    <Compile Include="GameBoyPrinterViewWindow.xaml.cs">
-      <DependentUpon>GameBoyPrinterViewWindow.xaml</DependentUpon>
+    <Compile Include="GameBoyPrinterEmulatorWindow.xaml.cs">
+      <DependentUpon>GameBoyPrinterEmulatorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
@@ -148,7 +148,7 @@
     <Compile Include="Readers\Pippin.cs" />
     <Compile Include="Readers\Retired\PS2Keyboard.cs" />
     <Compile Include="Readers\PS4Reader.cs" />
-    <Compile Include="Readers\SerialControllerReaderPrinter.cs" />
+    <Compile Include="Readers\GameBoyPrinterReader.cs" />
     <Compile Include="Readers\SerialControllerReader2.cs" />
     <Compile Include="Readers\PS3Reader.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
@@ -197,7 +197,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GameBoyPrinterViewWindow.xaml">
+    <Page Include="GameBoyPrinterEmulatorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -960,6 +960,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\pckeyboard-windows\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\printer-default\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\printer-default\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\virtualboy-default\circle.png">

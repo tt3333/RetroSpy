@@ -92,7 +92,7 @@ namespace RetroSpy
         }
     }
 
-    public partial class SetupWindow : Window
+    public partial class SetupWindow : Window, INotifyPropertyChanged
     {
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
@@ -111,6 +111,7 @@ namespace RetroSpy
         public SetupWindow()
         {
             InitializeComponent();
+
             isClosing = false;
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
@@ -224,6 +225,8 @@ namespace RetroSpy
         }
 
         private readonly object updatePortLock = new object();
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdatePortList()
         {
@@ -490,7 +493,7 @@ namespace RetroSpy
 
                 if (_vm.Sources.SelectedItem == InputSource.PRINTER)
                 {
-                    new GameBoyPrinterViewWindow(reader).ShowDialog();
+                    new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
                 }
                 else
                 {
