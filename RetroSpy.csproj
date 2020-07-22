@@ -132,6 +132,10 @@
     <Compile Include="beagle.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="BitmapPixelMaker.cs" />
+    <Compile Include="GameBoyPrinterViewWindow.xaml.cs">
+      <DependentUpon>GameBoyPrinterViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\Amiga.cs" />
@@ -139,10 +143,12 @@
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\C64mini.cs" />
     <Compile Include="Readers\PCKeyboardReader.cs" />
+    <Compile Include="Readers\GameBoyPrinter.cs" />
     <Compile Include="Readers\Retired\MouseTester.cs" />
     <Compile Include="Readers\Pippin.cs" />
     <Compile Include="Readers\Retired\PS2Keyboard.cs" />
     <Compile Include="Readers\PS4Reader.cs" />
+    <Compile Include="Readers\SerialControllerReaderPrinter.cs" />
     <Compile Include="Readers\SerialControllerReader2.cs" />
     <Compile Include="Readers\PS3Reader.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
@@ -190,6 +196,10 @@
     <Page Include="AddRemoveWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameBoyPrinterViewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SetupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

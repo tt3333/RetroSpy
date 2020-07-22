@@ -488,11 +488,18 @@ namespace RetroSpy
 #pragma warning restore CA2000 // Dispose objects before losing scope
                 }
 
-                new ViewWindow(_vm.Skins.SelectedItem,
-                                _vm.Backgrounds.SelectedItem,
-                                reader, _vm.StaticViewerWindowName)
-                    .ShowDialog();
-            }
+                if (_vm.Sources.SelectedItem == InputSource.PRINTER)
+                {
+                    new GameBoyPrinterViewWindow(reader).ShowDialog();
+                }
+                else
+                {
+                    new ViewWindow(_vm.Skins.SelectedItem,
+                                    _vm.Backgrounds.SelectedItem,
+                                    reader, _vm.StaticViewerWindowName)
+                        .ShowDialog();
+                }
+                }
             catch (ConfigParseException ex)
             {
                 MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);

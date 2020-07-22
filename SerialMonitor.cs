@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Text;
 using System.Windows.Threading;
 
 namespace RetroSpy
@@ -31,9 +32,11 @@ namespace RetroSpy
         private SerialPort _datPort;
         private readonly List<byte> _localBuffer;
         private DispatcherTimer _timer;
+        private bool _printerMode;
 
-        public SerialMonitor(string portName)
+        public SerialMonitor(string portName, bool printerMode = false)
         {
+            _printerMode = printerMode;
             _localBuffer = new List<byte>();
             _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", BAUD_RATE);
         }
@@ -121,10 +124,28 @@ namespace RetroSpy
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
 
-            PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
+            if (_printerMode == true)
+            {
+                var array = _localBuffer.ToArray();
+                string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
-            // Clear our buffer up until the last split character.
-            _localBuffer.RemoveRange(0, lastSplitIndex);
+                if (lastCommand.Contains("# Finished Pretending To Print for fun!"))
+                {
+                    PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(0, lastSplitIndex).ToArray()));
+
+                    // Clear our buffer up until the last split character.
+                    _localBuffer.RemoveRange(0, lastSplitIndex);
+                }
+            }
+            else
+            {
+ 
+
+                PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
+
+                // Clear our buffer up until the last split character.
+                _localBuffer.RemoveRange(0, lastSplitIndex);
+            }
         }
 
         protected virtual void Dispose(bool disposing)
