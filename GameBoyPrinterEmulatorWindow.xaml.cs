@@ -55,12 +55,25 @@ namespace RetroSpy
             set
             {
                 _DMGPaletteEnabled = value;
-                NotifyPropertyChanged("DMGPaletteEnabled");
+                NotifyPropertyChanged(nameof(DMGPaletteEnabled));
             }
         }
 
         private void DMGPaletteEnabled_Click(object sender, RoutedEventArgs e)
         {
+
+            for (int i = 0; i < 4; ++i)
+            {
+                if (DMGPaletteEnabled)
+                    _imageBuffer.ReplaceColor(DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i],
+                                                colors_red[i], colors_green[i], colors_blue[i]);
+                else
+                    _imageBuffer.ReplaceColor(colors_red[i], colors_green[i], colors_blue[i],
+                                                DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i]);
+            }
+            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            _image.Source = wbitmap;
+
             DMGPaletteEnabled = !DMGPaletteEnabled;
             Properties.Settings.Default.DMGPaletteEnabled = DMGPaletteEnabled;
         }
@@ -72,8 +85,14 @@ namespace RetroSpy
 
             _reader = reader ?? throw new NullReferenceException();
 
+            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            _imageBuffer.SetColor(0, 0, 0, 255);
+            
+            if (DMGPaletteEnabled)
+                _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
+            else
+                _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
 
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
 
@@ -90,7 +109,7 @@ namespace RetroSpy
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
-            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+            
         }
 
         private void Reader_ControllerDisconnected(object sender, EventArgs e)

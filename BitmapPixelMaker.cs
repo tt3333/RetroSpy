@@ -102,6 +102,24 @@ namespace RetroSpy
                 }
         }
 
+        public void ReplaceColor(byte oldRed, byte oldGreen, byte oldBlue, byte newRed, byte newGreen, byte newBlue)
+        {
+   
+            for (int i = 0; i < Width; ++i)
+                for (int j = 0; j < Height; ++j)
+                {
+                    byte red;
+                    byte green;
+                    byte blue;
+                    byte alpha;
+                    GetPixel(i, j, out red, out green, out blue, out alpha);
+                    if (red == oldRed && green == oldGreen && blue == oldBlue)
+                        SetPixel(i, j, newRed, newGreen, newBlue, alpha);
+
+                    
+                }
+        }
+
         // Set all pixels to a specific color.
         public void SetColor(byte red, byte green, byte blue, byte alpha)
         {
