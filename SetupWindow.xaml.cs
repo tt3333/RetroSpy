@@ -552,8 +552,9 @@ namespace RetroSpy
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(string.Format(CultureInfo.CurrentCulture, " RetroSpy Version {0}\n\nThis Release Supported By\n\n     40wattRange\n     Coltaho\n     Evan Grill\n     Filyx20\n     sk84uhlivin\n     watsonpunk", Assembly.GetEntryAssembly().GetName().Version), _resources.GetString("About", CultureInfo.CurrentUICulture),
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            new AboutWindow().ShowDialog();
+            //MessageBox.Show(string.Format(CultureInfo.CurrentCulture, " RetroSpy Version {0}\n\nThis Release Supported By\n\n     40wattRange\n     Coltaho\n     Evan Grill\n     Filyx20\n     sk84uhlivin\n     watsonpunk", Assembly.GetEntryAssembly().GetName().Version), _resources.GetString("About", CultureInfo.CurrentUICulture),
+            //    MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
