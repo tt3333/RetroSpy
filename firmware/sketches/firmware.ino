@@ -30,6 +30,8 @@
 //#define MODE_PCFX
 //#define MODE_AMIGA_KEYBOARD
 //#define MODE_AMIGA_MOUSE
+//#define MODE_CDI_KEYBOARD
+//#define MODE_GAMEBOY_PRINTER
 
 //--- Teensy Only
 //#define MODE_DREAMCAST
@@ -94,6 +96,8 @@
 #include "PlayStation.h"
 #include "TG16.h"
 #include "ThreeDO.h"
+#include "CDiKeyboard.h"
+#include "GameBoyPrinterEmulator.h"
 
 #include "Dreamcast.h"
 #include "AmigaCd32.h"
@@ -204,6 +208,12 @@ FMTownsKeyboardAndMouseSpy FMTownsKeyboardAndMouseSpy;
 #if defined(MODE_CDI)
 CDiSpy CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
 #endif
+#if defined(MODE_CDI_KEYBOARD)
+CDiKeyboardSpy CDiKeyboardSpy;
+#endif
+#if defined(MODE_GAMEBOY_PRINTER)
+GameBoyPrinterEmulator GameBoyPrinterEmulator;
+#endif
 #if defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
 AmigaAnalogSpy AmigaAnalogSpy;
 #endif
@@ -309,6 +319,10 @@ void setup()
 	FMTownsKeyboardAndMouseSpy.setup();
 #elif defined(MODE_CDI)
 	CDiSpy.setup();
+#elif defined(MODE_CDI_KEYBOARD)
+	CDiKeyboardSpy.setup();
+#elif defined(MODE_GAMEBOY_PRINTER)
+	GameBoyPrinterEmulator.setup();
 #elif defined(MODE_AMIGA_ANALOG_1)
 	AmigaAnalogSpy.setup(false);
 #elif defined(MODE_AMIGA_ANALOG_2)
@@ -419,6 +433,10 @@ void loop()
 	FMTownsKeyboardAndMouseSpy.loop();
 #elif defined(MODE_CDI)
 	CDiSpy.loop();
+#elif defined(MODE_CDI_KEYBOARD)
+	CDiKeyboardSpy.loop();
+#elif defined(MODE_GAMEBOY_PRINTER)
+	GameBoyPrinterEmulator.loop();
 #elif defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
 	AmigaAnalogSpy.loop();
 #elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)

@@ -153,6 +153,9 @@
   <data name="PleaseSelectAFolder" xml:space="preserve">
     <value>Please select a folder.</value>
   </data>
+  <data name="PNGFilter" xml:space="preserve">
+    <value>PNG file (*.png)|*.png</value>
+  </data>
   <data name="Port1And2CannotBeTheSame" xml:space="preserve">
     <value>Port 1 and Port 2 cannot be the same!</value>
   </data>

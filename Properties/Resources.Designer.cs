@@ -169,6 +169,15 @@ namespace RetroSpy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PNG file (*.png)|*.png.
+        /// </summary>
+        internal static string PNGFilter {
+            get {
+                return ResourceManager.GetString("PNGFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Port 1 and Port 2 cannot be the same!.
         /// </summary>
         internal static string Port1And2CannotBeTheSame {

@@ -92,7 +92,7 @@ namespace RetroSpy
         }
     }
 
-    public partial class SetupWindow : Window
+    public partial class SetupWindow : Window, INotifyPropertyChanged
     {
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
@@ -111,6 +111,7 @@ namespace RetroSpy
         public SetupWindow()
         {
             InitializeComponent();
+
             isClosing = false;
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
@@ -224,6 +225,8 @@ namespace RetroSpy
         }
 
         private readonly object updatePortLock = new object();
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdatePortList()
         {
@@ -488,19 +491,29 @@ namespace RetroSpy
 #pragma warning restore CA2000 // Dispose objects before losing scope
                 }
 
-                new ViewWindow(_vm.Skins.SelectedItem,
-                                _vm.Backgrounds.SelectedItem,
-                                reader, _vm.StaticViewerWindowName)
-                    .ShowDialog();
-            }
+                if (_vm.Sources.SelectedItem == InputSource.PRINTER)
+                {
+                    new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                }
+                else
+                {
+                    new ViewWindow(_vm.Skins.SelectedItem,
+                                    _vm.Backgrounds.SelectedItem,
+                                    reader, _vm.StaticViewerWindowName)
+                        .ShowDialog();
+                }
+                }
             catch (ConfigParseException ex)
             {
                 MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (System.Net.Sockets.SocketException)
             {
-                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
-                   
+                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);  
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             Show();

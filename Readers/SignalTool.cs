@@ -87,7 +87,7 @@ namespace RetroSpy.Readers
             public int windowPositionY;
         }
 
-        static Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
+        static readonly Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
 
         public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
