@@ -144,25 +144,42 @@ void PippinSpy::loop()
 		}
 		Serial.println(currentReadPacket->dataStop ? "S" : "-");
 #else
-		if (currentReadPacket->HasData && currentReadPacket->numBytes == 4 && (currentReadPacket->commandAddress == 0xF || currentReadPacket->commandAddress == 0xE)) {
+		if (currentReadPacket->HasData && currentReadPacket->numBytes == 4 && 
+				(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+		{
 			for (int j = 0; j < 3; ++j)
 			{
 				for (int k = 0; k < 8; ++k)
 					rawData[currentReadPacket->commandAddress][(j * 8) + k] = (currentReadPacket->data[j] & (1 << k)) != 0;
-
-				rawData[currentReadPacket->commandAddress][24] = (currentReadPacket->data[3] & 0b00000001) != 0;
-				rawData[currentReadPacket->commandAddress][25] = (currentReadPacket->data[3] & 0b00000010) != 0;
-				rawData[currentReadPacket->commandAddress][26] = (currentReadPacket->data[3] & 0b00000100) != 0;
 			}
+			rawData[currentReadPacket->commandAddress][24] = (currentReadPacket->data[3] & 0b00000001) != 0;
+			rawData[currentReadPacket->commandAddress][25] = (currentReadPacket->data[3] & 0b00000010) != 0;
+			rawData[currentReadPacket->commandAddress][26] = (currentReadPacket->data[3] & 0b00000100) != 0;
 		}
-		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && (currentReadPacket->commandAddress == 0xF || currentReadPacket->commandAddress == 0xE)) {
+		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && 
+					(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+		{
 			for (int j = 0; j < 2; ++j)
 			{
 				for (int k = 0; k < 8; ++k)
 					rawData[currentReadPacket->commandAddress][(j * 8) + k] = (currentReadPacket->data[j] & (1 << k)) != 0;
 			}  
 		}
-		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && currentReadPacket->commandAddress == 0x02) {
+		else if (!currentReadPacket->HasData && currentReadPacket->numBytes == 0 && 
+					(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+		{
+			for (int i = 0; i < 7; ++i)
+				rawData[currentReadPacket->commandAddress][i] = 0;
+			//rawData[currentReadPacket->commandAddress][7] = 1;
+			for(int i = 8; i < 15; ++i)
+				rawData[currentReadPacket->commandAddress][i] = 0;
+			//rawData[currentReadPacket->commandAddress][15] = 1;
+
+			//for (int i = 16; i < 27; ++i)
+			//	rawData[currentReadPacket->commandAddress][i] = 1;
+		}
+		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && currentReadPacket->commandAddress == 0x02) 
+		{
       
 			if (currentReadPacket->data[0] == 0x7F && currentReadPacket->data[1] == 0x7F)
 			{
@@ -228,10 +245,6 @@ void PippinSpy::loop()
 			for (int j = 16; j < 27; ++j)
 				Serial.write(rawData[controllerAddress][j] == 0 ? 0 : 1);
 		}		
-		if (currentReadPacket->commandAddress == 0x02)
-			Serial.write(0);
-		else
-			Serial.write(currentReadPacket->HasData == 1);
 		
 		if (currentReadPacket->commandAddress == 0x02 || currentReadPacket->commandAddress == mouseAddress || currentReadPacket->commandAddress == controllerAddress)
 		{

@@ -2,11 +2,11 @@
 {
     internal class Pippin
     {
-        private const int PACKET_SIZE = 62;
+        private const int PACKET_SIZE = 61;
         private const int POLISHED_PACKET_SIZE = 32;
 
         private static readonly string[] BUTTONS = {
-            null, "1", "2", "blue", "yellow", "up", "left", "right", "down", "red", "green", "square", "circle", "diamond"
+            null, "1", "2", "blue", "yellow", "d_up", "d_left", "d_right", "d_down", "red", "green", "square", "circle", "diamond"
         };
 
         private static readonly string[] KEYBOARD_CODES =
@@ -70,9 +70,9 @@
                     polishedPacket[15] |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
                 }
 
-                for (int i = 30; i < 62; i += 2)
+                for (int i = 29; i < 61; i += 2)
                 {
-                    polishedPacket[(i / 2) + 1] = (byte)((packet[i] >> 4) | packet[i + 1]);
+                    polishedPacket[(i / 2) + 2] = (byte)((packet[i] >> 4) | packet[i + 1]);
                 }
 
                 ControllerStateBuilder state = new ControllerStateBuilder();
@@ -87,13 +87,9 @@
                     state.SetButton(BUTTONS[i], polishedPacket[i] == 0x00);
                 }
 
-                float x = 0;
-                float y = 0;
-                if (packet[29] == 1) // This is the "Has Data" bit.  Reset the mouse on cached results.
-                {
-                    y = ReadMouse(polishedPacket[14]);
-                    x = ReadMouse(polishedPacket[15]);
-                }
+                float y = ReadMouse(polishedPacket[14]);
+                float x = ReadMouse(polishedPacket[15]);
+
                 SignalTool.SetMouseProperties(x, y, state);
 
                 for (int i = 0; i < KEYBOARD_CODES.Length; ++i)

@@ -11,10 +11,10 @@
 	<button name="blue" image="circle2.png" x="324" y="72" width="25" height="25" />
     <button name="yellow" image="circle2.png" x="294" y="92" width="25" height="25" />
 
-    <button name="up" image="circle2.png" x="123" y="83" width="25" height="25" />
-    <button name="right" image="circle2.png" x="153" y="111" width="25" height="25" />
-	<button name="down" image="circle2.png" x="121" y="138" width="25" height="25" />
-    <button name="left" image="circle2.png" x="97" y="110" width="25" height="25" />
+    <button name="d_up" image="circle2.png" x="123" y="83" width="25" height="25" />
+    <button name="d_right" image="circle2.png" x="153" y="111" width="25" height="25" />
+	<button name="d_down" image="circle2.png" x="121" y="138" width="25" height="25" />
+    <button name="d_left" image="circle2.png" x="97" y="110" width="25" height="25" />
 
     <button name="square" image="circle2.png" x="176" y="177" width="25" height="25" />
 	<button name="circle" image="circle2.png" x="221" y="177" width="25" height="25" />
