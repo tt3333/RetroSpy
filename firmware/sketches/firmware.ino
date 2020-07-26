@@ -60,7 +60,8 @@
 //#define MODE_ATARI5200_2
 
 // Pippin Controller Configuration
-#define PIPPIN_SPY_ADDRESS 0xF
+#define PIPPIN_CONTROLLER_SPY_ADDRESS 0xF
+#define PIPPIN_MOUSE_SPY_ADDRESS 0xE
 
 // Amiga Mouse Video Output Mode
 #define AMIGA_MOUSE_VIDEO_OUTPUT AmigaMouseSpy::VIDEO_PAL
@@ -306,7 +307,7 @@ void setup()
 #elif defined(MODE_DRIVING_CONTROLLER)
 	DrivingControllerSpy.setup();
 #elif defined(MODE_PIPPIN)
-	PippinSpy.setup(PIPPIN_SPY_ADDRESS);
+	PippinSpy.setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
 #elif defined(MODE_AMIGA_KEYBOARD)
 	AmigaKeyboardSpy.setup();
 #elif defined(MODE_AMIGA_MOUSE)

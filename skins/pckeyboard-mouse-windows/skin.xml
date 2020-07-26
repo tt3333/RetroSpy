@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Windows PC Keyboard &amp; Mouse" author="zoggins" type="pckeyboard">
+<skin name="Windows PC Keyboard &amp; Mouse" author="zoggins" type="pckeyboard;pippin">
 
     <background name="Default" image="ps2keyboard.png" />
 
@@ -24,6 +24,8 @@
     <button name="ScrollLock" image="circle2.png" x="866" y="13" width="40" height="40" />
     <button name="Pause" image="circle2.png" x="921" y="13" width="40" height="40" />
 
+  <button name="Power" image="circle2.png" x="1132" y="13" width="40" height="40" />
+  
 	<button name="Grave" image="circle2.png" x="17" y="76" width="40" height="40" />
 	<button name="D1" image="circle2.png" x="70" y="76" width="40" height="40" />
 	<button name="D2" image="circle2.png" x="123" y="76" width="40" height="40" />
@@ -117,7 +119,8 @@
 	<button name="NumberPad4" image="circle2.png" x="973" y="177" width="40" height="40" />
 	<button name="NumberPad5" image="circle2.png" x="1026" y="177" width="40" height="40" />
 	<button name="NumberPad6" image="circle2.png" x="1079" y="177" width="40" height="40" />
-
+  <button name="MacAdd" image="circle2.png" x="1132" y="177" width="40" height="40" />
+  
 	<button name="NumberPad1" image="circle2.png" x="973" y="230" width="40" height="40" />
 	<button name="NumberPad2" image="circle2.png" x="1026" y="230" width="40" height="40" />
 	<button name="NumberPad3" image="circle2.png" x="1079" y="230" width="40" height="40" />
@@ -127,6 +130,8 @@
 	<button name="Decimal" image="circle2.png" x="1079" y="280" width="40" height="40" />
 	
 	<button name="MouseLeft" image="circle2.png" x="1240" y="48" width="40" height="40" />
+	<button name="1" image="circle2.png" x="1240" y="48" width="40" height="40" />
+
 	<button name="MouseMiddle" image="circle2.png" x="1302" y="66" width="15" height="15" />
 	<button name="MouseRight" image="circle2.png" x="1334" y="48" width="40" height="40" />
 	<button name="MouseScrollUp" image="circle2.png" x="1302" y="48" width="15" height="15" />
@@ -137,4 +142,8 @@
 	<stick xname="PC_mouse_direction_x" yname="PC_mouse_direction_y" image="circle.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
 	<stick xname="PC_mouse_center_x" yname="PC_mouse_center_y" image="circle.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
 	<stick xname="PC_mouse_magnitude_x" yname="PC_mouse_magnitude_y" image="circle2.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
+	
+	<stick xname="mouse_direction_x" yname="mouse_direction_y" yreverse="true" image="circle.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
+	<stick xname="mouse_center_x" yname="mouse_center_y" yreverse="true" image="circle.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
+	<stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" yreverse="true" image="circle2.png" x="1300" y="249" xrange="60" yrange="60" height="20" width="20" />
 </skin>

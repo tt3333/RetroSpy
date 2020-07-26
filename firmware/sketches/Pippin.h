@@ -35,10 +35,11 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
-	void setup(byte controllerAddress);
+	void setup(byte controllerAddress, byte mouseAddress);
 
 private:
 	byte controllerAddress;
+  byte mouseAddress;
 };
 
 #endif

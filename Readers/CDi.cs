@@ -27,7 +27,7 @@ namespace RetroSpy.Readers
             null, "RightBracket", "Backslash", "Semicolon", "Apostrophe", "Return", "Comma", "Period",
             null, "Slash", "Up", "Grave", "Space", "Delete", "Left", "Down",
             null, "Right", "F1","F2","F3","F4","F5","F6",
-            null, "F7","F8", "Capital", "LeftShift", "LeftWindowsKey", "LeftControl"
+            null, "F7","F8", "Capital", "LeftShift", "LeftWindowsKey"/* SuperShift*/, "LeftControl"
         };
 
         private static float ReadAnalogButton(byte input)
