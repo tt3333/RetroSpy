@@ -26,7 +26,14 @@
 
 #include "Saturn3D.h"
 
+static bool isKeyboard = false;
+static byte keyboardData[18];
+static bool isMake = false;
+static bool isBreak = false;
+static byte keycode = 0;
+
 void Saturn3DSpy::loop() {
+
 	noInterrupts();
 	updateState();
 	interrupts();
@@ -39,9 +46,26 @@ void Saturn3DSpy::loop() {
 	T_DELAY(5);
 }
 
+void Saturn3DSpy::setup()
+{
+	PORTD = 0x00;
+	PORTB = 0x00;
+	DDRD = 0x00;
+
+	for (int i = 2; i <= 6; ++i)
+		pinMode(i, INPUT_PULLUP);
+	
+	for (int i = 0; i < 18; ++i)
+	{
+		keyboardData[i] = 0;
+	}
+}
+
 void Saturn3DSpy::updateState() {
 	byte numBits = 0;
 
+	isKeyboard = false;
+	
 	WAIT_FALLING_EDGE(SS_SEL);
 
 	for (int i = 0; i < 3; ++i) {
@@ -64,10 +88,17 @@ void Saturn3DSpy::updateState() {
 
 	if (rawData[3] != 0)
 	{
-		int numBytes = 4;
+		int numBytes = 4;  // 3D Controller
 
 		if (rawData[2] != 0) {
-			numBytes = 1;
+			
+			if (rawData[4] == 0) // Keyboard
+			{
+				isKeyboard = true;
+				numBytes = 2;
+			}
+			else // Mouse
+				numBytes = 1;
 		}
 
 		for (int i = 0; i < numBytes; ++i)
@@ -104,23 +135,83 @@ void Saturn3DSpy::updateState() {
 			rawData[numBits++] = 0;
 		}
 	}
+	
+	isKeyboard = isKeyboard && rawData[21] == 0 && rawData[22] == 0 && rawData[23] == 0;
+	if (isKeyboard)
+	{
+		isMake = rawData[28] != 0;
+		isBreak = rawData[31] != 0;
+		
+		keycode = 0;
+
+		for (int i = 7; i >= 0; i--)
+		{
+			if (rawData[32 + (7-i)] != 0)
+			{
+				keycode |= (1 << i);
+			}
+		}
+		
+		if (isMake)
+			keyboardData[keycode / 8] |= (1 << (keycode % 8));
+		
+		if (isBreak)
+			keyboardData[keycode/8] &= ~(1 << (keycode % 8));
+	}
 }
 
 void Saturn3DSpy::writeSerial() {
-	for (unsigned char i = 0; i < 56; ++i)
+	if (!isKeyboard)
 	{
-		Serial.write(rawData[i] ? ONE : ZERO);
+		for (unsigned char i = 0; i < 56; ++i)
+		{
+			Serial.write(rawData[i] ? ONE : ZERO);
+		}
 	}
+	else
+	{
+		for (int i = 0; i < 18; ++i)
+		{
+			Serial.write((keyboardData[i] & 0x0F) << 4);
+			Serial.write(keyboardData[i] & 0xF0);
+		}
+	}
+	
 	Serial.write(SPLIT);
 }
 
 void Saturn3DSpy::debugSerial() {
-	for (int i = 0; i < 56; ++i)
+	if (isKeyboard)
 	{
-		if (i % 8 == 0) {
-			Serial.print("|");
+		if (isMake)
+			Serial.print("1|");
+		else
+			Serial.print("0|");
+		
+		if (isBreak)
+			Serial.print("1|");
+		else
+			Serial.print("0|");
+		
+		Serial.print(keycode, HEX);
+		Serial.print("|");
+		
+		for (int i = 0; i < 18; ++i)
+		{	
+			Serial.print(keyboardData[i], HEX);
+			Serial.print(" ");
 		}
-		Serial.print(rawData[i] ? "1" : "0");
 	}
+	else
+	{
+		for (int i = 0; i < 56; ++i)
+		{
+			if (i % 8 == 0) {
+				Serial.print("|");
+			}
+			Serial.print(rawData[i] ? "1" : "0");
+		}
+	}
+	
 	Serial.print("\n");
 }
