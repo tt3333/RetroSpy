@@ -152,6 +152,18 @@ void Saturn3DSpy::updateState() {
 			}
 		}
 		
+		// This is a hack for the disappearing 7 bit
+		if(isBreak && keycode < 16 && (keyboardData[keycode / 8] & (1 << (keycode % 8))) == 0)
+		{
+			keycode |= 0b10000000;
+		}
+		else if (isBreak && keycode < 16 && (keyboardData[keycode / 8] & (1 << (keycode % 8))) != 0
+									&& (keyboardData[(keycode | 0b10000000) / 8] & (1 << ((keycode | 0b10000000) % 8))) != 0)
+		{
+			// both pushed, so clear the high keycode here.
+			keyboardData[(keycode | 0b10000000) / 8] &= ~(1 << ((keycode | 0b10000000) % 8));
+		}
+		
 		if (isMake)
 			keyboardData[keycode / 8] |= (1 << (keycode % 8));
 		
@@ -181,6 +193,7 @@ void Saturn3DSpy::writeSerial() {
 }
 
 void Saturn3DSpy::debugSerial() {
+	
 	if (isKeyboard)
 	{
 		if (isMake)
