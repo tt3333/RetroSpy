@@ -39,7 +39,8 @@ public:
 
 private:
 	byte controllerAddress;
-  byte mouseAddress;
+	byte mouseAddress;
+	byte joystickAddress;
 };
 
 #endif

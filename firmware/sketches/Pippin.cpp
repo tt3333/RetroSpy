@@ -119,6 +119,7 @@ void PippinSpy::loop()
 		tail = i;
 
 #ifdef SNIFFER
+
 		Serial.print(currentReadPacket->commandType, HEX);
 		Serial.print(" ");
 		Serial.print(currentReadPacket->commandAddress, HEX);
@@ -143,10 +144,12 @@ void PippinSpy::loop()
 			Serial.print(" ");
 		}
 		Serial.println(currentReadPacket->dataStop ? "S" : "-");
+		
 #else
-		if (currentReadPacket->HasData && currentReadPacket->numBytes == 4 && 
-				(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+		if (currentReadPacket->HasData && currentReadPacket->numBytes == 4 && currentReadPacket->commandAddress != 0x02) 
 		{
+			controllerAddress = currentReadPacket->commandAddress;
+			
 			for (int j = 0; j < 3; ++j)
 			{
 				for (int k = 0; k < 8; ++k)
@@ -156,27 +159,31 @@ void PippinSpy::loop()
 			rawData[currentReadPacket->commandAddress][25] = (currentReadPacket->data[3] & 0b00000010) != 0;
 			rawData[currentReadPacket->commandAddress][26] = (currentReadPacket->data[3] & 0b00000100) != 0;
 		}
-		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && 
-					(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && currentReadPacket->commandAddress != 0x02) 
 		{
+			mouseAddress = currentReadPacket->commandAddress;
 			for (int j = 0; j < 2; ++j)
 			{
 				for (int k = 0; k < 8; ++k)
 					rawData[currentReadPacket->commandAddress][(j * 8) + k] = (currentReadPacket->data[j] & (1 << k)) != 0;
 			}  
 		}
+		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 3 && currentReadPacket->commandAddress != 0x02)
+		{
+			joystickAddress = currentReadPacket->commandAddress;
+			for (int j = 0; j < 3; ++j)
+			{
+				for (int k = 0; k < 8; ++k)
+					rawData[currentReadPacket->commandAddress][(j * 8) + k] = (currentReadPacket->data[j] & (1 << k)) != 0;
+			}
+		}
 		else if (!currentReadPacket->HasData && currentReadPacket->numBytes == 0 && 
-					(currentReadPacket->commandAddress == controllerAddress || currentReadPacket->commandAddress == mouseAddress)) 
+			(currentReadPacket->commandAddress == mouseAddress || currentReadPacket->commandAddress == controllerAddress))
 		{
 			for (int i = 0; i < 7; ++i)
 				rawData[currentReadPacket->commandAddress][i] = 0;
-			//rawData[currentReadPacket->commandAddress][7] = 1;
-			for(int i = 8; i < 15; ++i)
+			for (int i = 8; i < 15; ++i)
 				rawData[currentReadPacket->commandAddress][i] = 0;
-			//rawData[currentReadPacket->commandAddress][15] = 1;
-
-			//for (int i = 16; i < 27; ++i)
-			//	rawData[currentReadPacket->commandAddress][i] = 1;
 		}
 		else if (currentReadPacket->HasData && currentReadPacket->numBytes == 2 && currentReadPacket->commandAddress == 0x02) 
 		{
@@ -244,7 +251,14 @@ void PippinSpy::loop()
 				Serial.write(rawData[mouseAddress][j] == 0 ? 0 : 1);
 			for (int j = 16; j < 27; ++j)
 				Serial.write(rawData[controllerAddress][j] == 0 ? 0 : 1);
-		}		
+		}
+		else if (currentReadPacket->commandAddress == joystickAddress)
+		{
+			for (int j = 0; j < 24; ++j)
+				Serial.write(rawData[joystickAddress][j] == 0 ? 0 : 1);
+			
+			Serial.write("\n");    
+		}
 		
 		if (currentReadPacket->commandAddress == 0x02 || currentReadPacket->commandAddress == mouseAddress || currentReadPacket->commandAddress == controllerAddress)
 		{
@@ -305,8 +319,6 @@ void adbStateChanged()
 		}
 		else
 		{
-			Serial.print(diff);
-			Serial.println(" here");
 			state = WAITING_FOR_ATTENTION;
 		}
 	}

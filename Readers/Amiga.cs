@@ -20,8 +20,7 @@ namespace RetroSpy.Readers
             null, "2", "1", "right", "left", "down", "up", "Joy22", "Joy22", "Joy2Right", "Joy2Left", "Joy2Down", "Joy2Up", null, null, null, null, null, null, null, null, null, null, null, null, null
         };
 
-        static readonly string[] BUTTONS_AMIGA_ANALOG =
-{
+        static readonly string[] BUTTONS_AMIGA_ANALOG = {
             "1", "2", "3", "4", null
         };
 

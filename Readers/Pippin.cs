@@ -4,9 +4,14 @@
     {
         private const int PACKET_SIZE = 61;
         private const int POLISHED_PACKET_SIZE = 32;
+        private const int JOYSTICK_PACKET_SIZE = 26;
 
         private static readonly string[] BUTTONS = {
             null, "1", "2", "blue", "yellow", "d_up", "d_left", "d_right", "d_down", "red", "green", "square", "circle", "diamond"
+        };
+
+        private static readonly string[] JOYSTICK_BUTTONS = {
+            "2", "3", "1", "4", "5", null, null, null
         };
 
         private static readonly string[] KEYBOARD_CODES =
@@ -42,6 +47,11 @@
             {
                 return data / 64.0f;
             }
+        }
+
+        private static float ReadJoystick(byte data)
+        {
+            return (data - 128.0f) / 128.0f;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
@@ -99,6 +109,37 @@
                         state.SetButton(KEYBOARD_CODES[i], (polishedPacket[(i / 8) + 16] & (1 << (i % 8))) != 0);
                     }
                 }
+
+                return state.Build();
+            }
+            else if (packet.Length == JOYSTICK_PACKET_SIZE)
+            {
+                ControllerStateBuilder state = new ControllerStateBuilder();
+
+                byte x = 0, y = 0;
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    x |= (byte)((packet[i + 2] == 0 ? 0 : 1) << i);
+                }
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    y |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
+                }
+
+                for (int i = 0; i < JOYSTICK_BUTTONS.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(JOYSTICK_BUTTONS[i]))
+                    {
+                        continue;
+                    }
+
+                    state.SetButton(JOYSTICK_BUTTONS[i], packet[i + 18] == 0x00);
+                }
+
+                state.SetAnalog("x", ReadJoystick(x));
+                state.SetAnalog("y", ReadJoystick(y));
 
                 return state.Build();
             }
