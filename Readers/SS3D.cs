@@ -6,6 +6,34 @@ namespace RetroSpy.Readers
     {
         private const int PACKET_SIZE = 56;
         private const int POLISHED_PACKET_SIZE = 21;
+        private const int KEYBOARD_PACKET_SIZE = 18 * 2;
+        private const int KEYBOARD_POLISHED_PACKET_SIZE = 18;
+
+        private static readonly string[] KEYS =
+        {
+            null, "F9", null, "F5", "F3", "F1", "F2", "F12",
+            null, "F10", "F8", "F6", "F4", "Tab", "Grave", null,
+            null, "LeftAlt", "LeftShift", "Katakana", "LeftControl", "Q", "D1", "RightAlt",
+            "RightControl", null, "Z", "S", "A", "W", "D2", null,
+
+            null, "C", "X", "D", "E", "D4", "D3", null,
+            null, "Space", "V", "F", "T", "R", "D5", null,
+            null, "N", "B", "H", "G", "Y", "D6", null,
+            null, null, "M", "J", "U", "D7", "D8", null,
+
+            null, "Comma", "K", "I", "O", "D0", "D9", null,
+            null, "Period", "Slash", "L", "Semicolon", "P", "Minus", null,
+            null, "JpSlash", "Apostrophe", null, "LeftBracket", "Equal", null, null,
+            "Capital", "RightShift", "Return", "RightBracket", null, "LeftOfReturn", null, null,
+
+            null, null, null, null, "Henkan", null, "Back", "Muhenkan",
+            null, null, "Yen", null, null, null, null, null,
+            null, null, null, null, null, null, "Escape", null,
+            "F11", null, null, null, null, null, "ScrollLock", null,
+
+            null, "Insert", "Pause", "F7", "PrintScreen", "Delete", "Left", "Home",
+            "End", "Up", "Down", "PageUp", "PageDown", "Right", null, null,
+        };
 
         private static readonly string[] BUTTONS = {
             null, "right", "left", "down", "up", "start", "A", "C", "B", "R", "X", "Y", "Z", "L"
@@ -49,131 +77,153 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
-            if (packet.Length < PACKET_SIZE)
+            if (packet.Length == PACKET_SIZE)
             {
-                return null;
-            }
+                byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
-            byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
-
-            polishedPacket[0] = 0;
-            byte j = 8;
-            for (byte i = 0; i < 8; ++i)
-            {
-                j--;
-                polishedPacket[0] |= (byte)((packet[i] == 0 ? 0 : 1) << j);
-            }
-
-            if (polishedPacket[0] != 0x02 && polishedPacket[0] != 0x16 && polishedPacket[0] != 0xFF)
-            {
-                return null;
-            }
-
-            ControllerStateBuilder state = new ControllerStateBuilder();
-
-            if (polishedPacket[0] != 0xFF)
-            {
-                for (byte i = 0; i < 16; ++i)
+                polishedPacket[0] = 0;
+                byte j = 8;
+                for (byte i = 0; i < 8; ++i)
                 {
-                    polishedPacket[i + 1] = packet[i + 8] == 0 ? (byte)1 : (byte)0;
+                    j--;
+                    polishedPacket[0] |= (byte)((packet[i] == 0 ? 0 : 1) << j);
                 }
 
-                byte numExtraBytes = 0;
-                if (polishedPacket[0] == 0x16)
-                {
-                    numExtraBytes = 4;
-                }
-
-                for (int i = 0; i < numExtraBytes; ++i)
-                {
-                    polishedPacket[17 + i] = 0;
-                    j = 8;
-                    for (byte k = 0; k < 8; ++k)
-                    {
-                        j--;
-                        polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + k)] == 0 ? 0 : 1) << j);
-                    }
-                }
-
-                if (polishedPacket.Length < POLISHED_PACKET_SIZE)
+                if (polishedPacket[0] != 0x02 && polishedPacket[0] != 0x16 && polishedPacket[0] != 0xFF)
                 {
                     return null;
                 }
 
-                for (int i = 0; i < BUTTONS.Length; ++i)
+                ControllerStateBuilder state = new ControllerStateBuilder();
+
+                if (polishedPacket[0] != 0xFF)
                 {
-                    if (string.IsNullOrEmpty(BUTTONS[i]))
+                    for (byte i = 0; i < 16; ++i)
                     {
-                        continue;
+                        polishedPacket[i + 1] = packet[i + 8] == 0 ? (byte)1 : (byte)0;
                     }
 
-                    state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
-                }
+                    byte numExtraBytes = 0;
+                    if (polishedPacket[0] == 0x16)
+                    {
+                        numExtraBytes = 4;
+                    }
 
-                if (polishedPacket[0] == 0x16)
-                {
-                    state.SetAnalog("lstick_x", ReadStick(polishedPacket[17]));
-                    state.SetAnalog("lstick_y", ReadStick(polishedPacket[18]));
-                    state.SetAnalog("trig_r", ReadTrigger(polishedPacket[19]));
-                    state.SetAnalog("trig_l", ReadTrigger(polishedPacket[20]));
+                    for (int i = 0; i < numExtraBytes; ++i)
+                    {
+                        polishedPacket[17 + i] = 0;
+                        j = 8;
+                        for (byte k = 0; k < 8; ++k)
+                        {
+                            j--;
+                            polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + k)] == 0 ? 0 : 1) << j);
+                        }
+                    }
+
+                    if (polishedPacket.Length < POLISHED_PACKET_SIZE)
+                    {
+                        return null;
+                    }
+
+                    for (int i = 0; i < BUTTONS.Length; ++i)
+                    {
+                        if (string.IsNullOrEmpty(BUTTONS[i]))
+                        {
+                            continue;
+                        }
+
+                        state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
+                    }
+
+                    if (polishedPacket[0] == 0x16)
+                    {
+                        state.SetAnalog("lstick_x", ReadStick(polishedPacket[17]));
+                        state.SetAnalog("lstick_y", ReadStick(polishedPacket[18]));
+                        state.SetAnalog("trig_r", ReadTrigger(polishedPacket[19]));
+                        state.SetAnalog("trig_l", ReadTrigger(polishedPacket[20]));
+                    }
+                    else
+                    {
+                        state.SetAnalog("lstick_x", ReadStick(128));
+                        state.SetAnalog("lstick_y", ReadStick(128));
+                        state.SetAnalog("trig_r", ReadTrigger(0));
+                        state.SetAnalog("trig_l", ReadTrigger(0));
+                    }
                 }
                 else
                 {
+                    for (int i = 0; i < BUTTONS.Length; ++i)
+                    {
+                        if (string.IsNullOrEmpty(BUTTONS[i]))
+                        {
+                            continue;
+                        }
+
+                        state.SetButton(BUTTONS[i], false);
+                    }
+
+                    for (int i = 0; i < MOUSE_BUTTONS.Length; ++i)
+                    {
+                        if (string.IsNullOrEmpty(MOUSE_BUTTONS[i]))
+                        {
+                            continue;
+                        }
+
+                        state.SetButton(MOUSE_BUTTONS[i], packet[i + 8] != 0x00);
+                    }
+
                     state.SetAnalog("lstick_x", ReadStick(128));
                     state.SetAnalog("lstick_y", ReadStick(128));
                     state.SetAnalog("trig_r", ReadTrigger(0));
                     state.SetAnalog("trig_l", ReadTrigger(0));
+
+                    byte xVal = 0;
+                    j = 8;
+                    for (byte k = 0; k < 8; ++k)
+                    {
+                        j--;
+                        xVal |= (byte)((packet[16 + k] == 0 ? 0 : 1) << j);
+                    }
+                    byte yVal = 0;
+                    j = 8;
+                    for (byte k = 0; k < 8; ++k)
+                    {
+                        j--;
+                        yVal |= (byte)((packet[24 + k] == 0 ? 0 : 1) << j);
+                    }
+
+                    float x = ReadMouse(packet[11] != 0, packet[9] != 0, xVal);
+                    float y = ReadMouse(packet[10] != 0, packet[8] != 0, yVal);
+
+                    SignalTool.SetMouseProperties(x, y, state);
                 }
+
+                return state.Build();
+            }
+            else if (packet.Length == KEYBOARD_PACKET_SIZE)
+            {
+                ControllerStateBuilder state = new ControllerStateBuilder();
+
+                int j = 0;
+                byte[] reconstructedPacket = new byte[KEYBOARD_POLISHED_PACKET_SIZE];
+                for (int i = 0; i < KEYBOARD_POLISHED_PACKET_SIZE; ++i)
+                {
+                    reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
+                    j += 2;
+                }
+
+                for (int i = 0; i < KEYS.Length; ++i)
+                {
+                    if (KEYS[i] != null)
+                    {
+                        state.SetButton(KEYS[i], (reconstructedPacket[(i / 8)] & (1 << (i % 8))) != 0);
+                    }
+                }
+
+                return state.Build();
             }
             else
-            {
-                for (int i = 0; i < BUTTONS.Length; ++i)
-                {
-                    if (string.IsNullOrEmpty(BUTTONS[i]))
-                    {
-                        continue;
-                    }
-
-                    state.SetButton(BUTTONS[i], false);
-                }
-
-                for (int i = 0; i < MOUSE_BUTTONS.Length; ++i)
-                {
-                    if (string.IsNullOrEmpty(MOUSE_BUTTONS[i]))
-                    {
-                        continue;
-                    }
-
-                    state.SetButton(MOUSE_BUTTONS[i], packet[i + 8] != 0x00);
-                }
-
-                state.SetAnalog("lstick_x", ReadStick(128));
-                state.SetAnalog("lstick_y", ReadStick(128));
-                state.SetAnalog("trig_r", ReadTrigger(0));
-                state.SetAnalog("trig_l", ReadTrigger(0));
-
-                byte xVal = 0;
-                j = 8;
-                for (byte k = 0; k < 8; ++k)
-                {
-                    j--;
-                    xVal |= (byte)((packet[16 + k] == 0 ? 0 : 1) << j);
-                }
-                byte yVal = 0;
-                j = 8;
-                for (byte k = 0; k < 8; ++k)
-                {
-                    j--;
-                    yVal |= (byte)((packet[24 + k] == 0 ? 0 : 1) << j);
-                }
-
-                float x = ReadMouse(packet[11] != 0, packet[9] != 0, xVal);
-                float y = ReadMouse(packet[10] != 0, packet[8] != 0, yVal);
-
-                SignalTool.SetMouseProperties(x, y, state);
-            }
-
-            return state.Build();
+                return null;
         }
     }
 }

@@ -22,12 +22,12 @@
 	
 	<button name="PrintScreen" image="circle2.png" x="812" y="58" width="40" height="40" />
 	<button name="ScrollLock" image="circle2.png" x="866" y="58" width="40" height="40" />
-	<button name="Pause" image="circle2.png" x="28" y="914" width="40" height="40" />
+	<button name="Pause" image="circle2.png" x="911" y="58" width="40" height="40" />
 	
 	<button name="Grave" image="circle2.png" x="28" y="134" width="40" height="40" />
 	<button name="D1" image="circle2.png" x="80" y="134" width="40" height="40" />
 	<button name="D2" image="circle2.png" x="131" y="134" width="40" height="40" />
-	<button name="D33" image="circle2.png" x="183" y="134" width="40" height="40" />
+	<button name="D3" image="circle2.png" x="183" y="134" width="40" height="40" />
 	<button name="D4" image="circle2.png" x="233" y="134" width="40" height="40" />
 	<button name="D5" image="circle2.png" x="283" y="134" width="40" height="40" />
 	<button name="D6" image="circle2.png" x="335" y="134" width="40" height="40" />
@@ -42,7 +42,7 @@
 	
 	<button name="Insert" image="circle2.png" x="812" y="134" width="40" height="40" />
 	<button name="Home" image="circle2.png" x="866" y="134" width="40" height="40" />
-	<button name="PageUp" image="circle2.png" x="28" y="134" width="40" height="40" />
+	<button name="PageUp" image="circle2.png" x="911" y="134" width="40" height="40" />
 	
 	<button name="Tab" image="circle2.png" x="28" y="184" width="40" height="40" />
 	<button name="Q" image="circle2.png" x="105" y="184" width="40" height="40" />
@@ -61,7 +61,7 @@
 	
 	<button name="Delete" image="circle2.png" x="812" y="184" width="40" height="40" />
 	<button name="End" image="circle2.png" x="866" y="184" width="40" height="40" />
-	<button name="PageDown" image="circle2.png" x="28" y="184" width="40" height="40" />
+	<button name="PageDown" image="circle2.png" x="911" y="184" width="40" height="40" />
 	
 	<button name="Capital" image="circle2.png" x="28" y="235" width="40" height="40" />
 	<button name="A" image="circle2.png" x="118" y="235" width="40" height="40" />
@@ -91,7 +91,7 @@
 	<button name="JpSlash" image="circle2.png" x="650" y="283" width="40" height="40" />
 	<button name="RightShift" image="circle2.png" x="701" y="283" width="40" height="40" />
 	
-	<button name="Up" image="circle2.png" x="624" y="283" width="40" height="40" />
+	<button name="Up" image="circle2.png" x="866" y="283" width="40" height="40" />
 	
 	<button name="LeftControl" image="circle2.png" x="28" y="335" width="40" height="40" />
 	<button name="LeftWindowsKey" image="circle2.png" x="107" y="335" width="40" height="40" />
@@ -107,7 +107,7 @@
 
 	<button name="Left" image="circle2.png" x="812" y="335" width="40" height="40" />
 	<button name="Down" image="circle2.png" x="866" y="335" width="40" height="40" />
-	<button name="Right" image="circle2.png" x="28" y="335" width="40" height="40" />
+	<button name="Right" image="circle2.png" x="911" y="335" width="40" height="40" />
 	
 
 </skin>

@@ -31,6 +31,7 @@
 
 class Saturn3DSpy : public ControllerSpy {
 public:
+	void setup();
 	void loop();
 	void writeSerial();
 	void debugSerial();
