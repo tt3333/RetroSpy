@@ -14,10 +14,10 @@ namespace RetroSpy.Readers
             null, "F9", null, "F5", "F3", "F1", "F2", "F12",
             null, "F10", "F8", "F6", "F4", "Tab", "Grave", null,
             null, "LeftAlt", "LeftShift", "Katakana", "LeftControl", "Q", "D1", "RightAlt",
-            "RightControl", null, "Z", "S", "A", "W", "D2", null,
+            "RightControl", "NumberPadEnter", "Z", "S", "A", "W", "D2", "LeftWindowsKey",
 
-            null, "C", "X", "D", "E", "D4", "D3", null,
-            null, "Space", "V", "F", "T", "R", "D5", null,
+            null, "C", "X", "D", "E", "D4", "D3", "RightWindowsKey",
+            null, "Space", "V", "F", "T", "R", "D5", "Applications",
             null, "N", "B", "H", "G", "Y", "D6", null,
             null, null, "M", "J", "U", "D7", "D8", null,
 
@@ -27,11 +27,11 @@ namespace RetroSpy.Readers
             "Capital", "RightShift", "Return", "RightBracket", null, "LeftOfReturn", null, null,
 
             null, null, null, null, "Henkan", null, "Back", "Muhenkan",
-            null, null, "Yen", null, null, null, null, null,
-            null, null, null, null, null, null, "Escape", null,
-            "F11", null, null, null, null, null, "ScrollLock", null,
+            null, "NumberPad1", "Yen", "NumberPad4", "NumberPad7", null, null, null,
+            "NumberPad0", "Decimal", "NumberPad2", "NumberPad5", "NumberPad6", "NumberPad8", "Escape", "NumberLock",
+            "F11", "Add", "NumberPad3", "Subtract", "Multiply", "NumberPad9", "ScrollLock", null,
 
-            null, "Insert", "Pause", "F7", "PrintScreen", "Delete", "Left", "Home",
+            "Divide", "Insert", "Pause", "F7", "PrintScreen", "Delete", "Left", "Home",
             "End", "Up", "Down", "PageUp", "PageDown", "Right", null, null,
         };
 

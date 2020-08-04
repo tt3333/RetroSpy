@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Windows PC Keyboard" author="zoggins" type="pckeyboard;cdi;dreamcast">
+<skin name="Windows PC Keyboard" author="zoggins" type="pckeyboard;cdi;dreamcast;saturn">
 
     <background name="Default" image="ps2keyboard.png" />
 
