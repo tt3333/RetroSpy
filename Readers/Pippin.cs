@@ -174,37 +174,40 @@
 
                 return state.Build();
             }
-            else if (packet.Length == TABLET_PACKET_SIZE && packet[34] != 0)
+            else if (packet.Length == TABLET_PACKET_SIZE )
             {
                 ControllerStateBuilder state = new ControllerStateBuilder();
 
-                byte x = 0, y = 0, x1 = 0, y1 = 0;
-
-                for (byte i = 0; i < 8; ++i)
+                if (packet[34] != 0)
                 {
-                    x |= (byte)((packet[i + 2] == 0 ? 0 : 1) << i);
+                    byte x = 0, y = 0, x1 = 0, y1 = 0;
+
+                    for (byte i = 0; i < 8; ++i)
+                    {
+                        x |= (byte)((packet[i + 2] == 0 ? 0 : 1) << i);
+                    }
+
+                    for (byte i = 0; i < 8; ++i)
+                    {
+                        x1 |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
+                    }
+
+                    for (byte i = 0; i < 8; ++i)
+                    {
+                        y |= (byte)((packet[i + 18] == 0 ? 0 : 1) << i);
+                    }
+
+                    for (byte i = 0; i < 8; ++i)
+                    {
+                        y1 |= (byte)((packet[i + 26] == 0 ? 0 : 1) << i);
+                    }
+
+                    SetTablet(((x & 0b00011111) * 32) + (x1 >> 3),
+                                ((y & 0b00011111) * 128) + (y1 >> 1), state);
+
+                    state.SetButton("Button", (y & 0b10000000) != 0);
                 }
 
-                for (byte i = 0; i < 8; ++i)
-                {
-                    x1 |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
-                }
-
-                for (byte i = 0; i < 8; ++i)
-                {
-                    y |= (byte)((packet[i + 18] == 0 ? 0 : 1) << i);
-                }
-
-                for (byte i = 0; i < 8; ++i)
-                {
-                    y1 |= (byte)((packet[i + 26] == 0 ? 0 : 1) << i);
-                }
-
-                SetTablet(  ((x & 0b00011111) * 32) + (x1 >> 3), 
-                            ((y & 0b00011111) * 128) + (y1 >> 1), state);
-
-                state.SetButton("Button", (y & 0b10000000) != 0);
-           
                 return state.Build();
             }    
             else

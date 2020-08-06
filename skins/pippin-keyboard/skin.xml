@@ -75,7 +75,7 @@
 
 	<button name="Left" image="circle2.png" x="647" y="911" width="50" height="50" />
 	<button name="Down" image="circle2.png" x="710" y="912" width="50" height="50" />
-	<button name="Right" image="circle2.png" x="780" y="" width="50" height="50" />
+	<button name="Right" image="circle2.png" x="780" y="912" width="50" height="50" />
 
 	<touchpad xname="touchpad_x" yname="touchpad_y" image="circle2.png" height="25" width="25" x="231" y="95" xrange="429" yrange="301" />
 

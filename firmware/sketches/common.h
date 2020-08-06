@@ -35,7 +35,7 @@
 // Uncomment these to enable 3rd party libraries once installed
 //#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
 //#define TP_IRLIB2               // Used by MODE_CDI
-#define TP_TIMERONE             // Used by MODE_PIPPIN & MODE_CDTV_WIRED
+//#define TP_TIMERONE             // Used by MODE_PIPPIN & MODE_CDTV_WIRED
 //#define TP_PINCHANGEINTERRUPT   // Used by MODE_COLECOVISION, MODE_DRIVING_CONTROLLER & MODE_KEYBOARD_CONTROLLER
 
 // Uncomment these out to enable the necessary ADC interrupt handler.
@@ -44,7 +44,7 @@
 //#define ATARI5200_ADC_INT_HANDLER
 
 // Uncomment this for serial debugging output
-#define DEBUG
+//#define DEBUG
 
 #define N64_BITCOUNT		    32
 #define SNES_BITCOUNT       16
