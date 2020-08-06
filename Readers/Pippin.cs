@@ -5,6 +5,10 @@
         private const int PACKET_SIZE = 61;
         private const int POLISHED_PACKET_SIZE = 32;
         private const int JOYSTICK_PACKET_SIZE = 26;
+        private const int TABLET_PACKET_SIZE = 42;
+
+        private static int minX = int.MaxValue, minY = int.MaxValue;
+        private static int maxX = int.MinValue, maxY = int.MinValue;
 
         private static readonly string[] BUTTONS = {
             null, "1", "2", "blue", "yellow", "d_up", "d_left", "d_right", "d_down", "red", "green", "square", "circle", "diamond"
@@ -52,6 +56,33 @@
         private static float ReadJoystick(byte data)
         {
             return (data - 128.0f) / 128.0f;
+        }
+
+        private static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
+        {
+            float newValue = ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
+            if (newValue > newMax)
+                return (int)newMax;
+            if (newValue < newMin)
+                return (int)newMin;
+
+            return (int)newValue;
+        }
+
+        private static void SetTablet(int X, int Y, ControllerStateBuilder state)
+        {
+            if (X < minX)
+                minX = X;
+            else if (X > maxX)
+                maxX = X;
+
+            if (Y < minY)
+                minY = Y;
+            else if (Y > maxY)
+                maxY = Y;
+
+            state.SetAnalog("touchpad_x", ScaleInteger(X, minX, maxX, 0, 1024) / 1024.0f);
+            state.SetAnalog("touchpad_y", ScaleInteger(Y, minY, maxY, 0, 16384) / 16384.0f);
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
@@ -143,6 +174,39 @@
 
                 return state.Build();
             }
+            else if (packet.Length == TABLET_PACKET_SIZE && packet[34] != 0)
+            {
+                ControllerStateBuilder state = new ControllerStateBuilder();
+
+                byte x = 0, y = 0, x1 = 0, y1 = 0;
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    x |= (byte)((packet[i + 2] == 0 ? 0 : 1) << i);
+                }
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    x1 |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
+                }
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    y |= (byte)((packet[i + 18] == 0 ? 0 : 1) << i);
+                }
+
+                for (byte i = 0; i < 8; ++i)
+                {
+                    y1 |= (byte)((packet[i + 26] == 0 ? 0 : 1) << i);
+                }
+
+                SetTablet(  ((x & 0b00011111) * 32) + (x1 >> 3), 
+                            ((y & 0b00011111) * 128) + (y1 >> 1), state);
+
+                state.SetButton("Button", (y & 0b10000000) != 0);
+           
+                return state.Build();
+            }    
             else
                 return null;
         }
