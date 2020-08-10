@@ -70,7 +70,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Dreamcast Keyboard
  - Saturn Keyboard
  - Virtual Boy
- - Xbox One
+ - Xbox One 
 
 ## Wishlist
  - ColecoVision Roller Controller
