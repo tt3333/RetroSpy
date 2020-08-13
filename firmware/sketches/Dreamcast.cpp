@@ -77,7 +77,7 @@ FASTRUN void DreamcastSpy::writeSerial() {
 			}
 		}
 
-		if ((controllerType == 1 && numFrames == 3) || (controllerType == 0x200 && numFrames == 6))
+		if ((controllerType == 1 && numFrames == 3) || (controllerType == 0x200 && numFrames == 6) || (controllerType == 0x40 && numFrames == 3))
 		{
 			rawData[byteCount++] = '\n';
 			Serial.write(p, byteCount - 6);
@@ -205,7 +205,7 @@ FASTRUN void DreamcastSpy::debugSerial() {
 		for (int i = 0; i < 6; ++i)
 		{
 			Serial.print("|");
-			Serial.print(keycode[i]);
+			Serial.print(keycode[i], HEX);
 		}
 	}
 	else if (dcCommand == 8 && controllerType == 0x200)

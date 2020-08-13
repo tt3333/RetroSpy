@@ -6,6 +6,37 @@ namespace RetroSpy.Readers
     {
         private const int FRAME_HEADER_SIZE = 32;
 
+        private static readonly string[] MODIFER_KEYS =
+        {
+            null, null, null, null, null, null, null, null, "RightWindowsKey" /*S2*/, "RightAlt", "RightShift", "RightControl", "LeftWindowsKey" /*S1*/,  "LeftAlt", "LeftShift", "LeftControl"
+        };
+
+        private static readonly string[] KEYS =
+        {
+            null, null, null, null, "A", "B", "C", "D",
+            "E", "F", "G", "H", "I", "J", "K", "L",
+            "M", "N", "O", "P", "Q", "R", "S", "T",
+            "U", "V", "W", "X", "Y", "Z", "D1", "D2",
+
+            "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D0",
+            "Return", "Escape", "Back", "Tab", "Space", "Minus", "Equals", "LeftBracket",
+            "RightBracket", "Backslash", "LeftOfReturn", "Semicolon", "Apostrophe", "Grave", "Comma", "Period",
+            "Slash", "Capital", "F1", "F2", "F3", "F4", "F5", "F6",
+
+            "F7", "F8", "F9", "F10", "F11", "F12", "PrintScreen", "ScrollLock",
+            "Pause", "Insert", "Home", "PageUp", "Delete", "End", "PageDown", "Right",
+            "Left", "Down", "Up", "NumberLock", "Divide", "Multiply", "Subtract", "Add",
+            "NumberPadEnter", "NumberPad1", "NumberPad2", "NumberPad3", "NumberPad4", "NumberPad5", "NumberPad6", "NumberPad7",
+
+            "NumberPad8", "NumberPad9", "NumberPad0", "Decimal", null, "Applications", null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+
+            null, null, null, null, null, null, null, "JpSlash",
+            "Katakana", "Yen", "Henkan", "Muhenkan", null, null, null, null
+        };
+
         private static readonly string[] BUTTONS = {
             "right2", "left2", "down2", "up2", "d", "x", "y", "z", "right", "left", "down", "up", "start", "a", "b", "c"
         };
@@ -209,6 +240,100 @@ namespace RetroSpy.Readers
 
                     state.SetButton("scroll_up", axis3 < 512);
                     state.SetButton("scroll_down", axis3 > 512);
+                }
+                else if (controllerType == 0x40 && numWords == 3)
+                {
+                    for (int i = 0; i < KEYS.Length; ++i)
+                    {
+                        if (KEYS[i] != null)
+                        {
+                            state.SetButton(KEYS[i], false);
+                        }
+                    }
+
+                    byte[] keycode = new byte[6];
+
+                    keycode[1] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[1] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[1] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+                    if (KEYS[keycode[1]] != null)
+                        state.SetButton(KEYS[keycode[1]], true);
+
+                    keycode[0] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[0] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[0] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+                    if (KEYS[keycode[0]] != null)
+                        state.SetButton(KEYS[keycode[0]], true);
+
+                    int k = 0;
+                    for (int i = 0; i < MODIFER_KEYS.Length / 2; ++i)
+                    {
+                        if (!string.IsNullOrEmpty(MODIFER_KEYS[k]))
+                        {
+                            state.SetButton(MODIFER_KEYS[k], (packet[j] & 0x2) != 0x0);
+                        }
+
+                        if (!string.IsNullOrEmpty(MODIFER_KEYS[k + 1]))
+                        {
+                            state.SetButton(MODIFER_KEYS[k + 1], (packet[j + 1] & 0x1) != 0x0);
+                        }
+
+                        k += 2;
+                        j += 2;
+                    }
+
+                    keycode[5] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[5] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[5] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+                    
+                    if (KEYS[keycode[5]] != null)
+                        state.SetButton(KEYS[keycode[5]], true);
+
+                    keycode[4] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[4] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[4] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+
+                    if (KEYS[keycode[4]] != null)
+                        state.SetButton(KEYS[keycode[4]], true);
+
+                    keycode[3] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[3] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[3] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+
+                    if (KEYS[keycode[3]] != null)
+                        state.SetButton(KEYS[keycode[3]], true);
+
+                    keycode[2] = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        keycode[2] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        keycode[2] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+
+                    if (KEYS[keycode[2]] != null)
+                        state.SetButton(KEYS[keycode[2]], true);
+                
                 }
                 return state.Build();
             }

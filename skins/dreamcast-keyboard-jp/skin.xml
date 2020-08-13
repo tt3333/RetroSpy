@@ -36,7 +36,7 @@
 	<button name="D9" image="circle2.png" x="483" y="134" width="40" height="40" />
 	<button name="D0" image="circle2.png" x="538" y="134" width="40" height="40" />
 	<button name="Minus" image="circle2.png" x="587" y="134" width="40" height="40" />
-	<button name="Equal" image="circle2.png" x="638" y="134" width="40" height="40" />
+	<button name="Equals" image="circle2.png" x="638" y="134" width="40" height="40" />
 	<button name="Yen" image="circle2.png" x="688" y="134" width="40" height="40" />
 	<button name="Back" image="circle2.png" x="738" y="134" width="40" height="40" />
 	
