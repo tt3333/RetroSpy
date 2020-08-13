@@ -66,6 +66,8 @@
 
 #include "gameboy_printer_protocol.h"
 
+#if !defined(__arm__) || !defined(CORE_TEENSY)
+
 #if LCD_DISPLAY_MESSAGE_ENABLE
 #include <LiquidCrystal.h>
 #endif
@@ -938,6 +940,17 @@ void GameBoyPrinterEmulator::loop()
 		}
 	};	
 }
+#else
+
+void GameBoyPrinterEmulator::setup()
+{
+	
+}
+
+void GameBoyPrinterEmulator::loop()
+{
+	
+}
 
 void GameBoyPrinterEmulator::writeSerial()
 {
@@ -953,3 +966,4 @@ void GameBoyPrinterEmulator::updateState()
 {
 	
 }
+#endif

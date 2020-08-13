@@ -8,7 +8,7 @@ namespace RetroSpy.Readers
 
         private static readonly string[] MODIFER_KEYS =
         {
-            "LeftControl", "LeftShift", "LeftAlt", "LeftWindowsKey" /*S1*/, "RightControl", "RightShift", "RightAlt", "RightWindowsKey" /*S2*/, null, null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null, "RightWindowsKey" /*S2*/, "RightAlt", "RightShift", "RightControl", "LeftWindowsKey" /*S1*/,  "LeftAlt", "LeftShift", "LeftControl"
         };
 
         private static readonly string[] KEYS =
@@ -19,8 +19,8 @@ namespace RetroSpy.Readers
             "U", "V", "W", "X", "Y", "Z", "D1", "D2",
 
             "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D0",
-            "Return", "Escape", "Back", "Tab", "Space", "Minus", "Equal", "LeftBracket",
-            "RightBracket", null, "Semicolon", "Apostrophe", "LeftOfReturn", "Grave", "Comma", "Period",
+            "Return", "Escape", "Back", "Tab", "Space", "Minus", "Equals", "LeftBracket",
+            "RightBracket", "Backslash", "LeftOfReturn", "Semicolon", "Apostrophe", "Grave", "Comma", "Period",
             "Slash", "Capital", "F1", "F2", "F3", "F4", "F5", "F6",
 
             "F7", "F8", "F9", "F10", "F11", "F12", "PrintScreen", "ScrollLock",
@@ -278,12 +278,12 @@ namespace RetroSpy.Readers
                     {
                         if (!string.IsNullOrEmpty(MODIFER_KEYS[k]))
                         {
-                            state.SetButton(MODIFER_KEYS[k], (packet[j] & 0x2) == 0x0);
+                            state.SetButton(MODIFER_KEYS[k], (packet[j] & 0x2) != 0x0);
                         }
 
-                        if (!string.IsNullOrEmpty(BUTTONS[k + 1]))
+                        if (!string.IsNullOrEmpty(MODIFER_KEYS[k + 1]))
                         {
-                            state.SetButton(MODIFER_KEYS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+                            state.SetButton(MODIFER_KEYS[k + 1], (packet[j + 1] & 0x1) != 0x0);
                         }
 
                         k += 2;
