@@ -38,7 +38,7 @@ static volatile byte currentEncoderValue;
 
 static void pin5bithigh_isr()
 {
-	asm volatile ("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
 	noInterrupts();
 	rawData[0] = (PIND & 0b01111100);
 	interrupts();
@@ -46,7 +46,7 @@ static void pin5bithigh_isr()
 
 static void pin8bithigh_isr()
 {
-	asm volatile ("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
 	noInterrupts();
 	rawData[1] = (PIND & 0b01111100);
 	interrupts();
@@ -55,7 +55,9 @@ static void pin8bithigh_isr()
 static void bitchange_isr()
 {
 	byte encoderValue = 0;
+	noInterrupts();
 	encoderValue |= ((PINB & 0b00000001) == 0 ? 0b00000000 : 0b0000001) | ((PIND & 0b10000000) == 0 ? 0b00000000 : 0b0000010);
+	interrupts();
 
 	if ((currentEncoderValue == 0x3 && encoderValue == 0x2)
 		|| currentEncoderValue == 0x2 && encoderValue == 0x0
@@ -83,7 +85,7 @@ static void bitchange_isr()
 
 void ColecoVisionSpy::setup()
 {
-	for (int i = 2; i <= 8; ++i)
+	for (int i = 2; i <= 10; ++i)
 		pinMode(i, INPUT_PULLUP);
 
 	currentEncoderValue = 0;
@@ -105,7 +107,7 @@ void ColecoVisionSpy::loop() {
 	debugSerial();
 #endif
 
-	delay(5);
+	//delay(5);
 }
 
 void ColecoVisionSpy::updateState() {
@@ -136,6 +138,8 @@ void ColecoVisionSpy::debugSerial() {
 	Serial.print((rawData[1] & 0b01000000) != 0 ? "0" : "2");
 	Serial.print("|");
 	Serial.print(currentState);
+	Serial.print("|");
+	Serial.print(currentEncoderValue);
 	Serial.print("\n");
 }
 

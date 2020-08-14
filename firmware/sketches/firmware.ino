@@ -111,7 +111,6 @@
 #include "AmigaMouse.h"
 #include "CDTVWired.h"
 #include "CDTVWireless.h"
-#include "CDi.h"
 #include "AmigaAnalog.h"
 #include "Atari5200.h"
 #include "KeyboardController.h"

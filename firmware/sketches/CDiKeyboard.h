@@ -28,6 +28,9 @@
 #define CDiKeyboard_h
 
 #include "ControllerSpy.h"
+
+#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY))
+
 #include <SoftwareSerial.h>
 
 class CDiKeyboardSpy : public ControllerSpy {
@@ -49,5 +52,14 @@ private:
 	byte incomingBytes[4];
 	bool T_mode_caps_on;
 };
-
+#elseclass CDiKeyboardSpy : public ControllerSpy {
+public:
+	CDiKeyboardSpy(){}
+	void setup() {}
+	void loop() {}
+	void writeSerial() {}
+	void debugSerial() {}
+	void updateState() {}
+};
+#endif
 #endif
