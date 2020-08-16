@@ -58,17 +58,18 @@
 //#define MODE_AMIGA_ANALOG_2
 //#define MODE_ATARI5200_1
 //#define MODE_ATARI5200_2
+//#define MODE_COLECOVISION_ROLLER
 
-// Pippin Controller Configuration
-#define PIPPIN_CONTROLLER_SPY_ADDRESS 0xF
-#define PIPPIN_MOUSE_SPY_ADDRESS 0xE
-
-// Amiga Mouse Video Output Mode
-#define AMIGA_MOUSE_VIDEO_OUTPUT AmigaMouseSpy::VIDEO_PAL
+// Some consoles care about PAL/NTSC for timing purposes
+#define VIDEO_OUTPUT VIDEO_PAL
 
 // CD-i controller timeouts (ms)
 #define CDI_WIRED_TIMEOUT 50
 #define CDI_WIRELESS_TIMEOUT 100
+
+// Pippin Controller Configuration
+#define PIPPIN_CONTROLLER_SPY_ADDRESS 0xF
+#define PIPPIN_MOUSE_SPY_ADDRESS 0xE
 
 ///////////////////////////////////////////////////////////////////////////////
 // ---------- NOTHING BELOW THIS LINE SHOULD BE MODIFIED  -------------------//
@@ -114,6 +115,7 @@
 #include "AmigaAnalog.h"
 #include "Atari5200.h"
 #include "KeyboardController.h"
+#include "ColecoVisionRoller.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -193,7 +195,7 @@ PippinSpy PippinSpy;
 #if defined(MODE_AMIGA_KEYBOARD)
 AmigaKeyboardSpy AmigaKeyboardSpy;
 #endif
-#if defined(MODE_AMIGA_MOUSE)                                                  
+#if defined(MODE_AMIGA_MOUSE)                                            
 AmigaMouseSpy AmigaMouseSpy;
 #endif
 #if defined(MODE_CDTV_WIRED)
@@ -219,6 +221,9 @@ AmigaAnalogSpy AmigaAnalogSpy;
 #endif
 #if defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 Atari5200Spy Atari5200Spy;
+#endif
+#if defined(MODE_COLECOVISION_ROLLER)                                                  
+ColecoVisionRollerSpy ColecoVisionRollerSpy;
 #endif
 #if defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
@@ -310,7 +315,7 @@ void setup()
 #elif defined(MODE_AMIGA_KEYBOARD)
 	AmigaKeyboardSpy.setup();
 #elif defined(MODE_AMIGA_MOUSE)
-	AmigaMouseSpy.setup(AMIGA_MOUSE_VIDEO_OUTPUT);
+	AmigaMouseSpy.setup(VIDEO_OUTPUT);
 #elif defined(MODE_CDTV_WIRED)
 	CDTVWiredSpy.setup();
 #elif defined(MODE_CDTV_WIRELESS)
@@ -337,6 +342,8 @@ void setup()
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
 #elif defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+#elif defined(MODE_COLECOVISION_ROLLER)
+	ColecoVisionRollerSpy.setup(VIDEO_OUTPUT);
 #endif
 
   #pragma GCC diagnostic push
@@ -441,6 +448,8 @@ void loop()
 	AmigaAnalogSpy.loop();
 #elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
 	Atari5200Spy.loop();
+#elif defined(MODE_COLECOVISION_ROLLER)
+	ColecoVisionRollerSpy.loop();
 #elif defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 
