@@ -41,6 +41,7 @@ private:
 	byte controllerAddress;
 	byte mouseAddress;
 	byte joystickAddress;
+	byte tabletAddress;
 };
 
 #endif
