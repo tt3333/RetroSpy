@@ -100,6 +100,7 @@
 #include "ThreeDO.h"
 #include "CDiKeyboard.h"
 #include "GameBoyPrinterEmulator.h"
+#include "CDi.h"
 
 #include "Dreamcast.h"
 #include "AmigaCd32.h"

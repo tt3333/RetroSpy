@@ -188,9 +188,9 @@ ISR(TIMER1_COMPA_vect) {
 }
 #endif
 #else
-void ColecoVisionSpy::loop() {}
-void ColecoVisionSpy::setup(byte videoOutputType) {}
-void ColecoVisionSpy::writeSerial() {}
-void ColecoVisionSpy::debugSerial() {}
-void ColecoVisionSpy::updateState() {}
+void ColecoVisionRollerSpy::loop() {}
+void ColecoVisionRollerSpy::setup(byte videoOutputType) {}
+void ColecoVisionRollerSpy::writeSerial() {}
+void ColecoVisionRollerSpy::debugSerial() {}
+void ColecoVisionRollerSpy::updateState() {}
 #endif
