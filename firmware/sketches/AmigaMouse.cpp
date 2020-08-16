@@ -67,6 +67,7 @@ void AmigaMouseSpy::setup(byte videoOutputType)
 
 }
 
+#if !defined(COLECOVISION_ROLLER_TIMER_INT_HANDLER)
 ISR(TIMER1_COMPA_vect) {
 	int8_t x = lastX - currentX;
 	int8_t y = lastY - currentY;
@@ -91,8 +92,8 @@ ISR(TIMER1_COMPA_vect) {
 		Serial.write((y & (1 << i)) == 0 ? 0 : 1);
 	Serial.write('\n');
 #endif
-
 }
+#endif
 
 void AmigaMouseSpy::loop()
 {

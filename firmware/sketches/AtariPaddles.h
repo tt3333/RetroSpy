@@ -1,5 +1,5 @@
-﻿//
-// AmigaMouses.h
+//
+// AtariPaddles.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
@@ -24,21 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef AmigaMouse_h
-#define AmigaMouse_h
+#ifndef AtariPaddles_h
+#define AtariPaddles_h
 
 #include "ControllerSpy.h"
 
-class AmigaMouseSpy : public ControllerSpy {
+class AtariPaddlesSpy : public ControllerSpy {
 public:
-	void setup(byte videoOutputType);
+	void setup();
 	void loop();
 	void writeSerial();
 	void debugSerial();
 	void updateState();
 
 private:
-
 };
 
 #endif

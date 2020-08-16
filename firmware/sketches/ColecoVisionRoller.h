@@ -1,5 +1,5 @@
-﻿//
-// AmigaMouses.h
+//
+// ColecoVisionRoller.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
@@ -24,21 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef AmigaMouse_h
-#define AmigaMouse_h
+#ifndef ColecoVisionRollerSpy_h
+#define ColecoVisionRollerSpy_h
 
 #include "ControllerSpy.h"
 
-class AmigaMouseSpy : public ControllerSpy {
+class ColecoVisionRollerSpy : public ControllerSpy {
 public:
-	void setup(byte videoOutputType);
 	void loop();
 	void writeSerial();
 	void debugSerial();
 	void updateState();
-
+	void setup(byte videoOutputType);
+	
 private:
-
+	
 };
 
 #endif
