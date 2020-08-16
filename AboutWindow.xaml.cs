@@ -31,19 +31,19 @@ namespace RetroSpy
             InitializeComponent();
             wb.NavigateToString(string.Format(CultureInfo.CurrentCulture, @"
 <HTML>
-    <BODY style='color: #CBCBCB; background-color: #252526; font-family: ""Segoe UI""'>
+    <BODY ALINK=""#CBCBCB"" VLINK=""#CBCBCB"" LINK=""#CBCBCB"" style='color: #CBCBCB; background-color: #252526; font-family: ""Segoe UI""'>
 <CENTER>Version: {0}</CENTER>
 <CENTER>Build Timestamp: {1}</CENTER>
 <BR>
         <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
             <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/sk84uhlivin"">sk84uhlivin<A></TD></TR>
+            <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
             <TR><td ALIGN='CENTER'>watsonpunk</TD></TR>            
             <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
             <TR><td ALIGN='CENTER'>40wattRange</TD></TR>
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitter.filyx20.dev"">Filyx20</A></TD></TR>
+            <TR><td ALIGN='CENTER'><A HREF=""https://twitter.filyx20.dev"" >Filyx20</A></TD></TR>
             <TR><td ALIGN='CENTER'>Evan Grill</TD></TR>
-            <TR><td ALIGN='CENTER'>Vike</TD></TR>        
+            <TR><td ALIGN='CENTER'><A HREF=""https://twitter.com/VikeMK"">Vike</A></TD></TR>        
         </TABLE>
     </BODY>
 </HTML>", Assembly.GetEntryAssembly().GetName().Version, DateTime.Now));

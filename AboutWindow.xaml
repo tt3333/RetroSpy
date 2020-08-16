@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RetroSpy"
         mc:Ignorable="d"
-        Title="About - RetroSpy" Height="444.175" Width="438.834" Closing="Window_Closing">
+        Title="About - RetroSpy" Height="428.363" Width="438.834" Closing="Window_Closing"  ResizeMode="NoResize">
     <Grid>
         <WebBrowser x:Name="wb"  Navigating="webBrowser1_Navigating" HorizontalAlignment="Left" Height="403" VerticalAlignment="Top" Width="421"/>
 
