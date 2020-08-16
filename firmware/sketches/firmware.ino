@@ -59,6 +59,7 @@
 //#define MODE_ATARI5200_1
 //#define MODE_ATARI5200_2
 //#define MODE_COLECOVISION_ROLLER
+//#define MODE_ATARI_PADDLES
 
 // Some consoles care about PAL/NTSC for timing purposes
 #define VIDEO_OUTPUT VIDEO_PAL
@@ -117,6 +118,7 @@
 #include "Atari5200.h"
 #include "KeyboardController.h"
 #include "ColecoVisionRoller.h"
+#include "AtariPaddles.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -226,6 +228,9 @@ Atari5200Spy Atari5200Spy;
 #if defined(MODE_COLECOVISION_ROLLER)                                                  
 ColecoVisionRollerSpy ColecoVisionRollerSpy;
 #endif
+#if defined(MODE_ATARI_PADDLES)                                                  
+AtariPaddlesSpy AtariPaddlesSpy;
+#endif
 #if defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
@@ -241,8 +246,10 @@ void setup()
   for(int i = 33; i < 40; ++i)
     pinMode(i, INPUT_PULLUP);
 #else
+#if !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+#endif
 #endif
 
 #if defined(MODE_DETECT)
@@ -345,6 +352,8 @@ void setup()
 	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_BIG_BIRD);
 #elif defined(MODE_COLECOVISION_ROLLER)
 	ColecoVisionRollerSpy.setup(VIDEO_OUTPUT);
+#elif defined(MODE_ATARI_PADDLES)
+	AtariPaddlesSpy.setup();
 #endif
 
   #pragma GCC diagnostic push
@@ -451,6 +460,8 @@ void loop()
 	Atari5200Spy.loop();
 #elif defined(MODE_COLECOVISION_ROLLER)
 	ColecoVisionRollerSpy.loop();
+#elif defined(MODE_ATARI_PADDLES)
+	AtariPaddlesSpy.loop();
 #elif defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 

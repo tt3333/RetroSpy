@@ -50,7 +50,9 @@ enum VideoOutputType {
 // They cannot co-exist when linked even when not active
 //#define AMIGA_ANALOG_ADC_INT_HANDLER
 //#define ATARI5200_ADC_INT_HANDLER
+//#define ATARIPADDLES_ADC_INT_HANDLER
 //#define COLECOVISION_ROLLER_TIMER_INT_HANDLER
+
 	
 // Uncomment this for serial debugging output
 //#define DEBUG

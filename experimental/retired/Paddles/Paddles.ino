@@ -15,11 +15,11 @@
 // If its hitting right too soon it needs to be increased.  
 // The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_min**. 
 
-int nominal_min = 213;
-int nominal_max = 1004;
+int nominal_min = 1024;
+int nominal_max = 0;
 
 // ---------- Uncomment for debugging output --------------
-//#define DEBUG
+#define DEBUG
 
 // PINOUTS for Right Paddle
 // Atari Pin 4 -> Digital Pin 5
@@ -171,15 +171,22 @@ void loop() {
   window[windowPosition] = currentVal;
   windowPosition += 1;
   windowPosition = (windowPosition % 3);
+
+  int smoothedValue = middleOfThree(window[0], window[1], window[2]);
+  if (smoothedValue > nominal_max)
+    nominal_max = smoothedValue;
+  if (smoothedValue != 0 && smoothedValue < nominal_min)
+    nominal_min = smoothedValue; 
+  
 #ifdef DEBUG
     Serial.print("-");
     Serial.print(fire2 ? "4" : "-");
     Serial.print("|");
     Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
     Serial.print("|");
-    Serial.print(0);
+    Serial.print(nominal_min);
     Serial.print("|");
-    Serial.print(0);
+    Serial.print(nominal_max);
     Serial.print("\n");
 #else
     int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255);
