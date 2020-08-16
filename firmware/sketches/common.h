@@ -38,7 +38,8 @@ enum VideoOutputType {
 	VIDEO_PAL = 1,
 	VIDEO_NTSC = 2,
 };
-#endif
+#endif
+
 // Uncomment these to enable 3rd party libraries once installed
 //#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
 //#define TP_IRLIB2               // Used by MODE_CDI
