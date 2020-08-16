@@ -28,7 +28,6 @@
 #define CDi_h
 
 #include "ControllerSpy.h"
-#include <SoftwareSerial.h>
 
 // Uncomment 1 of these for different levels of debugging output
 // I would not recomend using more than 1 at a time!
@@ -37,8 +36,9 @@
 //#define WIRED_DEBUG
 //#define WIRELESS_DEBUG
 
-#if defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
+#if !defined(TP_PINCHANGEINTERRUPT) && defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
 
+#include <SoftwareSerial.h>
 #include <IRLibAll.h>
 
 class CDiSpy : public ControllerSpy {

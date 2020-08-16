@@ -19,7 +19,7 @@ namespace RetroSpy
 
         public static readonly InputSource PIPPIN = new InputSource("pippin", "Bandai Pippin", true, false, false, false, port => new SerialControllerReader(port, Pippin.ReadFromPacket));
 
-        public static readonly InputSource COLECOVISION = new InputSource("colecovision", "ColecoVision", true, false, false, false, port => new SerialControllerReader(port, ColecoVision.ReadFromPacket));
+        public static readonly InputSource COLECOVISION = new InputSource("colecovision", "ColecoVision", true, false, false, true, (port,port2) => new SerialControllerReader2(port, port2, ColecoVision.ReadFromPacket, ColecoVision.ReadFromSecondColecoVisionController));
 
         public static readonly InputSource CDTV = new InputSource("cdtv", "Commodore CDTV", true, false, false, false, port => new SerialControllerReader(port, Amiga.ReadFromPacket));
         public static readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, false, (port, port2) => new SerialControllerReader2(port, port2, Amiga.ReadFromPacket, Amiga.ReadFromPacket2));

@@ -26,6 +26,8 @@
 
 #include "CDiKeyboard.h"
 
+#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY))
+
 // Backspace == Delete
 static byte lookup[128] = {
   67,68,69,70,71,72,74,75,
@@ -231,3 +233,5 @@ void CDiKeyboardSpy::updateState() {
 		}
 	}
 }
+
+#endif

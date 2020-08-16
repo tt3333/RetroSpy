@@ -32,6 +32,14 @@
 #include "config_arduino.h"
 #endif
 
+#ifndef VIDEO_OUTPUT_TYPE
+#define VIDEO_OUTPUT_TYPE
+enum VideoOutputType {
+	VIDEO_PAL = 1,
+	VIDEO_NTSC = 2,
+};
+#endif
+
 // Uncomment these to enable 3rd party libraries once installed
 //#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
 //#define TP_IRLIB2               // Used by MODE_CDI
@@ -42,7 +50,8 @@
 // They cannot co-exist when linked even when not active
 //#define AMIGA_ANALOG_ADC_INT_HANDLER
 //#define ATARI5200_ADC_INT_HANDLER
-
+//#define COLECOVISION_ROLLER_TIMER_INT_HANDLER
+	
 // Uncomment this for serial debugging output
 //#define DEBUG
 

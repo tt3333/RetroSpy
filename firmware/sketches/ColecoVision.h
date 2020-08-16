@@ -36,9 +36,9 @@ public:
 	void debugSerial();
 	void updateState();
 	void setup();
-
+	
 private:
-
+	
 };
 
 #endif

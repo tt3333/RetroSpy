@@ -26,7 +26,7 @@
 
 #include "CDi.h"
 
-#if defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
+#if !defined(TP_PINCHANGEINTERRUPT) && defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
 
 static unsigned long wireless_timeout;
 static unsigned long wireless_remote_timeout;

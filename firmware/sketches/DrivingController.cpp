@@ -38,6 +38,8 @@
 static volatile byte currentState[2];
 static volatile byte currentEncoderValue;
 
+static byte lastRawData;
+
 static void bitchange_isr()
 {
 	byte encoderValue = 0;
