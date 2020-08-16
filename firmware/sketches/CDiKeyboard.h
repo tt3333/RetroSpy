@@ -52,7 +52,8 @@ private:
 	byte incomingBytes[4];
 	bool T_mode_caps_on;
 };
-#elseclass CDiKeyboardSpy : public ControllerSpy {
+#else
+class CDiKeyboardSpy : public ControllerSpy {
 public:
 	CDiKeyboardSpy(){}
 	void setup() {}
