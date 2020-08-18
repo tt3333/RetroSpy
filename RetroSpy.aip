@@ -263,3 +263,6 @@ English=
 2=<InstallDir>\serial_install.exe*?*?Normal*?After Installation*?Yes*?Any*?Yes
 3=<InstallDir>\CH341SER\SETUP.BAT*?*?Hide*?After Installation*?Yes*?Any*?Yes
 
+[FileOptions]
+0=RetroSpy-Setup\keybindings.xml?E30
+

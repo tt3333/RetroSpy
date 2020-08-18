@@ -102,7 +102,7 @@ namespace RetroSpy
         private readonly ResourceManager _resources;
         private bool isClosing;
 
-        private void UpdatePortListThread()
+    private void UpdatePortListThread()
         {
             Thread thread = new Thread(UpdatePortList);
             thread.Start();
@@ -111,6 +111,14 @@ namespace RetroSpy
         public SetupWindow()
         {
             InitializeComponent();
+
+            if (Properties.Settings.Default.UpgradeRequired)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default. UpgradeRequired = false;
+                Properties.Settings.Default.Save();
+            }
+
 
             isClosing = false;
             _vm = new SetupWindowViewModel();
