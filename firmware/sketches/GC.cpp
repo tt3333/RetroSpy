@@ -32,8 +32,18 @@ void GCSpy::loop() {
 		readBits = GC_PREFIX + GC_BITCOUNT;
 		updateState();
 		interrupts();
-		if (checkPrefixGC()) {
+		if (checkPrefixGC())
+		{
 			sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+		}
+		else if (checkPrefixKeyboard())
+		{
+#if !defined(DEBUG)
+			writeKeyboard();
+#else
+			//sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+			debugKeyboard();
+#endif			
 		}
 		else if (checkPrefixGBA()) {
 #if !defined(DEBUG)
@@ -169,8 +179,41 @@ inline bool GCSpy::checkPrefixGBA()
 	return true;
 }
 
+inline bool GCSpy::checkPrefixKeyboard()
+{
+	if (rawData[0] != 0) return false; // 0
+	if(rawData[1] == 0) return false;  // 1
+	if(rawData[2] != 0) return false;  // 0
+	if(rawData[3] == 0) return false;  // 1
+	if(rawData[4] != 0) return false;  // 0
+	if(rawData[5] == 0) return false;  // 1
+	if(rawData[6] != 0) return false;  // 0
+	if(rawData[7] != 0) return false;  // 0
+	if(rawData[8] != 0) return false;  // 0
+	if(rawData[9] != 0) return false;  // 0
+	if(rawData[10] != 0) return false;  // 0
+	if(rawData[11] != 0) return false;  // 0
+	if(rawData[12] != 0) return false;  // 0
+	if(rawData[13] != 0) return false;  // 0
+	if(rawData[14] != 0) return false;  // 0
+	if(rawData[15] != 0) return false;  // 0
+	if(rawData[16] != 0) return false;  // 0
+	if(rawData[17] != 0) return false;  // 0
+	if(rawData[18] != 0) return false;  // 0
+	if(rawData[19] != 0) return false;  // 0
+	if(rawData[20] != 0) return false;  // 0
+	if(rawData[21] != 0) return false;  // 0
+	if (rawData[22] != 0) return false; // 0
+	if(rawData[23] != 0) return false;  // 0
+	if(rawData[24] == 0) return false;  // 1
+	seenGC2N64 = false;
+	return true;
+
+}
+
 inline bool GCSpy::checkPrefixGC()
 {
+	
 	if (rawData[0] != 0) return false; // 0
 	if (rawData[1] == 0) return false; // 1
 	if (rawData[2] != 0) return false; // 0
@@ -263,4 +306,49 @@ inline bool GCSpy::checkBothGCPrefixOnRaphnet()
 	if (rawData[58] == 0) return false; // 1
 	seenGC2N64 = true;
 	return true;
+}
+
+void GCSpy::debugKeyboard()
+{
+	byte vals[3];
+	for (int j = 0; j < 3; ++j)
+	{
+		vals[j] = 0;
+		for (int i = 0; i < 8; ++i)
+		{
+			if (rawData[GC_PREFIX + i + 32 + (j * 8)] != 0)
+			{
+				vals[j] |= (byte)(1 << (7 - i));
+			}
+		}
+	}
+	Serial.print("|");
+	Serial.print(vals[0], HEX);
+	Serial.print("|");
+	Serial.print(vals[1], HEX);
+	Serial.print("|");
+	Serial.println(vals[2], HEX);
+}
+
+void GCSpy::writeKeyboard()
+{
+	byte vals[3];
+	for (int j = 0; j < 3; ++j)
+	{
+		vals[j] = 0;
+		for (int i = 0; i < 8; ++i)
+		{
+			if (rawData[GC_PREFIX + i + 32 + (j * 8)] != 0)
+			{
+				vals[j] |= (byte)(1 << (7 - i));
+			}
+		}
+		if (vals[j] == 10)
+			vals[j] = 11;
+	}
+	
+	Serial.write(vals[0]);
+	Serial.write(vals[1]);
+	Serial.write(vals[2]);
+	Serial.write(SPLIT);
 }
