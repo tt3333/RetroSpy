@@ -17,7 +17,7 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
-            if (packet.Length == PACKET_SIZE)
+            if (packet.Length >= PACKET_SIZE)
             {
                 ControllerStateBuilder state = new ControllerStateBuilder();
 
