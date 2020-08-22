@@ -6,6 +6,8 @@ namespace RetroSpy.Readers
     {
         private const int PACKET_SIZE = 7;
 
+        private static float maxX = float.MinValue, maxY = float.MinValue;
+
         private static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "1", "2", "3"
         };
@@ -15,22 +17,19 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
-            if (packet.Length < PACKET_SIZE)
+            if (packet.Length >= PACKET_SIZE)
             {
-                return null;
-            }
+                ControllerStateBuilder state = new ControllerStateBuilder();
 
-            ControllerStateBuilder state = new ControllerStateBuilder();
-
-            for (int i = 0; i < BUTTONS.Length; ++i)
-            {
-                if (string.IsNullOrEmpty(BUTTONS[i]))
+                for (int i = 0; i < BUTTONS.Length; ++i)
                 {
-                    continue;
+                    if (string.IsNullOrEmpty(BUTTONS[i]))
+                    {
+                        continue;
+                    }
+
+                    state.SetButton(BUTTONS[i], packet[i] != 0x00);
                 }
-
-                state.SetButton(BUTTONS[i], packet[i] != 0x00);
-
                 float x = 0;
                 float y = 0;
 
@@ -69,9 +68,40 @@ namespace RetroSpy.Readers
 
                 state.SetAnalog("x", x);
                 state.SetAnalog("y", y);
-            }
 
-            return state.Build();
+                return state.Build();
+            }
+            else if (packet.Length == 2)
+            {
+                ControllerStateBuilder state = new ControllerStateBuilder();
+                
+                state.SetAnalog("paddle", packet[0] / 256.0f);
+                state.SetButton("1", packet[1] != 0);
+
+                return state.Build();
+            }
+            else if (packet.Length == 4)
+            {
+                ControllerStateBuilder state = new ControllerStateBuilder();
+
+                sbyte x = (sbyte)packet[0];
+                sbyte y = (sbyte)packet[1];
+
+                if (Math.Abs(x) != 0 && Math.Abs(x) > maxX)
+                    maxX = Math.Abs(x);
+
+                if (Math.Abs(y) != 0 && Math.Abs(y) > maxY)
+                    maxY = Math.Abs(y);
+
+                SignalTool.SetMouseProperties(-1.0f * x / maxX, y / maxY, state);
+
+                state.SetButton("1", packet[2] != 0);
+                state.SetButton("2", packet[3] != 0);
+
+                return state.Build();
+            }
+            else
+                return null;
         }
     }
 }

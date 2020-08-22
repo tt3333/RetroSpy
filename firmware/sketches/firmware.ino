@@ -11,6 +11,8 @@
 //#define MODE_N64
 //#define MODE_GC
 //#define MODE_SMS
+//#define MODE_SMS_PADDLE
+//#define MODE_SMS_SPORTS_PAD
 //#define MODE_GENESIS
 //#define MODE_SMS_ON_GENESIS // For using a Genesis cable and the Genesis 
 							  // reader in the exe while playing SMS games.
@@ -87,6 +89,8 @@
 #include "Genesis.h"
 #include "GenesisMouse.h"
 #include "SMS.h"
+#include "SMSPaddle.h"
+#include "SMSSportsPad.h"
 #include "Saturn.h"
 #include "Saturn3D.h"
 
@@ -143,6 +147,12 @@ GenesisMouseSpy GenesisMouseSpy;
 #endif
 #if defined(MODE_SMS)
 SMSSpy SMSSpy;
+#endif
+#if defined(MODE_SMS_PADDLE)
+SMSPaddleSpy SMSPaddleSpy;
+#endif
+#if defined(MODE_SMS_SPORTS_PAD)
+SMSSportsPadSpy SMSSportsPadSpy;
 #endif
 #if defined(MODE_SMS_ON_GENESIS)
 SMSSpy SMSOnGenesisSpy;
@@ -286,6 +296,10 @@ void setup()
     GenesisMouseSpy.setup();
 #elif defined(MODE_SMS)
     SMSSpy.setup();
+#elif defined(MODE_SMS_PADDLE)
+	SMSPaddleSpy.setup();
+#elif defined(MODE_SMS_SPORTS_PAD)
+	SMSSportsPadSpy.setup();
 #elif defined(MODE_SMS_ON_GENESIS)
     SMSOnGenesisSpy.setup(SMSSpy::OUTPUT_GENESIS);
 #elif defined(MODE_SATURN)
@@ -404,6 +418,10 @@ void loop()
     GenesisMouseSpy.loop();
 #elif defined(MODE_SMS)
     SMSSpy.loop();
+#elif defined(MODE_SMS_PADDLE)
+	SMSPaddleSpy.loop();
+#elif defined(MODE_SMS_SPORTS_PAD)
+	SMSSportsPadSpy.loop();
 #elif defined(MODE_SMS_ON_GENESIS)
     SMSOnGenesisSpy.loop();
 #elif defined(MODE_SATURN)

@@ -91,7 +91,7 @@ void SMSSpy::updateState() {
 	if (digitalRead(inputPins[3]) == LOW) { currentState |= CC_BTN_RIGHT; }
 	if (digitalRead(inputPins[4]) == LOW) { currentState |= CC_BTN_1; }
 	if (digitalRead(inputPins[5]) == LOW) { currentState |= CC_BTN_2; }
-
+	
 	interrupts();
 
 	lastReadTime = millis();
@@ -104,6 +104,7 @@ void SMSSpy::writeSerial() {
 		{
 			Serial.write(currentState & (1 << i) ? ONE : ZERO);
 		}
+		Serial.write(ZERO);
 		Serial.write(SPLIT);
 		break;
 	case OUTPUT_GENESIS:

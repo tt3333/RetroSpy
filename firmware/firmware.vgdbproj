@@ -61,6 +61,8 @@
         <string>sketches\gameboy_printer_protocol.h</string>
         <string>sketches\AtariPaddles.h</string>
         <string>sketches\ColecoVisionRoller.h</string>
+        <string>sketches\SMSPaddle.h</string>
+        <string>sketches\SMSSportsPad.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
