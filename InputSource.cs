@@ -41,7 +41,7 @@ namespace RetroSpy
         public static readonly InputSource VIRTUALBOY = new InputSource("virtualboy", "Nintendo VirtualBoy", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacketVB));
         public static readonly InputSource N64 = new InputSource("n64", "Nintendo 64", true, false, false, false, port => new SerialControllerReader(port, Nintendo64.ReadFromPacket));
         public static readonly InputSource PRINTER = new InputSource("printer", "Nintendo GameBoy Printer", true, false, false, false, port => new GameBoyPrinterReader(port, GameBoyPrinter.ReadFromPacket));
-        public static readonly InputSource GAMECUBE = new InputSource("gamecube", "Nintendo GameCube", true, false, false, false, port => new SerialControllerReader(port, GameCube.ReadFromPacket));
+        public static readonly InputSource GAMECUBE = new InputSource("gamecube", "Nintendo GameCube", true, false, false, true, (port, port2) => new SerialControllerReader2(port, port2, GameCube.ReadFromPacket, GameCube.ReadFromSecondPacket));
         public static readonly InputSource WII = new InputSource("wii", "Nintendo Wii", true, false, false, false, port => new SerialControllerReader(port, WiiReaderV2.ReadFromPacket));
         public static readonly InputSource SWITCH = new InputSource("switch", "Nintendo Switch", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -z", SwitchReader.ReadFromPacket));
 
