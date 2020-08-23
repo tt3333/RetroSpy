@@ -40,9 +40,13 @@ private:
 	bool seenGC2N64 = false;
 	bool checkPrefixGBA();
 	bool checkPrefixGC();
+	bool checkPrefixKeyboard();
 	bool checkBothGCPrefixOnRaphnet();
 	void sendRawGBAData();
 
+	void debugKeyboard();
+	void writeKeyboard();
+	
 	unsigned char rawData[34 + GC_PREFIX + GC_BITCOUNT];
 	unsigned char readBits;
 };
