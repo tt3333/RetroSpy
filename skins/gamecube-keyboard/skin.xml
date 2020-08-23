@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="ASCII Keyboard Controller" author="zoggins" type="gamecube;mousetester">
+<skin name="ASCII Keyboard Controller" author="zoggins" type="gamecube">
 
   	<!-- Load Controller images - Menu name, file path + name, read in order -->
   	<!-- Any new image/skin you make must have it's own entry in here! -->
@@ -54,7 +54,7 @@
     <button name="ScrollLock" image="circle2.png" x="815" y="56" width="40" height="40" />
     <button name="Delete" image="circle2.png" x="861" y="56" width="40" height="40" />
 	
-	<button name="Grave" image="circle2.png" x="220" y="56" width="40" height="40" />
+	<button name="Grave" image="circle2.png" x="220" y="120" width="40" height="40" />
 
     <button name="D1" image="circle2.png" x="264" y="120" width="40" height="40" />
     <button name="D2" image="circle2.png" x="311" y="120" width="40" height="40" />

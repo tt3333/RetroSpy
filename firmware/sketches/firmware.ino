@@ -9,7 +9,7 @@
 //#define MODE_NES
 //#define MODE_SNES
 //#define MODE_N64
-#define MODE_GC
+//#define MODE_GC
 //#define MODE_SMS
 //#define MODE_SMS_PADDLE
 //#define MODE_SMS_SPORTS_PAD

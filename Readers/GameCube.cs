@@ -19,13 +19,13 @@ namespace RetroSpy.Readers
             
             "Q", "K_R", "S", "T", "U", "V", "W", "K_X", 
             "K_Y", "K_Z", "D1", "D2", "D3", "D4", "D5", "D6",
-            "D7", "D8", "D9", "D0", "Minus", "Equals", null, null,
-            null, null, null, null, null, null, null, null,
+            "D7", "D8", "D9", "D0", "Minus", "Equals", "Yen", "LeftBracket",
+            "RightBracket", "Semicolon", "Apostrophe", "LeftOfReturn", "Comma", "Period", "Slash", "JpSlash",
 
             "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8",
             "F9", "F10", "F11", "F12", "Escape", "Insert", "Delete", "Grave",
-            "Back", "Tab", null, "Capital", "LeftShift", null, "LeftControl", "LeftAlt",
-            "LeftWindowsKey", "Space", "RightWindowsKey", "Applications", "K_left", "K_right", "K_up", "K_down",
+            "Back", "Tab", null, "Capital", "LeftShift", "RightShift", "LeftControl", "LeftAlt",
+            "LeftWindowsKey", "Space", "RightWindowsKey", "Applications", "K_left", "K_down", "K_up", "K_right",
 
             null, "Return", null, null, null, null, null, null,
             null, null, null, null, null, null, null, null,
@@ -35,6 +35,22 @@ namespace RetroSpy.Readers
         {
             null, null, null, null, null, null, "Function", "Function",
             "Function", "Function", null, "Function", null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+
+            null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null,
+
         };
 
         private static float ReadStick(byte input)
@@ -68,6 +84,34 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
+            if (packet.Length == 3)
+            {
+                ControllerStateBuilder state1 = new ControllerStateBuilder();
+
+                for (int i = 0; i < KEYS.Length; ++i)
+                {
+                    if (KEYS[i] != null)
+                    {
+                        state1.SetButton(KEYS[i], false);
+                    }
+                }
+
+                for (int i = 0; i < packet.Length; ++i)
+                {
+                    if (KEYS[packet[i]] != null)
+                        state1.SetButton(KEYS[packet[i]], true);
+                }
+
+                state1.SetButton("Function", false);
+                for (int i = 0; i < packet.Length; ++i)
+                {
+                    if (FUNCTION_KEYS[packet[i]] != null)
+                        state1.SetButton(FUNCTION_KEYS[packet[i]], true);
+                }
+
+                return state1.Build();
+            }
+
             if (packet.Length != PACKET_SIZE)
             {
                 return null;
@@ -97,6 +141,13 @@ namespace RetroSpy.Readers
             {
                 if (KEYS[keyboardData[i]] != null)
                     state.SetButton(KEYS[keyboardData[i]], true);
+            }
+
+            state.SetButton("Function", false);
+            for (int i = 0; i < packet.Length; ++i)
+            {
+                if (FUNCTION_KEYS[keyboardData[i]] != null)
+                    state.SetButton(FUNCTION_KEYS[keyboardData[i]], true);
             }
 
             state.SetAnalog("lstick_x", ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length)));
