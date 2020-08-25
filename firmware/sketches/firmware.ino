@@ -440,7 +440,7 @@ void loop()
     NeoGeoSpy.loop();
 #elif defined(MODE_PCFX)
     PCFXSpy.loop();
-#elif defined(MODE_PlayStation)
+#elif defined(MODE_PLAYSTATION)
     PlayStationSpy.loop();
 #elif defined(MODE_TG16)
     TG16Spy.loop();
