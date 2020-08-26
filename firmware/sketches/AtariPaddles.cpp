@@ -26,6 +26,8 @@
 
 #include "AtariPaddles.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 static int nominal_min = 1024;
 static int nominal_max = 0;
 static volatile int lastVal = 0;
@@ -176,3 +178,13 @@ void AtariPaddlesSpy::updateState()
 {
 	
 }
+
+#else
+
+void AtariPaddlesSpy::setup() {}
+void AtariPaddlesSpy::loop() {}
+void AtariPaddlesSpy::writeSerial() {}
+void AtariPaddlesSpy::debugSerial() {}
+void AtariPaddlesSpy::updateState() {}
+
+#endif
