@@ -144,7 +144,7 @@ namespace RetroSpy.Readers
             }
 
             state.SetButton("Function", false);
-            for (int i = 0; i < packet.Length; ++i)
+            for (int i = 0; i < keyboardData.Length; ++i)
             {
                 if (FUNCTION_KEYS[keyboardData[i]] != null)
                     state.SetButton(FUNCTION_KEYS[keyboardData[i]], true);
