@@ -19,10 +19,10 @@
 //#define MODE_GENESIS_MOUSE
 //#define MODE_SATURN
 //#define MODE_SATURN3D
+//#define MODE_PLAYSTATION
 
 //-- Arduino Only
 //#define MODE_BOOSTER_GRIP
-//#define MODE_PLAYSTATION
 //#define MODE_TG16
 //#define MODE_NEOGEO
 //#define MODE_3DO

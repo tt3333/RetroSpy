@@ -85,11 +85,11 @@
 #define TG_DATA3           NOT_CONNECTED
 #define TG_DATA4           NOT_CONNECTED
 
-#define PS_ATT             NOT_CONNECTED
-#define PS_CLOCK           NOT_CONNECTED
-#define PS_ACK             NOT_CONNECTED
-#define PS_CMD             NOT_CONNECTED
-#define PS_DATA            NOT_CONNECTED
+#define PS_ATT             DIGITAL_PIN_07
+#define PS_CLOCK           DIGITAL_PIN_08
+#define PS_ACK             DIGITAL_PIN_06
+#define PS_CMD             DIGITAL_PIN_20
+#define PS_DATA            DIGITAL_PIN_21
 
 //PORTD
 #define NEOGEO_SELECT      NOT_CONNECTED

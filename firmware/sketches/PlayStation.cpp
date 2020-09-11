@@ -35,6 +35,7 @@ void PlayStationSpy::loop() {
 #else
 	debugSerial();
 #endif
+	T_DELAY(5);
 }
 
 void PlayStationSpy::updateState() {
@@ -49,7 +50,7 @@ void PlayStationSpy::updateState() {
 	bits = 0;
 	do {
 		WAIT_LEADING_EDGE(PS_CLOCK);
-		byte pins = PIND;
+		byte pins = READ_PORTD(0b01100000);
 
 		rawData[numBits] = pins & 0b01000000;
 		playstationCommand[numBits] = pins & 0b00100000;
