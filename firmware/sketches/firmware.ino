@@ -274,7 +274,7 @@ void setup()
   else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
        DCSpy.setup();
     } else if( !PINC_READ( MODEPIN_WII ) ) {
-        WiiSpy.setup()();
+        WiiSpy.setup();
     }
 #endif 
     else {
@@ -394,7 +394,7 @@ void loop()
     } 
 #if defined(__arm__) && defined(CORE_TEENSY)
   else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-        DreamcastSpy.loop();
+        DCSpy.loop();
     } else if( !PINC_READ( MODEPIN_WII ) ) {
         WiiSpy.loop();
     }

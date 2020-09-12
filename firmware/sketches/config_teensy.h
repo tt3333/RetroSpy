@@ -47,7 +47,7 @@
 #define MODEPIN_DREAMCAST  36
 #define MODEPIN_WII        37
 
-#define N64_PIN	           DIGITAL_PIN_02
+#define N64_PIN	           DIGITAL_PIN_07
 
 #define SNES_LATCH         DIGITAL_PIN_08
 #define SNES_DATA          DIGITAL_PIN_06

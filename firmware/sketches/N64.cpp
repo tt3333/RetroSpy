@@ -72,7 +72,7 @@ void N64Spy::updateState() {
 	// bit3 = PIND & 0b00000100;
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-	bit2 = PIND & 0b00000100;
+	bit2 = READ_PORTD(0b00000100);
 	if (bit2 != 0)  // Controller Reset
 	{
 		WAIT_FALLING_EDGE(N64_PIN);
@@ -87,7 +87,7 @@ void N64Spy::updateState() {
 	}
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-	bit1 = PIND & 0b00000100;
+	bit1 = READ_PORTD(0b00000100);
 	if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
 	{
 		WAIT_FALLING_EDGE(N64_PIN);
@@ -99,7 +99,7 @@ void N64Spy::updateState() {
 	}
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-	bit0 = PIND & 0b00000100;
+	bit0 = READ_PORTD(0b00000100);
 	if (bit0 != 0) // controller poll
 	{
 		bits = 33;
@@ -119,7 +119,7 @@ read_loop:
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 
 	// Read a bit from the line and store as a byte in "rawData"
-	*rawDataPtr = PIND & 0b00000100;
+	*rawDataPtr = READ_PORTD(0b00000100);
 	++rawDataPtr;
 	if (--bits == 0) return;
 
