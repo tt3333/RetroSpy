@@ -940,6 +940,22 @@ void GameBoyPrinterEmulator::loop()
 		}
 	};	
 }
+
+void GameBoyPrinterEmulator::writeSerial()
+{
+	
+}
+
+void GameBoyPrinterEmulator::debugSerial()
+{
+	
+}
+
+void GameBoyPrinterEmulator::updateState()
+{
+	
+}
+
 #else
 
 void GameBoyPrinterEmulator::setup()
