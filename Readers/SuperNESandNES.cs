@@ -56,6 +56,14 @@ namespace RetroSpy.Readers
             "a", "b", "select", "start", "up", "down", "left", "right"
         };
 
+        private static readonly string[] BUTTONS_NES_POWERGLOVE = {
+            "a", "b", "select", "start", "up", "down", "left", "right", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" ,"enter", "center"
+        };
+
+        private static readonly string[] BUTTONS_NES_POWERGLOVE_FINGERS = {
+            "thumb", "index", "middle", "ring"
+        };
+
         private static readonly string[] BUTTONS_SNES = {
             "b", "y", "select", "start", "up", "down", "left", "right", "a", "x", "l", "r", null, null, null, null
         };
@@ -102,7 +110,113 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
+            if (packet.Length == 80)
+                return ProcessPowerGlove(packet);
+
             return ReadPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
+        }
+
+        public static ControllerStateEventArgs ProcessPowerGlove(byte[] packet)
+        {
+            if (packet == null)
+                throw new NullReferenceException();
+
+            ControllerStateBuilder state = new ControllerStateBuilder();
+
+            sbyte x = (sbyte)SignalTool.ReadByte(packet, 8, 8);
+            state.SetAnalog("x", x / 128.0f);
+
+            sbyte y = (sbyte)SignalTool.ReadByte(packet, 16, 8);
+            state.SetAnalog("y", y / 128.0f);
+
+            sbyte z = (sbyte)SignalTool.ReadByte(packet, 24, 8);
+            state.SetAnalog("z", z / 128.0f);
+
+            byte rotation = SignalTool.ReadByte(packet, 32, 8);
+            state.SetAnalog("rotation", rotation / 11.0f);
+
+            byte[] fingers = new byte[4];
+            for(int i = 0; i < 4; ++i)
+            {
+                fingers[i] = 0;
+                for(int j = 0; j < 2; ++j)
+                {
+                    fingers[i] |= (byte)(packet[40 + (i * 2) + j] == 0 ? 0 : (1 << j));
+                }
+            }
+            for(int i = 0; i < 4; ++i)
+            {
+                state.SetAnalog(BUTTONS_NES_POWERGLOVE_FINGERS[i], fingers[i] / 4.0f);
+            }
+
+            byte buttons = SignalTool.ReadByte(packet, 48, 8);
+            for(int i = 0; i < BUTTONS_NES_POWERGLOVE.Length; ++i)
+            {
+                state.SetButton(BUTTONS_NES_POWERGLOVE[i], false);
+            }    
+            switch (buttons)
+            {
+                case 0x00:
+                    state.SetButton("0", true);
+                    state.SetButton("center", true);
+                    break;
+                case 0x01:
+                    state.SetButton("1", true);
+                    break;
+                case 0x02:
+                    state.SetButton("2", true);
+                    break;
+                case 0x03:
+                    state.SetButton("3", true);
+                    break;
+                case 0x04:
+                    state.SetButton("4", true);
+                    break;
+                case 0x05:
+                    state.SetButton("5", true);
+                    break;
+                case 0x06:
+                    state.SetButton("6", true);
+                    break;
+                case 0x07:
+                    state.SetButton("7", true);
+                    break;
+                case 0x08:
+                    state.SetButton("8", true);
+                    break;
+                case 0x09:
+                    state.SetButton("9", true);
+                    break;
+                case 0x0A:
+                    state.SetButton("a", true);
+                    break;
+                case 0x0B:
+                    state.SetButton("b", true);
+                    break;
+                case 0x0C:
+                    state.SetButton("left", true);
+                    break;
+                case 0x0D:
+                    state.SetButton("up", true);
+                    break;
+                case 0x0E:
+                    state.SetButton("down", true);
+                    break;
+                case 0x0F:
+                    state.SetButton("right", true);
+                    break;
+                case 0x80:
+                    state.SetButton("enter", true);
+                    break;
+                case 0x82:
+                    state.SetButton("start", true);
+                    break;
+                case 0x83:
+                    state.SetButton("select", true);
+                    break;
+            }
+
+            return state.Build();
         }
 
         public static ControllerStateEventArgs ReadFromPacketVB(byte[] packet)
