@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="SNES NTT Data Controller" author="zoggins" type="snes;mousetester">
+
+    <background name="Default" image="nttdata.png" />
+
+    <button name="a" image="circle2.png" x="463" y="121" width="35" height="35" />
+    <button name="b" image="circle2.png" x="422" y="153" width="35" height="35" />
+    <button name="x" image="circle2.png" x="421" y="88" width="35" height="35" />
+    <button name="y" image="circle2.png" x="379" y="121" width="35" height="35" />
+
+    <button name="l" image="circle2.png" x="92" y="48" width="70" height="17" />
+    <button name="r" image="circle2.png" x="392" y="48" width="70" height="17" />
+
+    <button name="start" image="circle2.png" x="237" y="42" width="35" height="17" />
+    <button name="select" image="circle2.png" x="186" y="42" width="35" height="17" />
+    <button name="start" image="circle2.png" x="237" y="42" width="35" height="17" />
+    <button name="end" image="circle2.png" x="312" y="42" width="35" height="17" />
+  
+    <button name="up" image="circle2.png" x="77" y="102" width="20" height="20" />
+    <button name="down" image="circle2.png" x="77" y="154" width="20" height="20" />
+    <button name="left" image="circle2.png" x="53" y="130" width="20" height="20" />
+    <button name="right" image="circle2.png" x="105" y="130" width="20" height="20" />
+
+      <button name="1" image="circle2.png" x="148" y="78" width="35" height="35" />
+    <button name="2" image="circle2.png" x="193" y="78" width="35" height="35" />
+    <button name="3" image="circle2.png" x="237" y="78" width="35" height="35" />
+    <button name="star" image="circle2.png" x="279" y="78" width="35" height="35" />
+      <button name="c" image="circle2.png" x="320" y="78" width="35" height="35" />
+
+      <button name="4" image="circle2.png" x="148" y="122" width="35" height="35" />
+    <button name="5" image="circle2.png" x="193" y="122" width="35" height="35" />
+    <button name="6" image="circle2.png" x="237" y="122" width="35" height="35" />
+    <button name="pound" image="circle2.png" x="279" y="122" width="35" height="35" />
+      <button name="dot" image="circle2.png" x="320" y="122" width="35" height="35" />
+
+      <button name="7" image="circle2.png" x="148" y="167" width="35" height="35" />
+    <button name="8" image="circle2.png" x="193" y="167" width="35" height="35" />
+    <button name="9" image="circle2.png" x="237" y="167" width="35" height="35" />
+    <button name="0" image="circle2.png" x="304" y="167" width="35" height="35" />
+
+
+</skin>
