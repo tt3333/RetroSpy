@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="SNES NTT Data Controller" author="zoggins" type="snes;mousetester">
+<skin name="SNES NTT Data Controller" author="zoggins" type="snes">
 
     <background name="Default" image="nttdata.png" />
 

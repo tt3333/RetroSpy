@@ -60,6 +60,10 @@ namespace RetroSpy.Readers
             "b", "y", "select", "start", "up", "down", "left", "right", "a", "x", "l", "r", null, null, null, null
         };
 
+        private static readonly string[] BUTTONS_SNES_NTTDATA = {
+            "b", "y", "select", "start", "up", "down", "left", "right", "a", "x", "l", "r", null, null, null, null, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "star", "pound", "dot", "c", null, "end"
+        };
+
         private static readonly string[] BUTTONS_INTELLIVISION = {
             "n", "nne", "ne", "ene", "e", "ese", "se", "sse", "s", "ssw", "sw", "wsw", "w", "wnw", "nw", "nnw", "1", "2", "3", "4", "5", "6", "7", "8", "9", "clear", "0", "enter", "topleft", "topright", "bottomleft", "bottomright"
         };
@@ -146,21 +150,36 @@ namespace RetroSpy.Readers
 
             ControllerStateBuilder state = new ControllerStateBuilder();
 
-            for (int i = 0; i < BUTTONS_SNES.Length; ++i)
+            if (packet.Length == 32 && packet[15] == 0x00 && packet[13] != 0x00)
             {
-                if (string.IsNullOrEmpty(BUTTONS_SNES[i]))
+                for (int i = 0; i < BUTTONS_SNES_NTTDATA.Length; ++i)
                 {
-                    continue;
+                    if (string.IsNullOrEmpty(BUTTONS_SNES_NTTDATA[i]))
+                    {
+                        continue;
+                    }
+
+                    state.SetButton(BUTTONS_SNES_NTTDATA[i], packet[i] != 0x00);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < BUTTONS_SNES.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_SNES[i]))
+                    {
+                        continue;
+                    }
+
+                    state.SetButton(BUTTONS_SNES[i], packet[i] != 0x00);
                 }
 
-                state.SetButton(BUTTONS_SNES[i], packet[i] != 0x00);
-            }
-
-            if (state != null && packet.Length == 32 && packet[15] != 0x00)
-            {
-                float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
-                float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
-                SignalTool.SetMouseProperties(x, y, state);
+                if (state != null && packet.Length == 32 && packet[15] != 0x00)
+                {
+                    float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
+                    float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
+                    SignalTool.SetMouseProperties(x, y, state);
+                }
             }
 
             return state.Build();
