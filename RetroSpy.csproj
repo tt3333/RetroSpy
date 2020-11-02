@@ -246,6 +246,18 @@
     <None Include="experimental\retired\cdtv-wired\TimerOne.h" />
     <None Include="experimental\retired\DrivingController\DrivingController.ino" />
     <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
     <Content Include="skins\3do-controller\3dobackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -643,6 +655,63 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\gamecube-keyboard\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\jaguar-3button\circle.png">
