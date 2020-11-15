@@ -129,3 +129,6 @@ Backup*/
 /MiSTer/Debug
 /RetroSpy-Upload
 /RetroSpy-Setup
+/.visualgdb
+/firmware/.visualgdb/
+/firmware/firmware.adeps

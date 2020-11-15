@@ -66,6 +66,7 @@ namespace RetroSpy
     {
         public ElementConfig Config { get; set; }
         public string Name { get; set; }
+        public float Precision { get; set; }
     }
 
     public class RangeButton
@@ -88,6 +89,7 @@ namespace RetroSpy
         public uint OriginalYRange { get; set; }
         public bool XReverse { get; set; }
         public bool YReverse { get; set; }
+        public float Precision { get; set; }
     }
 
     public class AnalogTrigger
@@ -305,7 +307,8 @@ namespace RetroSpy
                 _buttons.Add(new Button
                 {
                     Config = ParseStandardConfig(skinPath, elem),
-                    Name = ReadStringAttr(elem, "name")
+                    Name = ReadStringAttr(elem, "name"),
+                    Precision = ReadFloatConfig(elem, "precision", false)
                 });
             }
 
@@ -341,7 +344,8 @@ namespace RetroSpy
                     YRange = ReadUintAttr(elem, "yrange"),
                     OriginalYRange = ReadUintAttr(elem, "yrange"),
                     XReverse = ReadBoolAttr(elem, "xreverse"),
-                    YReverse = ReadBoolAttr(elem, "yreverse")
+                    YReverse = ReadBoolAttr(elem, "yreverse"),
+                    Precision = ReadFloatConfig(elem, "precision", false)
                 });
             }
 
@@ -448,8 +452,21 @@ namespace RetroSpy
             return result;
         }
 
-        private static float ReadFloatConfig(XElement elem, string attrName)
+        private static float ReadFloatConfig(XElement elem, string attrName, bool required = true)
         {
+            IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
+            if (!attrs.Any())
+            {
+                if (required)
+                {
+                    throw new ConfigParseException("Required attribute '" + attrName + "' not found on element '" + elem.Name + "'.");
+                }
+                else
+                {
+                    return 0.0f;
+                }
+            }
+
             if (!float.TryParse(ReadStringAttr(elem, attrName), out float ret))
             {
                 throw new ConfigParseException("Failed to parse number for property '" + attrName + "' in element '" + elem.Name + "'.");

@@ -1,5 +1,5 @@
 //
-// SNES.cpp
+// PowerGlove.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
@@ -24,53 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SNES.h"
+#ifndef PowerGloveSpy_h
+#define PowerGloveSpy_h
 
-void SNESSpy::loop() {
-	noInterrupts();
-	updateState();
-	interrupts();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
+#include "ControllerSpy.h"
+
+class PowerGloveSpy : public ControllerSpy {
+public:
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
+
+private:
+	unsigned char rawData[NES_BITCOUNT * 10];
+}
+;
+
 #endif
-	T_DELAY(5);
-}
-
-void SNESSpy::writeSerial() {
-	sendRawData(rawData, 0, bytesToReturn);
-}
-
-void SNESSpy::debugSerial() {
-	sendRawDataDebug(rawData, 0, bytesToReturn);
-}
-
-void SNESSpy::updateState() {
-#ifdef MODE_2WIRE_SNES
-	read_shiftRegister_2wire(rawData, SNES_LATCH, SNES_DATA, false, SNES_BITCOUNT);
-#else
-	unsigned char position = 0;
-	unsigned char bits = 0;
-
-	bytesToReturn = SNES_BITCOUNT;
-
-	WAIT_FALLING_EDGE(SNES_LATCH);
-
-	do {
-		WAIT_FALLING_EDGE(SNES_CLOCK);
-		rawData[position++] = !PIN_READ(SNES_DATA);
-	} while (++bits < SNES_BITCOUNT);
-
-	if (rawData[15] != 0x0 || (rawData[15] == 0x00 && rawData[13] != 0x00))
-	{
-		bits = 0;
-		do {
-			WAIT_FALLING_EDGE(SNES_CLOCK);
-			rawData[position++] = !PIN_READ(SNES_DATA);
-		} while (++bits < SNES_BITCOUNT);
-
-		bytesToReturn = SNES_BITCOUNT_EXT;
-	}
-#endif
-}

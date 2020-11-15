@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Patton Box Digital (Brooke PS3/PS4 to Mega Drive Super Converter: DualShock 4; Mega Drive 6-Button)" author="Stuart John Patton (SJP176)" type="generic">
+
+    <background name="Default" image="BG.png" />
+	
+	<button name="up" image="24-BUTTON.png" x="37" y="115" />
+    <button name="down" image="24-BUTTON.png" x="169" y="104" />
+    <button name="left" image="24-BUTTON.png" x="102" y="104" />
+    <button name="right" image="24-BUTTON.png" x="231" y="129" />
+	
+    <button name="b2" image="24-BUTTON.png" x="365" y="129" />
+	<button name="b0" image="24-BUTTON.png" x="360" y="194" />
+	<button name="b1" image="24-BUTTON.png" x="421" y="169" />
+	<button name="b3" image="24-BUTTON.png" x="427" y="104" />
+	
+	<button name="b4" image="24-BUTTON.png" x="559" y="115" />
+	<button name="b5" image="24-BUTTON.png" x="494" y="104" />
+	
+	<button name="b6" image="24-BUTTON.png" x="107" y="168" />
+	<button name="b6" image="24-UBUTTON.png" x="236" y="194" />
+	<button name="b7" image="24-BUTTON.png" x="175" y="169" />
+	
+	<button name="b8" image="30-UBUTTON.png" x="175" y="239" />
+	<button name="b9" image="30-UBUTTON.png" x="407" y="239" />
+	
+	<button name="b10" image="30-UBUTTON.png" x="251" y="263" />
+	<button name="b11" image="30-UBUTTON.png" x="331" y="263" />
+
+	<button name="b12" image="24-UBUTTON.png" x="225" y="64" />
+	<button name="b13" image="24-UBUTTON.png" x="164" y="39" />
+	
+	<button name="x-" image="24-BUTTON.png" x="96" y="39" precision=".01" />
+	<button name="x+" image="24-BUTTON.png" x="225" y="65" precision=".01" />
+	<button name="y-" image="24-BUTTON.png" x="31" y="50" precision=".01" />
+	<button name="y+" image="24-BUTTON.png" x="164" y="39" precision=".01" />
+	
+	<button name="rx-" image="24-UBUTTON.png" x="371" y="64" precision=".01" />
+	<button name="rx+" image="24-UBUTTON.png" x="500" y="39" precision=".01" />
+	<button name="ry-" image="24-UBUTTON.png" x="565" y="50" precision=".01" />
+    <button name="ry+" image="24-UBUTTON.png" x="432" y="39" precision=".01" />
+	
+	<button name="z-" image="30-BUTTON.png" x="251" y="263" precision=".01" />
+	<button name="z+" image="30-BUTTON.png" x="331" y="263" precision=".01" />
+	
+	<button name="z-" image="24-BUTTON.png" x="554" y="180" precision=".01" />
+	<button name="z+" image="24-BUTTON.png" x="489" y="168" precision=".01" />
+
+</skin>
