@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Hit Box (Brook Super Converter: DualShock 4 to Mega Drive 6-Button Controller)" author="Stuart John Patton (SJP176)" type="generic">
+
+    <background name="Default" image="bg.png" />
+	
+	<button name="up" image="30-button.png" x="1042" y="1102" />
+    <button name="down" image="24-button.png" x="694" y="542" />
+    <button name="left" image="24-button.png" x="430" y="542" />
+    <button name="right" image="24-button.png" x="930" y="662" />
+	
+	<button name="b0" image="24-button.png" x="1154" y="818" />
+	<button name="b1" image="24-button.png" x="1406" y="718" />
+    <button name="b2" image="24-button.png" x="1178" y="554" />
+	<button name="b3" image="24-button.png" x="1418" y="446" />
+	
+	<button name="b4" image="24-button.png" x="1946" y="482" />
+	<button name="b5" image="24-button.png" x="1686" y="454" />
+	
+	<button name="b6" image="24-button.png" x="2006" y="102" />
+	<button name="b6" image="24-ubutton.png" x="1470" y="102" />
+	<button name="b7" image="24-button.png" x="2274" y="102" />
+	
+	<button name="b8" image="24-ubutton.png" x="102" y="102" />
+	<button name="b9" image="24-ubutton.png" x="370" y="102" />
+	
+	<button name="x-" image="24-button.png" x="430" y="542" precision=".1" />
+    <button name="x+" image="24-button.png" x="930" y="662" precision=".1" />
+	<button name="y-" image="30-button.png" x="1042" y="1102" precision=".1" />
+    <button name="y+" image="24-button.png" x="694" y="542" precision=".1" />
+	
+	<button name="rx-" image="24-button.png" x="430" y="542" precision=".1" />
+    <button name="rx+" image="24-button.png" x="930" y="662" precision=".1" />
+	<button name="ry-" image="30-button.png" x="1042" y="1102" precision=".1" />
+    <button name="ry+" image="24-button.png" x="694" y="542" precision=".1" />
+	
+	<button name="z-" image="24-button.png" x="1678" y="714" precision=".1" />
+	<button name="z+" image="24-button.png" x="1946" y="762" precision=".1" />
+	
+</skin>
