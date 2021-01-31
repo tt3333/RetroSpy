@@ -65,17 +65,21 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [USB controllers](https://retro-spy.com/wiki/setting-up-retrospy-for-the-mister/)
 
 ## To-Do List
+ - 8Bitdo Wireless Bluetooth Controller Adapter on Switch
+ - Xbox One
  - NEOGEO Arcade Stick Pro
- - CD-i Keyboard and Trackball
- - Dreamcast Keyboard
- - Saturn Keyboard
- - Virtual Boy
- - Xbox One 
+ - Pippin Wireless Controllers
 
 ## Wishlist
- - ColecoVision Roller Controller
  - ColecoVision Steering Wheel
  - Atari 5200 Trackball Controller
  - Steel Battalion Xbox Controller
- - Game Cube Keyboard Controller
- - PlayStation Analog Joystick
+ - CDTV Trackball
+ - Genesis XE-1 AP
+ - Nuon
+ - HyperScan
+ - Casio Loopy
+ - Bandai Playdia
+
+## Special Thanks
+Big thanks to Brian Khuu and other [contributers](https://github.com/mofosyne/arduino-gameboy-printer-emulator#contributors--thanks) for decoding the GBP protocol and making Arduino Game Boy Printer Emulator https://github.com/mofosyne/arduino-gameboy-printer-emulator.
