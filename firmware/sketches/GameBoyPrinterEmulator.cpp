@@ -5,6 +5,7 @@
  *
  * LICENCE:
  *   This file is part of Arduino Gameboy Printer Emulator.
+ *   https://github.com/mofosyne/arduino-gameboy-printer-emulator
  *
  *   Arduino Gameboy Printer Emulator is free software:
  *   you can redistribute it and/or modify it under the terms of the
