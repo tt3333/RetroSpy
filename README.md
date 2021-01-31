@@ -82,4 +82,4 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Bandai Playdia
 
 ## Special Thanks
-Big thanks to Brian Khuu and other [contributers](https://github.com/mofosyne/arduino-gameboy-printer-emulator#contributors--thanks) for decoding the GBP protocol and making Arduino Game Boy Printer Emulator https://github.com/mofosyne/arduino-gameboy-printer-emulator.
+Big thanks to Brian Khuu and other [contributors](https://github.com/mofosyne/arduino-gameboy-printer-emulator#contributors--thanks) for decoding the GBP protocol and making Arduino Game Boy Printer Emulator, which can be found at  https://github.com/mofosyne/arduino-gameboy-printer-emulator.
