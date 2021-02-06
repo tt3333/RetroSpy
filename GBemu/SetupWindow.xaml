@@ -1,0 +1,25 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:RuntimeBinder="clr-namespace:Microsoft.CSharp.RuntimeBinder;assembly=Microsoft.CSharp" x:Class="GBPemu.SetupWindow"
+        Title="RetroSpy - GameBoy Printer Emulator" Height="178.339" Width="597" Foreground="White" Background="#FF252526" Closing="Window_Closing">
+
+    <Grid Height="154" VerticalAlignment="Top">
+        <StackPanel VerticalAlignment="Top">
+            <Menu Width="Auto" Height="20">
+                <MenuItem Header="_Options">
+                    <MenuItem x:Name="FilterCOM" Header="Don't Filter COM Ports" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" Unchecked="FilterCOM_Checked" IsCheckable="True" />
+                </MenuItem>
+
+            </Menu>
+            <Label Content="Label" />
+        </StackPanel>
+        <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="31,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+               Visibility="{Binding ComPortOptionVisibility}" />
+        <ComboBox Name="ComPortCombo" Margin="117,51,38,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
+                  ItemsSource="{Binding Ports.Items}"
+                  SelectedValue="{Binding Ports.SelectedItem}"
+                  Visibility="{Binding ComPortOptionVisibility}" SelectionChanged="ComPortCombo_SelectionChanged" />
+        <Button Name="goButton" Content="Connect!" Margin="10,0,10,26" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="GoButton_Click" />
+    </Grid>
+</Window>
