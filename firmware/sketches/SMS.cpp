@@ -68,6 +68,8 @@ void SMSSpy::loop() {
 #else
 	debugSerial();
 #endif
+	
+	T_DELAY(5);
 }
 
 void SMSSpy::updateState() {
