@@ -333,12 +333,6 @@ namespace GBPemu
             UpdatePortList();
         }
 
-        private void FilterCOM_Checked(object sender, RoutedEventArgs e)
-        {
-            _vm.FilterCOMPorts = FilterCOM.IsChecked;
-            Properties.Settings.Default.FilterCOMPorts = FilterCOM.IsChecked;
-        }
-
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             isClosing = true;
