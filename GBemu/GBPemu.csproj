@@ -117,5 +117,8 @@
   <ItemGroup>
     <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SetupImage.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

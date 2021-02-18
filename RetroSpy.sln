@@ -13,11 +13,13 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Arduino_Nano = Debug|Arduino_Nano
 		Debug|Arduino_Uno = Debug|Arduino_Uno
 		Debug|Teensy_3 5 = Debug|Teensy_3 5
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Arduino_Nano = Release|Arduino_Nano
 		Release|Arduino_Uno = Release|Arduino_Uno
 		Release|Teensy_3 5 = Release|Teensy_3 5
 		Release|x64 = Release|x64
@@ -26,6 +28,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Arduino_Nano.ActiveCfg = Debug|Any CPU
+		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Arduino_Nano.Build.0 = Debug|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Arduino_Uno.ActiveCfg = Debug|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Arduino_Uno.Build.0 = Debug|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|Teensy_3 5.ActiveCfg = Debug|Any CPU
@@ -36,6 +40,8 @@ Global
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Debug|x86.Build.0 = Debug|x86
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Arduino_Nano.ActiveCfg = Release|Any CPU
+		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Arduino_Nano.Build.0 = Release|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Arduino_Uno.ActiveCfg = Release|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Arduino_Uno.Build.0 = Release|Any CPU
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|Teensy_3 5.ActiveCfg = Release|Any CPU
@@ -45,6 +51,8 @@ Global
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|x86.ActiveCfg = Release|x86
 		{265E6467-1C02-463D-ADE0-FDE2A3300925}.Release|x86.Build.0 = Release|x86
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Any CPU.ActiveCfg = Debug|Arduino_Uno
+		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Arduino_Nano.ActiveCfg = Debug|Arduino_Nano
+		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Arduino_Nano.Build.0 = Debug|Arduino_Nano
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Arduino_Uno.ActiveCfg = Debug|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Arduino_Uno.Build.0 = Debug|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|Teensy_3 5.ActiveCfg = Debug|Teensy_3 5
@@ -52,6 +60,8 @@ Global
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|x64.ActiveCfg = Debug|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Debug|x86.ActiveCfg = Debug|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Any CPU.ActiveCfg = Release|Arduino_Uno
+		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Arduino_Nano.ActiveCfg = Release|Arduino_Nano
+		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Arduino_Nano.Build.0 = Release|Arduino_Nano
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Arduino_Uno.ActiveCfg = Release|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Arduino_Uno.Build.0 = Release|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|Teensy_3 5.ActiveCfg = Release|Teensy_3 5
@@ -59,6 +69,8 @@ Global
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|x64.ActiveCfg = Release|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|x86.ActiveCfg = Release|Arduino_Uno
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.ActiveCfg = Debug|Arduino_Nano
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.Build.0 = Debug|Arduino_Nano
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.Build.0 = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Teensy_3 5.ActiveCfg = Debug|Win32
@@ -67,6 +79,8 @@ Global
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|x86.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|x86.Build.0 = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Arduino_Nano.ActiveCfg = Release|Win32
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Arduino_Nano.Build.0 = Release|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Arduino_Uno.ActiveCfg = Release|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Arduino_Uno.Build.0 = Release|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|Teensy_3 5.ActiveCfg = Release|Win32
@@ -76,6 +90,8 @@ Global
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Release|x86.Build.0 = Release|Win32
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Arduino_Nano.ActiveCfg = Debug|Any CPU
+		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Arduino_Nano.Build.0 = Debug|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Arduino_Uno.ActiveCfg = Debug|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Arduino_Uno.Build.0 = Debug|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|Teensy_3 5.ActiveCfg = Debug|Any CPU
@@ -86,6 +102,8 @@ Global
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Debug|x86.Build.0 = Debug|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Arduino_Nano.ActiveCfg = Release|Any CPU
+		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Arduino_Nano.Build.0 = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Arduino_Uno.ActiveCfg = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Arduino_Uno.Build.0 = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|Teensy_3 5.ActiveCfg = Release|Any CPU

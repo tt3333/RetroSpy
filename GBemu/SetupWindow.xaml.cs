@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Resources;
@@ -132,11 +133,15 @@ namespace GBPemu
 
             UpdatePortList();
             _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
+
+            //GoButton_Click(null, null);
         }
 
         private readonly object updatePortLock = new object();
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private int numPorts = 0;
 
         private void UpdatePortList()
         {
@@ -145,25 +150,115 @@ namespace GBPemu
                 try
                 {
                     var arduinoPorts = SetupCOMPortInformation();
-                    //List<string> arduinoPorts = GetArduinoPorts();
-                    GetTeensyPorts(arduinoPorts);
 
-                    arduinoPorts.Sort();
-
-                    string[] ports = arduinoPorts.ToArray<string>();
-
-                    if (ports.Length == 0)
+                    foreach (var port in arduinoPorts)
                     {
-                        ports = new string[1];
-                        ports[0] = "No Arduino/Teensy Found";
-                        _vm.Ports.UpdateContents(ports);
+                        SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
+                        _serialPort.Handshake = Handshake.None;
+
+                        _serialPort.ReadTimeout = 100;
+                        _serialPort.WriteTimeout = 100;
+
+                        try
+                        {
+                            _serialPort.Open();
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
+                        }
+                        catch (Exception ex)
+                        {
+                            _serialPort.Close();
+                            continue;
+                        }
+
+                        try
+                        {
+                            string result = null;
+                            do
+                            {
+                                result = _serialPort.ReadLine();
+                            } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
+
+                            if (result == "parse_state:0\r")
+                            {
+                                _serialPort.Close();
+                                Thread.Sleep(1000);
+
+                                if (this.Dispatcher.CheckAccess())
+                                {
+                                    this.Hide();
+                                }
+                                else
+                                {
+                                    this.Dispatcher.Invoke(() =>
+                                    {
+                                        this.Hide();
+                                    });
+                                }
+
+                                Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
+                                Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+                                Properties.Settings.Default.Save();
+
+                                IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+
+                                try
+                                {
+                                    if (this.Dispatcher.CheckAccess())
+                                    {
+                                        new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        this.Dispatcher.Invoke(() =>
+                                        {
+                                            new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                                        });
+                                    }
+
+
+                                }
+                                catch (UnauthorizedAccessException ex)
+                                {
+                                    MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+
+                                if (this.Dispatcher.CheckAccess())
+                                {
+                                    this.Show();
+                                }
+                                else
+                                {
+                                    this.Dispatcher.Invoke(() =>
+                                    {
+                                        this.Show();
+                                    });
+                                }
+
+                            }
+                            else
+                            {
+                                _serialPort.Close();
+                                continue;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _serialPort.Close();
+                            continue;
+                        }
+
                     }
-                    else
-                    {
-                        _vm.Ports.UpdateContents(ports);
-                    }
+
                 }
-                catch(TaskCanceledException)
+                catch (TaskCanceledException)
                 {
                     // Closing the window can cause this due to a race condition
                 }
@@ -296,11 +391,11 @@ namespace GBPemu
             {
                 if (_vm.FilterCOMPorts || port.FriendlyName.Contains("Arduino"))
                 {
-                    ports.Add(String.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
+                    ports.Add(port.PortName);
                 }
                 else if (port.FriendlyName.Contains("CH340") || port.FriendlyName.Contains("CH341"))
                 {
-                    ports.Add(String.Format(CultureInfo.CurrentCulture, "{0} (Generic Arduino)", port.PortName));
+                    ports.Add(port.PortName);
                 }
             }
 
@@ -314,7 +409,7 @@ namespace GBPemu
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
             Properties.Settings.Default.Save();
 
-            IControllerReader reader = InputSource.PRINTER.BuildReader(_vm.Ports.SelectedItem);
+            IControllerReader reader = InputSource.PRINTER.BuildReader("COM16");
 
             try
             {

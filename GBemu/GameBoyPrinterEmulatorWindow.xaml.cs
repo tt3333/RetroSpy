@@ -108,6 +108,7 @@ namespace GBPemu
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
+
             
         }
 
