@@ -156,8 +156,8 @@ namespace GBPemu
                         SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
                         _serialPort.Handshake = Handshake.None;
 
-                        _serialPort.ReadTimeout = 100;
-                        _serialPort.WriteTimeout = 100;
+                        _serialPort.ReadTimeout = 500;
+                        _serialPort.WriteTimeout = 500;
 
                         try
                         {
@@ -207,18 +207,20 @@ namespace GBPemu
                                 Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
                                 Properties.Settings.Default.Save();
 
-                                IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+                                
 
                                 try
                                 {
                                     if (this.Dispatcher.CheckAccess())
                                     {
+                                        IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                         new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
                                     }
                                     else
                                     {
                                         this.Dispatcher.Invoke(() =>
                                         {
+                                            IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                             new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
                                         });
                                     }

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -119,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SetupImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PrintImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PrintImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

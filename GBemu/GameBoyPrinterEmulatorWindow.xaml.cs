@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace GBPemu
         private readonly byte[] DMG_colors_green = { 0xbc, 0xac, 0x62, 0x38 };
         private readonly byte[] DMG_colors_blue = { 0x0f, 0x0f, 0x30, 0x0f };
 
-        private readonly Image _image;
+        private readonly System.Windows.Controls.Image _image;
         private readonly BitmapPixelMaker _imageBuffer;
         private readonly IControllerReader _reader;
 
@@ -86,17 +87,42 @@ namespace GBPemu
 
             DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
 
+            var bmp = new Bitmap(Properties.Resources.PrintImage);
+
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            
+
             if (DMGPaletteEnabled)
                 _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
             else
                 _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
 
+            for (int i = 0; i < bmp.Width; ++i)
+            {
+                for(int j = 0; j < bmp.Height; ++j)
+                {
+                    var pixel = bmp.GetPixel(i, j);
+                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                    {
+                        if (DMGPaletteEnabled)
+                        {
+                            _imageBuffer.SetRed(i, j, DMG_colors_red[0]);
+                            _imageBuffer.SetGreen(i, j, DMG_colors_green[0]);
+                            _imageBuffer.SetBlue(i, j, DMG_colors_blue[0]);
+                        }
+                        else
+                        {
+                            _imageBuffer.SetRed(i, j, colors_red[0]);
+                            _imageBuffer.SetGreen(i, j, colors_green[0]);
+                            _imageBuffer.SetBlue(i, j, colors_blue[0]);
+                        }
+                    }    
+                }
+            }
+
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
 
             // Create an Image to display the bitmap.
-            _image = new Image
+            _image = new System.Windows.Controls.Image
             {
                 Stretch = Stretch.None,
                 Margin = new Thickness(0)
@@ -116,13 +142,13 @@ namespace GBPemu
         {
             if (Dispatcher.CheckAccess())
             {
-                Close();
+                Hide();
             }
             else
             {
                 Dispatcher.Invoke(() =>
                 {
-                    Close();
+                    Hide();
                 });
             }
         }

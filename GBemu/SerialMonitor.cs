@@ -33,6 +33,7 @@ namespace GBPemu
         private readonly List<byte> _localBuffer;
         private DispatcherTimer _timer;
         private readonly bool _printerMode;
+        private bool _beenConnected = false;
 
         public SerialMonitor(string portName, bool printerMode = false)
         {
@@ -82,6 +83,18 @@ namespace GBPemu
 
         private void Tick(object sender, EventArgs e)
         {
+            if (_datPort != null || _datPort.IsOpen)
+            {
+                _beenConnected = true;
+            }
+
+            if (_beenConnected && _datPort != null && !_datPort.IsOpen)
+            {
+                Stop();
+                Disconnected?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+
             if (_datPort == null || !_datPort.IsOpen || PacketReceived == null)
             {
                 return;
@@ -89,7 +102,7 @@ namespace GBPemu
 
             // Try to read some data from the COM port and append it to our localBuffer.
             // If there's an IOException then the device has been disconnected.
-            try
+                try
             {
                 int readCount = _datPort.BytesToRead;
                 if (readCount < 1)

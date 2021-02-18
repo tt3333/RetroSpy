@@ -69,8 +69,7 @@ Global
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|x64.ActiveCfg = Release|Arduino_Uno
 		{73EA1611-B8A4-4879-8D2A-A2620F1326F9}.Release|x86.ActiveCfg = Release|Arduino_Uno
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.ActiveCfg = Debug|Arduino_Nano
-		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.Build.0 = Debug|Arduino_Nano
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.Build.0 = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Teensy_3 5.ActiveCfg = Debug|Win32
