@@ -257,6 +257,7 @@ namespace GBPemu
         {
             Properties.Settings.Default.Save();
             _reader.Finish();
+            System.Environment.Exit(0);  
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
