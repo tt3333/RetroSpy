@@ -64,6 +64,7 @@
         <string>sketches\ColecoVisionRoller.h</string>
         <string>sketches\SMSPaddle.h</string>
         <string>sketches\SMSSportsPad.h</string>
+        <string>sketches\PowerGlove.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>

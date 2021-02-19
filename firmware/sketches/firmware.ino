@@ -1,12 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5
-// v4.0
+// v4.1
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
 // ---------- Uncomment one of these options to select operation mode ---------
 // 
 //#define MODE_NES
+//#define MODE_POWERGLOVE
 //#define MODE_SNES
 //#define MODE_N64
 //#define MODE_GC
@@ -123,9 +124,13 @@
 #include "KeyboardController.h"
 #include "ColecoVisionRoller.h"
 #include "AtariPaddles.h"
+#include "PowerGlove.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
+#endif
+#if defined(MODE_POWERGLOVE)
+PowerGloveSpy PowerGloveSpy;
 #endif
 #if defined(MODE_SNES)
 SNESSpy SNESSpy;
@@ -282,6 +287,8 @@ void setup()
     }
 #elif defined(MODE_NES)
     NESSpy.setup();
+#elif defined(MODE_POWERGLOVE)
+	PowerGloveSpy.setup();
 #elif defined(MODE_SNES)
     SNESSpy.setup();
 #elif defined(MODE_N64)
@@ -410,6 +417,8 @@ void loop()
     SNESSpy.loop();
 #elif defined(MODE_NES)
     NESSpy.loop();
+#elif defined(MODE_POWERGLOVE)
+	PowerGloveSpy.loop();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.loop();
 #elif defined(MODE_GENESIS)

@@ -62,7 +62,7 @@ void SNESSpy::updateState() {
 		rawData[position++] = !PIN_READ(SNES_DATA);
 	} while (++bits < SNES_BITCOUNT);
 
-	if (rawData[15] != 0x0)
+	if (rawData[15] != 0x0 || (rawData[15] == 0x00 && rawData[13] != 0x00))
 	{
 		bits = 0;
 		do {

@@ -149,6 +149,8 @@ namespace RetroSpy
         private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new List<Tuple<RangeButton, Image>>();
         private readonly List<Tuple<AnalogStick, Image>> _sticksWithImages = new List<Tuple<AnalogStick, Image>>();
 
+        private readonly Dictionary<string, List<Tuple<Button, Image>>> _dictOfButtonsWithImages = new Dictionary<string, List<Tuple<Button, Image>>>();
+
         // The triggers images are embedded inside of a Grid element so that we can properly mask leftwards and upwards
         // without the image aligning to the top left of its element.
         private readonly List<Tuple<AnalogTrigger, Grid>> _triggersWithGridImages = new List<Tuple<AnalogTrigger, Grid>>();
@@ -266,7 +268,18 @@ namespace RetroSpy
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
                     Image image = GetImageForElement(button.Config);
-                    _buttonsWithImages.Add(new Tuple<Button, Image>(button, image));
+                    var tuple = new Tuple<Button, Image>(button, image);
+                    _buttonsWithImages.Add(tuple);
+                    if (_dictOfButtonsWithImages.ContainsKey(button.Name))
+                    {
+                        _dictOfButtonsWithImages[button.Name].Add(tuple);
+                    }
+                    else
+                    {
+                        var list = new List<Tuple<Button, Image>>();
+                        list.Add(tuple);
+                        _dictOfButtonsWithImages.Add(button.Name, list);
+                    }
                     image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
@@ -739,6 +752,45 @@ namespace RetroSpy
                             });
                         }
                         break;
+                }
+            }
+
+            foreach(var analog in e.Analogs)
+            {
+                string[] buttonNames = { analog.Key + '-', analog.Key + '+'};
+                bool[] buttonStates = { false, false };
+
+                float posPrecision = _dictOfButtonsWithImages.ContainsKey(buttonNames[1]) ? _dictOfButtonsWithImages[buttonNames[1]].ToArray()[0].Item1.Precision : 0.0f;
+                float negPrecision = -1.0f * (_dictOfButtonsWithImages.ContainsKey(buttonNames[0]) ? _dictOfButtonsWithImages[buttonNames[0]].ToArray()[0].Item1.Precision : 0.0f);
+
+                if (analog.Value < negPrecision)
+                {
+                    buttonStates[0] = true;
+                }
+                else if (analog.Value > posPrecision)
+                {
+                    buttonStates[1] = true;
+                }
+                
+                for (int i = 0; i < buttonNames.Length; ++i)
+                {
+                    if (_dictOfButtonsWithImages.ContainsKey(buttonNames[i]))
+                    {
+                        foreach( var button in _dictOfButtonsWithImages[buttonNames[i]])
+                        { 
+                            if (button.Item2.Dispatcher.CheckAccess())
+                            {
+                                button.Item2.Visibility = buttonStates[i] ? Visibility.Visible : Visibility.Hidden;
+                            }
+                            else
+                            {
+                                button.Item2.Dispatcher.Invoke(() =>
+                                {
+                                    button.Item2.Visibility = buttonStates[i] ? Visibility.Visible : Visibility.Hidden;
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }

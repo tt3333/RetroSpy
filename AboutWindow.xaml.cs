@@ -40,9 +40,10 @@ namespace RetroSpy
             <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/watsonpunk"">watsonpunk</A></TD></TR>            
             <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitter.filyx20.dev"" >Filyx20</A></TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""http://evangrill.com"">Evan Grill</A></TD></TR>  
             <TR><td ALIGN='CENTER'><A HREF=""https://twitter.com/VikeMK"">Vike</A></TD></TR>      
+            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/MarcyAugust"">MarcyAugust</A></TD></TR>   
+            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/shadowlugia"">ShadowLugia</A></TD></TR>   
         </TABLE>
     </BODY>
 </HTML>", Assembly.GetEntryAssembly().GetName().Version, DateTime.Now));
