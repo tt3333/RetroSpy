@@ -43,6 +43,7 @@ private:
 	bool checkPrefixKeyboard();
 	bool checkBothGCPrefixOnRaphnet();
 	void sendRawGBAData();
+	bool checkPrefixLuigisMansion();
 
 	void debugKeyboard();
 	void writeKeyboard();

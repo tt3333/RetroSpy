@@ -32,9 +32,13 @@ void GCSpy::loop() {
 		readBits = GC_PREFIX + GC_BITCOUNT;
 		updateState();
 		interrupts();
-		if (checkPrefixGC())
+		if (checkPrefixGC() || checkPrefixLuigisMansion())
 		{
+#if !defined(DEBUG)
 			sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+#else
+			sendRawDataDebug(rawData, 0, GC_BITCOUNT);
+#endif
 		}
 		else if (checkPrefixKeyboard())
 		{
@@ -54,6 +58,12 @@ void GCSpy::loop() {
 		}
 		else if (checkBothGCPrefixOnRaphnet()) {
 			// Sets seenGC2N64RaphnetAdapter to true
+		}
+		else
+		{
+#if defined(DEBUG)
+			sendRawDataDebug(rawData, 0, GC_BITCOUNT);
+#endif
 		}
 	}
 	else {
@@ -239,6 +249,38 @@ inline bool GCSpy::checkPrefixGC()
 	//if (rawData[22] != 0) return false; // 0 or 1
 	if (rawData[23] != 0) return false; // 0
 	if (rawData[24] == 0) return false; // 1
+	seenGC2N64 = false;
+	return true;
+}
+
+inline bool GCSpy::checkPrefixLuigisMansion()
+{
+	
+	if (rawData[0] != 0) return false; // 0
+	if(rawData[1] == 0) return false;  // 1
+	if(rawData[2] != 0) return false;  // 0
+	if(rawData[3] != 0) return false;  // 0
+	if(rawData[4] != 0) return false;  // 0
+	if(rawData[5] != 0) return false;  // 0
+	if(rawData[6] != 0) return false;  // 0
+	if(rawData[7] != 0) return false;  // 0
+	if(rawData[8] != 0) return false;  // 0
+	if(rawData[9] != 0) return false;  // 0
+	if(rawData[10] != 0) return false;  // 0
+	if(rawData[11] != 0) return false;  // 0
+	if(rawData[12] != 0) return false;  // 0
+	if(rawData[13] != 0) return false;  // 0
+	if(rawData[14] != 0) return false;  // 0
+	if(rawData[15] != 0) return false;  // 0
+	if(rawData[16] != 0) return false;  // 0
+	if(rawData[17] != 0) return false;  // 0
+	if(rawData[18] != 0) return false;  // 0
+	if(rawData[19] != 0) return false;  // 0
+	if(rawData[20] != 0) return false;  // 0
+	if(rawData[21] != 0) return false;  // 0
+	//if (rawData[22] != 0) return false; // 0 or 1
+	if(rawData[23] != 0) return false;  // 0
+	if(rawData[24] == 0) return false;  // 1
 	seenGC2N64 = false;
 	return true;
 }
