@@ -21,6 +21,27 @@ goto end
 :AnyCPUBuild
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" RetroSpy.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=bin\Release
 
+if errorlevel 0 goto :releasegb
+echo Aborting release. Error during AnyCPU build.
+goto end
+
+:releasegb
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+
+if errorlevel 0 goto x64Buildgb
+echo Aborting release. Error during x86 build.
+goto end
+
+:x64Buildgb
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+
+if errorlevel 0 goto AnyCPUBuildgb
+echo Aborting release. Error during x64 build.
+goto end
+
+:AnyCPUBuildgb
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+
 if errorlevel 0 goto :MiSTer
 echo Aborting release. Error during AnyCPU build.
 goto end
@@ -53,24 +74,44 @@ if exist "..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip RetroSpy.exe
 copy RetroSpy.exe ..\..\RetroSpy-Setup
+
+if exist "..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPemu.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip GBPemu.exe
+copy GBPemu.exe ..\..\RetroSpy-Setup
 cd ..\..
 
 cd bin\x64\Release
+copy RetroSpy.exe RetroSpy.x64.exe
 if exist "..\..\..\..\..\certs\codesign.pfx" (
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x64.exe
 )
-copy RetroSpy.exe RetroSpy.x64.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x64.exe
 copy RetroSpy.x64.exe ..\..\..\RetroSpy-Setup\
+
+copy GBPemu.exe GBPemu.x64.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPemu.x64.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPemu.x64.exe
+copy GBPemu.x64.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 cd bin\x86\Release
+copy RetroSpy.exe RetroSpy.x86.exe
 if exist "..\..\..\..\..\certs\codesign.pfx" (
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy.x86.exe
 )
-copy RetroSpy.exe RetroSpy.x86.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.x86.exe
 copy RetroSpy.x86.exe ..\..\..\RetroSpy-Setup\
+
+copy GBPemu.exe GBPemu.x86.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPemu.x86.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPemu.x86.exe
+copy GBPemu.x86.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 ;cd SharpDX\net45
