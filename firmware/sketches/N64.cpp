@@ -26,13 +26,15 @@
 
 #include "N64.h"
 
+static bool getControllerInfo = false;
+
 void N64Spy::loop() {
 	noInterrupts();
 	updateState();
 	interrupts();
 	if (checkPrefixN64()) {
 #if !defined(DEBUG)
-		writeSerial();
+	writeSerial();
 #else
 		debugSerial();
 #endif
@@ -52,7 +54,9 @@ inline bool N64Spy::checkPrefixN64() {
 
 void N64Spy::updateState() {
 	unsigned short bits;
-
+	bool shortcutToControllerPoll = false;
+	getControllerInfo = false;
+	
 	unsigned char *rawDataPtr = &rawData[1];
 	byte /*bit7, bit6, bit5, bit4, bit3, */bit2, bit1, bit0;
 	WAIT_FALLING_EDGE(N64_PIN);
@@ -74,43 +78,45 @@ void N64Spy::updateState() {
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 	bit2 = READ_PORTD(0b00000100);
 	if (bit2 != 0)  // Controller Reset
-	{
-		WAIT_FALLING_EDGE(N64_PIN);
-		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-		// bit1 = PIND & 0b00000100;
-		WAIT_FALLING_EDGE(N64_PIN);
-		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-		// bit0 = PIND & 0b00000100;
-		bits = 25;
-		rawData[0] = 0xFF;
-		goto read_loop;
-	}
+		{
+			WAIT_FALLING_EDGE(N64_PIN);
+			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+			// bit1 = PIND & 0b00000100;
+			WAIT_FALLING_EDGE(N64_PIN);
+			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+			// bit0 = PIND & 0b00000100;
+			bits = 25;
+			rawData[0] = 0xFF;
+			goto read_loop;
+		}
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 	bit1 = READ_PORTD(0b00000100);
 	if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
-	{
-		WAIT_FALLING_EDGE(N64_PIN);
-		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-		// bit0 = PIND & 0b00000100;
-		bits = 281;
-		rawData[0] = 0x02;
-		goto read_loop;
-	}
+		{
+			WAIT_FALLING_EDGE(N64_PIN);
+			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+			// bit0 = PIND & 0b00000100;
+			bits = 281;
+			rawData[0] = 0x02;
+			goto read_loop;
+		}
+checkControllerPoll:
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 	bit0 = READ_PORTD(0b00000100);
 	if (bit0 != 0) // controller poll
-	{
-		bits = 33;
-		rawData[0] = 0x01;
-		goto read_loop;
-	}
-	bits = 25;   // Get controller info
+		{
+			bits = 33;
+			rawData[0] = 0x01;
+			goto read_loop;
+		}
+	bits = 25;     // Get controller info
 	rawData[0] = 0x00;
+	getControllerInfo = true;
 
 read_loop:
-
+	
 	// Wait for the line to go high then low.
 	WAIT_FALLING_EDGE(N64_PIN);
 
@@ -121,13 +127,29 @@ read_loop:
 	// Read a bit from the line and store as a byte in "rawData"
 	*rawDataPtr = READ_PORTD(0b00000100);
 	++rawDataPtr;
-	if (--bits == 0) return;
+	--bits;
+	if (bits == 0)
+	{
+		if (shortcutToControllerPoll) 
+		{   
+			rawDataPtr = &rawData[1];
+			shortcutToControllerPoll = false;
+			goto checkControllerPoll;
+		}
+		if (rawData[0] == 0x00 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] == 0
+			&& rawData[6] == 0 && rawData[7] != 0 && rawData[8] == 0 && rawData[9] != 0 && rawData[25] != 0) 
+		{
+			shortcutToControllerPoll = true;
+			bits = 8;
+		}
+		
+		return;
+	}	
 
 	goto read_loop;
 }
-
 void N64Spy::writeSerial() {
-	const unsigned char first = 2;
+	const unsigned char first = getControllerInfo ? 1 : 2;
 
 	for (unsigned char i = first; i < first + N64_BITCOUNT; i++) {
 		Serial.write(rawData[i] ? ONE : ZERO);
@@ -139,10 +161,11 @@ void N64Spy::debugSerial() {
 	Serial.print(rawData[0]);
 	Serial.print("|");
 	int j = 0;
+	const unsigned char first = getControllerInfo ? 1 : 2;
 	for (unsigned char i = 0; i < 32; i++) {
 		if (j % 8 == 0 && j != 0)
 			Serial.print("|");
-		Serial.print(rawData[i + 2] ? "1" : "0");
+		Serial.print(rawData[i + first] ? "1" : "0");
 		j++;
 	}
 	Serial.print("\n");
