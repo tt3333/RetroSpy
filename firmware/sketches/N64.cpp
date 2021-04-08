@@ -136,14 +136,14 @@ read_loop:
 			shortcutToControllerPoll = false;
 			goto checkControllerPoll;
 		}
-		if (rawData[0] == 0x00 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] == 0
+		else if (rawData[0] == 0x00 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] == 0
 			&& rawData[6] == 0 && rawData[7] != 0 && rawData[8] == 0 && rawData[9] != 0 && rawData[25] != 0) 
 		{
 			shortcutToControllerPoll = true;
 			bits = 8;
 		}
-		
-		return;
+		else 
+			return;
 	}	
 
 	goto read_loop;
