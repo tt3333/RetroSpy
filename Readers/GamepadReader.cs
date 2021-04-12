@@ -114,6 +114,13 @@ namespace RetroSpy.Readers
                 outState.SetButton("down", pov[0] > OctantAngle(2) && pov[0] < OctantAngle(5));
                 outState.SetButton("left", pov[0] > OctantAngle(4) && pov[0] < OctantAngle(7));
             }
+            else  // For SN30
+            {
+                outState.SetButton("up", (float)state.Y / RANGE == -1.0);
+                outState.SetButton("down", (float)state.Y / RANGE == 1.0);
+                outState.SetButton("left", (float)state.X / RANGE == -1.0);
+                outState.SetButton("right", (float)state.X / RANGE == 1.0);
+            }
 
             outState.SetAnalog("x", (float)state.X / RANGE);
             outState.SetAnalog("y", (float)state.Y / RANGE);

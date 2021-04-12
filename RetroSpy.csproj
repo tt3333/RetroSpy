@@ -246,6 +246,21 @@
     <None Include="experimental\retired\cdtv-wired\TimerOne.h" />
     <None Include="experimental\retired\DrivingController\DrivingController.ino" />
     <None Include="experimental\retired\ps2keyboard\ps2keyboard.ino" />
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="skins\generic-hitbox-brooksc-ds4-md6\bg.xcf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -268,6 +283,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\generic-pattonboxanalogue-ds4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\24-button.png">
@@ -294,9 +327,20 @@
     <Content Include="skins\generic-pattonboxanalogue-ds4\bg.xcf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="skins\generic-sn30\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-sn30\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-sn30\snes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="skins\nes-pghelper\source.fla">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.xcf" />
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.xcf" />
     <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
     <Content Include="skins\3do-controller\3dobackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
