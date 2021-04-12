@@ -90,7 +90,7 @@ namespace GBPemu
         }
     }
 
-    public partial class SetupWindow : Window, INotifyPropertyChanged
+    public partial class SetupWindow : Window
     {
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
@@ -139,10 +139,6 @@ namespace GBPemu
 
         private readonly object updatePortLock = new object();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private int numPorts = 0;
-
         private void UpdatePortList()
         {
             if (!isClosing && Monitor.TryEnter(updatePortLock))
@@ -163,7 +159,7 @@ namespace GBPemu
                         {
                             _serialPort.Open();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             continue;
                         }
@@ -172,7 +168,7 @@ namespace GBPemu
                         {
                             _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             _serialPort.Close();
                             continue;
@@ -251,7 +247,7 @@ namespace GBPemu
                                 continue;
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             _serialPort.Close();
                             continue;
