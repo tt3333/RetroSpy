@@ -37,13 +37,15 @@ namespace RetroSpy
 <BR>
         <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
             <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>
+            <TR><td ALIGN='CENTER'>40wattrange</TD></TR>             
             <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/watsonpunk"">watsonpunk</A></TD></TR>            
             <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
             <TR><td ALIGN='CENTER'><A HREF=""http://evangrill.com"">Evan Grill</A></TD></TR>  
             <TR><td ALIGN='CENTER'><A HREF=""https://twitter.com/VikeMK"">Vike</A></TD></TR>      
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/MarcyAugust"">MarcyAugust</A></TD></TR>   
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/shadowlugia"">ShadowLugia</A></TD></TR>   
+            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/mrgamy"">MrGamy</A></TD></TR>
+            <TR><td ALIGN='CENTER'><A HREF=""https://discord.gg/tyvzPbu5fv"">peco_de_guile</A></TD></TR>
         </TABLE>
     </BODY>
 </HTML>", Assembly.GetEntryAssembly().GetName().Version, DateTime.Now));

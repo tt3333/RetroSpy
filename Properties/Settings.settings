@@ -56,5 +56,17 @@
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="MisterUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)">root</Value>
+    </Setting>
+    <Setting Name="MisterPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="BeagleboneUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)">retrospy</Value>
+    </Setting>
+    <Setting Name="BeaglebonePassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">retrospy</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

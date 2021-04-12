@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:RuntimeBinder="clr-namespace:Microsoft.CSharp.RuntimeBinder;assembly=Microsoft.CSharp" x:Class="RetroSpy.SetupWindow"
         Title="RetroSpy" Height="515.015" Width="602" Foreground="White" Background="#FF252526" Closing="Window_Closing">
-
     <Grid>
         <StackPanel VerticalAlignment="Top">
             <Menu Width="Auto" Height="20">
+                <MenuItem Header="_Tools">
+                    <MenuItem x:Name="ReloadSkins" Header="Reload Skins" HorizontalAlignment="Left" Width="Auto"  Click="ReloadSkins_Click"/>
+                </MenuItem>
                 <MenuItem Header="_Options">
                     <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click" />
                     <MenuItem x:Name="CustomSkinPath" Header="Custom Skin Path..." HorizontalAlignment="Left" Width="Auto"  Click="CustomSkinPath_Click"/>
@@ -14,7 +16,7 @@
                     <MenuItem x:Name="KeybindingBehavior" Header="Legacy Keybinding Behavior" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding LegacyKeybindingBehavior}" Checked="KeybindingBehavior_Checked" Unchecked="KeybindingBehavior_Checked" IsCheckable="True" />
                     <MenuItem x:Name="FilterCOM" Header="Don't Filter COM Ports" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" Unchecked="FilterCOM_Checked" IsCheckable="True" />
                 </MenuItem>
-                 <MenuItem Header="_Help">
+                <MenuItem Header="_Help">
                     <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click" />
                 </MenuItem>
             </Menu>
@@ -62,5 +64,11 @@
                   ItemsSource="{Binding Ports2.Items}"
                   SelectedValue="{Binding Ports2.SelectedItem}"
                   Visibility="{Binding ComPort2OptionVisibility}" SelectionChanged="ComPortCombo_SelectionChanged" />
+        <Label x:Name="UsernameLabel" Content="Username:" HorizontalAlignment="Left" Margin="49,103,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+            Visibility="{Binding SSHOptionVisibility}" />
+        <TextBox x:Name="txtUsername" Margin="145,105,266,0" VerticalAlignment="Top"  Text="{Binding Username}" Height="24" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Visibility="{Binding SSHOptionVisibility}" />
+        <Label x:Name="PasswordLabel" Content="Password:" HorizontalAlignment="Left" Margin="330,103,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+            Visibility="{Binding SSHOptionVisibility}" />
+        <PasswordBox  x:Name="txtPassword" Margin="411,105,10,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" Visibility="{Binding SSHOptionVisibility}" />
     </Grid>
 </Window>

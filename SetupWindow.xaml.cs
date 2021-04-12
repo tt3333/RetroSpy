@@ -153,6 +153,12 @@ namespace RetroSpy
 
             PopulateSources();
 
+            _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername 
+                                                                          : Properties.Settings.Default.BeagleboneUsername;
+
+            txtPassword.Password = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
+                                                  : Properties.Settings.Default.BeaglebonePassword;
+
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
@@ -446,7 +452,18 @@ namespace RetroSpy
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+            if (_vm.Sources.SelectedItem == InputSource.MISTER)
+            {
+                Properties.Settings.Default.MisterUsername = _vm.Username;
+                Properties.Settings.Default.MisterPassword = txtPassword.Password;
+            }
+            else
+            {
+                Properties.Settings.Default.BeagleboneUsername = _vm.Username;
+                Properties.Settings.Default.BeaglebonePassword = txtPassword.Password;
+            }
             Properties.Settings.Default.Save();
+            
             try
             {
                 IControllerReader reader;
@@ -469,7 +486,7 @@ namespace RetroSpy
                          || _vm.Sources.SelectedItem == InputSource.PS4 || _vm.Sources.SelectedItem == InputSource.MISTER
                          || _vm.Sources.SelectedItem == InputSource.TG16MINI)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
+                    reader = _vm.Sources.SelectedItem.BuildReader4(txtHostname.Text, txtUsername.Text, txtPassword.Password);
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 
                             || _vm.Sources.SelectedItem == InputSource.ATARI5200 || _vm.Sources.SelectedItem == InputSource.COLECOVISION
@@ -536,6 +553,14 @@ namespace RetroSpy
                 return;
             }
 
+            _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername
+                                                              : Properties.Settings.Default.BeagleboneUsername;
+            txtUsername.Text = _vm.Username;
+
+
+            txtPassword.Password = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
+                                                  : Properties.Settings.Default.BeaglebonePassword;
+
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
             _vm.ComPort2OptionVisibility = _vm.Sources.SelectedItem.RequiresComPort2 ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
@@ -578,6 +603,28 @@ namespace RetroSpy
             new AboutWindow().ShowDialog();
             //MessageBox.Show(string.Format(CultureInfo.CurrentCulture, " RetroSpy Version {0}\n\nThis Release Supported By\n\n     40wattRange\n     Coltaho\n     Evan Grill\n     Filyx20\n     sk84uhlivin\n     watsonpunk", Assembly.GetEntryAssembly().GetName().Version), _resources.GetString("About", CultureInfo.CurrentUICulture),
             //    MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ReloadSkins_Click(object sender, RoutedEventArgs e)
+        {
+            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+
+            string skinsDirectory = Path.Combine(strWorkPath, "skins");
+
+            if (!Directory.Exists(skinsDirectory))
+            {
+                MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
+                return;
+            }
+
+            LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
+            _skins = results.SkinsLoaded;
+
+            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == _vm.Sources.SelectedItem));
+
+            PopulateSources();
         }
 
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
@@ -657,6 +704,8 @@ namespace RetroSpy
         public bool LegacyKeybindingBehavior { get; set; }
         public string Hostname { get; set; }
         public bool FilterCOMPorts { get; set; }
+
+        public string Username { get; set; }
 
         private Visibility _comPortOptionVisibility;
 

@@ -132,3 +132,4 @@ Backup*/
 /.visualgdb
 /firmware/.visualgdb/
 /firmware/firmware.adeps
+.visualgdb
