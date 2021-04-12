@@ -12,7 +12,7 @@ namespace RetroSpy.Readers
         private SSHMonitor _serialMonitor;
 
         public SSHControllerReader(string hostname, string arguments, Func<byte[], ControllerStateEventArgs> packetParser,
-            string username = "retrospy", string password = "retrospy", int delayInMilliseconds = 0)
+            string username, string password, int delayInMilliseconds = 0)
         {
             _packetParser = packetParser;
 

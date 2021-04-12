@@ -238,5 +238,53 @@ namespace RetroSpy.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("root")]
+        public string MisterUsername {
+            get {
+                return ((string)(this["MisterUsername"]));
+            }
+            set {
+                this["MisterUsername"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string MisterPassword {
+            get {
+                return ((string)(this["MisterPassword"]));
+            }
+            set {
+                this["MisterPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("retrospy")]
+        public string BeagleboneUsername {
+            get {
+                return ((string)(this["BeagleboneUsername"]));
+            }
+            set {
+                this["BeagleboneUsername"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("retrospy")]
+        public string BeaglebonePassword {
+            get {
+                return ((string)(this["BeaglebonePassword"]));
+            }
+            set {
+                this["BeaglebonePassword"] = value;
+            }
+        }
     }
 }
