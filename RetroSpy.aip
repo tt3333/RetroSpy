@@ -256,8 +256,8 @@ English=
 4=<Desktop>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal
 5=<ProgramGroup>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal
 6=<Desktop>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal
-7=<ProgramGroup>*?GameBoy Printer Emulator*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
-8=<Desktop>*?GameBoy Printer Emulator*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
+7=<ProgramGroup>*?GameBoy Printer Emulator (Experimental)*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
+8=<Desktop>*?GameBoy Printer Emulator (Experimental)*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
 
 [Commands]
 0=<InstallDir>\drivers\dpinst-amd64.exe*?*?Normal*?After Installation*?Yes*?64-bit*?Yes
