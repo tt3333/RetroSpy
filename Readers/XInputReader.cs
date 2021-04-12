@@ -52,7 +52,7 @@ namespace RetroSpy.Readers
 
         private const double TIMER_MS = 30;
         private DispatcherTimer _timer;
-        private readonly uint _id = 0;
+        private readonly uint _id;
 
         public XInputReader(uint id = 0)
         {

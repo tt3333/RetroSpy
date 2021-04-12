@@ -275,7 +275,7 @@ namespace RetroSpy
             saveFileDialog.Dispose();
         }
 
-        private void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
             RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
             bitmap.Render(visual);

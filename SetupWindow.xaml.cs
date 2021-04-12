@@ -92,7 +92,7 @@ namespace RetroSpy
         }
     }
 
-    public partial class SetupWindow : Window, INotifyPropertyChanged
+    public partial class SetupWindow : Window
     {
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
@@ -239,8 +239,6 @@ namespace RetroSpy
         }
 
         private readonly object updatePortLock = new object();
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdatePortList()
         {
@@ -429,12 +427,12 @@ namespace RetroSpy
             _vm.XIAndGamepad.UpdateContents(XInputReader.GetDevices());
         }
 
-        private void UpdateBeagleList()
+        private static void UpdateBeagleList()
         {
             //_vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
         }
 
-        private void UpdateBeagleI2CList()
+        private static void UpdateBeagleI2CList()
         {
             //_vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
         }
