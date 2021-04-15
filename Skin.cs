@@ -293,7 +293,26 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("detail"))
+            ParseElements(doc.Root, skinPath);
+
+            foreach (XElement elem in doc.Root.Elements("section"))
+            {
+                var sectionType = ReadStringAttr(elem, "type");
+
+                if (type.TypeTag == sectionType)
+                {
+                    name = ReadStringAttr(elem, "name", false);
+                    if (name != "")
+                        Name = name;
+
+                    ParseElements(elem, skinPath);
+                }
+            }       
+        }
+
+        private void ParseElements(XElement doc, string skinPath)
+        {
+            foreach (XElement elem in doc.Elements("detail"))
             {
                 _details.Add(new Detail
                 {
@@ -302,7 +321,7 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("button"))
+            foreach (XElement elem in doc.Elements("button"))
             {
                 _buttons.Add(new Button
                 {
@@ -312,7 +331,7 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("rangebutton"))
+            foreach (XElement elem in doc.Elements("rangebutton"))
             {
                 float from = ReadFloatConfig(elem, "from");
                 float to = ReadFloatConfig(elem, "to");
@@ -331,7 +350,7 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("stick"))
+            foreach (XElement elem in doc.Elements("stick"))
             {
                 _analogSticks.Add(new AnalogStick
                 {
@@ -349,7 +368,7 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("touchpad"))
+            foreach (XElement elem in doc.Elements("touchpad"))
             {
                 _touchPads.Add(new TouchPad
                 {
@@ -363,7 +382,7 @@ namespace RetroSpy
                 });
             }
 
-            foreach (XElement elem in doc.Root.Elements("analog"))
+            foreach (XElement elem in doc.Elements("analog"))
             {
                 IEnumerable<XAttribute> directionAttrs = elem.Attributes("direction");
                 if (!directionAttrs.Any())

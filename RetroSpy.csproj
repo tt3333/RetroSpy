@@ -396,15 +396,6 @@
     <Content Include="skins\generic-pattonboxanalogue-ds4\bg.xcf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\generic-sn30\circle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\generic-sn30\skin.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\generic-sn30\snes.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="skins\nes-pghelper\source.fla">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
