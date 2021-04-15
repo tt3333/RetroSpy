@@ -59,7 +59,6 @@
         <string>sketches\Wii.h</string>
         <string>sketches\CDiKeyboard.h</string>
         <string>sketches\GameBoyPrinterEmulator.h</string>
-        <string>sketches\gameboy_printer_protocol.h</string>
         <string>sketches\AtariPaddles.h</string>
         <string>sketches\ColecoVisionRoller.h</string>
         <string>sketches\SMSPaddle.h</string>

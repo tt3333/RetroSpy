@@ -37,7 +37,7 @@ namespace RetroSpy
         private readonly byte[] DMG_colors_blue = { 0x0f, 0x0f, 0x30, 0x0f };
 
         private readonly Image _image;
-        private readonly BitmapPixelMaker _imageBuffer;
+        private BitmapPixelMaker _imageBuffer;
         private readonly IControllerReader _reader;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -155,9 +155,28 @@ namespace RetroSpy
                 {   // Skip lines used for comments
                     continue;
                 }
+                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
                 total_tile_count++;
             }
-            
+
+            var tile_height_count = total_tile_count / TILES_PER_LINE;
+
+            _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
+
+            _image.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
+            _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
+            GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; 
+            this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+
             int tile_count = 0;
 
             for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
@@ -174,6 +193,14 @@ namespace RetroSpy
                     continue;
                 }
                 else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
                 {   // Skip lines used for comments
                     continue;
                 }

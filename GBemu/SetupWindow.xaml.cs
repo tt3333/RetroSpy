@@ -182,7 +182,7 @@ namespace GBPemu
                                 result = _serialPort.ReadLine();
                             } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
 
-                            if (result == "parse_state:0\r")
+                            if (result == "parse_state:0\r" || result.Contains("d=debug"))
                             {
                                 _serialPort.Close();
                                 Thread.Sleep(1000);
