@@ -299,7 +299,9 @@ namespace RetroSpy
             {
                 var sectionType = ReadStringAttr(elem, "type");
 
-                if (type.TypeTag == sectionType)
+                var sectionTypes = sectionType.Split(';');
+
+                if (sectionTypes.Contains(type.TypeTag))
                 {
                     name = ReadStringAttr(elem, "name", false);
                     if (name != "")
