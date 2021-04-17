@@ -68,5 +68,8 @@
     <Setting Name="BeaglebonePassword" Type="System.String" Scope="User">
       <Value Profile="(Default)">retrospy</Value>
     </Setting>
+    <Setting Name="DontSavePassword" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
