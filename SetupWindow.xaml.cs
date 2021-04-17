@@ -167,6 +167,8 @@ namespace RetroSpy
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
+            _vm.DontSavePassword = Properties.Settings.Default.DontSavePassword;
+
             _vm.UseLagFix = Properties.Settings.Default.UseLagFix;
 
             _portListUpdateTimer = new DispatcherTimer
@@ -452,16 +454,17 @@ namespace RetroSpy
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+            Properties.Settings.Default.DontSavePassword = _vm.DontSavePassword;
             Properties.Settings.Default.UseLagFix = _vm.UseLagFix;
             if (_vm.Sources.SelectedItem == InputSource.MISTER)
             {
                 Properties.Settings.Default.MisterUsername = _vm.Username;
-                Properties.Settings.Default.MisterPassword = txtPassword.Password;
+                Properties.Settings.Default.MisterPassword = _vm.DontSavePassword ? "" : txtPassword.Password;
             }
             else
             {
                 Properties.Settings.Default.BeagleboneUsername = _vm.Username;
-                Properties.Settings.Default.BeaglebonePassword = txtPassword.Password;
+                Properties.Settings.Default.BeaglebonePassword = _vm.DontSavePassword ? "" : txtPassword.Password;
             }
             Properties.Settings.Default.Save();
             
@@ -634,6 +637,12 @@ namespace RetroSpy
             Properties.Settings.Default.FilterCOMPorts = FilterCOM.IsChecked;
         }
 
+        private void DoNotSavePassword_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.DontSavePassword = DoNotSavePassword.IsChecked;
+            Properties.Settings.Default.DontSavePassword = DoNotSavePassword.IsChecked;
+        }
+
         private void LagFix_Checked(object sender, RoutedEventArgs e)
         {
             _vm.UseLagFix = LagFix.IsChecked;
@@ -710,7 +719,8 @@ namespace RetroSpy
         public bool StaticViewerWindowName { get; set; }
         public bool LegacyKeybindingBehavior { get; set; }
         public string Hostname { get; set; }
-        public bool FilterCOMPorts { get; set; }   
+        public bool FilterCOMPorts { get; set; }
+        public bool DontSavePassword { get; set; }
         public bool UseLagFix { get; set; }
 
         public string Username { get; set; }
