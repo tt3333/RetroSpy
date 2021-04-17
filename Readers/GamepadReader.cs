@@ -36,7 +36,7 @@ namespace RetroSpy.Readers
             return result;
         }
 
-        public GamepadReader(int id = 0)
+        public GamepadReader(int id = 0, bool useLagFix = false)
         {
             ResourceManager stringManager = Properties.Resources.ResourceManager;
 

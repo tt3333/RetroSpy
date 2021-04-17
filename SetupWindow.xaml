@@ -15,6 +15,7 @@
                     <Separator/>
                     <MenuItem x:Name="KeybindingBehavior" Header="Legacy Keybinding Behavior" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding LegacyKeybindingBehavior}" Checked="KeybindingBehavior_Checked" Unchecked="KeybindingBehavior_Checked" IsCheckable="True" />
                     <MenuItem x:Name="FilterCOM" Header="Don't Filter COM Ports" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" Unchecked="FilterCOM_Checked" IsCheckable="True" />
+                    <MenuItem x:Name="LagFix" Header="Need Lag Fix" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding UseLagFix}" Checked="LagFix_Checked" Unchecked="LagFix_Checked" IsCheckable="True" />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click" />

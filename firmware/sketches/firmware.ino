@@ -1,8 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5
-// v4.1
+// v4.2.3
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
+
+// NOTE: If you are having input display lag problems try uncommenting out this line.
+// #define LAG_FIX
+// WARNING!!! If you do uncomment out this line you must enable "Options -> Use Lag Fix" in the UI
 
 // ---------- Uncomment one of these options to select operation mode ---------
 // 
@@ -383,8 +387,11 @@ void setup()
   A_DELAY(200);
   #pragma GCC diagnostic pop
   
+#ifdef LAG_FIX
+  Serial.begin(57600);
+#else
   Serial.begin( 115200 );
-	
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

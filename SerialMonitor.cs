@@ -34,11 +34,11 @@ namespace RetroSpy
         private DispatcherTimer _timer;
         private readonly bool _printerMode;
 
-        public SerialMonitor(string portName, bool printerMode = false)
+        public SerialMonitor(string portName, bool useLagFix, bool printerMode = false)
         {
             _printerMode = printerMode;
             _localBuffer = new List<byte>();
-            _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", BAUD_RATE);
+            _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", useLagFix ? 57600 : BAUD_RATE);
         }
 
         public void Start()

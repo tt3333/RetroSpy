@@ -11,11 +11,11 @@ namespace RetroSpy.Readers
         private readonly Func<byte[], ControllerStateEventArgs> _packetParser;
         private SerialMonitor _serialMonitor;
 
-        public SerialControllerReader(string portName, Func<byte[], ControllerStateEventArgs> packetParser)
+        public SerialControllerReader(string portName, bool useLagFix, Func<byte[], ControllerStateEventArgs> packetParser)
         {
             _packetParser = packetParser;
 
-            _serialMonitor = new SerialMonitor(portName);
+            _serialMonitor = new SerialMonitor(portName, useLagFix);
             _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
             _serialMonitor.Disconnected += SerialMonitor_Disconnected;
             _serialMonitor.Start();

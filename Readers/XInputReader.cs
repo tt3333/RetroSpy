@@ -54,7 +54,7 @@ namespace RetroSpy.Readers
         private DispatcherTimer _timer;
         private readonly uint _id;
 
-        public XInputReader(uint id = 0)
+        public XInputReader(uint id = 0, bool useLagFix = false)
         {
             _id = id;
             _timer = new DispatcherTimer

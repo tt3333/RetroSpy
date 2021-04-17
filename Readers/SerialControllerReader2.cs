@@ -15,19 +15,19 @@ namespace RetroSpy.Readers
         private SerialMonitor _serialMonitor;
         private SerialMonitor _serialMonitor2;
 
-        public SerialControllerReader2(string portName, string port2Name, Func<byte[], ControllerStateEventArgs> packetParser, Func<byte[], ControllerStateEventArgs> packet2Parser)
+        public SerialControllerReader2(string portName, string port2Name, bool useLagFix, Func<byte[], ControllerStateEventArgs> packetParser, Func<byte[], ControllerStateEventArgs> packet2Parser)
         {
             _packetParser = packetParser;
             _packet2Parser = packet2Parser;
 
-            _serialMonitor = new SerialMonitor(portName);
+            _serialMonitor = new SerialMonitor(portName, useLagFix);
             _serialMonitor.PacketReceived += SerialMonitor_PacketReceived;
             _serialMonitor.Disconnected += SerialMonitor_Disconnected;
             _serialMonitor.Start();
 
             if (port2Name != "Not Connected")
             {
-                _serialMonitor2 = new SerialMonitor(port2Name);
+                _serialMonitor2 = new SerialMonitor(port2Name, useLagFix);
                 _serialMonitor2.PacketReceived += SerialMonitor2_PacketReceived;
                 _serialMonitor2.Disconnected += SerialMonitor2_Disconnected;
                 _serialMonitor2.Start();

@@ -167,6 +167,8 @@ namespace RetroSpy
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
+            _vm.UseLagFix = Properties.Settings.Default.UseLagFix;
+
             _portListUpdateTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -450,6 +452,7 @@ namespace RetroSpy
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.LegacyKeybindingBehavior = _vm.LegacyKeybindingBehavior;
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+            Properties.Settings.Default.UseLagFix = _vm.UseLagFix;
             if (_vm.Sources.SelectedItem == InputSource.MISTER)
             {
                 Properties.Settings.Default.MisterUsername = _vm.Username;
@@ -467,11 +470,11 @@ namespace RetroSpy
                 IControllerReader reader;
                 if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PC360)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PCKEYBOARD)
                 {
@@ -495,7 +498,7 @@ namespace RetroSpy
                         throw new ConfigParseException(_resources.GetString("Port1And2CannotBeTheSame", CultureInfo.CurrentUICulture));
                     }
 
-                    reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem);
+                    reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem, _vm.UseLagFix);
                 }
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 //{
@@ -507,7 +510,7 @@ namespace RetroSpy
                 //}
                 else
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem, _vm.UseLagFix);
                 }
                 if (_vm.DelayInMilliseconds > 0)
                 {
@@ -631,6 +634,12 @@ namespace RetroSpy
             Properties.Settings.Default.FilterCOMPorts = FilterCOM.IsChecked;
         }
 
+        private void LagFix_Checked(object sender, RoutedEventArgs e)
+        {
+            _vm.UseLagFix = LagFix.IsChecked;
+            Properties.Settings.Default.UseLagFix = LagFix.IsChecked;
+        }
+
         private void AddRemove_Click(object sender, RoutedEventArgs e)
         {
             new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
@@ -701,7 +710,8 @@ namespace RetroSpy
         public bool StaticViewerWindowName { get; set; }
         public bool LegacyKeybindingBehavior { get; set; }
         public string Hostname { get; set; }
-        public bool FilterCOMPorts { get; set; }
+        public bool FilterCOMPorts { get; set; }   
+        public bool UseLagFix { get; set; }
 
         public string Username { get; set; }
 
