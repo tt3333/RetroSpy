@@ -78,6 +78,57 @@ namespace GBPemu
             Properties.Settings.Default.DMGPaletteEnabled = DMGPaletteEnabled;
         }
 
+
+        private void DisplayError()
+        {
+            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+
+            var bmp = new Bitmap(Properties.Resources.ErrorImage);
+
+            _imageBuffer = new BitmapPixelMaker(480, 432);
+
+            if (DMGPaletteEnabled)
+                _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
+            else
+                _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
+
+            for (int i = 0; i < bmp.Width; ++i)
+            {
+                for (int j = 0; j < bmp.Height; ++j)
+                {
+                    var pixel = bmp.GetPixel(i, j);
+                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                    {
+                        if (DMGPaletteEnabled)
+                        {
+                            _imageBuffer.SetRed(i, j, DMG_colors_red[0]);
+                            _imageBuffer.SetGreen(i, j, DMG_colors_green[0]);
+                            _imageBuffer.SetBlue(i, j, DMG_colors_blue[0]);
+                        }
+                        else
+                        {
+                            _imageBuffer.SetRed(i, j, colors_red[0]);
+                            _imageBuffer.SetGreen(i, j, colors_green[0]);
+                            _imageBuffer.SetBlue(i, j, colors_blue[0]);
+                        }
+                    }
+                }
+            }
+
+
+            //imageBuffer.SetColor(0, 0, 0);
+            // Convert the pixel data into a WriteableBitmap.
+            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+            // Set the Image source.
+            _image.Source = wbitmap;
+
+            GameBoyPrinterEmulatorWindowGrid.Height = 432;
+            GameBoyPrinterEmulatorWindowGrid.Width = 480;
+            this.Height = 432;
+            this.Width = 480;
+        }
+    
         public GameBoyPrinterEmulatorWindow(IControllerReader reader)
         {
             InitializeComponent();
@@ -193,6 +244,12 @@ namespace GBPemu
             }
 
             var tile_height_count = total_tile_count / TILES_PER_LINE;
+
+            if (tile_height_count == 0)
+            {
+                DisplayError();
+                return;
+            }    
 
             _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
 
