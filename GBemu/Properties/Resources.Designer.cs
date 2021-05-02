@@ -61,6 +61,16 @@ namespace GBPemu.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ErrorImage {
+            get {
+                object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PNG file (*.png)|*.png.
         /// </summary>
         internal static string PNGFilter {
