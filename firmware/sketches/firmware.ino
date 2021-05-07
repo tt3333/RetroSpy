@@ -271,22 +271,46 @@ void setup()
 #endif
 #endif
 
+#ifdef LAG_FIX
+	Serial.begin(57600);
+#else
+	Serial.begin(115200);
+#endif
+
 #if defined(MODE_DETECT)
     if ( !PINC_READ(MODEPIN_SNES)) {
+	    delay(1000);
+		Serial.println("Starting up in SNES mode");
+	    delay(1000);
         SNESSpy.setup();
     } else if ( !PINC_READ(MODEPIN_N64))  {
+	    delay(1000);
+	    Serial.println("Starting up in N64 mode");
+	    delay(1000);
         N64Spy.setup();
     } else if ( !PINC_READ(MODEPIN_GC)) {
+	    delay(1000);
+	    Serial.println("Starting up in Gamecube mode");
+	    delay(1000);
         GCSpy.setup();
     }
 #if defined(__arm__) && defined(CORE_TEENSY)
   else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+	  delay(1000);
+	  Serial.println("Starting up in Dreamcast mode");
+	  delay(1000);
        DCSpy.setup();
     } else if( !PINC_READ( MODEPIN_WII ) ) {
+	    delay(1000);
+	    Serial.println("Starting up in Wii mode");
+	    delay(1000);
         WiiSpy.setup();
     }
 #endif 
     else {
+	    delay(1000);
+	    Serial.println("Starting up in NES mode");
+	    delay(1000);
         NESSpy.setup();
     }
 #elif defined(MODE_NES)
@@ -387,11 +411,6 @@ void setup()
   A_DELAY(200);
   #pragma GCC diagnostic pop
   
-#ifdef LAG_FIX
-  Serial.begin(57600);
-#else
-  Serial.begin( 115200 );
-#endif
 
 }
 
