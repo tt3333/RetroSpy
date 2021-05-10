@@ -206,115 +206,122 @@ namespace GBPemu
 
         private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
         {
-            _imageBuffer.SetColor(0, 0, 0, 255);
-
-            int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
-            int square_height = square_width;
-
-            var tiles_rawBytes_array = e.RawPrinterData.Split('\n');
-
-            var total_tile_count = 0;
-
-            for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
+            try
             {
-                var tile_element = tiles_rawBytes_array[tile_i];
+                _imageBuffer.SetColor(0, 0, 0, 255);
 
-                // Check for invalid raw lines
-                if (tile_element.Length == 0)
-                {   // Skip lines with no bytes (can happen with .split() )
-                    continue;
-                }
-                else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                total_tile_count++;
-            }
+                int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
+                int square_height = square_width;
 
-            var tile_height_count = total_tile_count / TILES_PER_LINE;
+                var tiles_rawBytes_array = e.RawPrinterData.Split('\n');
 
-            if (tile_height_count == 0)
-            {
-                DisplayError();
-                return;
-            }    
+                var total_tile_count = 0;
 
-            _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
-
-            _image.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
-            _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-            GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
-            GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-            this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
-            this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-
-            int tile_count = 0;
-
-            for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
-            {
-                var tile_element = tiles_rawBytes_array[tile_i];
-
-                // Check for invalid raw lines
-                if (tile_element.Length == 0)
-                {   // Skip lines with no bytes (can happen with .split() )
-                    continue;
-                }
-                else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
-                {   // Skip lines used for comments
-                    continue;
-                }
-
-                // Gameboy Tile Offset
-                int tile_x_offset = tile_count % TILES_PER_LINE;
-                int tile_y_offset = tile_count / TILES_PER_LINE;
-
-                var pixels = Decode(tile_element);
-
-                if (pixels != null)
+                for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
                 {
-                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                    var tile_element = tiles_rawBytes_array[tile_i];
+
+                    // Check for invalid raw lines
+                    if (tile_element.Length == 0)
+                    {   // Skip lines with no bytes (can happen with .split() )
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    total_tile_count++;
                 }
-                else
+
+                var tile_height_count = total_tile_count / TILES_PER_LINE;
+
+                if (tile_height_count == 0)
                 {
-                    //status = false;
+                    DisplayError();
+                    return;
                 }
 
+                _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
 
-                // Increment Tile Count Tracker
-                tile_count++;
+                _image.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
+                _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+                GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
+                GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+                this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
+                this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
+                int tile_count = 0;
+
+                for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
+                {
+                    var tile_element = tiles_rawBytes_array[tile_i];
+
+                    // Check for invalid raw lines
+                    if (tile_element.Length == 0)
+                    {   // Skip lines with no bytes (can happen with .split() )
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+
+                    // Gameboy Tile Offset
+                    int tile_x_offset = tile_count % TILES_PER_LINE;
+                    int tile_y_offset = tile_count / TILES_PER_LINE;
+
+                    var pixels = Decode(tile_element);
+
+                    if (pixels != null)
+                    {
+                        Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                    }
+                    else
+                    {
+                        //status = false;
+                    }
+
+
+                    // Increment Tile Count Tracker
+                    tile_count++;
+
+                }
+
+                //imageBuffer.SetColor(0, 0, 0);
+                // Convert the pixel data into a WriteableBitmap.
+                WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+                // Set the Image source.
+                _image.Source = wbitmap;
             }
-
-            //imageBuffer.SetColor(0, 0, 0);
-            // Convert the pixel data into a WriteableBitmap.
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-
-            // Set the Image source.
-            _image.Source = wbitmap;
+            catch(Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+            }
         }
 
         void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
@@ -361,6 +368,7 @@ namespace GBPemu
                     pixels[j * TILE_PIXEL_WIDTH + i] = (byte)((hiBit << 1) | loBit);
                 }
             }
+
             return pixels;
         }
 
