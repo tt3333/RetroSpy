@@ -92,17 +92,17 @@
 #define PS_DATA            DIGITAL_PIN_21
 
 //PORTD
-#define NEOGEO_SELECT      NOT_CONNECTED
-#define NEOGEO_D           NOT_CONNECTED
-#define NEOGEO_B           NOT_CONNECTED
-#define NEOGEO_RIGHT       NOT_CONNECTED
-#define NEOGEO_DOWN        NOT_CONNECTED
-#define NEOGEO_START       NOT_CONNECTED
+#define NEOGEO_SELECT      DIGITAL_PIN_07
+#define NEOGEO_D           DIGITAL_PIN_08
+#define NEOGEO_B           DIGITAL_PIN_06
+#define NEOGEO_RIGHT       DIGITAL_PIN_20
+#define NEOGEO_DOWN        DIGITAL_PIN_21
+#define NEOGEO_START       DIGITAL_PIN_05
 //PORTB
-#define NEOGEO_C           NOT_CONNECTED
-#define NEOGEO_A           NOT_CONNECTED
-#define NEOGEO_LEFT        NOT_CONNECTED
-#define NEOGEO_UP          NOT_CONNECTED
+#define NEOGEO_C           DIGITAL_PIN_16
+#define NEOGEO_A           DIGITAL_PIN_27
+#define NEOGEO_LEFT        DIGITAL_PIN_19
+#define NEOGEO_UP          DIGITAL_PIN_18
 
 #define INTPIN1            NOT_CONNECTED
 #define INTPIN2            NOT_CONNECTED

@@ -35,6 +35,8 @@ void NeoGeoSpy::loop() {
 #else
 	debugSerial();
 #endif
+	
+	T_DELAY(5);
 }
 
 void NeoGeoSpy::updateState() {
