@@ -78,29 +78,29 @@ void N64Spy::updateState() {
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 	bit2 = READ_PORTD(0b00000100);
 	if (bit2 != 0)  // Controller Reset
-		{
-			WAIT_FALLING_EDGE(N64_PIN);
-			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-			// bit1 = PIND & 0b00000100;
-			WAIT_FALLING_EDGE(N64_PIN);
-			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-			// bit0 = PIND & 0b00000100;
-			bits = 25;
-			rawData[0] = 0xFF;
-			goto read_loop;
-		}
+	{
+		WAIT_FALLING_EDGE(N64_PIN);
+		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+		// bit1 = PIND & 0b00000100;
+		WAIT_FALLING_EDGE(N64_PIN);
+		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+		// bit0 = PIND & 0b00000100;
+		bits = 25;
+		rawData[0] = 0xFF;
+		goto read_loop;
+	}
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
 	bit1 = READ_PORTD(0b00000100);
 	if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
-		{
-			WAIT_FALLING_EDGE(N64_PIN);
-			asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
-			// bit0 = PIND & 0b00000100;
-			bits = 281;
-			rawData[0] = 0x02;
-			goto read_loop;
-		}
+	{
+		WAIT_FALLING_EDGE(N64_PIN);
+		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+		// bit0 = PIND & 0b00000100;
+		bits = 281;
+		rawData[0] = 0x02;
+		goto read_loop;
+	}
 checkControllerPoll:
 	WAIT_FALLING_EDGE(N64_PIN);
 	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
@@ -138,6 +138,12 @@ read_loop:
 		}
 		else if (rawData[0] == 0x00 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] == 0
 			&& rawData[6] == 0 && rawData[7] != 0 && rawData[8] == 0 && rawData[9] != 0 && rawData[25] != 0) 
+		{
+			shortcutToControllerPoll = true;
+			bits = 8;
+		}
+		else if (rawData[0] == 0x00 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] == 0 && rawData[5] == 0
+			&& rawData[6] == 0 && rawData[7] != 0 && rawData[8] == 0 && rawData[9] != 0 && rawData [24] == 0 && rawData[25] == 0) 
 		{
 			shortcutToControllerPoll = true;
 			bits = 8;

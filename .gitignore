@@ -133,3 +133,4 @@ Backup*/
 /firmware/.visualgdb/
 /firmware/firmware.adeps
 .visualgdb
+*.editorconfig
