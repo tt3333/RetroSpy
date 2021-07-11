@@ -8,7 +8,9 @@ echo ""
 echo "Installing USBProxy..."
 echo ""
 
+
 cd ~retrospy/USBProxy
+git pull
 cd src/build
 cmake ..
 make
@@ -20,4 +22,5 @@ echo "Installing ds4drv..."
 echo ""
 
 cd ~retrospy/ds4drv
+git pull
 sudo python3 setup.py install
