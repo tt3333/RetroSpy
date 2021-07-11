@@ -42,6 +42,27 @@ goto end
 :AnyCPUBuildgb
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
 
+if errorlevel 0 goto releaseuu
+echo Aborting release. Error during AnyCPU build.
+goto end
+
+:releaseuu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+
+if errorlevel 0 goto x64Builduu
+echo Aborting release. Error during x86 build.
+goto end
+
+:x64Builduu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+
+if errorlevel 0 goto AnyCPUBuilduu
+echo Aborting release. Error during x64 build.
+goto end
+
+:AnyCPUBuilduu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+
 if errorlevel 0 goto :MiSTer
 echo Aborting release. Error during AnyCPU build.
 goto end
@@ -80,6 +101,12 @@ if exist "..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip GBPemu.exe
 copy GBPemu.exe ..\..\RetroSpy-Setup
+
+if exist "..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a UsbUpdater.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip UsbUpdater.exe
+copy UsbUpdater.exe ..\..\RetroSpy-Setup
 cd ..\..
 
 cd bin\x64\Release
@@ -96,6 +123,13 @@ if exist "..\..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPemu.x64.exe
 copy GBPemu.x64.exe ..\..\..\RetroSpy-Setup\
+
+copy UsbUpdater.exe UsbUpdater.x64.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a UsbUpdater.x64.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip UsbUpdater.x64.exe
+copy UsbUpdater.x64.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 cd bin\x86\Release
@@ -112,6 +146,13 @@ if exist "..\..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPemu.x86.exe
 copy GBPemu.x86.exe ..\..\..\RetroSpy-Setup\
+
+copy UsbUpdater.exe UsbUpdater.x86.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a UsbUpdater.x86.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip UsbUpdater.x86.exe
+copy UsbUpdater.x86.exe ..\..\..\RetroSpy-Setup\
 cd ..\..\..
 
 ;cd SharpDX\net45
@@ -161,6 +202,7 @@ if exist "..\..\certs\codesign.pfx" (
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
 copy RetroSpy-release.zip RetroSpy-Upload
+copy UsbUpdater\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( CALL BatchSubstitute.bat "RELEASE_TAG" "%~1" MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
 if exist "..\..\beaglebone\" (

@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MiSTer", "MiSTer\MiSTer.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GBPemu", "GBemu\GBPemu.csproj", "{8177880B-0631-4F7C-98EF-81BBC890A787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbUpdater", "UsbUpdater\UsbUpdater.csproj", "{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,30 @@ Global
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|x64.Build.0 = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|x86.ActiveCfg = Release|Any CPU
 		{8177880B-0631-4F7C-98EF-81BBC890A787}.Release|x86.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Arduino_Nano.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Arduino_Nano.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Arduino_Uno.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Arduino_Uno.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Teensy_3 5.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|Teensy_3 5.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Arduino_Nano.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Arduino_Nano.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Arduino_Uno.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Arduino_Uno.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Teensy_3 5.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|Teensy_3 5.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|x64.Build.0 = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FEB56C8-A29B-4972-AE58-9400E1EC5FC9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
