@@ -28,6 +28,18 @@ namespace GBPemu
         private readonly int TILE_PIXEL_HEIGHT = 8;
         private readonly int TILES_PER_LINE = 20; // Gameboy Printer Tile Constant
 
+        private readonly byte[,,] palettes = {
+                                                {{ 0xff, 0xaa, 0x55, 0x00 }, { 0xff, 0xaa, 0x55, 0x00 }, { 0xff, 0xaa, 0x55, 0x00 }},   // Grayscale
+                                                {{ 0x9b, 0x77, 0x30, 0x0f }, { 0xbc, 0xa1, 0x62, 0x38 }, { 0x0f, 0x12, 0x30, 0x0f }},   // DMG
+                                                {{ 0xc4, 0x8b, 0x4d, 0x1f }, { 0xcf, 0x95, 0x53, 0x1f }, { 0xa1, 0x6d, 0x3c, 0x1f }},   // GameBoy Pocket
+                                                {{ 0xff, 0x7b, 0x01, 0x00 }, { 0xff, 0xff, 0x63, 0x00 }, { 0xff, 0x30, 0xc6, 0x00 }},   // GameBoy Color EU/US
+                                                {{ 0xff, 0xff, 0x83, 0x00 }, { 0xff, 0xad, 0x31, 0x00 }, { 0xff, 0x63, 0x00, 0x00 }},   // GameBoy Color JP
+                                                {{ 0xe0, 0x88, 0x34, 0x08 }, { 0xf8, 0xc0, 0x68, 0x18 }, { 0xd0, 0x70, 0x56, 0x20 }},   // BGB
+                                                {{ 0xe0, 0xa8, 0x70, 0x2b }, { 0xdb, 0x9f, 0x6b, 0x2b }, { 0xcd, 0x94, 0x66, 0x26 }},   // GraphixKid Gray
+                                                {{ 0x7e, 0xab, 0x7b, 0x4c }, { 0x84, 0xc3, 0x92, 0x62 }, { 0xb4, 0x96, 0x78, 0x5a }},   // GraphixKid Green
+                                                {{ 0x7e, 0x57, 0x38, 0x2e }, { 0x84, 0x7b, 0x5d, 0x46 }, { 0x16, 0x46, 0x49, 0x3d }}    // Black Zero
+        };
+
         private readonly byte[] colors_red = { 0xff, 0xaa, 0x55, 0x00 };
         private readonly byte[] colors_green = { 0xff, 0xaa, 0x55, 0x00 };
         private readonly byte[] colors_blue = { 0xff, 0xaa, 0x55, 0x00 };
@@ -42,55 +54,81 @@ namespace GBPemu
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string propertyName)
+        private int SelectedPalette = 0;
+
+        private void checkPalette(int paletteId)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Palette_Grayscale.IsChecked = paletteId == 0;
+            Palette_DMG.IsChecked = paletteId == 1;
+            Palette_GBPocket.IsChecked = paletteId == 2;
+            Palette_GBCUS.IsChecked = paletteId == 3;
+            Palette_GBCJP.IsChecked = paletteId == 4;
+            Palette_BGB.IsChecked = paletteId == 5;
+            Palette_GKGray.IsChecked = paletteId == 6;
+            Palette_GKGreen.IsChecked = paletteId == 7;
+            Palette_BZ.IsChecked = paletteId == 8;
         }
 
-        private bool _DMGPaletteEnabled;
-
-        public bool DMGPaletteEnabled
+        private void Palette_Click(Object sender, EventArgs e)
         {
-            get => _DMGPaletteEnabled;
-            set
+            int newPalette = 0;
+
+            if (sender == Palette_DMG)
             {
-                _DMGPaletteEnabled = value;
-                NotifyPropertyChanged(nameof(DMGPaletteEnabled));
+                newPalette = 1;
             }
-        }
+            else if (sender == Palette_GBPocket)
+            {
+                newPalette = 2;
+            }
+            else if (sender == Palette_GBCUS)
+            {
+                newPalette = 3;
+            }
+            else if (sender == Palette_GBCJP)
+            {
+                newPalette = 4;
+            }
+            else if (sender == Palette_BGB)
+            {
+                newPalette = 5;
+            }
+            else if (sender == Palette_GKGray)
+            {
+                newPalette = 6;
+            }
+            else if (sender == Palette_GKGreen)
+            {
+                newPalette = 7;
+            }
+            else if (sender == Palette_BZ)
+            {
+                newPalette = 8;
+            }
 
-        private void DMGPaletteEnabled_Click(object sender, RoutedEventArgs e)
-        {
+            checkPalette(newPalette);
 
             for (int i = 0; i < 4; ++i)
             {
-                if (DMGPaletteEnabled)
-                    _imageBuffer.ReplaceColor(DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i],
-                                                colors_red[i], colors_green[i], colors_blue[i]);
-                else
-                    _imageBuffer.ReplaceColor(colors_red[i], colors_green[i], colors_blue[i],
-                                                DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i]);
+                _imageBuffer.ReplaceColor(palettes[SelectedPalette, 0, i], palettes[SelectedPalette, 1, i], palettes[SelectedPalette, 2, i],
+                                          palettes[newPalette, 0, i], palettes[newPalette, 1, i], palettes[newPalette, 2, i]);
             }
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
             _image.Source = wbitmap;
 
-            DMGPaletteEnabled = !DMGPaletteEnabled;
-            Properties.Settings.Default.DMGPaletteEnabled = DMGPaletteEnabled;
+            SelectedPalette = newPalette;
+            Properties.Settings.Default.SelectedPalette = SelectedPalette;
         }
-
 
         private void DisplayError()
         {
-            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+            SelectedPalette = Properties.Settings.Default.SelectedPalette;
 
             var bmp = new Bitmap(Properties.Resources.ErrorImage);
 
             _imageBuffer = new BitmapPixelMaker(480, 432);
 
-            if (DMGPaletteEnabled)
-                _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
-            else
-                _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
+            _imageBuffer.SetColor(palettes[SelectedPalette, 0, 3], palettes[SelectedPalette, 1, 3], palettes[SelectedPalette, 2, 3]);
 
             for (int i = 0; i < bmp.Width; ++i)
             {
@@ -99,18 +137,9 @@ namespace GBPemu
                     var pixel = bmp.GetPixel(i, j);
                     if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                     {
-                        if (DMGPaletteEnabled)
-                        {
-                            _imageBuffer.SetRed(i, j, DMG_colors_red[0]);
-                            _imageBuffer.SetGreen(i, j, DMG_colors_green[0]);
-                            _imageBuffer.SetBlue(i, j, DMG_colors_blue[0]);
-                        }
-                        else
-                        {
-                            _imageBuffer.SetRed(i, j, colors_red[0]);
-                            _imageBuffer.SetGreen(i, j, colors_green[0]);
-                            _imageBuffer.SetBlue(i, j, colors_blue[0]);
-                        }
+                        _imageBuffer.SetRed(i, j, palettes[SelectedPalette, 0, 0]);
+                        _imageBuffer.SetGreen(i, j, palettes[SelectedPalette, 1, 0]);
+                        _imageBuffer.SetBlue(i, j, palettes[SelectedPalette, 2, 0]);
                     }
                 }
             }
@@ -136,16 +165,13 @@ namespace GBPemu
 
             _reader = reader ?? throw new NullReferenceException();
 
-            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+            SelectedPalette = Properties.Settings.Default.SelectedPalette;
 
             var bmp = new Bitmap(Properties.Resources.PrintImage);
 
             _imageBuffer = new BitmapPixelMaker(480, 432);
 
-            if (DMGPaletteEnabled)
-                _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
-            else
-                _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
+            _imageBuffer.SetColor(palettes[SelectedPalette, 0, 3], palettes[SelectedPalette, 1, 3], palettes[SelectedPalette, 2, 3]);
 
             for (int i = 0; i < bmp.Width; ++i)
             {
@@ -154,18 +180,9 @@ namespace GBPemu
                     var pixel = bmp.GetPixel(i, j);
                     if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                     {
-                        if (DMGPaletteEnabled)
-                        {
-                            _imageBuffer.SetRed(i, j, DMG_colors_red[0]);
-                            _imageBuffer.SetGreen(i, j, DMG_colors_green[0]);
-                            _imageBuffer.SetBlue(i, j, DMG_colors_blue[0]);
-                        }
-                        else
-                        {
-                            _imageBuffer.SetRed(i, j, colors_red[0]);
-                            _imageBuffer.SetGreen(i, j, colors_green[0]);
-                            _imageBuffer.SetBlue(i, j, colors_blue[0]);
-                        }
+                        _imageBuffer.SetRed(i, j, palettes[SelectedPalette, 0, 0]);
+                        _imageBuffer.SetGreen(i, j, palettes[SelectedPalette, 1, 0]);
+                        _imageBuffer.SetBlue(i, j, palettes[SelectedPalette, 2, 0]);
                     }    
                 }
             }
@@ -185,8 +202,8 @@ namespace GBPemu
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
+            checkPalette(SelectedPalette);
 
-            
         }
 
         private void Reader_ControllerDisconnected(object sender, EventArgs e)
@@ -339,10 +356,10 @@ namespace GBPemu
                     canvas.SetRect(pixel_x_offset + i * pixel_width,
                             pixel_y_offset + j * pixel_height,
                             pixel_width,
-                            pixel_height, 
-                            DMGPaletteEnabled ? DMG_colors_red[pixels[j * TILE_PIXEL_WIDTH + i]]  : colors_red[pixels[j * TILE_PIXEL_WIDTH + i]],
-                            DMGPaletteEnabled ? DMG_colors_green[pixels[j * TILE_PIXEL_WIDTH + i]] : colors_green[pixels[j * TILE_PIXEL_WIDTH + i]],
-                            DMGPaletteEnabled ? DMG_colors_blue[pixels[j * TILE_PIXEL_WIDTH + i]] : colors_blue[pixels[j * TILE_PIXEL_WIDTH + i]]);
+                            pixel_height,
+                            palettes[SelectedPalette, 0, pixels[j * TILE_PIXEL_WIDTH + i]],
+                            palettes[SelectedPalette, 1, pixels[j * TILE_PIXEL_WIDTH + i]],
+                            palettes[SelectedPalette, 2, pixels[j * TILE_PIXEL_WIDTH + i]]);
                 }
             }
         }
