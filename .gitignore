@@ -134,3 +134,4 @@ Backup*/
 /firmware/firmware.adeps
 .visualgdb
 *.editorconfig
+/GBP_Firmware.zip

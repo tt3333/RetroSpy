@@ -259,6 +259,7 @@ English=
 7=<ProgramGroup>*?GameBoy Printer Emulator (Experimental)*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
 8=<Desktop>*?GameBoy Printer Emulator (Experimental)*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal
 9=<ProgramGroup>*?RetroSpy USB Updater*?<InstallDir>\UsbUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal
+10=<ProgramGroup>*?GameBoy Printer Emulator Updater*?<InstallDir>\GBPUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal
 
 [Commands]
 0=<InstallDir>\drivers\dpinst-amd64.exe*?*?Normal*?After Installation*?Yes*?64-bit*?Yes

@@ -250,7 +250,16 @@ copy RetroSpy-release.zip RetroSpy-Upload
 copy UsbUpdater\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( CALL BatchSubstitute.bat "RELEASE_TAG" "%~1" MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
+if exist "..\..\GBP_Firmware\" (
+del GBP_Firmware.zip
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\avrdude.exe
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\avrdude.conf
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\firmware.ino.hex
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\libusb0.dll
+copy GBP_Firmware.zip RetroSpy-Upload
+)
 if exist "..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & goto end
 )
+
 :end
