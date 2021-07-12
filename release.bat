@@ -63,6 +63,28 @@ goto end
 :AnyCPUBuilduu
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
 
+if errorlevel 0 goto releasegpbu
+echo Aborting release. Error during x64 build.
+goto end
+
+:releasegpbu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+
+if errorlevel 0 goto x64Buildgpbu
+echo Aborting release. Error during x86 build.
+goto end
+
+:x64Buildgpbu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+
+if errorlevel 0 goto AnyCPUBuildgpbu
+echo Aborting release. Error during x64 build.
+goto end
+
+:AnyCPUBuildgpbu
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+
+
 if errorlevel 0 goto :MiSTer
 echo Aborting release. Error during AnyCPU build.
 goto end
@@ -107,6 +129,13 @@ if exist "..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip UsbUpdater.exe
 copy UsbUpdater.exe ..\..\RetroSpy-Setup
+
+if exist "..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPUpdater.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip GBPUpdater.exe
+copy GBPUpdater.exe ..\..\RetroSpy-Setup
+
 cd ..\..
 
 cd bin\x64\Release
@@ -130,6 +159,14 @@ if exist "..\..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip UsbUpdater.x64.exe
 copy UsbUpdater.x64.exe ..\..\..\RetroSpy-Setup\
+
+copy GBPUpdater.exe GBPUpdater.x64.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPUpdater.x64.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPUpdater.x64.exe
+copy GBPUpdater.x64.exe ..\..\..\RetroSpy-Setup\
+
 cd ..\..\..
 
 cd bin\x86\Release
@@ -153,6 +190,14 @@ if exist "..\..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip UsbUpdater.x86.exe
 copy UsbUpdater.x86.exe ..\..\..\RetroSpy-Setup\
+
+copy GBPUpdater.exe GBPUpdater.x86.exe
+if exist "..\..\..\..\..\certs\codesign.pfx" (
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a GBPUpdater.x86.exe
+)
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip GBPUpdater.x86.exe
+copy GBPUpdater.x86.exe ..\..\..\RetroSpy-Setup\
+
 cd ..\..\..
 
 ;cd SharpDX\net45
@@ -205,7 +250,16 @@ copy RetroSpy-release.zip RetroSpy-Upload
 copy UsbUpdater\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( CALL BatchSubstitute.bat "RELEASE_TAG" "%~1" MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
+if exist "..\..\GBP_Firmware\" (
+del GBP_Firmware.zip
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\avrdude.exe
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\avrdude.conf
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\firmware.ino.hex
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\libusb0.dll
+copy GBP_Firmware.zip RetroSpy-Upload
+)
 if exist "..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & goto end
 )
+
 :end
