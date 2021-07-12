@@ -101,112 +101,122 @@ namespace GBPUpdater
         static void Main(string[] args)
         {
 
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(tempDirectory);
-
-            Console.WriteLine(tempDirectory);
-
-            Console.Write("Downloading latest firmware...");
-            WebClient webClient = new WebClient();
-            webClient.DownloadFile("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip", 
-                Path.Combine(tempDirectory, "GBP_Firmware.zip"));
-            Console.WriteLine("done.\n");
-
-            Console.Write("Decompressing firmware package...");
-            ZipFile.ExtractToDirectory(Path.Combine(tempDirectory, "GBP_Firmware.zip"), tempDirectory);
-            Console.WriteLine("done.\n");
-
-            Console.Write("Searching for GameBoy Printer Emulator...");
-            
-            SerialPort _serialPort = null;
-
-            var arduinoPorts = SetupCOMPortInformation();
-            string gbpemuPort = "";
-            bool foundPort = false;
-
-            foreach (var port in arduinoPorts)
+            try
             {
-                _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
-                _serialPort.Handshake = Handshake.None;
+                string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                Directory.CreateDirectory(tempDirectory);
 
-                _serialPort.ReadTimeout = 500;
-                _serialPort.WriteTimeout = 500;
+                Console.WriteLine(tempDirectory);
 
-                try
+                Console.Write("Downloading latest firmware...");
+                WebClient webClient = new WebClient();
+                webClient.DownloadFile("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip",
+                    Path.Combine(tempDirectory, "GBP_Firmware.zip"));
+                Console.WriteLine("done.\n");
+
+                Console.Write("Decompressing firmware package...");
+                ZipFile.ExtractToDirectory(Path.Combine(tempDirectory, "GBP_Firmware.zip"), tempDirectory);
+                Console.WriteLine("done.\n");
+
+                Console.Write("Searching for GameBoy Printer Emulator...");
+
+                SerialPort _serialPort = null;
+
+                var arduinoPorts = SetupCOMPortInformation();
+                string gbpemuPort = "";
+                bool foundPort = false;
+
+                foreach (var port in arduinoPorts)
                 {
-                    _serialPort.Open();
+                    _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
+                    _serialPort.Handshake = Handshake.None;
+
+                    _serialPort.ReadTimeout = 500;
+                    _serialPort.WriteTimeout = 500;
+
+                    try
+                    {
+                        _serialPort.Open();
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
+                    }
+                    catch (Exception)
+                    {
+                        _serialPort.Close();
+                        continue;
+                    }
+
+                    string result = null;
+                    do
+                    {
+                        result = _serialPort.ReadLine();
+                    } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
+
+                    if (result == "parse_state:0\r" || result.Contains("d=debug"))
+                    {
+                        foundPort = true;
+                        gbpemuPort = port;
+                        _serialPort.Close();
+                    }
+                    else
+                    {
+                        _serialPort.Close();
+                        continue;
+                    }
                 }
-                catch (Exception)
-                {
-                    continue;
-                }
 
-                try
+                if (!foundPort)
                 {
-                    _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                }
-                catch (Exception)
-                {
-                    _serialPort.Close();
-                    continue;
-                }
-
-                string result = null;
-                do
-                {
-                    result = _serialPort.ReadLine();
-                } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
-
-                if (result == "parse_state:0\r" || result.Contains("d=debug"))
-                {
-                    foundPort = true;
-                    gbpemuPort = port;
-                    _serialPort.Close();
+                    Console.WriteLine("cannot find RetroSpy GameBoy Printer Emulator.\n");
                 }
                 else
                 {
-                    _serialPort.Close();
-                    continue;
+                    Console.WriteLine("found on " + gbpemuPort + ".\n");
+
+
+                    Console.WriteLine("Updating firmware...");
+
+                    var processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        WorkingDirectory = tempDirectory
+                    };
+
+                    StringBuilder sb = new StringBuilder();
+                    Process p = Process.Start(processInfo);
+                    p.OutputDataReceived += (sender, args1) => sb.AppendLine(args1.Data);
+                    p.ErrorDataReceived += (sender, args1) => sb.AppendLine(args1.Data);
+                    p.BeginOutputReadLine();
+                    p.BeginErrorReadLine();
+                    p.WaitForExit();
+                    Console.WriteLine(sb.ToString());
+
+                    Console.WriteLine("...done.\n");
+
+                    Console.WriteLine("Update Complete!\n");
                 }
-            }
 
-            if (!foundPort)
+                Console.WriteLine("Press Enter to Exit");
+                Console.Read();
+
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("cannot find RetroSpy GameBoy Printer Emulator.\n");
+                Console.WriteLine("\nUpdater encountered an error.  Message: " + ex.Message);
+                Console.WriteLine("");
+                Console.WriteLine("Press Enter to Exit");
+                Console.ReadLine();
             }
-            else
-            {
-                Console.WriteLine("found on " + gbpemuPort + ".\n");
-
-
-                Console.WriteLine("Updating firmware...");
-
-                var processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true,
-                    WorkingDirectory = tempDirectory
-                };
-
-                StringBuilder sb = new StringBuilder();
-                Process p = Process.Start(processInfo);
-                p.OutputDataReceived += (sender, args1) => sb.AppendLine(args1.Data);
-                p.ErrorDataReceived += (sender, args1) => sb.AppendLine(args1.Data);
-                p.BeginOutputReadLine();
-                p.BeginErrorReadLine();
-                p.WaitForExit();
-                Console.WriteLine(sb.ToString());
-
-                Console.WriteLine("...done.\n");
-
-                Console.WriteLine("Update Complete!\n");
-            }
-
-            Console.WriteLine("Press Enter to Exit");
-            Console.Read();
-
 
         }
     }
