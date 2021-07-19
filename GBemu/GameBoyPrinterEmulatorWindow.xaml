@@ -11,7 +11,17 @@
             <ContextMenu>
                 <MenuItem Header="Save As..." Click="SaveAs_Click" />
                 <Separator/>
-                <MenuItem Header="Use DMG Color Palette" Click="DMGPaletteEnabled_Click" IsChecked="{Binding DMGPaletteEnabled}"/>
+                <MenuItem Header="Palette">
+                    <MenuItem Name="Palette_Grayscale" Header="Grayscale" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_DMG" Header="DMG" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_GBPocket" Header="GameBoy Pocket" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_GBCUS" Header="GameBoy Color EU/US" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_GBCJP" Header="GameBoy Color JP" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_BGB" Header="BGB" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_GKGray" Header="Graphix Kid Gray" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_GKGreen" Header="Graphix Kid Green" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_BZ" Header="Black Zero" Click="Palette_Click" IsCheckable="true" />
+                </MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>
