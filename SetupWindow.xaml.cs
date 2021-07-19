@@ -251,7 +251,6 @@ namespace RetroSpy
                 try
                 {
                     var arduinoPorts = SetupCOMPortInformation();
-                    //List<string> arduinoPorts = GetArduinoPorts();
                     GetTeensyPorts(arduinoPorts);
 
                     arduinoPorts.Sort();
@@ -528,6 +527,7 @@ namespace RetroSpy
                 }
                 else
                 {
+                    _portListUpdateTimer.Stop();
                     new ViewWindow(_vm.Skins.SelectedItem,
                                     _vm.Backgrounds.SelectedItem,
                                     reader, _vm.StaticViewerWindowName)
@@ -547,6 +547,7 @@ namespace RetroSpy
                 MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            _portListUpdateTimer.Start();
             Show();
         }
 
