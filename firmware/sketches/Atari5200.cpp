@@ -1,4 +1,4 @@
-﻿//
+//
 // Atari5200Spy.cpp
 //
 // Author:

@@ -1,4 +1,4 @@
-﻿//
+//
 // Pippin.h
 //
 // Author:

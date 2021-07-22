@@ -1,4 +1,4 @@
-﻿//
+//
 // KeyboardController.h
 //
 // Author:

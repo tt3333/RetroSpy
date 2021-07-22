@@ -1,4 +1,4 @@
-﻿//
+//
 // AmgiaKeyboard.h
 //
 // Author:

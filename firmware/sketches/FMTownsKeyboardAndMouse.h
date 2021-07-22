@@ -1,4 +1,4 @@
-﻿//
+//
 // FMTownsKeyboardAndMouse.h
 //
 // Author:

@@ -1,4 +1,4 @@
-﻿//
+//
 // AmgiaMouse.cpp
 //
 // Author:

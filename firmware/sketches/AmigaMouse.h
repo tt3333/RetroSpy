@@ -1,4 +1,4 @@
-﻿//
+//
 // AmigaMouses.h
 //
 // Author:
