@@ -22,7 +22,6 @@
                     <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click" />
                 </MenuItem>
             </Menu>
-            <Label Content="Label" />
         </StackPanel>
         <ComboBox Margin="145,37,10,0" SelectedIndex="0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
                   SelectionChanged="SourceSelectComboBox_SelectionChanged"

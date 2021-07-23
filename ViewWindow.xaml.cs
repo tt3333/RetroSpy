@@ -112,6 +112,14 @@ namespace RetroSpy
                 touchpad.Item1.XRange = (uint)(touchpad.Item1.OriginalXRange * xRatio);
                 touchpad.Item1.YRange = (uint)(touchpad.Item1.OriginalYRange * yRatio);
             }
+
+            foreach (Tuple<AnalogText, Label> analogText in _analogTextBoxes)
+            {
+                uint newX = analogText.Item1.X = (uint)Math.Round(analogText.Item1.OriginalX * xRatio);
+                uint newY = analogText.Item1.Y = (uint)Math.Round(analogText.Item1.OriginalY * yRatio);
+                analogText.Item2.Margin = new Thickness(newX, newY, 0, 0);
+                analogText.Item2.LayoutTransform = new ScaleTransform(xRatio, yRatio);
+            }
         }
 
         private class NativeMethods
@@ -148,6 +156,7 @@ namespace RetroSpy
         private readonly List<Tuple<TouchPad, Image>> _touchPadWithImages = new List<Tuple<TouchPad, Image>>();
         private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new List<Tuple<RangeButton, Image>>();
         private readonly List<Tuple<AnalogStick, Image>> _sticksWithImages = new List<Tuple<AnalogStick, Image>>();
+        private readonly List<Tuple<AnalogText, Label>> _analogTextBoxes = new List<Tuple<AnalogText, Label>>();
 
         private readonly Dictionary<string, List<Tuple<Button, Image>>> _dictOfButtonsWithImages = new Dictionary<string, List<Tuple<Button, Image>>>();
 
@@ -332,6 +341,16 @@ namespace RetroSpy
                 }
             }
 
+            foreach (AnalogText analogtext in _skin.AnalogTexts)
+            {
+                if (BgIsActive(skinBackground.Name, analogtext.TargetBackgrounds, analogtext.IgnoreBackgrounds))
+                { 
+                    Label label = GetLabelForElement(analogtext);
+                    _analogTextBoxes.Add(new Tuple<AnalogText, Label>(analogtext, label));
+                    ControllerGrid.Children.Add(label);
+                }
+            }
+
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
@@ -372,6 +391,18 @@ namespace RetroSpy
                 Height = config.Height
             };
             return img;
+        }
+
+        private static Label GetLabelForElement(AnalogText config)
+        {
+            Label label = new Label
+            {
+                FontFamily = config.Font,
+                FontSize = config.Size,
+                Margin = new Thickness(config.X, config.Y, 0, 0),
+                Foreground =config.Color,
+            };
+            return label;
         }
 
         private static Grid GetGridForAnalogTrigger(AnalogTrigger trigger)
@@ -548,6 +579,12 @@ namespace RetroSpy
                         });
                     }
                 }
+            }
+
+            foreach (Tuple<AnalogText, Label> text in _analogTextBoxes)
+            {
+                float value = e.Analogs.ContainsKey(text.Item1.Name) ? e.Analogs[text.Item1.Name] * text.Item1.Range : 0;
+                text.Item2.Content = (int)value;
             }
 
             foreach (Tuple<RangeButton, Image> button in _rangeButtonsWithImages)
@@ -793,6 +830,8 @@ namespace RetroSpy
                     }
                 }
             }
+
+
         }
 
         // INotifyPropertyChanged interface implementation

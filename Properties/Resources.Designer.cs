@@ -79,6 +79,24 @@ namespace RetroSpy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Element &apos;analogtext&apos; needs attribute &apos;color&apos;..
+        /// </summary>
+        internal static string AnalogTextNeedsColor {
+            get {
+                return ResourceManager.GetString("AnalogTextNeedsColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Element &apos;analogtext&apos; needs attribute &apos;font&apos;..
+        /// </summary>
+        internal static string AnalogTextNeedsFont {
+            get {
+                return ResourceManager.GetString("AnalogTextNeedsFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Element &apos;background&apos; should either define &apos;image&apos; with optionally &apos;width&apos; and &apos;height&apos; or both &apos;width&apos; and &apos;height&apos;..
         /// </summary>
         internal static string BothWidthAndHeight {

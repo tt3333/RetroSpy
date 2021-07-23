@@ -114,6 +114,42 @@ namespace RetroSpy
         public uint OriginalYRange { get; set; }
     }
 
+    public class AnalogText
+    {
+        public uint X { get; set; } 
+        public uint Y { get; set; }
+        public uint OriginalX { get; set; }
+        public uint OriginalY { get; set; }
+        public FontFamily Font { get; set; }
+        public Brush Color { get; set; }
+        public uint Range { get; set; }
+        public float Size { get; set; }
+        public string Name { get; set; }
+        public List<string> TargetBackgrounds { get; private set; }
+        public List<string> IgnoreBackgrounds { get; private set; }
+        public void SetTargetBackgrounds(List<string> list)
+        {
+            if (TargetBackgrounds == null)
+                TargetBackgrounds = list;
+            else
+            {
+                TargetBackgrounds.Clear();
+                TargetBackgrounds.AddRange(list);
+            }
+        }
+
+        public void SetIgnoreBackgrounds(List<string> list)
+        {
+            if (IgnoreBackgrounds == null)
+                IgnoreBackgrounds = list;
+            else
+            {
+                IgnoreBackgrounds.Clear();
+                IgnoreBackgrounds.AddRange(list);
+            }
+        }
+    }
+
     public class LoadResults
     {
         public List<Skin> SkinsLoaded { get; private set; }
@@ -169,6 +205,9 @@ namespace RetroSpy
 
         private readonly List<TouchPad> _touchPads = new List<TouchPad>();
         public IReadOnlyList<TouchPad> TouchPads => _touchPads;
+
+        private readonly List<AnalogText> _analogTexts = new List<AnalogText>();
+        public IReadOnlyList<AnalogText> AnalogTexts => _analogTexts;
 
         // ----------------------------------------------------------------------------------------------------------------
 
@@ -412,6 +451,49 @@ namespace RetroSpy
                     IsReversed = ReadBoolAttr(elem, "reverse"),
                     UseNegative = ReadBoolAttr(elem, "usenegative")
                 });
+
+            }
+
+            foreach (XElement elem in doc.Elements("analogtext"))
+            {
+                IEnumerable<XAttribute> fontAttrs = elem.Attributes("font");
+                if (!fontAttrs.Any())
+                {
+                    throw new ConfigParseException(_resources.GetString("AnalogTextNeedsFont", CultureInfo.CurrentUICulture));
+                }
+                FontFamily font = new FontFamily(fontAttrs.First().Value);
+
+                IEnumerable<XAttribute> colorAttrs = elem.Attributes("color");
+                if (!colorAttrs.Any())
+                {
+                    throw new ConfigParseException(_resources.GetString("AnalogTextNeedsColor", CultureInfo.CurrentUICulture));
+                }
+
+                var converter = new System.Windows.Media.BrushConverter();
+                var brush = (Brush)converter.ConvertFromString(colorAttrs.First().Value);
+
+                List<string> targetBgs = GetArrayAttr(elem, "target", false);
+                List<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
+
+                var x = ReadUintAttr(elem, "x");
+                var y = ReadUintAttr(elem, "y");
+               
+                var analogTextConfig = new AnalogText
+                {
+                    X = x,
+                    Y = y,
+                    OriginalX = x,
+                    OriginalY = y,
+                    Size = ReadFloatConfig(elem, "size"),
+                    Range = ReadUintAttr(elem, "range"),
+                    Font = font,
+                    Color = brush,
+                    Name = ReadStringAttr(elem, "name"),
+               };
+                analogTextConfig.SetTargetBackgrounds(targetBgs);
+                analogTextConfig.SetIgnoreBackgrounds(ignoreBgs);
+
+                _analogTexts.Add(analogTextConfig);
             }
         }
 

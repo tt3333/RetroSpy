@@ -123,6 +123,12 @@
   <data name="AnalogNeedsDirection" xml:space="preserve">
     <value>Element 'analog' needs attribute 'direction'.</value>
   </data>
+  <data name="AnalogTextNeedsColor" xml:space="preserve">
+    <value>Element 'analogtext' needs attribute 'color'.</value>
+  </data>
+  <data name="AnalogTextNeedsFont" xml:space="preserve">
+    <value>Element 'analogtext' needs attribute 'font'.</value>
+  </data>
   <data name="BothWidthAndHeight" xml:space="preserve">
     <value>Element 'background' should either define 'image' with optionally 'width' and 'height' or both 'width' and 'height'.</value>
   </data>
