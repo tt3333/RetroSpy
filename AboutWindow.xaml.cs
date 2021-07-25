@@ -46,7 +46,7 @@ namespace RetroSpy
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/mrgamy"">MrGamy</A></TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://discord.gg/tyvzPbu5fv"">peco_de_guile</A></TD></TR>
             <TR><td ALIGN='CENTER'>Mellified</TD></TR> 
-            <TR><td ALIGH='CENTER'>Karl W. Reinsch</TD></TR>
+            <TR><td ALIGN='CENTER'>Karl W. Reinsch</TD></TR>
         </TABLE>
     </BODY>
 </HTML>", Assembly.GetEntryAssembly().GetName().Version, DateTime.Now));
