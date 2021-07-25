@@ -108,7 +108,7 @@ namespace RetroSpy
             thread.Start();
         }
 
-        public SetupWindow()
+        public SetupWindow(bool skipSetup = false)
         {
             InitializeComponent();
 
@@ -215,6 +215,16 @@ namespace RetroSpy
             {
                 ShowSkinParseErrors(results.ParseErrors);
             }
+
+            if (skipSetup)
+            {
+                SourceSelectComboBox_SelectionChanged(null, null);
+                Skin_SelectionChanged(null, null);
+                GoButton_Click(null, null);
+            }
+            else
+                Show();
+
         }
 
         private void PopulateSources()

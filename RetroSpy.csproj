@@ -147,6 +147,9 @@
     <Compile Include="AddRemoveWindow.xaml.cs">
       <DependentUpon>AddRemoveWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
     <Compile Include="beagle.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
