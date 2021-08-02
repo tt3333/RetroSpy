@@ -24,11 +24,14 @@ namespace RetroSpy
         private readonly int _delayInMilliseconds;
         private DispatcherTimer _timer;
 
-        public SSHMonitor(string hostname, string command, string username, string password, int delayInMilliseconds)
+        public SSHMonitor(string hostname, string command, string username, string password, string commandSub, int delayInMilliseconds)
         {
             _localBuffer = new List<byte>();
             _client = new SshClient(hostname, username, password);
-            _command = command;
+            if (!string.IsNullOrEmpty(commandSub))
+                _command = String.Format(command, commandSub);
+            else
+                _command = command;
             _delayInMilliseconds = delayInMilliseconds;
         }
 

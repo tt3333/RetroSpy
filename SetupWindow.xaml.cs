@@ -1,4 +1,5 @@
 ﻿using Ookii.Dialogs.Wpf;
+using Renci.SshNet;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
@@ -119,7 +120,6 @@ namespace RetroSpy
                 Properties.Settings.Default.Save();
             }
 
-
             isClosing = false;
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
@@ -210,6 +210,11 @@ namespace RetroSpy
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
             _vm.Hostname = Properties.Settings.Default.Hostname;
+
+            var defaultMisterControllers = new List<uint>();
+            for (uint i = 0; i < 10; ++i)
+                defaultMisterControllers.Add(i);
+            _vm.MisterGamepad.UpdateContents(defaultMisterControllers);
 
             if (results.ParseErrors.Count > 0)
             {
@@ -450,6 +455,48 @@ namespace RetroSpy
             //_vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
         }
 
+        private void MiSTerPopulate_Click(object sender, RoutedEventArgs e)
+        {
+            SshClient _client = null;
+            try
+            {
+                List<uint> controllers = new List<uint>();
+                _client = new SshClient(this.txtHostname.Text, this.txtUsername.Text, txtPassword.Password);
+                _client.Connect();
+                var _data = _client.CreateShellStream("", 0, 0, 0, 0, 1000);
+
+                Thread.Sleep(5000);
+
+                _data.WriteLine("ls -l /dev/input/js*");
+                _data.WriteLine("retrospy_end");
+
+                while (true)
+                {
+                    while (!_data.DataAvailable) ;
+                    var line = _data.ReadLine();
+                    if (line.Contains("retrospy_end"))
+                        break;
+                    if (line.Contains("/dev/input/js"))
+                    {
+                        int i = line.LastIndexOf("/dev/input/js");
+                        if (line.Substring(i + 13) != "*")
+                            controllers.Add(uint.Parse(line.Substring(i + 13)));
+                    }
+                }
+
+                _vm.MisterGamepad.UpdateContents(controllers);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Couldn't connected to MiSTer to get connected controllers.");
+            }
+            finally
+            {
+                if(_client != null)
+                    _client.Dispose();
+            }
+        }
+
         private void GoButton_Click(object sender, RoutedEventArgs e)
         {
             Hide();
@@ -496,10 +543,13 @@ namespace RetroSpy
                          _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 ||
                          _vm.Sources.SelectedItem == InputSource.GENMINI || _vm.Sources.SelectedItem == InputSource.C64MINI ||
                          _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3 
-                         || _vm.Sources.SelectedItem == InputSource.PS4 || _vm.Sources.SelectedItem == InputSource.MISTER
-                         || _vm.Sources.SelectedItem == InputSource.TG16MINI)
+                         || _vm.Sources.SelectedItem == InputSource.PS4 || _vm.Sources.SelectedItem == InputSource.TG16MINI)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader4(txtHostname.Text, txtUsername.Text, txtPassword.Password);
+                }
+                else if (_vm.Sources.SelectedItem == InputSource.MISTER)
+                {
+                    reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text, txtUsername.Text, txtPassword.Password, _vm.MisterGamepad.SelectedItem.ToString());
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 
                             || _vm.Sources.SelectedItem == InputSource.ATARI5200 || _vm.Sources.SelectedItem == InputSource.COLECOVISION
@@ -579,6 +629,7 @@ namespace RetroSpy
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
             _vm.ComPort2OptionVisibility = _vm.Sources.SelectedItem.RequiresComPort2 ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
+            _vm.MisterGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresMisterId ? Visibility.Visible : Visibility.Hidden;
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname ? Visibility.Visible : Visibility.Hidden;
             UpdateGamepadList();
             UpdateXIList();
@@ -723,6 +774,7 @@ namespace RetroSpy
         public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
         public ListView<uint> XIAndGamepad { get; set; }
+        public ListView<uint> MisterGamepad { get; set; }
         public ListView<Skin> Skins { get; set; }
         public ListView<Background> Backgrounds { get; set; }
         public ListView<InputSource> Sources { get; set; }
@@ -772,6 +824,18 @@ namespace RetroSpy
             }
         }
 
+        private Visibility _MiSTerGamepadOptionVisibility;
+
+        public Visibility MisterGamepadOptionVisibility
+        {
+            get => _MiSTerGamepadOptionVisibility;
+            set
+            {
+                _MiSTerGamepadOptionVisibility = value;
+                NotifyPropertyChanged("MiSTerGamepadOptionVisibility");
+            }
+        }
+
         private Visibility _SSHOptionVisibility;
 
         public Visibility SSHOptionVisibility
@@ -789,6 +853,7 @@ namespace RetroSpy
             Ports = new ListView<string>();
             Ports2 = new ListView<string>();
             XIAndGamepad = new ListView<uint>();
+            MisterGamepad = new ListView<uint>();
             Skins = new ListView<Skin>();
             Sources = new ListView<InputSource>();
             Backgrounds = new ListView<Background>();

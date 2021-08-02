@@ -33,6 +33,13 @@
                Visibility="{Binding ComPortOptionVisibility}" />
         <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,65,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding XIAndGamepadOptionVisibility}" />
+        <Label Name="MisterControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="340 ,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+               Visibility="{Binding MisterGamepadOptionVisibility}" />
+        <ComboBox Name="MisterControllerIdCombo" Margin="425,137,90.2,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
+                  ItemsSource="{Binding MisterGamepad.Items}"
+                  SelectedValue="{Binding MisterGamepad.SelectedItem}"
+                  Visibility="{Binding MisterGamepadOptionVisibility}" />
+        <Button Name="MiSTerPopulate" Content="Detect" Margin="512,0,10.2,320" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="MiSTerPopulate_Click" Visibility="{Binding MisterGamepadOptionVisibility}"/>
         <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,67,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding SSHOptionVisibility}" />
         <ComboBox Name="ComPortCombo" Margin="145,71,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True"
@@ -50,7 +57,7 @@
                  ItemsSource="{Binding Skins.Items}"
                  DisplayMemberPath="Name"
                  SelectedValue="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged" />
-        <TextBox Name="txtDelay" Margin="145,137,10.333,0" VerticalAlignment="Top" Height="24    " Text="{Binding DelayInMilliseconds}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" />
+        <TextBox Name="txtDelay" Margin="145,137,265.2,0" VerticalAlignment="Top" Height="24    " Text="{Binding DelayInMilliseconds}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" />
         <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="GoButton_Click" />
         <ListBox Margin="0,198,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
         	SelectedIndex="0"
