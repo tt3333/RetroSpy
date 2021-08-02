@@ -45,6 +45,7 @@
 //#define MODE_WII
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
+//#define MODE_GCv2
 
 //Bridge GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
@@ -129,6 +130,7 @@
 #include "ColecoVisionRoller.h"
 #include "AtariPaddles.h"
 #include "PowerGlove.h"
+#include "GCv2.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -144,6 +146,9 @@ N64Spy N64Spy;
 #endif
 #if defined(MODE_GC)
 GCSpy GCSpy;
+#endif
+#if defined(MODE_GCv2)
+GCv2Spy GCv2Spy;
 #endif
 #if defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
@@ -323,6 +328,8 @@ void setup()
     N64Spy.setup();
 #elif defined(MODE_GC)
     GCSpy.setup();
+#elif defined(MODE_GCv2)
+	GCv2Spy.setup();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.setup();
 #elif defined(MODE_GENESIS)
@@ -438,6 +445,8 @@ void loop()
     }
 #elif defined(MODE_GC)
     GCSpy.loop();
+#elif defined(MODE_GCv2)
+	GCv2Spy.loop();
 #elif defined(MODE_N64)
     N64Spy.loop();
 #elif defined(MODE_SNES)
