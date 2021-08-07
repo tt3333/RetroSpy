@@ -64,6 +64,10 @@
         <string>sketches\SMSSportsPad.h</string>
         <string>sketches\PowerGlove.h</string>
         <string>sketches\GCv2.h</string>
+        <string>sketches\gameboy_printer_protocol.h</string>
+        <string>sketches\gbp_cbuff.h</string>
+        <string>sketches\gbp_pkt.h</string>
+        <string>sketches\gbp_serial_io.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
