@@ -14,7 +14,7 @@
 	<button name="a" image="abbutton.png" x="437" y="712" />
 	<button name="b" image="abbutton.png" x="351" y="740" />
 	<button name="start" image="startselect.png" x="316" y="982" />
-	<button name="select" image="startselect.png" x="219" y="982" />
+	<button name="z" image="startselect.png" x="219" y="982" />
 	<button name="l" image="lbutton.png" x="33" y="433" />
 	<button name="r" image="rbutton.png" x="490" y="433" />
 
