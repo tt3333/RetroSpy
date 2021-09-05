@@ -13,6 +13,7 @@ namespace RetroSpy.Readers
 
         private static bool SecondButton;
         private static float SecondPaddle;
+        private static int SecondPaddleRaw;
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
@@ -31,8 +32,8 @@ namespace RetroSpy.Readers
 
             ControllerStateBuilder state = new ControllerStateBuilder();
 
-            state.SetAnalog("paddle", ReadPaddle(packet[2]));
-            state.SetAnalog("paddle2", SecondPaddle);
+            state.SetAnalog("paddle", ReadPaddle(packet[2]), packet[2]);
+            state.SetAnalog("paddle2", SecondPaddle, SecondPaddleRaw);
             state.SetButton("fire2", SecondButton);
             state.SetButton("fire", (packet[1] != 0x00));
 
@@ -56,6 +57,7 @@ namespace RetroSpy.Readers
 
             SecondButton = (packet[1] != 0x00);
             SecondPaddle = ReadPaddle(packet[2]);
+            SecondPaddleRaw = packet[2];
 
             return null;
         }

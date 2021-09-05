@@ -69,13 +69,13 @@ namespace RetroSpy.Readers
                 outState.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 
-            outState.SetAnalog("rstick_x", ReadStick(polishedPacket[22]));
-            outState.SetAnalog("rstick_y", ReadStick(polishedPacket[23]));
-            outState.SetAnalog("lstick_x", ReadStick(polishedPacket[20]));
-            outState.SetAnalog("lstick_y", ReadStick(polishedPacket[21]));
+            outState.SetAnalog("rstick_x", ReadStick(polishedPacket[22]), polishedPacket[22]);
+            outState.SetAnalog("rstick_y", ReadStick(polishedPacket[23]), polishedPacket[23]);
+            outState.SetAnalog("lstick_x", ReadStick(polishedPacket[20]), polishedPacket[20]);
+            outState.SetAnalog("lstick_y", ReadStick(polishedPacket[21]), polishedPacket[21]);
 
-            outState.SetAnalog("l_trig", ReadStick(polishedPacket[24]));
-            outState.SetAnalog("r_trig", ReadStick(polishedPacket[25]));
+            outState.SetAnalog("l_trig", ReadStick(polishedPacket[24]), polishedPacket[24]);
+            outState.SetAnalog("r_trig", ReadStick(polishedPacket[25]), polishedPacket[25]);
 
             int touchpad_x1 = (polishedPacket[27] << 8) | polishedPacket[26];
             int touchpad_y1 = (polishedPacket[29] << 8) | polishedPacket[28];
@@ -86,13 +86,13 @@ namespace RetroSpy.Readers
             {
                 if (polishedPacket[17] == 1) // click
                 {
-                    outState.SetAnalog("touchpad_x3", ReadTouchPad(touchpad_x1, 1920));
-                    outState.SetAnalog("touchpad_y3", ReadTouchPad(touchpad_y1, 943));
+                    outState.SetAnalog("touchpad_x3", ReadTouchPad(touchpad_x1, 1920), touchpad_x1);
+                    outState.SetAnalog("touchpad_y3", ReadTouchPad(touchpad_y1, 943), touchpad_y1);
                 }
                 else
                 {
-                    outState.SetAnalog("touchpad_x1", ReadTouchPad(touchpad_x1, 1920));
-                    outState.SetAnalog("touchpad_y1", ReadTouchPad(touchpad_y1, 943));
+                    outState.SetAnalog("touchpad_x1", ReadTouchPad(touchpad_x1, 1920), touchpad_x1);
+                    outState.SetAnalog("touchpad_y1", ReadTouchPad(touchpad_y1, 943), touchpad_y1);
                 }
             }
 
@@ -100,13 +100,13 @@ namespace RetroSpy.Readers
             {
                 if (polishedPacket[17] == 1) // click
                 {
-                    outState.SetAnalog("touchpad_x4", ReadTouchPad(touchpad_x2, 1920));
-                    outState.SetAnalog("touchpad_y4", ReadTouchPad(touchpad_y2, 943));
+                    outState.SetAnalog("touchpad_x4", ReadTouchPad(touchpad_x2, 1920), touchpad_x2);
+                    outState.SetAnalog("touchpad_y4", ReadTouchPad(touchpad_y2, 943), touchpad_y2);
                 }
                 else
                 {
-                    outState.SetAnalog("touchpad_x2", ReadTouchPad(touchpad_x2, 1920));
-                    outState.SetAnalog("touchpad_y2", ReadTouchPad(touchpad_y2, 943));
+                    outState.SetAnalog("touchpad_x2", ReadTouchPad(touchpad_x2, 1920), touchpad_x2);
+                    outState.SetAnalog("touchpad_y2", ReadTouchPad(touchpad_y2, 943), touchpad_y2);
                 }
             }
 

@@ -86,8 +86,8 @@ namespace RetroSpy.Readers
                 }
             }
 
-            state.SetAnalog("x", x);
-            state.SetAnalog("y", y);
+            state.SetAnalog("x", x, 0);
+            state.SetAnalog("y", y, 0);
 
             state.SetButton("1", packet[5] == 0 && packet[6] == 0 && packet[7] == 0 && packet[8] != 0);
             state.SetButton("2", packet[5] == 0 && packet[6] == 0 && packet[7] != 0 && packet[8] == 0);
@@ -172,8 +172,8 @@ namespace RetroSpy.Readers
                         }
                     }
 
-                    state.SetAnalog("x_2", x_2);
-                    state.SetAnalog("y_2", y_2);
+                    state.SetAnalog("x_2", x_2, 0);
+                    state.SetAnalog("y_2", y_2, 0);
 
                     state.SetButton("1_2", y_packet[5] == 0 && y_packet[6] == 0 && y_packet[7] == 0 && y_packet[8] != 0);
                     state.SetButton("2_2", y_packet[5] == 0 && y_packet[6] == 0 && y_packet[7] != 0 && y_packet[8] == 0);
@@ -210,7 +210,7 @@ namespace RetroSpy.Readers
                 if (Math.Abs(roller_y) != 0 && Math.Abs(roller_y) > maxY)
                     maxY = Math.Abs(roller_y);
 
-                SignalTool.SetMouseProperties(-1.0f * roller_x / maxX, -1.0f * roller_y / maxY, state);    
+                SignalTool.SetMouseProperties(-1.0f * roller_x / maxX, -1.0f * roller_y / maxY, roller_x, roller_y, state);    
             }
 
             return state.Build();

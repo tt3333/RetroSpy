@@ -143,61 +143,71 @@ namespace RetroSpy.Readers
 
                 state.SetButton("wireless-1a", cleanedData[10] != 0x00);
 
-                state.SetAnalog("wired-analog_right", ReadAnalogButton(cleanedData[3]));
-                state.SetAnalog("wired-analog_left", ReadAnalogButton(cleanedData[2]));
-                state.SetAnalog("wired-analog_up", ReadAnalogButton(cleanedData[0]));
-                state.SetAnalog("wired-analog_down", ReadAnalogButton(cleanedData[1]));
+                state.SetAnalog("wired-analog_right", ReadAnalogButton(cleanedData[3]), cleanedData[3]);
+                state.SetAnalog("wired-analog_left", ReadAnalogButton(cleanedData[2]), cleanedData[2]);
+                state.SetAnalog("wired-analog_up", ReadAnalogButton(cleanedData[0]), cleanedData[0]);
+                state.SetAnalog("wired-analog_down", ReadAnalogButton(cleanedData[1]), cleanedData[1]);
 
-                state.SetAnalog("wireless-analog_right", ReadAnalogButton(cleanedData[9]));
-                state.SetAnalog("wireless-analog_left", ReadAnalogButton(cleanedData[8]));
-                state.SetAnalog("wireless-analog_up", ReadAnalogButton(cleanedData[6]));
-                state.SetAnalog("wireless-analog_down", ReadAnalogButton(cleanedData[7]));
+                state.SetAnalog("wireless-analog_right", ReadAnalogButton(cleanedData[9]), cleanedData[9]);
+                state.SetAnalog("wireless-analog_left", ReadAnalogButton(cleanedData[8]), cleanedData[8]);
+                state.SetAnalog("wireless-analog_up", ReadAnalogButton(cleanedData[6]), cleanedData[6]);
+                state.SetAnalog("wireless-analog_down", ReadAnalogButton(cleanedData[7]), cleanedData[7]);
 
                 float x = 0, x_wireless = 0;
                 float y = 0, y_wireless = 0;
+                int xRaw = 0, x_wirelessRaw = 0;
+                int yRaw = 0, y_wirelessRaw = 0;
 
                 if (cleanedData[0] > 0)
                 {
                     y = ReadAnalogButton(cleanedData[0]);
+                    yRaw = cleanedData[0];
                 }
                 else if (cleanedData[1] > 0)
                 {
                     y = -1 * ReadAnalogButton(cleanedData[1]);
+                    yRaw = cleanedData[1];
                 }
                 if (cleanedData[2] > 0)
                 {
                     x = -1 * ReadAnalogButton(cleanedData[2]);
+                    xRaw = cleanedData[2];
                 }
                 else if (cleanedData[3] > 0)
                 {
                     x = ReadAnalogButton(cleanedData[3]);
+                    xRaw = cleanedData[3];
                 }
 
                 if (cleanedData[6] > 0)
                 {
                     y_wireless = ReadAnalogButton(cleanedData[6]);
+                    y_wirelessRaw = cleanedData[6];
                 }
                 else if (cleanedData[7] > 0)
                 {
                     y_wireless = -1 * ReadAnalogButton(cleanedData[7]);
+                    y_wirelessRaw = cleanedData[7];
                 }
 
                 if (cleanedData[8] > 0)
                 {
                     x_wireless = -1 * ReadAnalogButton(cleanedData[8]);
+                    x_wirelessRaw = cleanedData[8];
                 }
                 else if (cleanedData[9] > 0)
                 {
                     x_wireless = ReadAnalogButton(cleanedData[9]);
+                    x_wirelessRaw = cleanedData[9];
                 }
 
 
-                state.SetAnalog("wireless_stick_x", x_wireless);
-                state.SetAnalog("wireless_stick_y", y_wireless);
+                state.SetAnalog("wireless_stick_x", x_wireless, x_wirelessRaw);
+                state.SetAnalog("wireless_stick_y", y_wireless, y_wirelessRaw);
 
-                state.SetAnalog("stick_x", x);
-                state.SetAnalog("stick_y", y);
-                SignalTool.SetMouseProperties(x, y, state);
+                state.SetAnalog("stick_x", x, xRaw);
+                state.SetAnalog("stick_y", y, yRaw);
+                SignalTool.SetMouseProperties(x, y, xRaw, yRaw, state);
 
                 return state.Build();
             }

@@ -70,13 +70,13 @@ namespace RetroSpy.Readers
                 outState.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 
-            outState.SetAnalog("trig_l", ReadTrigger(polishedPacket[16]));
-            outState.SetAnalog("trig_r", ReadTrigger(polishedPacket[17]));
+            outState.SetAnalog("trig_l", ReadTrigger(polishedPacket[16]), polishedPacket[16]);
+            outState.SetAnalog("trig_r", ReadTrigger(polishedPacket[17]), polishedPacket[17]);
 
-            outState.SetAnalog("rstick_x", ReadStick(sticks[2]));
-            outState.SetAnalog("rstick_y", ReadStick(sticks[3]));
-            outState.SetAnalog("lstick_x", ReadStick(sticks[0]));
-            outState.SetAnalog("lstick_y", ReadStick(sticks[1]));
+            outState.SetAnalog("rstick_x", ReadStick(sticks[2]), sticks[2]);
+            outState.SetAnalog("rstick_y", ReadStick(sticks[3]), sticks[3]);
+            outState.SetAnalog("lstick_x", ReadStick(sticks[0]), sticks[0]);
+            outState.SetAnalog("lstick_y", ReadStick(sticks[1]), sticks[1]);
 
             return outState.Build();
         }

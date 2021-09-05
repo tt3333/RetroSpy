@@ -61,7 +61,8 @@ namespace RetroSpy.Readers
 
                 foreach (string button in _states[0].Analogs.Keys)
                 {
-                    filteredStateBuilder.SetAnalog(button, _states[2].Analogs[button]);
+                    int rawValue = _states[2].RawAnalogs[button + "_raw"];
+                    filteredStateBuilder.SetAnalog(button, _states[2].Analogs[button], rawValue);
                     if (MassEnabled)
                     {
                         if (Math.Abs(Math.Abs(_states[2].Analogs[button]) - Math.Abs(_states[1].Analogs[button])) > 0.3)
@@ -77,7 +78,7 @@ namespace RetroSpy.Readers
                         if (Math.Abs(_states[2].Analogs[button] - _states[1].Analogs[button]) > .5f &&
                             Math.Abs(_states[1].Analogs[button] - _states[0].Analogs[button]) < 0.1f)
                         {
-                            filteredStateBuilder.SetAnalog(button, _lastUnfiltered.Analogs[button]);
+                            filteredStateBuilder.SetAnalog(button, _lastUnfiltered.Analogs[button], _lastUnfiltered.RawAnalogs[button + "_raw"]);
                             filtered = true;
                         }
                     }

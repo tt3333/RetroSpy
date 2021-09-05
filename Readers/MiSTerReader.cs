@@ -66,10 +66,10 @@ namespace RetroSpy.Readers
             {
                 if (i < AXES_NAMES.Length)
                 {
-                    outState.SetAnalog(AXES_NAMES[i], axesValues[i] / (float)short.MaxValue);
+                    outState.SetAnalog(AXES_NAMES[i], axesValues[i] / (float)short.MaxValue, axesValues[i]);
                 }
 
-                outState.SetAnalog("a" + i.ToString(CultureInfo.CurrentCulture), axesValues[i] / (float)short.MaxValue);
+                outState.SetAnalog("a" + i.ToString(CultureInfo.CurrentCulture), axesValues[i] / (float)short.MaxValue, axesValues[i]);
             }
 
             if (axes >= 2)

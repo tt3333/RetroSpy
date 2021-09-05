@@ -137,17 +137,17 @@ namespace RetroSpy.Readers
 
                     if (polishedPacket[0] == 0x16)
                     {
-                        state.SetAnalog("lstick_x", ReadStick(polishedPacket[17]));
-                        state.SetAnalog("lstick_y", ReadStick(polishedPacket[18]));
-                        state.SetAnalog("trig_r", ReadTrigger(polishedPacket[19]));
-                        state.SetAnalog("trig_l", ReadTrigger(polishedPacket[20]));
+                        state.SetAnalog("lstick_x", ReadStick(polishedPacket[17]), polishedPacket[17]);
+                        state.SetAnalog("lstick_y", ReadStick(polishedPacket[18]), polishedPacket[18]);
+                        state.SetAnalog("trig_r", ReadTrigger(polishedPacket[19]), polishedPacket[19]);
+                        state.SetAnalog("trig_l", ReadTrigger(polishedPacket[20]), polishedPacket[20]);
                     }
                     else
                     {
-                        state.SetAnalog("lstick_x", ReadStick(128));
-                        state.SetAnalog("lstick_y", ReadStick(128));
-                        state.SetAnalog("trig_r", ReadTrigger(0));
-                        state.SetAnalog("trig_l", ReadTrigger(0));
+                        state.SetAnalog("lstick_x", ReadStick(128), 128);
+                        state.SetAnalog("lstick_y", ReadStick(128), 128);
+                        state.SetAnalog("trig_r", ReadTrigger(0), 0);
+                        state.SetAnalog("trig_l", ReadTrigger(0), 0);
                     }
                 }
                 else
@@ -172,10 +172,10 @@ namespace RetroSpy.Readers
                         state.SetButton(MOUSE_BUTTONS[i], packet[i + 8] != 0x00);
                     }
 
-                    state.SetAnalog("lstick_x", ReadStick(128));
-                    state.SetAnalog("lstick_y", ReadStick(128));
-                    state.SetAnalog("trig_r", ReadTrigger(0));
-                    state.SetAnalog("trig_l", ReadTrigger(0));
+                    state.SetAnalog("lstick_x", ReadStick(128), 128);
+                    state.SetAnalog("lstick_y", ReadStick(128), 128);
+                    state.SetAnalog("trig_r", ReadTrigger(0), 0);
+                    state.SetAnalog("trig_l", ReadTrigger(0), 0);
 
                     byte xVal = 0;
                     j = 8;
@@ -195,7 +195,7 @@ namespace RetroSpy.Readers
                     float x = ReadMouse(packet[11] != 0, packet[9] != 0, xVal);
                     float y = ReadMouse(packet[10] != 0, packet[8] != 0, yVal);
 
-                    SignalTool.SetMouseProperties(x, y, state);
+                    SignalTool.SetMouseProperties(x, y, xVal, yVal, state);
                 }
 
                 return state.Build();

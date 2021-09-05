@@ -128,16 +128,16 @@ namespace RetroSpy.Readers
             ControllerStateBuilder state = new ControllerStateBuilder();
 
             sbyte x = (sbyte)SignalTool.ReadByte(packet, 8, 8);
-            state.SetAnalog("x", x / 128.0f);
+            state.SetAnalog("x", x / 128.0f, x);
 
             sbyte y = (sbyte)SignalTool.ReadByte(packet, 16, 8);
-            state.SetAnalog("y", y / 128.0f);
+            state.SetAnalog("y", y / 128.0f, y);
 
             sbyte z = (sbyte)SignalTool.ReadByte(packet, 24, 8);
-            state.SetAnalog("z", z / 128.0f);
+            state.SetAnalog("z", z / 128.0f, z);
 
             byte rotation = SignalTool.ReadByte(packet, 32, 8);
-            state.SetAnalog("rotation", rotation / 11.0f);
+            state.SetAnalog("rotation", rotation / 11.0f, rotation);
 
             byte[] fingers = new byte[4];
             for(int i = 0; i < 4; ++i)
@@ -150,7 +150,7 @@ namespace RetroSpy.Readers
             }
             for(int i = 0; i < 4; ++i)
             {
-                state.SetAnalog(BUTTONS_NES_POWERGLOVE_FINGERS[i], fingers[i] / 4.0f);
+                state.SetAnalog(BUTTONS_NES_POWERGLOVE_FINGERS[i], fingers[i] / 4.0f, fingers[i]);
             }
 
             byte buttons = SignalTool.ReadByte(packet, 48, 8);
@@ -292,7 +292,7 @@ namespace RetroSpy.Readers
                 {
                     float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
                     float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
-                    SignalTool.SetMouseProperties(x, y, state);
+                    SignalTool.SetMouseProperties(x, y, SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1),SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1), state);
                 }
             }
 
@@ -431,7 +431,7 @@ namespace RetroSpy.Readers
                     state.SetButton(SCANCODES_FMTOWNS[i], polishedPacket[i] != 0x00);
                 }
 
-                SignalTool.SetMouseProperties(((sbyte)reconstructedPacket[33]) / -128.0f, ((sbyte)reconstructedPacket[32]) / 128.0f, state);
+                SignalTool.SetMouseProperties(((sbyte)reconstructedPacket[33]) / -128.0f, ((sbyte)reconstructedPacket[32]) / 128.0f, reconstructedPacket[33], reconstructedPacket[32], state);
 
                 state.SetButton("left", packet[68] == 1);
                 state.SetButton("right", packet[69] == 1);
@@ -441,6 +441,7 @@ namespace RetroSpy.Readers
         }
 
         private static float atari5200_y;
+        private static int atari5200_yRaw;
 
         public static ControllerStateEventArgs ReadFromPacketAtari52002(byte[] packet)
         {
@@ -453,7 +454,7 @@ namespace RetroSpy.Readers
             }
 
             atari5200_y = (((packet[17] >> 4) | (packet[18])) - 128.0f) / 128.0f;
-
+            atari5200_yRaw = ((packet[17] >> 4) | (packet[18]));
             return null;
         }
 
@@ -478,8 +479,8 @@ namespace RetroSpy.Readers
                 state.SetButton(BUTTONS_ATARI5200[i], packet[i] == 0x00);
             }
 
-            state.SetAnalog("x", (((packet[17] >> 4) | (packet[18])) - 128.0f) / -128.0f);
-            state.SetAnalog("y", atari5200_y);
+            state.SetAnalog("x", (((packet[17] >> 4) | (packet[18])) - 128.0f) / -128.0f, (packet[17] >> 4) | (packet[18]));
+            state.SetAnalog("y", atari5200_y, atari5200_yRaw);
 
             return state.Build();
         }

@@ -145,86 +145,86 @@ namespace RetroSpy.Readers
 
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79 || polishedPacket[0] == 0x53)
             {
-                state.SetAnalog("rstick_x", ReadStick(polishedPacket[17]));
-                state.SetAnalog("rstick_y", ReadStick(polishedPacket[18]));
-                state.SetAnalog("lstick_x", ReadStick(polishedPacket[19]));
-                state.SetAnalog("lstick_y", ReadStick(polishedPacket[20]));
+                state.SetAnalog("rstick_x", ReadStick(polishedPacket[17]), polishedPacket[17]);
+                state.SetAnalog("rstick_y", ReadStick(polishedPacket[18]), polishedPacket[18]);
+                state.SetAnalog("lstick_x", ReadStick(polishedPacket[19]), polishedPacket[19]);
+                state.SetAnalog("lstick_y", ReadStick(polishedPacket[20]), polishedPacket[20]);
             }
             else if (polishedPacket[0] == 0x23)
             {
                 float steering = ReadNegConSteering(polishedPacket[17]);
                 if (steering < 0)
                 {
-                    state.SetAnalog("l_steering", steering * -1);
-                    state.SetAnalog("r_steering", 0.0f);
+                    state.SetAnalog("l_steering", steering * -1, polishedPacket[17]);
+                    state.SetAnalog("r_steering", 0.0f, 0);
                 }
                 else if (steering > 0)
                 { 
-                    state.SetAnalog("l_steering", 0.0f);
-                    state.SetAnalog("r_steering", steering);
+                    state.SetAnalog("l_steering", 0.0f, 0);
+                    state.SetAnalog("r_steering", steering, polishedPacket[17]);
                 }
                 else
                 {
-                    state.SetAnalog("l_steering", 0.0f);
-                    state.SetAnalog("r_steering", 0.0f);
+                    state.SetAnalog("l_steering", 0.0f, 0);
+                    state.SetAnalog("r_steering", 0.0f, 0);
                 }
 
-                state.SetAnalog("I", ReadAnalogButton(polishedPacket[18]));
-                state.SetAnalog("II", ReadAnalogButton(polishedPacket[19]));
-                state.SetAnalog("l1", ReadAnalogButton(polishedPacket[20]));
+                state.SetAnalog("I", ReadAnalogButton(polishedPacket[18]), polishedPacket[18]);
+                state.SetAnalog("II", ReadAnalogButton(polishedPacket[19]), polishedPacket[19]);
+                state.SetAnalog("l1", ReadAnalogButton(polishedPacket[20]), polishedPacket[20]);
             }
             else
             {
-                state.SetAnalog("rstick_x", 0);
-                state.SetAnalog("rstick_y", 0);
-                state.SetAnalog("lstick_x", 0);
-                state.SetAnalog("lstick_y", 0);
+                state.SetAnalog("rstick_x", 0, 0);
+                state.SetAnalog("rstick_y", 0, 0);
+                state.SetAnalog("lstick_x", 0, 0);
+                state.SetAnalog("lstick_y", 0, 0);
             }
 
             if (polishedPacket[0] == 0x79)
             {
-                state.SetAnalog("analog_right", polishedPacket[6] != 0x00 ? ReadAnalogButton(polishedPacket[21]) : 0.0f);
-                state.SetAnalog("analog_left", polishedPacket[8] != 0x00 ? ReadAnalogButton(polishedPacket[22]) : 0.0f);
-                state.SetAnalog("analog_up", polishedPacket[5] != 0x00 ? ReadAnalogButton(polishedPacket[23]) : 0.0f);
-                state.SetAnalog("analog_down", polishedPacket[7] != 0x00 ? ReadAnalogButton(polishedPacket[24]) : 0.0f);
+                state.SetAnalog("analog_right", polishedPacket[6] != 0x00 ? ReadAnalogButton(polishedPacket[21]) : 0.0f, polishedPacket[6] != 0x00 ? polishedPacket[21] : 0);
+                state.SetAnalog("analog_left", polishedPacket[8] != 0x00 ? ReadAnalogButton(polishedPacket[22]) : 0.0f, polishedPacket[8] != 0x00 ? polishedPacket[22] : 0);
+                state.SetAnalog("analog_up", polishedPacket[5] != 0x00 ? ReadAnalogButton(polishedPacket[23]) : 0.0f, polishedPacket[5] != 0x00 ? polishedPacket[23] : 0);
+                state.SetAnalog("analog_down", polishedPacket[7] != 0x00 ? ReadAnalogButton(polishedPacket[24]) : 0.0f, polishedPacket[7] != 0x00 ? polishedPacket[24] : 0);
 
-                state.SetAnalog("analog_triangle", polishedPacket[13] != 0x00 ? ReadAnalogButton(polishedPacket[25]) : 0.0f);
-                state.SetAnalog("analog_circle", polishedPacket[14] != 0x00 ? ReadAnalogButton(polishedPacket[26]) : 0.0f);
-                state.SetAnalog("analog_x", polishedPacket[15] != 0x00 ? ReadAnalogButton(polishedPacket[27]) : 0.0f);
-                state.SetAnalog("analog_square", polishedPacket[16] != 0x00 ? ReadAnalogButton(polishedPacket[28]) : 0.0f);
+                state.SetAnalog("analog_triangle", polishedPacket[13] != 0x00 ? ReadAnalogButton(polishedPacket[25]) : 0.0f, polishedPacket[13] != 0x00 ? polishedPacket[25] : 0);
+                state.SetAnalog("analog_circle", polishedPacket[14] != 0x00 ? ReadAnalogButton(polishedPacket[26]) : 0.0f, polishedPacket[14] != 0x00 ? polishedPacket[26] : 0);
+                state.SetAnalog("analog_x", polishedPacket[15] != 0x00 ? ReadAnalogButton(polishedPacket[27]) : 0.0f, polishedPacket[15] != 0x00 ? polishedPacket[27] : 0);
+                state.SetAnalog("analog_square", polishedPacket[16] != 0x00 ? ReadAnalogButton(polishedPacket[28]) : 0.0f, polishedPacket[16] != 0x00 ? polishedPacket[28] : 0);
 
-                state.SetAnalog("analog_l1", polishedPacket[11] != 0x00 ? ReadAnalogButton(polishedPacket[29]) : 0.0f);
-                state.SetAnalog("analog_r1", polishedPacket[12] != 0x00 ? ReadAnalogButton(polishedPacket[30]) : 0.0f);
-                state.SetAnalog("analog_l2", polishedPacket[9] != 0x00 ? ReadAnalogButton(polishedPacket[31]) : 0.0f);
-                state.SetAnalog("analog_r2", polishedPacket[10] != 0x00 ? ReadAnalogButton(polishedPacket[32]) : 0.0f);
+                state.SetAnalog("analog_l1", polishedPacket[11] != 0x00 ? ReadAnalogButton(polishedPacket[29]) : 0.0f, polishedPacket[11] != 0x00 ? polishedPacket[29] : 0);
+                state.SetAnalog("analog_r1", polishedPacket[12] != 0x00 ? ReadAnalogButton(polishedPacket[30]) : 0.0f, polishedPacket[12] != 0x00 ? polishedPacket[30] : 0);
+                state.SetAnalog("analog_l2", polishedPacket[9] != 0x00 ? ReadAnalogButton(polishedPacket[31]) : 0.0f, polishedPacket[9] != 0x00 ? polishedPacket[31] : 0);
+                state.SetAnalog("analog_r2", polishedPacket[10] != 0x00 ? ReadAnalogButton(polishedPacket[32]) : 0.0f, polishedPacket[10] != 0x00 ? polishedPacket[32] : 0);
             }
             else
             {
-                state.SetAnalog("analog_right", (float)(polishedPacket[6] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_left", (float)(polishedPacket[8] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_up", (float)(polishedPacket[5] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_down", (float)(polishedPacket[7] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_right", (float)(polishedPacket[6] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_left", (float)(polishedPacket[8] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_up", (float)(polishedPacket[5] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_down", (float)(polishedPacket[7] != 0x00 ? 1.0 : 0.0), 0);
 
-                state.SetAnalog("analog_triangle", (float)(polishedPacket[13] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_circle", (float)(polishedPacket[14] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_x", (float)(polishedPacket[15] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_square", (float)(polishedPacket[16] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_triangle", (float)(polishedPacket[13] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_circle", (float)(polishedPacket[14] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_x", (float)(polishedPacket[15] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_square", (float)(polishedPacket[16] != 0x00 ? 1.0 : 0.0), 0);
 
-                state.SetAnalog("analog_l1", (float)(polishedPacket[11] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_r1", (float)(polishedPacket[12] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_l2", (float)(polishedPacket[9] != 0x00 ? 1.0 : 0.0));
-                state.SetAnalog("analog_r2", (float)(polishedPacket[10] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_l1", (float)(polishedPacket[11] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_r1", (float)(polishedPacket[12] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_l2", (float)(polishedPacket[9] != 0x00 ? 1.0 : 0.0), 0);
+                state.SetAnalog("analog_r2", (float)(polishedPacket[10] != 0x00 ? 1.0 : 0.0), 0);
             }
 
             if (polishedPacket[0] == 0x12)
             {
                 float x = ReadMouse(polishedPacket[10] == 0x00, polishedPacket[17]);
                 float y = ReadMouse(polishedPacket[9] == 0x00, polishedPacket[18]);
-                SignalTool.SetMouseProperties(x, y, state);
+                SignalTool.SetMouseProperties(x, y, polishedPacket[17], polishedPacket[18], state);
             }
             else
             {
-                SignalTool.SetMouseProperties(0, 0, state);
+                SignalTool.SetMouseProperties(0, 0, 0, 0, state);
             }
 
             return state.Build();
