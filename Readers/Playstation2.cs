@@ -4,8 +4,9 @@ namespace RetroSpy.Readers
 {
     public static class Playstation2
     {
-        private const int PACKET_SIZE = 152;
-        private const int POLISHED_PACKET_SIZE = 33;
+        private const int PACKET_SIZE = 168;
+        private const int PACKET_SIZE_WO_RUMBLE = 152;
+        private const int POLISHED_PACKET_SIZE = 35;
 
         private static readonly string[] BUTTONS = {
             null, "select", "lstick", "rstick", "start", "up", "right", "down", "left", "l2", "r2", "l1", "r1", "triangle", "circle", "x", "square"
@@ -67,10 +68,14 @@ namespace RetroSpy.Readers
             if (packet == null)
                 throw new NullReferenceException();
 
-            if (packet.Length < PACKET_SIZE)
+
+
+            if (packet.Length < PACKET_SIZE_WO_RUMBLE)
             {
                 return null;
             }
+
+            bool hasRumble = packet.Length == PACKET_SIZE;
 
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
@@ -117,7 +122,16 @@ namespace RetroSpy.Readers
                 }
             }
 
-            if (polishedPacket.Length < POLISHED_PACKET_SIZE)
+            for (int i = 0; i < 2; ++i)
+            {
+                polishedPacket[33 + i] = 0;
+                for (byte j = 0; j < 8; ++j)
+                {
+                    polishedPacket[33 + i] |= (byte)((packet[152 + (i * 8 + j)] == 0 ? 0 : 1) << j);
+                }
+            }
+
+            if (polishedPacket.Length < (hasRumble ? POLISHED_PACKET_SIZE : POLISHED_PACKET_SIZE - 2))
             {
                 return null;
             }
@@ -141,6 +155,17 @@ namespace RetroSpy.Readers
             else
             {
                 SetButtons(BUTTONS, polishedPacket, state);
+            }
+
+            if (hasRumble)
+            {
+                state.SetAnalog("motor1", ReadAnalogButton(polishedPacket[33]));
+                state.SetAnalog("motor2", ReadAnalogButton(polishedPacket[34]));
+            }
+            else
+            {
+                state.SetAnalog("motor1", 0);
+                state.SetAnalog("motor2", 0);
             }
 
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79 || polishedPacket[0] == 0x53)

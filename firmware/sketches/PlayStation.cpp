@@ -65,7 +65,12 @@ void PlayStationSpy::updateState() {
 	bits = 0;
 	do {
 		WAIT_LEADING_EDGE(PS_CLOCK);
-		rawData[numBits++] = !PIN_READ(PS_DATA);
+		
+		byte pins = READ_PORTD(0b01100000);
+
+		rawData[numBits++] = !(pins & 0b01000000);
+		rawData[152 + bits] = pins & 0b00100000;
+		
 	} while (++bits < 16);
 
 	//Read analog sticks for Analog Controller in Red Mode
@@ -108,7 +113,7 @@ void PlayStationSpy::updateState() {
 void PlayStationSpy::writeSerial() {
 	if (playstationCommand[0] == 0 && playstationCommand[1] != 0 && playstationCommand[2] == 0 && playstationCommand[3] == 0 && playstationCommand[4] == 0 && playstationCommand[5] == 0 && playstationCommand[6] != 0 && playstationCommand[7] == 0) {
 		// playstationCommand=0x42 (Controller Poll)
-		for (unsigned char i = 0; i < 152; ++i) {
+		for (unsigned char i = 0; i < 168; ++i) {
 			Serial.write(rawData[i] ? ONE : ZERO);
 		}
 		Serial.write(SPLIT);

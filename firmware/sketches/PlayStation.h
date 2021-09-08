@@ -37,7 +37,7 @@ public:
 	void updateState();
 
 private:
-	unsigned char rawData[152]; // 8 + 16 + 128
+	unsigned char rawData[168]; // 8 + 16 + 128 + 16 (for rumble starts at 152)
 	unsigned char playstationCommand[8];
 };
 
