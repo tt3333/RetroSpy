@@ -89,21 +89,21 @@ namespace RetroSpy.Readers
 
         static readonly Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
 
-        public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
+        public static void SetMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             if (!windows.ContainsKey(""))
                 windows[""] = new SlidingWindow();
-            SetMouseProperties(x, y, state, maxCircleSize, windows[""], "");
+            SetMouseProperties(x, y, xRaw, yRaw, state, maxCircleSize, windows[""], "");
         }
 
-        public static void SetPCMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
+        public static void SetPCMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             if (!windows.ContainsKey("PC_"))
                 windows["PC_"] = new SlidingWindow();
-            SetMouseProperties(x, y, state, maxCircleSize, windows["PC_"], "PC_");
+            SetMouseProperties(x, y, xRaw, yRaw, state, maxCircleSize, windows["PC_"], "PC_");
         }
 
-        private static void SetMouseProperties(float x, float y, ControllerStateBuilder state, 
+        private static void SetMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, 
             float maxCircleSize, SlidingWindow window, string prefix)
         {
             window.windowX[window.windowPositionX] = x;
@@ -135,12 +135,12 @@ namespace RetroSpy.Readers
                 }
             }
 
-            state.SetAnalog(prefix + "mouse_center_x", 0);
-            state.SetAnalog(prefix + "mouse_center_y", 0);
-            state.SetAnalog(prefix + "mouse_direction_x", x1);
-            state.SetAnalog(prefix + "mouse_direction_y", y1);
-            state.SetAnalog(prefix + "mouse_magnitude_x", x);
-            state.SetAnalog(prefix + "mouse_magnitude_y", y);
+            state.SetAnalog(prefix + "mouse_center_x", 0, 0);
+            state.SetAnalog(prefix + "mouse_center_y", 0, 0);
+            state.SetAnalog(prefix + "mouse_direction_x", x1, xRaw);
+            state.SetAnalog(prefix + "mouse_direction_y", y1, yRaw);
+            state.SetAnalog(prefix + "mouse_magnitude_x", x, xRaw);
+            state.SetAnalog(prefix + "mouse_magnitude_y", y, yRaw);
         }
 
         public static void FakeAnalogStick(byte up, byte down, byte left, byte right, ControllerStateBuilder state, string xName, string yName)
@@ -181,8 +181,8 @@ namespace RetroSpy.Readers
                 }
             }
 
-            state.SetAnalog(xName, x);
-            state.SetAnalog(yName, y);
+            state.SetAnalog(xName, x, 0);
+            state.SetAnalog(yName, y, 0);
         }
     }
 }

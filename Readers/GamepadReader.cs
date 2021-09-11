@@ -122,12 +122,12 @@ namespace RetroSpy.Readers
                 outState.SetButton("right", (float)state.X / RANGE == 1.0);
             }
 
-            outState.SetAnalog("x", (float)state.X / RANGE);
-            outState.SetAnalog("y", (float)state.Y / RANGE);
-            outState.SetAnalog("z", (float)state.Z / RANGE);
-            outState.SetAnalog("rx", (float)state.RotationX / RANGE);
-            outState.SetAnalog("ry", (float)state.RotationY / RANGE);
-            outState.SetAnalog("rz", (float)state.RotationZ / RANGE);
+            outState.SetAnalog("x", (float)state.X / RANGE, state.X);
+            outState.SetAnalog("y", (float)state.Y / RANGE, state.Y);
+            outState.SetAnalog("z", (float)state.Z / RANGE, state.Z);
+            outState.SetAnalog("rx", (float)state.RotationX / RANGE, state.RotationX);
+            outState.SetAnalog("ry", (float)state.RotationY / RANGE, state.RotationY);
+            outState.SetAnalog("rz", (float)state.RotationZ / RANGE, state.RotationZ);
 
             ControllerStateChanged?.Invoke(this, outState.Build());
         }

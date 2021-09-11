@@ -83,8 +83,8 @@ namespace RetroSpy.Readers
                     outState.SetButton("c", (unencryptedData[5] & 0b00000010) == 0);
                     outState.SetButton("z", (unencryptedData[5] & 0b00000001) == 0);
 
-                    outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f);
-                    outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
+                    outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f, stickX);
+                    outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f, stickY);
 
                     outState.SetButton("disconnect", false);
                     outState.SetButton("lock", false);
@@ -126,16 +126,16 @@ namespace RetroSpy.Readers
                     outState.SetButton("l", (unencryptedData[4] & 0b00100000) == 0);
                     outState.SetButton("r", (unencryptedData[4] & 0b00000010) == 0);
 
-                    outState.SetAnalog("l_trig", leftTrigger / 31.0f);
-                    outState.SetAnalog("r_trig", rightTrigger / 31.0f);
+                    outState.SetAnalog("l_trig", leftTrigger / 31.0f, leftTrigger);
+                    outState.SetAnalog("r_trig", rightTrigger / 31.0f, rightTrigger);
 
                     outState.SetButton("zl", (unencryptedData[5] & 0b10000000) == 0);
                     outState.SetButton("zr", (unencryptedData[5] & 0b00000100) == 0);
 
-                    outState.SetAnalog("lstick_x", (leftX - 32.0f) / 32.0f);
-                    outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f);
-                    outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f);
-                    outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f);
+                    outState.SetAnalog("lstick_x", (leftX - 32.0f) / 32.0f, leftX);
+                    outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f, leftY);
+                    outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f, rightX);
+                    outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f, rightY);
 
                     outState.SetButton("disconnect", false);
                     outState.SetButton("lock", false);
@@ -172,16 +172,16 @@ namespace RetroSpy.Readers
                     outState.SetButton("l", (unencryptedData[4] & 0b00100000) == 0);
                     outState.SetButton("r", (unencryptedData[4] & 0b00000010) == 0);
 
-                    outState.SetAnalog("l_trig", leftTrigger / 31.0f);
-                    outState.SetAnalog("r_trig", rightTrigger / 31.0f);
+                    outState.SetAnalog("l_trig", leftTrigger / 31.0f, leftTrigger);
+                    outState.SetAnalog("r_trig", rightTrigger / 31.0f, rightTrigger);
 
                     outState.SetButton("zl", (unencryptedData[5] & 0b10000000) == 0);
                     outState.SetButton("zr", (unencryptedData[5] & 0b00000100) == 0);
 
-                    outState.SetAnalog("lstick_x", (leftX - 32.0f) / 32.0f);
-                    outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f);
-                    outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f);
-                    outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f);
+                    outState.SetAnalog("lstick_x", (leftX - 32.0f) / 32.0f, leftX);
+                    outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f, leftY);
+                    outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f, rightX);
+                    outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f, rightY);
 
                     outState.SetButton("disconnect", false);
                     outState.SetButton("lock", false);
@@ -198,8 +198,8 @@ namespace RetroSpy.Readers
                     outState.SetButton("c", (unencryptedData[5] & 0b00000010) == 0);
                     outState.SetButton("z", (unencryptedData[5] & 0b00000001) == 0);
 
-                    outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f);
-                    outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
+                    outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f, stickX);
+                    outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f, stickY);
 
                     return outState.Build();
                 }
@@ -238,16 +238,16 @@ namespace RetroSpy.Readers
                     outState.SetButton("l", (unencryptedData[6] & 0b00100000) == 0);
                     outState.SetButton("r", (unencryptedData[6] & 0b00000010) == 0);
 
-                    outState.SetAnalog("l_trig", leftTrigger / 255.0f);
-                    outState.SetAnalog("r_trig", rightTrigger / 255.0f);
+                    outState.SetAnalog("l_trig", leftTrigger / 255.0f, leftTrigger);
+                    outState.SetAnalog("r_trig", rightTrigger / 255.0f, rightTrigger);
 
                     outState.SetButton("zl", (unencryptedData[7] & 0b10000000) == 0);
                     outState.SetButton("zr", (unencryptedData[7] & 0b00000100) == 0);
 
-                    outState.SetAnalog("lstick_x", (leftX - 128.0f) / 128.0f);
-                    outState.SetAnalog("lstick_y", (leftY - 128.0f) / 128.0f);
-                    outState.SetAnalog("rstick_x", (rightX - 128.0f) / 128.0f);
-                    outState.SetAnalog("rstick_y", (rightY - 128.0f) / 128.0f);
+                    outState.SetAnalog("lstick_x", (leftX - 128.0f) / 128.0f, leftX);
+                    outState.SetAnalog("lstick_y", (leftY - 128.0f) / 128.0f, leftY);
+                    outState.SetAnalog("rstick_x", (rightX - 128.0f) / 128.0f, rightX);
+                    outState.SetAnalog("rstick_y", (rightY - 128.0f) / 128.0f, rightY);
 
                     outState.SetButton("disconnect", false);
                     outState.SetButton("lock", false);

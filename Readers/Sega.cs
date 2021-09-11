@@ -82,7 +82,7 @@ namespace RetroSpy.Readers
                 float x = ReadMouse(xSign, xOver, xVal);
                 float y = ReadMouse(ySign, yOver, yVal);
 
-                SignalTool.SetMouseProperties(x, y, state);
+                SignalTool.SetMouseProperties(x, y, xVal, yVal, state);
             }
 
             return state.Build();

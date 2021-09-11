@@ -170,12 +170,12 @@ namespace RetroSpy.Readers
                         j += 2;
                     }
 
-                    state.SetAnalog("stick_x", ReadStick(joyx));
-                    state.SetAnalog("stick_y", ReadStick(joyy));
-                    state.SetAnalog("stick_x2", ReadStick(joyx2));
-                    state.SetAnalog("stick_y2", ReadStick(joyy2));
-                    state.SetAnalog("trig_r", ReadTrigger(rtrigger));
-                    state.SetAnalog("trig_l", ReadTrigger(ltrigger));
+                    state.SetAnalog("stick_x", ReadStick(joyx), joyx);
+                    state.SetAnalog("stick_y", ReadStick(joyy), joyy);
+                    state.SetAnalog("stick_x2", ReadStick(joyx2), joyx2);
+                    state.SetAnalog("stick_y2", ReadStick(joyy2), joyy2);
+                    state.SetAnalog("trig_r", ReadTrigger(rtrigger), rtrigger);
+                    state.SetAnalog("trig_l", ReadTrigger(ltrigger), ltrigger);
                 }
                 else if (controllerType == 0x200 && numWords == 6)
                 {
@@ -236,7 +236,7 @@ namespace RetroSpy.Readers
                     float x = (axis2 - 512) / 512.0f;
                     float y = -1 * (axis1 - 512) / 512.0f;
 
-                    SignalTool.SetMouseProperties(x, y, state);
+                    SignalTool.SetMouseProperties(x, y, axis2, axis1, state);
 
                     state.SetButton("scroll_up", axis3 < 512);
                     state.SetButton("scroll_down", axis3 > 512);

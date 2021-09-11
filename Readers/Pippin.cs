@@ -81,8 +81,8 @@
             else if (Y > maxY)
                 maxY = Y;
 
-            state.SetAnalog("touchpad_x", ScaleInteger(X, minX, maxX, 0, 1024) / 1024.0f);
-            state.SetAnalog("touchpad_y", ScaleInteger(Y, minY, maxY, 0, 16384) / 16384.0f);
+            state.SetAnalog("touchpad_x", ScaleInteger(X, minX, maxX, 0, 1024) / 1024.0f, X);
+            state.SetAnalog("touchpad_y", ScaleInteger(Y, minY, maxY, 0, 16384) / 16384.0f, Y);
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
@@ -131,7 +131,7 @@
                 float y = ReadMouse(polishedPacket[14]);
                 float x = ReadMouse(polishedPacket[15]);
 
-                SignalTool.SetMouseProperties(x, y, state);
+                SignalTool.SetMouseProperties(x, y, polishedPacket[14], polishedPacket[15], state);
 
                 for (int i = 0; i < KEYBOARD_CODES.Length; ++i)
                 {
@@ -169,8 +169,8 @@
                     state.SetButton(JOYSTICK_BUTTONS[i], packet[i + 18] == 0x00);
                 }
 
-                state.SetAnalog("x", ReadJoystick(x));
-                state.SetAnalog("y", ReadJoystick(y));
+                state.SetAnalog("x", ReadJoystick(x), x);
+                state.SetAnalog("y", ReadJoystick(y), y);
 
                 return state.Build();
             }

@@ -72,7 +72,7 @@ namespace RetroSpy.Readers
             for (int i = 4; i < 12; ++i)
             {
                 outState.SetButton(ANALOG_BUTTONS[i - 4], binaryPacket[i] > 0);
-                outState.SetAnalog(ANALOG_BUTTONS[i - 4], ReadTrigger(binaryPacket[i]));
+                outState.SetAnalog(ANALOG_BUTTONS[i - 4], ReadTrigger(binaryPacket[i]), binaryPacket[i]);
             }
 
             int j = 0;
@@ -80,7 +80,7 @@ namespace RetroSpy.Readers
             {
                 short val = binaryPacket[12 + j];
                 val += (short)(binaryPacket[13 + j] << 8);
-                outState.SetAnalog(STICKS[i], ReadStick(val));
+                outState.SetAnalog(STICKS[i], ReadStick(val), val);
                 j += 2;
             }
 

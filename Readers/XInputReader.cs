@@ -92,12 +92,12 @@ namespace RetroSpy.Readers
             outState.SetButton("l", (state.wButtons & 0x0100) != 0);
             outState.SetButton("r", (state.wButtons & 0x0200) != 0);
 
-            outState.SetAnalog("lstick_x", (float)state.sThumbLX / 32768);
-            outState.SetAnalog("lstick_y", (float)state.sThumbLY / 32768);
-            outState.SetAnalog("rstick_x", (float)state.sThumbRX / 32768);
-            outState.SetAnalog("rstick_y", (float)state.sThumbRY / 32768);
-            outState.SetAnalog("trig_l", (float)state.bLeftTrigger / 255);
-            outState.SetAnalog("trig_r", (float)state.bRightTrigger / 255);
+            outState.SetAnalog("lstick_x", (float)state.sThumbLX / 32768, state.sThumbLX);
+            outState.SetAnalog("lstick_y", (float)state.sThumbLY / 32768, state.sThumbLY);
+            outState.SetAnalog("rstick_x", (float)state.sThumbRX / 32768, state.sThumbRX);
+            outState.SetAnalog("rstick_y", (float)state.sThumbRY / 32768, state.sThumbRY);
+            outState.SetAnalog("trig_l", (float)state.bLeftTrigger / 255, state.bLeftTrigger);
+            outState.SetAnalog("trig_r", (float)state.bRightTrigger / 255, state.bRightTrigger);
 
             ControllerStateChanged?.Invoke(this, outState.Build());
         }

@@ -71,10 +71,10 @@ namespace RetroSpy.Readers
                     outState.SetButton(PRO_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
 
-                outState.SetAnalog("rstick_x", ReadStick(polishedPacket[26]));
-                outState.SetAnalog("rstick_y", ReadStick(polishedPacket[27]));
-                outState.SetAnalog("lstick_x", ReadStick(polishedPacket[24]));
-                outState.SetAnalog("lstick_y", ReadStick(polishedPacket[25]));
+                outState.SetAnalog("rstick_x", ReadStick(polishedPacket[26]), polishedPacket[26]);
+                outState.SetAnalog("rstick_y", ReadStick(polishedPacket[27]), polishedPacket[27]);
+                outState.SetAnalog("lstick_x", ReadStick(polishedPacket[24]), polishedPacket[24]);
+                outState.SetAnalog("lstick_y", ReadStick(polishedPacket[25]), polishedPacket[25]);
 
                 return outState.Build();
             }
@@ -178,10 +178,10 @@ namespace RetroSpy.Readers
                         break;
                 }
 
-                outState.SetAnalog("lstick_x", ReadPokkenStick(polishedPacket[17], false));
-                outState.SetAnalog("lstick_y", ReadPokkenStick(polishedPacket[18], true));
-                outState.SetAnalog("rstick_x", ReadPokkenStick(polishedPacket[19], false));
-                outState.SetAnalog("rstick_y", ReadPokkenStick(polishedPacket[20], true));
+                outState.SetAnalog("lstick_x", ReadPokkenStick(polishedPacket[17], false), polishedPacket[17]);
+                outState.SetAnalog("lstick_y", ReadPokkenStick(polishedPacket[18], true), polishedPacket[18]);
+                outState.SetAnalog("rstick_x", ReadPokkenStick(polishedPacket[19], false), polishedPacket[19]);
+                outState.SetAnalog("rstick_y", ReadPokkenStick(polishedPacket[20], true), polishedPacket[20]);
 
                 return outState.Build();
             }

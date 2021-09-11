@@ -39,10 +39,10 @@ namespace RetroSpy.Readers
 
             float x = ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length));
             float y = ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length + 8));
-            state.SetAnalog("stick_x", x);
-            state.SetAnalog("stick_y", y);
+            state.SetAnalog("stick_x", x, SignalTool.ReadByte(packet, BUTTONS.Length));
+            state.SetAnalog("stick_y", y, SignalTool.ReadByte(packet, BUTTONS.Length + 8));
 
-            SignalTool.SetMouseProperties(x, y, state);
+            SignalTool.SetMouseProperties(x, y, SignalTool.ReadByte(packet, BUTTONS.Length), SignalTool.ReadByte(packet, BUTTONS.Length + 8), state);
 
             return state.Build();
         }
