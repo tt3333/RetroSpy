@@ -583,7 +583,11 @@ namespace RetroSpy
 
             foreach (Tuple<AnalogText, Label> text in _analogTextBoxes)
             {
-                float value = e.Analogs.ContainsKey(text.Item1.Name) ? e.Analogs[text.Item1.Name] * text.Item1.Range : 0;
+                float value = 0;
+                if (e.Analogs.ContainsKey(text.Item1.Name))
+                    value = e.Analogs[text.Item1.Name] * text.Item1.Range;
+                else if (e.RawAnalogs.ContainsKey(text.Item1.Name))
+                    value = e.RawAnalogs[text.Item1.Name] * text.Item1.Range;
                 text.Item2.Content = (int)value;
             }
 

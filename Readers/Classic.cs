@@ -66,8 +66,8 @@ namespace RetroSpy.Readers
                     }
                 }
 
-                state.SetAnalog("x", x);
-                state.SetAnalog("y", y);
+                state.SetAnalog("x", x, 0);
+                state.SetAnalog("y", y, 0);
 
                 return state.Build();
             }
@@ -75,7 +75,7 @@ namespace RetroSpy.Readers
             {
                 ControllerStateBuilder state = new ControllerStateBuilder();
                 
-                state.SetAnalog("paddle", packet[0] / 256.0f);
+                state.SetAnalog("paddle", packet[0] / 256.0f, packet[0]);
                 state.SetButton("1", packet[1] != 0);
 
                 return state.Build();
@@ -93,7 +93,7 @@ namespace RetroSpy.Readers
                 if (Math.Abs(y) != 0 && Math.Abs(y) > maxY)
                     maxY = Math.Abs(y);
 
-                SignalTool.SetMouseProperties(-1.0f * x / maxX, y / maxY, state);
+                SignalTool.SetMouseProperties(-1.0f * x / maxX, y / maxY, x, y, state);
 
                 state.SetButton("1", packet[2] != 0);
                 state.SetButton("2", packet[3] != 0);

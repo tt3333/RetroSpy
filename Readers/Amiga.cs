@@ -26,7 +26,7 @@ namespace RetroSpy.Readers
 
 
         private static float AmigaAnalogXAxisData;
-
+        private static int AmigaAnalogXAxisDataRaw;
         public static ControllerStateEventArgs ReadFromPacket2(byte[] packet)
         {
             if (packet == null)
@@ -35,6 +35,7 @@ namespace RetroSpy.Readers
             if (packet.Length == 6)
             {
                 AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
+                AmigaAnalogXAxisDataRaw = ((packet[4] >> 4) | (packet[5]));
             }
             return null;
         }
@@ -57,8 +58,8 @@ namespace RetroSpy.Readers
                     state.SetButton(BUTTONS_AMIGA_ANALOG[i], packet[i] != 0x00);
                 }
 
-                state.SetAnalog("y", (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f);
-                state.SetAnalog("x", AmigaAnalogXAxisData);
+                state.SetAnalog("y", (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f, ((packet[4] >> 4) | (packet[5])));
+                state.SetAnalog("x", AmigaAnalogXAxisData, AmigaAnalogXAxisDataRaw);
             }
             if (packet.Length == BUTTONS_CD32.Length)
             {
@@ -103,27 +104,33 @@ namespace RetroSpy.Readers
                     }
 
                     float x = 0;
+                    int xRaw = 0;
                     float y = 0;
+                    int yRaw = 0;
 
                     if (packet[0] != 0x00)
                     {
                         x = -0.25f;
+                        xRaw = packet[0];
                     }
                     else if (packet[2] != 0x00)
                     {
                         x = 0.25f;
+                        xRaw = packet[2];
                     }
 
                     if (packet[1] != 0x00)
                     {
                         y = 0.25f;
+                        yRaw = packet[1];
                     }
                     else if (packet[3] != 0x00)
                     {
                         y = -0.25f;
+                        yRaw = packet[3];
                     }
 
-                    SignalTool.SetMouseProperties(x, y, state, .25f);
+                    SignalTool.SetMouseProperties(x, y, xRaw, yRaw, state, .25f);
                 }
             }
             else if (packet.Length == BUTTONS_CDTV_JOYSTICK.Length && packet[0] == 0)
@@ -172,7 +179,7 @@ namespace RetroSpy.Readers
                     sbyte xVal = (sbyte)SignalTool.ReadByte(packet, 3);
                     sbyte yVal = (sbyte)SignalTool.ReadByte(packet, 11);
 
-                    SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, state);
+                    SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, xVal, yVal, state);
                 }
             }
             else if (packet.Length == 19)
@@ -185,7 +192,7 @@ namespace RetroSpy.Readers
                 sbyte xVal = (sbyte)SignalTool.ReadByteBackwards(packet, 3);
                 sbyte yVal = (sbyte)SignalTool.ReadByteBackwards(packet, 11);
 
-                SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, state);
+                SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, xVal, yVal, state);
             }
             else if (packet.Length == 36)
             {

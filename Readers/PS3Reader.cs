@@ -59,23 +59,23 @@ namespace RetroSpy.Readers
                 outState.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
             }
 
-            outState.SetAnalog("rstick_x", ReadStick(polishedPacket[26]));
-            outState.SetAnalog("rstick_y", ReadStick(polishedPacket[27]));
-            outState.SetAnalog("lstick_x", ReadStick(polishedPacket[24]));
-            outState.SetAnalog("lstick_y", ReadStick(polishedPacket[25]));
+            outState.SetAnalog("rstick_x", ReadStick(polishedPacket[26]), polishedPacket[26]);
+            outState.SetAnalog("rstick_y", ReadStick(polishedPacket[27]), polishedPacket[27]);
+            outState.SetAnalog("lstick_x", ReadStick(polishedPacket[24]), polishedPacket[24]);
+            outState.SetAnalog("lstick_y", ReadStick(polishedPacket[25]), polishedPacket[25]);
 
-            outState.SetAnalog("analog_up", ReadAnalogButton(polishedPacket[28]));
-            outState.SetAnalog("analog_right", ReadAnalogButton(polishedPacket[29]));
-            outState.SetAnalog("analog_down", ReadAnalogButton(polishedPacket[30]));
-            outState.SetAnalog("analog_left", ReadAnalogButton(polishedPacket[31]));
-            outState.SetAnalog("l_trig", ReadAnalogButton(polishedPacket[32]));
-            outState.SetAnalog("r_trig", ReadAnalogButton(polishedPacket[33]));
-            outState.SetAnalog("analog_l1", ReadAnalogButton(polishedPacket[34]));
-            outState.SetAnalog("analog_r1", ReadAnalogButton(polishedPacket[35]));
-            outState.SetAnalog("analog_triangle", ReadAnalogButton(polishedPacket[36]));
-            outState.SetAnalog("analog_circle", ReadAnalogButton(polishedPacket[37]));
-            outState.SetAnalog("analog_x", ReadAnalogButton(polishedPacket[38]));
-            outState.SetAnalog("analog_square", ReadAnalogButton(polishedPacket[39]));
+            outState.SetAnalog("analog_up", ReadAnalogButton(polishedPacket[28]), polishedPacket[28]);
+            outState.SetAnalog("analog_right", ReadAnalogButton(polishedPacket[29]), polishedPacket[29]);
+            outState.SetAnalog("analog_down", ReadAnalogButton(polishedPacket[30]), polishedPacket[30]);
+            outState.SetAnalog("analog_left", ReadAnalogButton(polishedPacket[31]), polishedPacket[31]);
+            outState.SetAnalog("l_trig", ReadAnalogButton(polishedPacket[32]), polishedPacket[32]);
+            outState.SetAnalog("r_trig", ReadAnalogButton(polishedPacket[33]), polishedPacket[33]);
+            outState.SetAnalog("analog_l1", ReadAnalogButton(polishedPacket[34]), polishedPacket[34]);
+            outState.SetAnalog("analog_r1", ReadAnalogButton(polishedPacket[35]), polishedPacket[35]);
+            outState.SetAnalog("analog_triangle", ReadAnalogButton(polishedPacket[36]), polishedPacket[36]);
+            outState.SetAnalog("analog_circle", ReadAnalogButton(polishedPacket[37]), polishedPacket[37]);
+            outState.SetAnalog("analog_x", ReadAnalogButton(polishedPacket[38]), polishedPacket[38]);
+            outState.SetAnalog("analog_square", ReadAnalogButton(polishedPacket[39]), polishedPacket[39]);
 
             return outState.Build();
         }

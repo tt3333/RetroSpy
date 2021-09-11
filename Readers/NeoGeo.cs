@@ -71,8 +71,8 @@ namespace RetroSpy.Readers
                 }
             }
 
-            state.SetAnalog("lstick_x", lstick_x);
-            state.SetAnalog("lstick_y", lstick_y);
+            state.SetAnalog("lstick_x", lstick_x, 0);
+            state.SetAnalog("lstick_y", lstick_y, 0);
 
             return state.Build();
         }

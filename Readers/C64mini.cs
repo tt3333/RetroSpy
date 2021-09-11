@@ -90,8 +90,8 @@ namespace RetroSpy.Readers
                 }
             }
 
-            outState.SetAnalog("x", x);
-            outState.SetAnalog("y", y);
+            outState.SetAnalog("x", x, polishedPacket[16]);
+            outState.SetAnalog("y", y, polishedPacket[17]);
 
             return outState.Build();
         }
