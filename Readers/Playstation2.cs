@@ -159,13 +159,13 @@ namespace RetroSpy.Readers
 
             if (hasRumble)
             {
-                state.SetAnalog("motor1", ReadAnalogButton(polishedPacket[33]));
-                state.SetAnalog("motor2", ReadAnalogButton(polishedPacket[34]));
+                state.SetAnalog("motor1", ReadAnalogButton(polishedPacket[33]), polishedPacket[33]);
+                state.SetAnalog("motor2", ReadAnalogButton(polishedPacket[34]), polishedPacket[34]);
             }
             else
             {
-                state.SetAnalog("motor1", 0);
-                state.SetAnalog("motor2", 0);
+                state.SetAnalog("motor1", 0, 0);
+                state.SetAnalog("motor2", 0, 0);
             }
 
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79 || polishedPacket[0] == 0x53)

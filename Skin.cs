@@ -232,11 +232,21 @@ namespace RetroSpy
             string typeStr = ReadStringAttr(doc.Root, ("type"));
             string[] typesVec = typeStr.Split(';');
 
-            List<InputSource> types = new List<InputSource>();
+            List<Tuple<InputSource, string>> types = new List<Tuple<InputSource, string>>();
 
             foreach (string type in typesVec)
             {
-                InputSource TempType = InputSource.ALL.First(x => x.TypeTag == type);
+                string orgType = type;
+                string type1;
+                if (type.Contains("."))
+                {
+                    type1 = type.Substring(0, type.IndexOf('.'));
+                }
+                else
+                {
+                    type1 = type;
+                }
+                Tuple<InputSource, string> TempType = new Tuple<InputSource, string>(InputSource.ALL.First(x => x.TypeTag == type1), orgType);
 
                 if (TempType == null)
                 {
@@ -246,7 +256,7 @@ namespace RetroSpy
             }
 
             int i = 0;
-            foreach (InputSource inputSource in types)
+            foreach (Tuple<InputSource,string> inputSource in types)
             {
                 Skin TempSkin = null;
                 if (i == 0)
@@ -259,12 +269,12 @@ namespace RetroSpy
                     TempSkin = new Skin();
                 }
 
-                TempSkin.LoadSkin(Name, Author, inputSource, doc, skinPath);
+                TempSkin.LoadSkin(Name, Author, inputSource.Item1, doc, skinPath, inputSource.Item2);
                 generatedSkins.Add(TempSkin);
             }
         }
 
-        public void LoadSkin(string name, string author, InputSource type, XDocument doc, string skinPath)
+        public void LoadSkin(string name, string author, InputSource type, XDocument doc, string skinPath, string orgType)
         {
             Name = name;
             Author = author;
@@ -340,7 +350,7 @@ namespace RetroSpy
 
                 var sectionTypes = sectionType.Split(';');
 
-                if (sectionTypes.Contains(type.TypeTag))
+                if (sectionTypes.Contains(orgType))
                 {
                     name = ReadStringAttr(elem, "name", false);
                     if (name != "")
