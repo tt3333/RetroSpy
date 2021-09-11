@@ -26,6 +26,164 @@
 
 #include "N64.h"
 
+#if defined(__arm__) && defined(CORE_TEENSY)
+
+void N64Spy::loop() 
+{
+	unsigned char *rawDataPtr = rawData;
+	elapsedMicros betweenLowSignal = 0;
+	short headerVal = 0;
+	int headerBits = 8;
+	
+findcmdinit:
+	interrupts();
+
+	rawDataPtr = rawData;
+	
+	// Wait for the line to go high then low.
+	WAIT_FALLING_EDGE(N64_PIN);
+	if (betweenLowSignal < 25)
+	{
+		betweenLowSignal = 0;
+		goto findcmdinit;
+	}
+	else
+	{
+		headerBits = 7;
+		betweenLowSignal = 0;
+		
+		noInterrupts();
+		// Wait ~2us between line reads
+		asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+
+		// Read a bit from the line and store as a byte in "rawData"
+		*rawDataPtr = PIN_READ(N64_PIN);
+		headerVal = (*rawDataPtr != 0 ? 0x80 : 0x00);
+		++rawDataPtr;
+
+		goto readCmd;
+	}
+	
+	goto findcmdinit;
+	
+readCmd:
+	
+	// Wait for the line to go high then low.
+	WAIT_FALLING_EDGE(N64_PIN);
+
+	// Wait ~2us between line reads
+	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+
+	// Read a bit from the line and store as a byte in "rawData"
+	*rawDataPtr = PIN_READ(N64_PIN);
+	
+	headerVal |= *rawDataPtr != 0 ? (1 << (headerBits - 1)) : 0;
+
+	++rawDataPtr;
+	if (--headerBits == 0)
+	{
+		if (headerVal == 0x00)
+		{
+			readBits = 26;
+			goto readData;
+		}
+		if (headerVal == 0x01)
+		{
+			readBits = 34;
+			goto readData;
+		}
+		if (headerVal == 0x03)
+		{
+			readBits = 266;
+			goto readData;
+		}
+		if (headerVal == 0x04)
+		{
+			readBits = 266;
+			goto readData;
+		}
+		if (headerVal == 0xff)
+		{
+			readBits = 26;
+			goto readData;
+		}
+		else
+		{
+#if defined(DEBUG)
+			//Serial.println(headerVal);
+#endif
+			interrupts();
+			betweenLowSignal = 0;
+			goto findcmdinit;
+		}
+	}
+	goto readCmd;
+	
+readData:
+	
+	// Wait for the line to go high then low.
+	WAIT_FALLING_EDGE(N64_PIN);
+	
+	// Wait ~2us between line reads
+	asm volatile(MICROSECOND_NOPS MICROSECOND_NOPS);
+
+	// Read a bit from the line and store as a byte in "rawData"
+	*rawDataPtr = PIN_READ(N64_PIN);
+	
+	rawDataPtr++;
+	
+	if (--readBits == 0)
+	{
+		goto printData;
+	}
+	
+	goto readData;
+	
+printData:
+	interrupts();
+	if (headerVal == 0x01)
+	{
+		
+	
+#if !defined(DEBUG)
+	
+		writeSerial();
+#else
+		debugSerial();
+#endif
+	}
+	betweenLowSignal = 0;
+	goto findcmdinit;
+}
+
+void N64Spy::updateState() {
+
+}
+
+void N64Spy::writeSerial() {
+	const unsigned char first = 9;
+
+	for (unsigned char i = first; i < first + N64_BITCOUNT; i++) {
+		Serial.write(rawData[i] ? ONE : ZERO);
+	}
+	Serial.write(SPLIT);
+}
+
+void N64Spy::debugSerial() {
+	
+	int j = 0;
+	const unsigned char first = 9;
+	for (unsigned char i = first; i < first + N64_BITCOUNT; i++) {
+		if (j % 8 == 0 && j != 0)
+			Serial.print("|");
+		Serial.print(rawData[i] ? "1" : "0");
+		j++;
+	}
+	Serial.print("\n");
+}
+
+#else
+
 static bool getControllerInfo = false;
 
 void N64Spy::loop() {
@@ -176,3 +334,5 @@ void N64Spy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+
+#endif
