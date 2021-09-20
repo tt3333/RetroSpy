@@ -36,8 +36,7 @@ namespace RetroSpy
 <CENTER>Build Timestamp: {1}</CENTER>
 <BR>
         <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
-            <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>
-            <TR><td ALIGN='CENTER'>40wattrange</TD></TR>             
+            <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>            
             <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/watsonpunk"">watsonpunk</A></TD></TR>            
             <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
