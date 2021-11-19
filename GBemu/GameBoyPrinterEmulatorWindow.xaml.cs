@@ -22,7 +22,7 @@ namespace GBPemu
     /// <summary>
     /// Interaction logic for GameBoyPrinterEmulatorWindow.xaml
     /// </summary>
-    public partial class GameBoyPrinterEmulatorWindow : Window, INotifyPropertyChanged
+    public partial class GameBoyPrinterEmulatorWindow : Window
     {
         private readonly int TILE_PIXEL_WIDTH = 8;
         private readonly int TILE_PIXEL_HEIGHT = 8;
@@ -40,23 +40,13 @@ namespace GBPemu
                                                 {{ 0x7e, 0x57, 0x38, 0x2e }, { 0x84, 0x7b, 0x5d, 0x46 }, { 0x16, 0x46, 0x49, 0x3d }}    // Black Zero
         };
 
-        private readonly byte[] colors_red = { 0xff, 0xaa, 0x55, 0x00 };
-        private readonly byte[] colors_green = { 0xff, 0xaa, 0x55, 0x00 };
-        private readonly byte[] colors_blue = { 0xff, 0xaa, 0x55, 0x00 };
-
-        private readonly byte[] DMG_colors_red = { 0x9b, 0x8b, 0x30, 0x0f };
-        private readonly byte[] DMG_colors_green = { 0xbc, 0xac, 0x62, 0x38 };
-        private readonly byte[] DMG_colors_blue = { 0x0f, 0x0f, 0x30, 0x0f };
-
         private readonly System.Windows.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
         private readonly IControllerReader _reader;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private int SelectedPalette = 0;
 
-        private void checkPalette(int paletteId)
+        private void CheckPalette(int paletteId)
         {
             Palette_Grayscale.IsChecked = paletteId == 0;
             Palette_DMG.IsChecked = paletteId == 1;
@@ -106,7 +96,7 @@ namespace GBPemu
                 newPalette = 8;
             }
 
-            checkPalette(newPalette);
+            CheckPalette(newPalette);
 
             for (int i = 0; i < 4; ++i)
             {
@@ -202,7 +192,7 @@ namespace GBPemu
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
-            checkPalette(SelectedPalette);
+            CheckPalette(SelectedPalette);
 
         }
 
