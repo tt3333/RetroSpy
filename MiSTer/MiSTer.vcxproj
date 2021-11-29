@@ -67,9 +67,9 @@
     <IncludePath />
     <ReferencePath />
     <LibraryPath />
-    <NMakeIncludeSearchPath>C:\MinGW\lib\gcc\mingw32\9.2.0\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;C:\MinGW\lib\gcc\mingw32\9.2.0\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include</NMakeIncludeSearchPath>
-    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$(TOOLCHAIN_ROOT)\lib\gcc\mingw32\9.2.0\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include;$(TOOLCHAIN_ROOT)\lib\gcc\mingw32\9.2.0\include;$(ToolchainDir)\arm-linux-gnueabihf\libc\usr\include</NMakeIncludeSearchPath>
     <OutDir>$(Configuration)\</OutDir>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>

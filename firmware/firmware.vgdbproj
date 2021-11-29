@@ -113,7 +113,7 @@
       <FormattingEngine xsi:nil="true" />
     </ExtraSettings>
     <CodeAnalyzerSettings>
-      <Enabled>false</Enabled>
+      <Enabled>true</Enabled>
       <SelectedAnalyzers>
         <string>apiModeling.google.GTest</string>
         <string>core.builtin.BuiltinFunctions</string>
