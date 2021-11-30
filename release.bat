@@ -5,84 +5,84 @@ IF "%~1"=="" GOTO release
 IF NOT "%~1"=="" set sub=1
 
 :release
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" RetroSpy.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=bin\x86\Release
+"C:\Program Files\dotnet\dotnet.exe" build RetroSpy.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=bin\x86\Release
 
 if errorlevel 0 goto x64Build
 echo Aborting release. Error during x86 build.
 goto end
 
 :x64Build
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" RetroSpy.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin\x64\Release
+"C:\Program Files\dotnet\dotnet.exe" build RetroSpy.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin\x64\Release
 
 if errorlevel 0 goto AnyCPUBuild
 echo Aborting release. Error during x64 build.
 goto end
 
 :AnyCPUBuild
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" RetroSpy.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=bin\Release
+"C:\Program Files\dotnet\dotnet.exe" build RetroSpy.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=bin\Release
 
 if errorlevel 0 goto :releasegb
 echo Aborting release. Error during AnyCPU build.
 goto end
 
 :releasegb
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
 
 if errorlevel 0 goto x64Buildgb
 echo Aborting release. Error during x86 build.
 goto end
 
 :x64Buildgb
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
 
 if errorlevel 0 goto AnyCPUBuildgb
 echo Aborting release. Error during x64 build.
 goto end
 
 :AnyCPUBuildgb
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBemu\GBPemu.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
 
 if errorlevel 0 goto releaseuu
 echo Aborting release. Error during AnyCPU build.
 goto end
 
 :releaseuu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+"C:\Program Files\dotnet\dotnet.exe" build UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
 
 if errorlevel 0 goto x64Builduu
 echo Aborting release. Error during x86 build.
 goto end
 
 :x64Builduu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+"C:\Program Files\dotnet\dotnet.exe" build UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
 
 if errorlevel 0 goto AnyCPUBuilduu
 echo Aborting release. Error during x64 build.
 goto end
 
 :AnyCPUBuilduu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+"C:\Program Files\dotnet\dotnet.exe" build UsbUpdater\UsbUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
 
 if errorlevel 0 goto releasegpbu
 echo Aborting release. Error during x64 build.
 goto end
 
 :releasegpbu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x86 /p:OutputPath=..\bin\x86\Release
 
 if errorlevel 0 goto x64Buildgpbu
 echo Aborting release. Error during x86 build.
 goto end
 
 :x64Buildgpbu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform=x64 /p:OutputPath=..\bin\x64\Release
 
 if errorlevel 0 goto AnyCPUBuildgpbu
 echo Aborting release. Error during x64 build.
 goto end
 
 :AnyCPUBuildgpbu
-"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
+"C:\Program Files\dotnet\dotnet.exe" build GBPUpdater\GBPUpdater.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release
 
 
 if errorlevel 0 goto :MiSTer

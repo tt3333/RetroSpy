@@ -42,6 +42,7 @@
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <EnableDefaultPageItems>false</EnableDefaultPageItems>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net48</TargetFramework>
     <UseWPF>true</UseWPF>
@@ -94,6 +95,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -2263,7 +2267,16 @@
   <!--<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />-->
   <PropertyGroup>
     <PostBuildEvent>rmdir /S /Q firmware\
-xcopy /y /e /s  ..\..\..\firmware\sketches\*.* firmware\</PostBuildEvent>
+
+if  exist ..\..\firmware\ (
+xcopy /y /e /s  ..\..\firmware\sketches\*.* firmware\
+EXIT  /B 0
+)
+
+if  exist ..\..\..\firmware\ (
+xcopy /y /e /s  ..\..\..\firmware\sketches\*.* firmware\
+EXIT  /B 0
+)</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
