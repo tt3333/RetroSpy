@@ -28,23 +28,59 @@ namespace GBPemu
         private readonly int TILE_PIXEL_HEIGHT = 8;
         private readonly int TILES_PER_LINE = 20; // Gameboy Printer Tile Constant
 
-        private readonly byte[,,] palettes = {
-                                                {{ 0xff, 0xaa, 0x55, 0x00 }, { 0xff, 0xaa, 0x55, 0x00 }, { 0xff, 0xaa, 0x55, 0x00 }},   // Grayscale
-                                                {{ 0x9b, 0x77, 0x30, 0x0f }, { 0xbc, 0xa1, 0x62, 0x38 }, { 0x0f, 0x12, 0x30, 0x0f }},   // DMG
-                                                {{ 0xc4, 0x8b, 0x4d, 0x1f }, { 0xcf, 0x95, 0x53, 0x1f }, { 0xa1, 0x6d, 0x3c, 0x1f }},   // GameBoy Pocket
-                                                {{ 0xff, 0x7b, 0x01, 0x00 }, { 0xff, 0xff, 0x63, 0x00 }, { 0xff, 0x30, 0xc6, 0x00 }},   // GameBoy Color EU/US
-                                                {{ 0xff, 0xff, 0x83, 0x00 }, { 0xff, 0xad, 0x31, 0x00 }, { 0xff, 0x63, 0x00, 0x00 }},   // GameBoy Color JP
-                                                {{ 0xe0, 0x88, 0x34, 0x08 }, { 0xf8, 0xc0, 0x68, 0x18 }, { 0xd0, 0x70, 0x56, 0x20 }},   // BGB
-                                                {{ 0xe0, 0xa8, 0x70, 0x2b }, { 0xdb, 0x9f, 0x6b, 0x2b }, { 0xcd, 0x94, 0x66, 0x26 }},   // GraphixKid Gray
-                                                {{ 0x7e, 0xab, 0x7b, 0x4c }, { 0x84, 0xc3, 0x92, 0x62 }, { 0xb4, 0x96, 0x78, 0x5a }},   // GraphixKid Green
-                                                {{ 0x7e, 0x57, 0x38, 0x2e }, { 0x84, 0x7b, 0x5d, 0x46 }, { 0x16, 0x46, 0x49, 0x3d }}    // Black Zero
+        private readonly byte[][][] palettes = {
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 },
+                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 }, 
+                                                    new byte[]  { 0xff, 0xaa, 0x55, 0x00 }
+                                                },   // Grayscale
+                                                new byte[][] {
+                                                    new byte[] { 0x9b, 0x77, 0x30, 0x0f }, 
+                                                    new byte[] { 0xbc, 0xa1, 0x62, 0x38 }, 
+                                                    new byte[] { 0x0f, 0x12, 0x30, 0x0f }
+                                                },   // DMG
+                                                new byte[][] { 
+                                                    new byte[] { 0xc4, 0x8b, 0x4d, 0x1f }, 
+                                                    new byte[] { 0xcf, 0x95, 0x53, 0x1f }, 
+                                                    new byte[] { 0xa1, 0x6d, 0x3c, 0x1f }
+                                                },   // GameBoy Pocket
+                                                new byte[][] { 
+                                                    new byte[] { 0xff, 0x7b, 0x01, 0x00 }, 
+                                                    new byte[] { 0xff, 0xff, 0x63, 0x00 }, 
+                                                    new byte[] { 0xff, 0x30, 0xc6, 0x00 }
+                                                },   // GameBoy Color EU/US
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0xff, 0x83, 0x00 }, 
+                                                    new byte[] { 0xff, 0xad, 0x31, 0x00 }, 
+                                                    new byte[] { 0xff, 0x63, 0x00, 0x00 }
+                                                },   // GameBoy Color JP
+                                                new byte[][] {
+                                                    new byte[] { 0xe0, 0x88, 0x34, 0x08 },
+                                                    new byte[] { 0xf8, 0xc0, 0x68, 0x18 }, 
+                                                    new byte[] { 0xd0, 0x70, 0x56, 0x20 }
+                                                },   // BGB
+                                                new byte[][] {
+                                                    new byte[] { 0xe0, 0xa8, 0x70, 0x2b }, 
+                                                    new byte[] { 0xdb, 0x9f, 0x6b, 0x2b }, 
+                                                    new byte[] { 0xcd, 0x94, 0x66, 0x26 }
+                                                },   // GraphixKid Gray
+                                                new byte[][] { 
+                                                    new byte[] { 0x7e, 0xab, 0x7b, 0x4c }, 
+                                                    new byte[] { 0x84, 0xc3, 0x92, 0x62 }, 
+                                                    new byte[] { 0xb4, 0x96, 0x78, 0x5a }
+                                                },   // GraphixKid Green
+                                                new byte[][] { 
+                                                    new byte[] { 0x7e, 0x57, 0x38, 0x2e }, 
+                                                    new byte[] { 0x84, 0x7b, 0x5d, 0x46 }, 
+                                                    new byte[] { 0x16, 0x46, 0x49, 0x3d }
+                                                }    // Black Zero
         };
 
         private readonly System.Windows.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
         private readonly IControllerReader _reader;
 
-        private int SelectedPalette = 0;
+        private int SelectedPalette;
 
         private void CheckPalette(int paletteId)
         {
@@ -100,8 +136,8 @@ namespace GBPemu
 
             for (int i = 0; i < 4; ++i)
             {
-                _imageBuffer.ReplaceColor(palettes[SelectedPalette, 0, i], palettes[SelectedPalette, 1, i], palettes[SelectedPalette, 2, i],
-                                          palettes[newPalette, 0, i], palettes[newPalette, 1, i], palettes[newPalette, 2, i]);
+                _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                          new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
             }
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
             _image.Source = wbitmap;
@@ -114,38 +150,39 @@ namespace GBPemu
         {
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
 
-            var bmp = new Bitmap(Properties.Resources.ErrorImage);
-
-            _imageBuffer = new BitmapPixelMaker(480, 432);
-
-            _imageBuffer.SetColor(palettes[SelectedPalette, 0, 3], palettes[SelectedPalette, 1, 3], palettes[SelectedPalette, 2, 3]);
-
-            for (int i = 0; i < bmp.Width; ++i)
+            using (var bmp = new Bitmap(Properties.Resources.ErrorImage))
             {
-                for (int j = 0; j < bmp.Height; ++j)
+                _imageBuffer = new BitmapPixelMaker(480, 432);
+
+                _imageBuffer.SetColor(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3]);
+
+                for (int i = 0; i < bmp.Width; ++i)
                 {
-                    var pixel = bmp.GetPixel(i, j);
-                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                    for (int j = 0; j < bmp.Height; ++j)
                     {
-                        _imageBuffer.SetRed(i, j, palettes[SelectedPalette, 0, 0]);
-                        _imageBuffer.SetGreen(i, j, palettes[SelectedPalette, 1, 0]);
-                        _imageBuffer.SetBlue(i, j, palettes[SelectedPalette, 2, 0]);
+                        var pixel = bmp.GetPixel(i, j);
+                        if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                        {
+                            _imageBuffer.SetRed(i, j, palettes[SelectedPalette][0][0]);
+                            _imageBuffer.SetGreen(i, j, palettes[SelectedPalette][1][0]);
+                            _imageBuffer.SetBlue(i, j, palettes[SelectedPalette][2][0]);
+                        }
                     }
                 }
+
+
+                // imageBuffer.SetColor(0, 0, 0);
+                // Convert the pixel data into a WriteableBitmap.
+                WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+                // Set the Image source.
+                _image.Source = wbitmap;
+
+                GameBoyPrinterEmulatorWindowGrid.Height = 432;
+                GameBoyPrinterEmulatorWindowGrid.Width = 480;
+                Height = 432;
+                Width = 480;
             }
-
-
-            //imageBuffer.SetColor(0, 0, 0);
-            // Convert the pixel data into a WriteableBitmap.
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-
-            // Set the Image source.
-            _image.Source = wbitmap;
-
-            GameBoyPrinterEmulatorWindowGrid.Height = 432;
-            GameBoyPrinterEmulatorWindowGrid.Width = 480;
-            this.Height = 432;
-            this.Width = 480;
         }
     
         public GameBoyPrinterEmulatorWindow(IControllerReader reader)
@@ -153,47 +190,48 @@ namespace GBPemu
             InitializeComponent();
             DataContext = this;
 
-            _reader = reader ?? throw new NullReferenceException();
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
 
-            var bmp = new Bitmap(Properties.Resources.PrintImage);
-
-            _imageBuffer = new BitmapPixelMaker(480, 432);
-
-            _imageBuffer.SetColor(palettes[SelectedPalette, 0, 3], palettes[SelectedPalette, 1, 3], palettes[SelectedPalette, 2, 3]);
-
-            for (int i = 0; i < bmp.Width; ++i)
+            using (var bmp = new Bitmap(Properties.Resources.PrintImage))
             {
-                for(int j = 0; j < bmp.Height; ++j)
+                _imageBuffer = new BitmapPixelMaker(480, 432);
+
+                _imageBuffer.SetColor(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3]);
+
+                for (int i = 0; i < bmp.Width; ++i)
                 {
-                    var pixel = bmp.GetPixel(i, j);
-                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                    for (int j = 0; j < bmp.Height; ++j)
                     {
-                        _imageBuffer.SetRed(i, j, palettes[SelectedPalette, 0, 0]);
-                        _imageBuffer.SetGreen(i, j, palettes[SelectedPalette, 1, 0]);
-                        _imageBuffer.SetBlue(i, j, palettes[SelectedPalette, 2, 0]);
-                    }    
+                        var pixel = bmp.GetPixel(i, j);
+                        if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                        {
+                            _imageBuffer.SetRed(i, j, palettes[SelectedPalette][0][0]);
+                            _imageBuffer.SetGreen(i, j, palettes[SelectedPalette][1][0]);
+                            _imageBuffer.SetBlue(i, j, palettes[SelectedPalette][2][0]);
+                        }
+                    }
                 }
+
+                WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+                // Create an Image to display the bitmap.
+                _image = new System.Windows.Controls.Image
+                {
+                    Stretch = Stretch.None,
+                    Margin = new Thickness(0)
+                };
+
+                GameBoyPrinterEmulatorWindowGrid.Children.Add(_image);
+                _image.Source = wbitmap;
+
+                _reader.ControllerStateChanged += Reader_ControllerStateChanged;
+                _reader.ControllerDisconnected += Reader_ControllerDisconnected;
+
+                CheckPalette(SelectedPalette);
+
             }
-
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-
-            // Create an Image to display the bitmap.
-            _image = new System.Windows.Controls.Image
-            {
-                Stretch = Stretch.None,
-                Margin = new Thickness(0)
-            };
-
-            GameBoyPrinterEmulatorWindowGrid.Children.Add(_image);
-            _image.Source = wbitmap;
-
-            _reader.ControllerStateChanged += Reader_ControllerStateChanged;
-            _reader.ControllerDisconnected += Reader_ControllerDisconnected;
-
-            CheckPalette(SelectedPalette);
-
         }
 
         private void Reader_ControllerDisconnected(object sender, EventArgs e)
@@ -213,122 +251,115 @@ namespace GBPemu
 
         private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
         {
-            try
+            _imageBuffer.SetColor(0, 0, 0, 255);
+
+            int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
+            int square_height = square_width;
+
+            var tiles_rawBytes_array = e.RawPrinterData.Split('\n');
+
+            var total_tile_count = 0;
+
+            for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
-                _imageBuffer.SetColor(0, 0, 0, 255);
+                var tile_element = tiles_rawBytes_array[tile_i];
 
-                int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
-                int square_height = square_width;
-
-                var tiles_rawBytes_array = e.RawPrinterData.Split('\n');
-
-                var total_tile_count = 0;
-
-                for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
-                {
-                    var tile_element = tiles_rawBytes_array[tile_i];
-
-                    // Check for invalid raw lines
-                    if (tile_element.Length == 0)
-                    {   // Skip lines with no bytes (can happen with .split() )
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    total_tile_count++;
+                // Check for invalid raw lines
+                if (tile_element.Length == 0)
+                {   // Skip lines with no bytes (can happen with .split() )
+                    continue;
                 }
-
-                var tile_height_count = total_tile_count / TILES_PER_LINE;
-
-                if (tile_height_count == 0)
-                {
-                    DisplayError();
-                    return;
+                else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
                 }
-
-                _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
-
-                _image.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
-                _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-                GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
-                GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-                this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
-                this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-
-                int tile_count = 0;
-
-                for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
-                {
-                    var tile_element = tiles_rawBytes_array[tile_i];
-
-                    // Check for invalid raw lines
-                    if (tile_element.Length == 0)
-                    {   // Skip lines with no bytes (can happen with .split() )
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-
-                    // Gameboy Tile Offset
-                    int tile_x_offset = tile_count % TILES_PER_LINE;
-                    int tile_y_offset = tile_count / TILES_PER_LINE;
-
-                    var pixels = Decode(tile_element);
-
-                    if (pixels != null)
-                    {
-                        Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
-                    }
-                    else
-                    {
-                        //status = false;
-                    }
-
-
-                    // Increment Tile Count Tracker
-                    tile_count++;
-
+                else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
                 }
-
-                //imageBuffer.SetColor(0, 0, 0);
-                // Convert the pixel data into a WriteableBitmap.
-                WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-
-                // Set the Image source.
-                _image.Source = wbitmap;
+                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                total_tile_count++;
             }
-            catch(Exception ex)
+
+            var tile_height_count = total_tile_count / TILES_PER_LINE;
+
+            if (tile_height_count == 0)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
+                DisplayError();
+                return;
             }
+
+            _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
+
+            _image.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
+            _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
+            GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
+            this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+
+            int tile_count = 0;
+
+            for (var tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
+            {
+                var tile_element = tiles_rawBytes_array[tile_i];
+
+                // Check for invalid raw lines
+                if (tile_element.Length == 0)
+                {   // Skip lines with no bytes (can happen with .split() )
+                    continue;
+                }
+                else if (tile_element.StartsWith("!", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("#", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("//", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+                else if (tile_element.StartsWith("{", StringComparison.Ordinal) == true)
+                {   // Skip lines used for comments
+                    continue;
+                }
+
+                // Gameboy Tile Offset
+                int tile_x_offset = tile_count % TILES_PER_LINE;
+                int tile_y_offset = tile_count / TILES_PER_LINE;
+
+                var pixels = Decode(tile_element);
+
+                if (pixels != null)
+                {
+                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                }
+                else
+                {
+                    //status = false;
+                }
+
+
+                // Increment Tile Count Tracker
+                tile_count++;
+
+            }
+
+            //imageBuffer.SetColor(0, 0, 0);
+            // Convert the pixel data into a WriteableBitmap.
+            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+            // Set the Image source.
+            _image.Source = wbitmap;      
         }
 
         void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
@@ -347,9 +378,9 @@ namespace GBPemu
                             pixel_y_offset + j * pixel_height,
                             pixel_width,
                             pixel_height,
-                            palettes[SelectedPalette, 0, pixels[j * TILE_PIXEL_WIDTH + i]],
-                            palettes[SelectedPalette, 1, pixels[j * TILE_PIXEL_WIDTH + i]],
-                            palettes[SelectedPalette, 2, pixels[j * TILE_PIXEL_WIDTH + i]]);
+                            palettes[SelectedPalette][0][pixels[j * TILE_PIXEL_WIDTH + i]],
+                            palettes[SelectedPalette][1][pixels[j * TILE_PIXEL_WIDTH + i]],
+                            palettes[SelectedPalette][2][pixels[j * TILE_PIXEL_WIDTH + i]]);
                 }
             }
         }
@@ -401,7 +432,7 @@ namespace GBPemu
             saveFileDialog.Dispose();
         }
 
-        private void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
             RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
             bitmap.Render(visual);

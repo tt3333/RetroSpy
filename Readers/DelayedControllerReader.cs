@@ -11,9 +11,9 @@ namespace RetroSpy.Readers
 
         public event EventHandler ControllerDisconnected;
 
-        public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
-        public event StateEventHandler ControllerStateChangedNoDelay;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChangedNoDelay;
 
         public IControllerReader BaseControllerReader => baseControllerReader;
         public int DelayInMilliseconds => delayInMilliseconds;

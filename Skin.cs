@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Xml.Linq;
 
 namespace RetroSpy
 {
+    [CLSCompliant(false)]
     public class ElementConfig
     {
         public BitmapImage Image { get; set; }
@@ -22,31 +24,40 @@ namespace RetroSpy
         public uint Height { get; set; }
         public uint OriginalWidth { get; set; }
         public uint OriginalHeight { get; set; }
-        public List<string> TargetBackgrounds { get; private set; }
-        public List<string> IgnoreBackgrounds { get; private set; }
-        public void SetTargetBackgrounds(List<string> list)
+        public Collection<string> TargetBackgrounds { get; private set; }
+        public Collection<string> IgnoreBackgrounds { get; private set; }
+        public void SetTargetBackgrounds(Collection<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (TargetBackgrounds == null)
                 TargetBackgrounds = list;
             else
             {
                 TargetBackgrounds.Clear();
-                TargetBackgrounds.AddRange(list);
+                foreach(var background in list)
+                    TargetBackgrounds.Add(background);
             }
         }
 
-        public void SetIgnoreBackgrounds(List<string> list)
+        public void SetIgnoreBackgrounds(Collection<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (IgnoreBackgrounds == null)
                 IgnoreBackgrounds = list;
             else
             {
                 IgnoreBackgrounds.Clear();
-                IgnoreBackgrounds.AddRange(list);
+                foreach (var background in list)
+                    IgnoreBackgrounds.Add(background);
             }
         }
     }
 
+    [CLSCompliant(false)]
     public class Background
     {
         public string Name { get; set; }
@@ -56,12 +67,14 @@ namespace RetroSpy
         public uint Height { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class Detail
     {
         public string Name { get; set; }
         public ElementConfig Config { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class Button
     {
         public ElementConfig Config { get; set; }
@@ -69,6 +82,7 @@ namespace RetroSpy
         public float Precision { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class RangeButton
     {
         public ElementConfig Config { get; set; }
@@ -77,6 +91,7 @@ namespace RetroSpy
         public float To { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class AnalogStick
     {
         public ElementConfig Config { get; set; }
@@ -92,6 +107,7 @@ namespace RetroSpy
         public float Precision { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class AnalogTrigger
     {
         public enum DirectionValue { Up, Down, Left, Right, Fade }
@@ -103,6 +119,7 @@ namespace RetroSpy
         public bool UseNegative { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class TouchPad
     {
         public ElementConfig Config { get; set; }
@@ -114,8 +131,10 @@ namespace RetroSpy
         public uint OriginalYRange { get; set; }
     }
 
+    [CLSCompliant(false)]
     public class AnalogText
     {
+
         public uint X { get; set; } 
         public uint Y { get; set; }
         public uint OriginalX { get; set; }
@@ -125,59 +144,78 @@ namespace RetroSpy
         public uint Range { get; set; }
         public float Size { get; set; }
         public string Name { get; set; }
-        public List<string> TargetBackgrounds { get; private set; }
-        public List<string> IgnoreBackgrounds { get; private set; }
-        public void SetTargetBackgrounds(List<string> list)
+        public Collection<string> TargetBackgrounds { get; private set; }
+        public Collection<string> IgnoreBackgrounds { get; private set; }
+        public void SetTargetBackgrounds(Collection<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (TargetBackgrounds == null)
                 TargetBackgrounds = list;
             else
             {
                 TargetBackgrounds.Clear();
-                TargetBackgrounds.AddRange(list);
+                foreach (var background in list)
+                    TargetBackgrounds.Add(background);
             }
         }
 
-        public void SetIgnoreBackgrounds(List<string> list)
+        public void SetIgnoreBackgrounds(Collection<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (IgnoreBackgrounds == null)
                 IgnoreBackgrounds = list;
             else
             {
                 IgnoreBackgrounds.Clear();
-                IgnoreBackgrounds.AddRange(list);
+                foreach (var background in list)
+                    IgnoreBackgrounds.Add(background);
             }
         }
     }
-
+   
     public class LoadResults
     {
-        public List<Skin> SkinsLoaded { get; private set; }
-        public List<string> ParseErrors { get; private set; }
+        [CLSCompliant(false)]
+        public Collection<Skin> SkinsLoaded { get; private set; }
+        public Collection<string> ParseErrors { get; private set; }
 
-        public void SetSkinsLoaded(List<Skin> list)
+        [CLSCompliant(false)]
+        public void SetSkinsLoaded(Collection<Skin> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (SkinsLoaded == null)
                 SkinsLoaded = list;
             else
             {
                 SkinsLoaded.Clear();
-                SkinsLoaded.AddRange(list);
+                foreach (var skin in list)
+                    SkinsLoaded.Add(skin);
             }
         }
 
-        public void SetParseErrors(List<string> list)
+        public void SetParseErrors(Collection<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             if (ParseErrors == null)
                 ParseErrors = list;
             else
             {
                 ParseErrors.Clear();
-                ParseErrors.AddRange(list);
+                foreach(var parseError in list)
+                    ParseErrors.Add(parseError);
             }
         }
     }
 
+    [CLSCompliant(false)]
     public class Skin
     {
         private readonly ResourceManager _resources;
@@ -246,13 +284,8 @@ namespace RetroSpy
                 {
                     type1 = type;
                 }
-                Tuple<InputSource, string> TempType = new Tuple<InputSource, string>(InputSource.ALL.First(x => x.TypeTag == type1), orgType);
+                types.Add(new Tuple<InputSource, string>(InputSource.ALL.First(x => x.TypeTag == type1), orgType));
 
-                if (TempType == null)
-                {
-                    throw new ConfigParseException(_resources.GetString("IllegalSkinType", CultureInfo.CurrentUICulture));
-                }
-                types.Add(TempType);
             }
 
             int i = 0;
@@ -281,7 +314,7 @@ namespace RetroSpy
             Type = type;
 
             if (doc == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(doc));
 
             IEnumerable<XElement> bgElems = doc.Root.Elements("background");
 
@@ -353,7 +386,7 @@ namespace RetroSpy
                 if (sectionTypes.Contains(orgType))
                 {
                     name = ReadStringAttr(elem, "name", false);
-                    if (name != "")
+                    if (!string.IsNullOrEmpty(name))
                         Name = name;
 
                     ParseElements(elem, skinPath);
@@ -482,8 +515,8 @@ namespace RetroSpy
                 var converter = new System.Windows.Media.BrushConverter();
                 var brush = (Brush)converter.ConvertFromString(colorAttrs.First().Value);
 
-                List<string> targetBgs = GetArrayAttr(elem, "target", false);
-                List<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
+                Collection<string> targetBgs = GetArrayAttr(elem, "target", false);
+                Collection<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
 
                 var x = ReadUintAttr(elem, "x");
                 var y = ReadUintAttr(elem, "y");
@@ -524,7 +557,7 @@ namespace RetroSpy
             return attrs.First().Value;
         }
 
-        private static List<string> GetArrayAttr(XElement elem, string attrName, bool required = true)
+        private static Collection<string> GetArrayAttr(XElement elem, string attrName, bool required = true)
         {
             IEnumerable<XAttribute> attrs = elem.Attributes(attrName);
             if (!attrs.Any())
@@ -535,10 +568,10 @@ namespace RetroSpy
                 }
                 else
                 {
-                    return new List<string>(0);
+                    return new Collection<string>();
                 }
             }
-            return new List<string>(attrs.First().Value.Split(';'));
+            return new Collection<string>(attrs.First().Value.Split(';'));
         }
 
         private static Color ReadColorAttr(XElement elem, string attrName, bool required)
@@ -557,12 +590,7 @@ namespace RetroSpy
                     return result;
                 }
             }
-            object converted = ColorConverter.ConvertFromString(attrs.First().Value);
-            if (result != null)
-            {
-                result = (Color)converted;
-            }
-            return result;
+            return (Color)ColorConverter.ConvertFromString(attrs.First().Value);
         }
 
         private static float ReadFloatConfig(XElement elem, string attrName, bool required = true)
@@ -635,8 +663,8 @@ namespace RetroSpy
             uint x = ReadUintAttr(elem, "x");
             uint y = ReadUintAttr(elem, "y");
 
-            List<string> targetBgs = GetArrayAttr(elem, "target", false);
-            List<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
+            Collection<string> targetBgs = GetArrayAttr(elem, "target", false);
+            Collection<string> ignoreBgs = GetArrayAttr(elem, "ignore", false);
 
             var ec = new ElementConfig
             {
@@ -679,10 +707,12 @@ namespace RetroSpy
 
         // ----------------------------------------------------------------------------------------------------------------
 
-        public static void LoadAllSkinsFromSubFolder(string path, List<Skin> skins, List<string> errs)
+        public static void LoadAllSkinsFromSubFolder(string path, Collection<Skin> skins, Collection<string> errs)
         {
-            if (skins == null || errs == null)
-                throw new NullReferenceException();
+            if (skins == null)
+                throw new ArgumentNullException(nameof(skins));
+            else if (errs == null)
+                throw new ArgumentNullException(nameof(errs));
 
             foreach (string skinDir in Directory.GetDirectories(path))
             {
@@ -714,8 +744,8 @@ namespace RetroSpy
 
         public static LoadResults LoadAllSkinsFromParentFolder(string path, string customPath)
         {
-            List<Skin> skins = new List<Skin>();
-            List<string> errs = new List<string>();
+            Collection<Skin> skins = new Collection<Skin>();
+            Collection<string> errs = new Collection<string>();
 
             LoadAllSkinsFromSubFolder(path, skins, errs);
             if (!string.IsNullOrEmpty(customPath))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
 
@@ -9,7 +10,7 @@ namespace RetroSpy.Readers
     {
         // ----- Interface implementations with backing state -------------------------------------------------------------
 
-        public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler ControllerDisconnected;
 
@@ -30,13 +31,15 @@ namespace RetroSpy.Readers
 
         private static class NativeMethods
         {
+            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
             [DllImport("xinput9_1_0.dll")]
             public static extern uint XInputGetState(uint userIndex, ref XInputState inputState);
         }
 
-        public static List<uint> GetDevices()
+        [CLSCompliant(false)]
+        public static Collection<uint> GetDevices()
         {
-            List<uint> result = new List<uint>();
+            Collection<uint> result = new Collection<uint>();
             XInputState dummy = new XInputState();
             for (uint i = 0; i < 4; i++) //Poll all 4 possible controllers to see which are connected, thats how it works :/
             {
@@ -54,7 +57,8 @@ namespace RetroSpy.Readers
         private DispatcherTimer _timer;
         private readonly uint _id;
 
-        public XInputReader(uint id = 0, bool useLagFix = false)
+        [CLSCompliant(false)]
+        public XInputReader(uint id = 0)
         {
             _id = id;
             _timer = new DispatcherTimer

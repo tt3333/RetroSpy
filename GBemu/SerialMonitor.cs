@@ -18,14 +18,14 @@ namespace GBPemu
         private readonly byte[] Packet;
     }
 
-    public delegate void PacketEventHandler(object sender, PacketDataEventArgs e);
+    //public delegate void PacketEventHandler(object sender, PacketDataEventArgs e);
 
     public class SerialMonitor : IDisposable
     {
         private const int BAUD_RATE = 115200;
         private const int TIMER_MS = 1;
 
-        public event PacketEventHandler PacketReceived;
+        public event EventHandler<PacketDataEventArgs> PacketReceived;
 
         public event EventHandler Disconnected;
 
@@ -33,7 +33,7 @@ namespace GBPemu
         private readonly List<byte> _localBuffer;
         private DispatcherTimer _timer;
         private readonly bool _printerMode;
-        private bool _beenConnected = false;
+        private bool _beenConnected;
 
         public SerialMonitor(string portName, bool printerMode = false)
         {
@@ -51,7 +51,10 @@ namespace GBPemu
 
             _localBuffer.Clear();
             if (_printerMode)
+            {
                 _datPort.ReadBufferSize = 1000000;
+            }
+
             _datPort.Open();
 
             _timer = new DispatcherTimer
@@ -102,7 +105,7 @@ namespace GBPemu
 
             // Try to read some data from the COM port and append it to our localBuffer.
             // If there's an IOException then the device has been disconnected.
-                try
+            try
             {
                 int readCount = _datPort.BytesToRead;
                 if (readCount < 1)
@@ -111,7 +114,7 @@ namespace GBPemu
                 }
 
                 byte[] readBuffer = new byte[readCount];
-                _datPort.Read(readBuffer, 0, readCount);
+                _ = _datPort.Read(readBuffer, 0, readCount);
                 //_datPort.DiscardInBuffer();
                 _localBuffer.AddRange(readBuffer);
             }
@@ -139,9 +142,9 @@ namespace GBPemu
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
 
-            if (_printerMode == true)
+            if (_printerMode)
             {
-                var array = _localBuffer.ToArray();
+                byte[] array = _localBuffer.ToArray();
                 string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
                 if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)"))
@@ -154,7 +157,7 @@ namespace GBPemu
             }
             else
             {
- 
+
 
                 PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 

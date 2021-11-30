@@ -63,7 +63,7 @@ namespace RetroSpy
                 _bindings.Add(new Binding(outputKey, requiredButtons));
             }
 
-            _reader = reader ?? throw new NullReferenceException();
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             if (_reader.GetType() == typeof(DelayedControllerReader))
                 ((DelayedControllerReader)_reader).ControllerStateChangedNoDelay += Reader_ControllerStateChanged;
             else

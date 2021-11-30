@@ -34,7 +34,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < PACKET_SIZE)
             {

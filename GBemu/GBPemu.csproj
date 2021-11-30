@@ -160,10 +160,10 @@
   <ItemGroup>
     <Resource Include="ErrorImage.png" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.6.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.6.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.NetAnalyzers.dll" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
   </ItemGroup>

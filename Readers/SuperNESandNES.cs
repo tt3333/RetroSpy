@@ -104,7 +104,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketIntellivision(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             return ReadPacketButtons(packet, BUTTONS_INTELLIVISION);
         }
@@ -112,7 +112,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketNES(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length == 80)
                 return ProcessPowerGlove(packet);
@@ -123,7 +123,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ProcessPowerGlove(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             ControllerStateBuilder state = new ControllerStateBuilder();
 
@@ -226,7 +226,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketVB(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             return ReadPacketButtons(packet, BUTTONS_VIRTUALBOY);
         }
@@ -234,7 +234,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketPCFX(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length != BUTTONS_PCFX.Length)
             {
@@ -247,7 +247,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketPSClassic(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             return ReadPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
         }
@@ -255,7 +255,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketSNES(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < BUTTONS_SNES.Length)
             {
@@ -288,7 +288,7 @@ namespace RetroSpy.Readers
                     state.SetButton(BUTTONS_SNES[i], packet[i] != 0x00);
                 }
 
-                if (state != null && packet.Length == 32 && packet[15] != 0x00)
+                if (packet.Length == 32 && packet[15] != 0x00)
                 {
                     float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
                     float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
@@ -302,7 +302,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketJaguar(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < 4)
             {
@@ -369,7 +369,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketFMTowns(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length != 9 && packet.Length != 70)
             {
@@ -446,7 +446,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketAtari52002(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length != BUTTONS_ATARI5200.Length)
             {
@@ -461,7 +461,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketAtari52001(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length != BUTTONS_ATARI5200.Length)
             {

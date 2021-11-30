@@ -1,6 +1,7 @@
 ﻿using Renci.SshNet;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
@@ -13,7 +14,7 @@ namespace RetroSpy
     {
         private const int TIMER_MS = 1;
 
-        public event PacketEventHandler PacketReceived;
+        public event EventHandler<PacketDataEventArgs> PacketReceived;
 
         public event EventHandler Disconnected;
 
@@ -29,7 +30,7 @@ namespace RetroSpy
             _localBuffer = new List<byte>();
             _client = new SshClient(hostname, username, password);
             if (!string.IsNullOrEmpty(commandSub))
-                _command = String.Format(command, commandSub);
+                _command = String.Format(CultureInfo.CurrentCulture, command, commandSub);
             else
                 _command = command;
             _delayInMilliseconds = delayInMilliseconds;

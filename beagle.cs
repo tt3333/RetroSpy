@@ -48,17 +48,29 @@
 |      beagle_net.dll   --  Compiled .NET binding
  ========================================================================*/
 #pragma warning disable IDE1006
-#pragma warning disable CA1707
-#pragma warning disable CA1717
-#pragma warning disable CA1028
-#pragma warning disable CA1052
-#pragma warning disable CA1810
-#pragma warning disable CA1815
-#pragma warning disable CA1034
-#pragma warning disable CA1051
-#pragma warning disable CA1062
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+
+#pragma warning disable CA1008 // Enums should have zero value
+#pragma warning disable CA1027 // Mark enums with FlagsAttribute
+#pragma warning disable CA1028 // Enum Storage should be Int32
+#pragma warning disable CA1034 // Nested types should not be visible
+#pragma warning disable CA1051 // Do not declare visible instance fields
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
+#pragma warning disable CA1062 // Validate arguments of public methods
+#pragma warning disable CA1069 // Enums values should not be duplicated
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1810 // Initialize reference type static fields inline
+#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable CS3001 // Argument type is not CLS-compliant
+#pragma warning disable CS3003 // Type is not CLS-compliant
+#pragma warning disable CS3002 // Return type is not CLS-compliant
+#pragma warning disable CS3009 // Base type is not CLS-compliant
+#pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
+
+
 
 using System;
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 using System.Runtime.InteropServices;
 
 //[assembly: AssemblyTitleAttribute("Beagle .NET binding")]
@@ -318,6 +330,7 @@ namespace TotalPhase
         BG_USB2_COMPLEX_MATCH_EVENT_VBUS_TRIGGER = 16
     }
 
+
     public enum BeagleUsb2VbusTriggerType : int
     {
         BG_USB2_VBUS_TRIGGER_TYPE_CURRENT = 1,
@@ -378,6 +391,7 @@ namespace TotalPhase
         BG_USB3_MATCH_PACKET_5GBIT_START = 7,
         BG_USB3_MATCH_PACKET_5GBIT_STOP = 8
     }
+
 
     public enum BeagleUsb3ErrorType : int
     {
@@ -593,6 +607,7 @@ namespace TotalPhase
         public struct BeagleVersion
         {
             /* Software, firmware, and hardware versions. */
+
             public ushort software;
             public ushort firmware;
             public ushort hardware;
@@ -835,6 +850,7 @@ namespace TotalPhase
          * 10-digit serial number.
          */
 
+
         public static uint bg_unique_id(
             int beagle
         )
@@ -929,6 +945,7 @@ namespace TotalPhase
          * Accuracy depends on the operating system scheduler
          * Returns the number of milliseconds slept
          */
+
 
         public static uint bg_sleep_ms(
             uint milliseconds
@@ -3340,6 +3357,7 @@ namespace TotalPhase
             public static extern int net_bg_port(int beagle);
 
             [DllImport("beagle")]
+
             public static extern int net_bg_features(int beagle);
 
             [DllImport("beagle")]
@@ -3582,4 +3600,24 @@ namespace TotalPhase
     } // class BeagleApi
 } // namespace TotalPhase
 
+#pragma warning restore CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
+#pragma warning restore CS3009 // Base type is not CLS-compliant
+#pragma warning restore CS3003 // Type is not CLS-compliant
+#pragma warning restore CS3002 // Return type is not CLS-compliant
+#pragma warning restore CS3001 // Argument type is not CLS-compliant
+#pragma warning restore CA1815 // Override equals and operator equals on value types
+#pragma warning restore CA1810 // Initialize reference type static fields inline
+#pragma warning restore CA1707 // Identifiers should not contain underscores
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning restore CA1069 // Enums values should not be duplicated
+#pragma warning restore IDE0079 // Remove unnecessary suppression
+#pragma warning restore CA1062 // Validate arguments of public methods
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
+#pragma warning restore CA1051 // Do not declare visible instance fields
+#pragma warning restore CA1034 // Nested types should not be visible
+#pragma warning restore CA1028 // Enum Storage should be Int32
+#pragma warning restore CA1027 // Mark enums with FlagsAttribute
+#pragma warning restore CA1008 // Enums should have zero value
+
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 #pragma warning restore IDE1006

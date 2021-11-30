@@ -12,7 +12,7 @@ namespace RetroSpy.Readers
 {
     public sealed class PCKeyboardReader : IControllerReader, IDisposable
     {
-        public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler ControllerDisconnected;
 

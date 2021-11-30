@@ -11,7 +11,7 @@ namespace RetroSpy
 
 			bool skipSetup = e.Args.Length == 1 && e.Args[0] == "-skipSetup";
 
-			new SetupWindow(skipSetup);
+			_ = new SetupWindow(skipSetup);
 		}
 	}
 }

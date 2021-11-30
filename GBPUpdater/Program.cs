@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Management;
 using System.IO.Ports;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace GBPUpdater
 {
@@ -98,7 +99,8 @@ namespace GBPUpdater
             return ports;
         }
 
-        static void Main(string[] args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "I am fishing for the GBP, so I expect failures. I also want to report any errors that occur.")]
+        static void Main()
         {
 
             try
@@ -108,17 +110,19 @@ namespace GBPUpdater
 
                 Console.WriteLine(tempDirectory);
 
-                Console.Write("Downloading latest firmware...");
-                WebClient webClient = new WebClient();
-                webClient.DownloadFile("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip",
-                    Path.Combine(tempDirectory, "GBP_Firmware.zip"));
-                Console.WriteLine("done.\n");
+                Console.Write(Properties.Resources.ResourceManager.GetString("Downloading", CultureInfo.CurrentUICulture));
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.DownloadFile("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip",
+                        Path.Combine(tempDirectory, "GBP_Firmware.zip"));
+                }
+                Console.WriteLine(Properties.Resources.ResourceManager.GetString("Done", CultureInfo.CurrentUICulture));
 
-                Console.Write("Decompressing firmware package...");
+                Console.Write(Properties.Resources.ResourceManager.GetString("Decompressing", CultureInfo.CurrentUICulture));
                 ZipFile.ExtractToDirectory(Path.Combine(tempDirectory, "GBP_Firmware.zip"), tempDirectory);
-                Console.WriteLine("done.\n");
+                Console.WriteLine(Properties.Resources.ResourceManager.GetString("Done", CultureInfo.CurrentUICulture));
 
-                Console.Write("Searching for GameBoy Printer Emulator...");
+                Console.Write(Properties.Resources.ResourceManager.GetString("Searching", CultureInfo.CurrentUICulture));
 
                 SerialPort _serialPort = null;
 
@@ -128,60 +132,64 @@ namespace GBPUpdater
 
                 foreach (var port in arduinoPorts)
                 {
-                    _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
-                    _serialPort.Handshake = Handshake.None;
+                    using (_serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                    {
+                        Handshake = Handshake.None,
 
-                    _serialPort.ReadTimeout = 500;
-                    _serialPort.WriteTimeout = 500;
+                        ReadTimeout = 500,
+                        WriteTimeout = 500
+                    })
+                    {
 
-                    try
-                    {
-                        _serialPort.Open();
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
+                        try
+                        {
+                            _serialPort.Open();
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
 
-                    try
-                    {
-                        _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                    }
-                    catch (Exception)
-                    {
-                        _serialPort.Close();
-                        continue;
-                    }
+                        try
+                        {
+                            _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
+                        }
+                        catch (Exception)
+                        {
+                            _serialPort.Close();
+                            continue;
+                        }
 
-                    string result = null;
-                    do
-                    {
-                        result = _serialPort.ReadLine();
-                    } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
+                        string result = null;
+                        do
+                        {
+                            result = _serialPort.ReadLine();
+                        } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
 
-                    if (result == "parse_state:0\r" || result.Contains("d=debug"))
-                    {
-                        foundPort = true;
-                        gbpemuPort = port;
-                        _serialPort.Close();
-                    }
-                    else
-                    {
-                        _serialPort.Close();
-                        continue;
+                        if (result == "parse_state:0\r" || result.Contains("d=debug"))
+                        {
+                            foundPort = true;
+                            gbpemuPort = port;
+                            _serialPort.Close();
+                        }
+                        else
+                        {
+                            _serialPort.Close();
+                            continue;
+                        }
                     }
                 }
 
                 if (!foundPort)
                 {
-                    Console.WriteLine("cannot find RetroSpy GameBoy Printer Emulator.\n");
+                    Console.WriteLine(Properties.Resources.ResourceManager.GetString("NotFound", CultureInfo.CurrentUICulture));
                 }
                 else
                 {
                     Console.WriteLine("found on " + gbpemuPort + ".\n");
 
 
-                    Console.WriteLine("Updating firmware...");
+                    Console.WriteLine(Properties.Resources.ResourceManager.GetString("Updating", CultureInfo.CurrentUICulture));
 
                     var processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
                     {
@@ -201,12 +209,13 @@ namespace GBPUpdater
                     p.WaitForExit();
                     Console.WriteLine(sb.ToString());
 
-                    Console.WriteLine("...done.\n");
+                    Console.Write(Properties.Resources.ResourceManager.GetString("Dots", CultureInfo.CurrentUICulture));
+                    Console.WriteLine(Properties.Resources.ResourceManager.GetString("Done", CultureInfo.CurrentUICulture));
 
-                    Console.WriteLine("Update Complete!\n");
+                    Console.WriteLine(Properties.Resources.ResourceManager.GetString("Complete", CultureInfo.CurrentUICulture));
                 }
-
-                Console.WriteLine("Press Enter to Exit");
+            
+                Console.WriteLine(Properties.Resources.ResourceManager.GetString("Exit", CultureInfo.CurrentUICulture));
                 Console.Read();
 
             }
@@ -214,7 +223,7 @@ namespace GBPUpdater
             {
                 Console.WriteLine("\nUpdater encountered an error.  Message: " + ex.Message);
                 Console.WriteLine("");
-                Console.WriteLine("Press Enter to Exit");
+                Console.WriteLine(Properties.Resources.ResourceManager.GetString("Exit", CultureInfo.CurrentUICulture));
                 Console.ReadLine();
             }
 

@@ -8,7 +8,7 @@ namespace GBPemu
         public static readonly ControllerStateEventArgs Zero = new ControllerStateEventArgs
             (new Dictionary<string, bool>(), new Dictionary<string, float>());
 
-        private string _rawPrinterData;
+        private readonly string _rawPrinterData;
 
         public string RawPrinterData
         {

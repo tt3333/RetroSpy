@@ -63,12 +63,12 @@ namespace RetroSpy.Readers
             return (float)(input) / 256;
         }
 
-        private static byte[] keyboardData = new byte[3];
+        private static readonly byte[] keyboardData = new byte[3];
 
         public static ControllerStateEventArgs ReadFromSecondPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length == 3)
             {
@@ -82,7 +82,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length == 3)
             {

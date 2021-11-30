@@ -83,7 +83,7 @@ namespace RetroSpy
             InitializeComponent();
             DataContext = this;
 
-            _reader = reader ?? throw new NullReferenceException();
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
             DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
 

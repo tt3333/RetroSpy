@@ -1,6 +1,7 @@
 ﻿using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -18,30 +19,15 @@ namespace RetroSpy
             _magicWidth = Width - _originalWidth;
         }
 
-        public double GetMagicHeight()
-        {
-            return _magicHeight;
-        }
+        public double MagicHeight => _magicHeight;
 
-        public double GetMagicWidth()
-        {
-            return _magicWidth;
-        }
+        public double MagicWidth => _magicWidth;
 
-        public double GetAdjustedHeight()
-        {
-            return Height - _magicHeight;
-        }
+        public double AdjustedHeight => Height - _magicHeight;
 
-        public double GetAdjustedWidth()
-        {
-            return Width - _magicWidth;
-        }
+        public double AdjustedWidth => Width - _magicWidth;
 
-        public double GetRatio()
-        {
-            return _originalWidth / _originalHeight;
-        }
+        public double Ratio => _originalWidth / _originalHeight;
 
         private static void AdjustImage(ElementConfig config, Image image, double xRatio, double yRatio)
         {
@@ -74,10 +60,10 @@ namespace RetroSpy
 
         public void AdjustControllerElements()
         {
-            ControllerGrid.Width = ((Image)ControllerGrid.Children[0]).Width = GetAdjustedWidth();
-            ControllerGrid.Height = ((Image)ControllerGrid.Children[0]).Height = GetAdjustedHeight();
-            double xRatio = GetAdjustedWidth() / _originalWidth;
-            double yRatio = GetAdjustedHeight() / _originalHeight;
+            ControllerGrid.Width = ((Image)ControllerGrid.Children[0]).Width = AdjustedWidth;
+            ControllerGrid.Height = ((Image)ControllerGrid.Children[0]).Height = AdjustedHeight;
+            double xRatio = AdjustedWidth / _originalWidth;
+            double yRatio = AdjustedHeight / _originalHeight;
 
             foreach (Tuple<Detail, Image> detail in _detailsWithImages)
             {
@@ -124,9 +110,11 @@ namespace RetroSpy
 
         private class NativeMethods
         {
+            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
             [DllImport("user32.dll")]
             public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
             [DllImport("user32.dll")]
             public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
         }
@@ -205,13 +193,18 @@ namespace RetroSpy
             }
         }
 
+        [CLSCompliant(false)]
         public ViewWindow(Skin skin, Background skinBackground, IControllerReader reader, bool staticViewerWindowName)
         {
             InitializeComponent();
             DataContext = this;
 
-            if (reader == null || skin == null || skinBackground == null)
-                throw new NullReferenceException();
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            else if (skin == null)
+                throw new ArgumentNullException(nameof(skin));
+            else if (skinBackground == null)
+                throw new ArgumentNullException(nameof(skinBackground));
 
             _skin = skin;
             _reader = reader;
@@ -246,7 +239,7 @@ namespace RetroSpy
                 ControllerGrid.Children.Add(img);
             }
 
-            foreach (Detail detail in _skin.Details)
+            foreach (RetroSpy.Detail detail in _skin.Details)
             {
                 if (BgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
@@ -285,8 +278,10 @@ namespace RetroSpy
                     }
                     else
                     {
-                        var list = new List<Tuple<Button, Image>>();
-                        list.Add(tuple);
+                        var list = new List<Tuple<Button, Image>>
+                        {
+                            tuple
+                        };
                         _dictOfButtonsWithImages.Add(button.Name, list);
                     }
                     image.Visibility = Visibility.Hidden;
@@ -369,7 +364,7 @@ namespace RetroSpy
             Topmost = Properties.Settings.Default.TopMost;
         }
 
-        private static bool BgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
+        private static bool BgIsActive(string bgName, Collection<string> eligableBgs, Collection<string> ignoreBgs)
         {
             if (ignoreBgs.Contains(bgName))
             {
@@ -857,7 +852,7 @@ namespace RetroSpy
         {
             _calculatedMagic = false;
             _window = window;
-            _ratio = window.GetRatio();
+            _ratio = window.Ratio;
             ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
         }
 
@@ -907,8 +902,8 @@ namespace RetroSpy
                     return IntPtr.Zero;
                 }
 
-                double magicWidth = _window.GetMagicWidth();
-                double magicHeight = _window.GetMagicHeight();
+                double magicWidth = _window.MagicWidth;
+                double magicHeight = _window.MagicHeight;
 
                 position.cx = (int)(magicWidth + ((position.cy - magicHeight) * _ratio));
 

@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace RetroSpy
 {
@@ -20,9 +21,9 @@ namespace RetroSpy
     {
         private readonly List<string> _excludedList;
         readonly IReadOnlyList<InputSource> _allSources;
-        readonly List<string> _originalExcludedList;
+        readonly Collection<string> _originalExcludedList;
 
-        public AddRemoveWindow(IReadOnlyList<InputSource> allSources, List<string> excludedList)
+        public AddRemoveWindow(IReadOnlyList<InputSource> allSources, Collection<string> excludedList)
         {
             _originalExcludedList = excludedList;
             _excludedList = new List<string>(excludedList);

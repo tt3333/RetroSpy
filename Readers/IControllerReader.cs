@@ -2,11 +2,11 @@
 
 namespace RetroSpy.Readers
 {
-    public delegate void StateEventHandler(object sender, ControllerStateEventArgs e);
+    //public delegate void StateEventHandler(object sender, ControllerStateEventArgs e);
 
     public interface IControllerReader
     {
-        event StateEventHandler ControllerStateChanged;
+        event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         event EventHandler ControllerDisconnected;
 

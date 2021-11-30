@@ -3,6 +3,7 @@ using Renci.SshNet;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -98,8 +99,8 @@ namespace RetroSpy
         private readonly SetupWindowViewModel _vm;
         private readonly DispatcherTimer _portListUpdateTimer;
         private readonly DispatcherTimer _xiAndGamepadListUpdateTimer;
-        private List<Skin> _skins;
-        private readonly List<string> _excludedSources;
+        private Collection<Skin> _skins;
+        private readonly Collection<string> _excludedSources;
         private readonly ResourceManager _resources;
         private bool isClosing;
 
@@ -123,7 +124,7 @@ namespace RetroSpy
             isClosing = false;
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
-            _excludedSources = new List<string>();
+            _excludedSources = new Collection<string>();
             _resources = Properties.Resources.ResourceManager;
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
@@ -245,7 +246,7 @@ namespace RetroSpy
             _vm.Sources.UpdateContents(prunedSources);
         }
 
-        private void ShowSkinParseErrors(List<string> errs)
+        private void ShowSkinParseErrors(Collection<string> errs)
         {
             StringBuilder msg = new StringBuilder();
             msg.AppendLine("Some skins were unable to be parsed:");
@@ -478,15 +479,17 @@ namespace RetroSpy
                         break;
                     if (line.Contains("/dev/input/js"))
                     {
-                        int i = line.LastIndexOf("/dev/input/js");
+                        int i = line.LastIndexOf("/dev/input/js", StringComparison.Ordinal);
                         if (line.Substring(i + 13) != "*")
-                            controllers.Add(uint.Parse(line.Substring(i + 13)));
+                            controllers.Add(uint.Parse(line.Substring(i + 13), CultureInfo.CurrentCulture));
                     }
                 }
 
                 _vm.MisterGamepad.UpdateContents(controllers);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 MessageBox.Show("Couldn't connected to MiSTer to get connected controllers.");
             }
@@ -549,7 +552,7 @@ namespace RetroSpy
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.MISTER)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text, txtUsername.Text, txtPassword.Password, _vm.MisterGamepad.SelectedItem.ToString());
+                    reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text, txtUsername.Text, txtPassword.Password, _vm.MisterGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 
                             || _vm.Sources.SelectedItem == InputSource.ATARI5200 || _vm.Sources.SelectedItem == InputSource.COLECOVISION
@@ -773,9 +776,13 @@ namespace RetroSpy
     {
         public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
+        [CLSCompliant(false)]
         public ListView<uint> XIAndGamepad { get; set; }
+        [CLSCompliant(false)]
         public ListView<uint> MisterGamepad { get; set; }
+        [CLSCompliant(false)]
         public ListView<Skin> Skins { get; set; }
+        [CLSCompliant(false)]
         public ListView<Background> Backgrounds { get; set; }
         public ListView<InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }

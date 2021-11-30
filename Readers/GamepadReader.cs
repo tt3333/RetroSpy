@@ -2,6 +2,7 @@
 using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace RetroSpy.Readers
 {
     public sealed class GamepadReader : IControllerReader, IDisposable
     {
-        public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler ControllerDisconnected;
 
@@ -22,12 +23,13 @@ namespace RetroSpy.Readers
         private DispatcherTimer _timer;
         private Joystick _joystick;
 
-        public static List<uint> GetDevices()
+        [CLSCompliant(false)]
+        public static Collection<uint> GetDevices()
         { 
             var input = new DirectInput();
             int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
             input.Dispose();
-            List<uint> result = new List<uint>(amount);
+            Collection<uint> result = new Collection<uint>();
            
             for (uint i = 0; i < amount; i++)
             {
@@ -36,7 +38,7 @@ namespace RetroSpy.Readers
             return result;
         }
 
-        public GamepadReader(int id = 0, bool useLagFix = false)
+        public GamepadReader(int id = 0)
         {
             ResourceManager stringManager = Properties.Resources.ResourceManager;
 

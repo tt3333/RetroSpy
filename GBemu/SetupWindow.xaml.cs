@@ -7,11 +7,9 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Resources;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 
@@ -82,11 +80,7 @@ namespace GBPemu
 
         public int GetSelectedId()
         {
-            if (SelectedItem != null)
-            {
-                return _items.IndexOf(SelectedItem);
-            }
-            return -1;
+            return SelectedItem != null ? _items.IndexOf(SelectedItem) : -1;
         }
     }
 
@@ -97,7 +91,7 @@ namespace GBPemu
         private readonly ResourceManager _resources;
         private bool isClosing;
 
-    private void UpdatePortListThread()
+        private void UpdatePortListThread()
         {
             Thread thread = new Thread(UpdatePortList);
             thread.Start();
@@ -110,7 +104,7 @@ namespace GBPemu
             if (Properties.Settings.Default.UpgradeRequired)
             {
                 Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default. UpgradeRequired = false;
+                Properties.Settings.Default.UpgradeRequired = false;
                 Properties.Settings.Default.Save();
             }
 
@@ -120,7 +114,7 @@ namespace GBPemu
             DataContext = _vm;
             _resources = Properties.Resources.ResourceManager;
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
@@ -139,120 +133,122 @@ namespace GBPemu
 
         private readonly object updatePortLock = new object();
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "I am fishing for the printer, so I expect failures.")]
         private void UpdatePortList()
         {
             if (!isClosing && Monitor.TryEnter(updatePortLock))
             {
                 try
                 {
-                    var arduinoPorts = SetupCOMPortInformation();
+                    List<string> arduinoPorts = SetupCOMPortInformation();
 
-                    foreach (var port in arduinoPorts)
+                    foreach (string port in arduinoPorts)
                     {
-                        SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
-                        _serialPort.Handshake = Handshake.None;
+                        using (SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                        {
+                            Handshake = Handshake.None,
+                            ReadTimeout = 500,
+                            WriteTimeout = 500
+                        })
+                        {
 
-                        _serialPort.ReadTimeout = 500;
-                        _serialPort.WriteTimeout = 500;
-
-                        try
-                        {
-                            _serialPort.Open();
-                        }
-                        catch (Exception)
-                        {
-                            continue;
-                        }
-
-                        try
-                        {
-                            _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                        }
-                        catch (Exception)
-                        {
-                            _serialPort.Close();
-                            continue;
-                        }
-
-                        try
-                        {
-                            string result = null;
-                            do
+                            try
                             {
-                                result = _serialPort.ReadLine();
-                            } while (result != null && (result.StartsWith("!") || result.StartsWith("#")));
-
-                            if (result == "parse_state:0\r" || result.Contains("d=debug"))
-                            {
-                                _serialPort.Close();
-                                Thread.Sleep(1000);
-
-                                if (this.Dispatcher.CheckAccess())
-                                {
-                                    this.Hide();
-                                }
-                                else
-                                {
-                                    this.Dispatcher.Invoke(() =>
-                                    {
-                                        this.Hide();
-                                    });
-                                }
-
-                                Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
-                                Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
-                                Properties.Settings.Default.Save();
-
-                                
-
-                                try
-                                {
-                                    if (this.Dispatcher.CheckAccess())
-                                    {
-                                        IControllerReader reader = InputSource.PRINTER.BuildReader(port);
-                                        new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
-                                    }
-                                    else
-                                    {
-                                        this.Dispatcher.Invoke(() =>
-                                        {
-                                            IControllerReader reader = InputSource.PRINTER.BuildReader(port);
-                                            new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
-                                        });
-                                    }
-
-
-                                }
-                                catch (UnauthorizedAccessException ex)
-                                {
-                                    MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
-                                }
-
-                                if (this.Dispatcher.CheckAccess())
-                                {
-                                    this.Show();
-                                }
-                                else
-                                {
-                                    this.Dispatcher.Invoke(() =>
-                                    {
-                                        this.Show();
-                                    });
-                                }
-
+                                _serialPort.Open();
                             }
-                            else
+                            catch (Exception)
+                            {
+                                continue;
+                            }
+
+                            try
+                            {
+                                _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
+                            }
+                            catch (Exception)
                             {
                                 _serialPort.Close();
                                 continue;
                             }
-                        }
-                        catch (Exception)
-                        {
-                            _serialPort.Close();
-                            continue;
-                        }
 
+                            try
+                            {
+                                string result = null;
+                                do
+                                {
+                                    result = _serialPort.ReadLine();
+                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
+
+                                if (result == "parse_state:0\r" || result.Contains("d=debug"))
+                                {
+                                    _serialPort.Close();
+                                    Thread.Sleep(1000);
+
+                                    if (Dispatcher.CheckAccess())
+                                    {
+                                        Hide();
+                                    }
+                                    else
+                                    {
+                                        Dispatcher.Invoke(() =>
+                                        {
+                                            Hide();
+                                        });
+                                    }
+
+                                    Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
+                                    Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+                                    Properties.Settings.Default.Save();
+
+                                    try
+                                    {
+                                        if (Dispatcher.CheckAccess())
+                                        {
+                                            IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+                                            _ = new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                                        }
+                                        else
+                                        {
+                                            Dispatcher.Invoke(() =>
+                                            {
+                                                IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+                                                _ = new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                                            });
+                                        }
+
+
+                                    }
+                                    catch (UnauthorizedAccessException ex)
+                                    {
+                                        _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+
+                                    if (Dispatcher.CheckAccess())
+                                    {
+                                        Show();
+                                    }
+                                    else
+                                    {
+                                        Dispatcher.Invoke(() =>
+                                        {
+                                            Show();
+                                        });
+                                    }
+
+                                }
+                                else
+                                {
+                                    _serialPort.Close();
+                                    continue;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                _serialPort.Close();
+                                continue;
+                            }
+
+                        }
                     }
 
                 }
@@ -263,61 +259,6 @@ namespace GBPemu
                 finally
                 {
                     Monitor.Exit(updatePortLock);
-                }
-            }
-        }
-
-        private static void GetTeensyPorts(List<string> arduinoPorts)
-        {
-            const uint vid = 0x16C0;
-            const uint serPid = 0x483;
-            string vidStr = "'%USB_VID[_]" + vid.ToString("X", CultureInfo.CurrentCulture) + "%'";
-            using (var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr))
-            {
-                foreach (var mgmtObject in searcher.Get())
-                {
-                    var DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
-                    if (DeviceIdParts[0] != "USB") break;
-
-                    int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
-                    uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
-                    if (pid == serPid)
-                    {
-                        //uint serNum = Convert.ToUInt32(DeviceIdParts[2], CultureInfo.CurrentCulture);
-                        string port = (((string)mgmtObject["Caption"]).Split("()".ToArray()))[1];
-
-                        var hwid = ((string[])mgmtObject["HardwareID"])[0];
-                        switch (hwid.Substring(hwid.IndexOf("REV_", StringComparison.Ordinal) + 4, 4))
-                        {
-                            case "0273":
-                                //board = PJRC_Board.Teensy_LC;
-                                break;
-
-                            case "0274":
-                                //board = PJRC_Board.Teensy_30;
-                                break;
-
-                            case "0275":
-                                //board = PJRC_Board.Teensy_31_2;
-                                break;
-
-                            case "0276":
-                                arduinoPorts.Add(port + " (Teensy 3.5)");
-                                break;
-
-                            case "0277":
-                                arduinoPorts.Add(port + " (Teensy 3.6)");
-                                break;
-
-                            case "0279":
-                                //board = PJRC_Board.Teensy_40;
-                                break;
-
-                            default:
-                                //board = PJRC_Board.unknown;
-                                break;
-                        }
-                    }
                 }
             }
         }
@@ -349,8 +290,8 @@ namespace GBPemu
         {
             List<COMPortInfo> comPortInformation = new List<COMPortInfo>();
 
-            String[] portNames = System.IO.Ports.SerialPort.GetPortNames();
-            foreach (String s in portNames)
+            string[] portNames = SerialPort.GetPortNames();
+            foreach (string s in portNames)
             {
                 // s is like "COM14"
                 COMPortInfo ci = new COMPortInfo
@@ -361,8 +302,8 @@ namespace GBPemu
                 comPortInformation.Add(ci);
             }
 
-            String[] usbDevs = GetUSBCOMDevices();
-            foreach (String s in usbDevs)
+            string[] usbDevs = GetUSBCOMDevices();
+            foreach (string s in usbDevs)
             {
                 // Name will be like "USB Bridge (COM14)"
                 int start = s.IndexOf("(COM", StringComparison.Ordinal) + 1;
@@ -372,7 +313,7 @@ namespace GBPemu
                     if (end >= 0)
                     {
                         // cname is like "COM14"
-                        String cname = s.Substring(start, end - start);
+                        string cname = s.Substring(start, end - start);
                         for (int i = 0; i < comPortInformation.Count; i++)
                         {
                             if (comPortInformation[i].PortName == cname)
@@ -385,7 +326,7 @@ namespace GBPemu
             }
 
             List<string> ports = new List<string>();
-            foreach (var port in comPortInformation)
+            foreach (COMPortInfo port in comPortInformation)
             {
                 if (_vm.FilterCOMPorts || port.FriendlyName.Contains("Arduino"))
                 {
@@ -411,11 +352,11 @@ namespace GBPemu
 
             try
             {
-                new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                _ = new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             Show();

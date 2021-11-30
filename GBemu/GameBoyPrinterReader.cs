@@ -4,7 +4,8 @@ namespace GBPemu
 {
     public sealed class GameBoyPrinterReader : IControllerReader, IDisposable
     {
-        public event StateEventHandler ControllerStateChanged;
+        //public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler ControllerDisconnected;
 

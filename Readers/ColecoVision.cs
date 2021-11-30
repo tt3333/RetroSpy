@@ -32,7 +32,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < PACKET_SIZE)
             {
@@ -167,8 +167,8 @@ namespace RetroSpy.Readers
                         // Don't let magnitude exceed the unit circle
                         if (Math.Sqrt(Math.Pow(x_2, 2) + Math.Pow(y_2, 2)) > 1.0)
                         {
-                            x = x1_2;
-                            y = y1_2;
+                            x_2 = x1_2;
+                            y_2 = y1_2;
                         }
                     }
 
@@ -219,7 +219,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromSecondColecoVisionController(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length != ROLLER_PACKET_SIZE)
             {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using System.Windows;
 using System.Windows.Media;
@@ -9,6 +6,54 @@ using System.Windows.Media.Imaging;
 
 namespace GBPemu
 {
+    public struct Pixel : IEquatable<Pixel>
+    {
+        public Pixel(byte red, byte green, byte blue, byte alpha)
+        {
+            Red = red;
+            Green = green;
+            Blue = blue;
+            Alpha = alpha;
+        }
+
+        public byte Red { get; set; }
+        public byte Green { get; set; }
+        public byte Blue { get; set; }
+        public byte Alpha { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Pixel p = (Pixel)obj;
+                return (Red == p.Red) && (Green == p.Green) && (Blue == p.Blue) && (Alpha == p.Alpha);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return (Red.GetHashCode() * 17) + (Green.GetHashCode() * 17) + (Blue.GetHashCode() * 17) + (Alpha.GetHashCode() * 17);
+        }
+
+        public static bool operator ==(Pixel left, Pixel right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Pixel left, Pixel right)
+        {
+            return !(left == right);
+        }
+
+        public bool Equals(Pixel other)
+        {
+            return (Red == other.Red) && (Green == other.Green) && (Blue == other.Blue) && (Alpha == other.Alpha);
+        }
+    }
 
     public class BitmapPixelMaker
     {
@@ -37,56 +82,60 @@ namespace GBPemu
         }
 
         // Get a pixel's value.
-        public void GetPixel(int x, int y, out byte red, out byte green, out byte blue, out byte alpha)
+        public Pixel GetPixel(int x, int y)
         {
-            int index = y * Stride + x * 4;
-            blue = Pixels[index++];
-            green = Pixels[index++];
-            red = Pixels[index++];
-            alpha = Pixels[index];
+            Pixel retVal = new Pixel();
+
+            int index = (y * Stride) + (x * 4);
+            retVal.Blue = Pixels[index++];
+            retVal.Green = Pixels[index++];
+            retVal.Red = Pixels[index++];
+            retVal.Alpha = Pixels[index];
+
+            return retVal;
         }
 
         public byte GetBlue(int x, int y)
         {
-            return Pixels[y * Stride + x * 4];
+            return Pixels[(y * Stride) + (x * 4)];
         }
         public byte GetGreen(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 1];
+            return Pixels[(y * Stride) + (x * 4) + 1];
         }
         public byte GetRed(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 2];
+            return Pixels[(y * Stride) + (x * 4) + 2];
         }
         public byte GetAlpha(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 3];
+            return Pixels[(y * Stride) + (x * 4) + 3];
         }
 
         // Set a pixel's value.
-        public void SetPixel(int x, int y, byte red, byte green, byte blue, byte alpha)
+        public void SetPixel(int x, int y, Pixel color)
         {
-            int index = y * Stride + x * 4;
-            Pixels[index++] = blue;
-            Pixels[index++] = green;
-            Pixels[index++] = red;
-            Pixels[index++] = alpha;
+            int index = (y * Stride) + (x * 4);
+            Pixels[index++] = color.Blue;
+            Pixels[index++] = color.Green;
+            Pixels[index++] = color.Red;
+            Pixels[index++] = color.Alpha;
         }
         public void SetBlue(int x, int y, byte blue)
         {
-            Pixels[y * Stride + x * 4] = blue;
+            Pixels[(y * Stride) + (x * 4)] = blue;
         }
         public void SetGreen(int x, int y, byte green)
         {
-            Pixels[y * Stride + x * 4 + 1] = green;
+            Pixels[(y * Stride) + (x * 4) + 1] = green;
         }
         public void SetRed(int x, int y, byte red)
         {
-            Pixels[y * Stride + x * 4 + 2] = red;
+            Pixels[(y * Stride) + (x * 4) + 2] = red;
         }
         public void SetAlpha(int x, int y, byte alpha)
         {
-            Pixels[y * Stride + x * 4 + 3] = alpha;
+            Pixels[(y * Stride) + (x * 4) + 3] = alpha;
         }
 
         public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
@@ -102,22 +151,17 @@ namespace GBPemu
                 }
         }
 
-        public void ReplaceColor(byte oldRed, byte oldGreen, byte oldBlue, byte newRed, byte newGreen, byte newBlue)
+        public void ReplaceColor(Pixel oldColor, Pixel newColor)
         {
-   
             for (int i = 0; i < Width; ++i)
+            {
                 for (int j = 0; j < Height; ++j)
                 {
-                    byte red;
-                    byte green;
-                    byte blue;
-                    byte alpha;
-                    GetPixel(i, j, out red, out green, out blue, out alpha);
-                    if (red == oldRed && green == oldGreen && blue == oldBlue)
-                        SetPixel(i, j, newRed, newGreen, newBlue, alpha);
-
-                    
+                    Pixel pixel = GetPixel(i, j);
+                    if (pixel == oldColor)
+                        SetPixel(i, j, newColor);
                 }
+            }
         }
 
         // Set all pixels to a specific color.

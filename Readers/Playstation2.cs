@@ -63,10 +63,11 @@ namespace RetroSpy.Readers
             return val;
         }
 
+#pragma warning disable CA1508 // Avoid dead conditional code
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
 
 
@@ -254,6 +255,7 @@ namespace RetroSpy.Readers
 
             return state.Build();
         }
+#pragma warning restore CA1508 // Avoid dead conditional code
 
         private static void SetButtons(string[] buttons, byte[] polishedPacket, ControllerStateBuilder state)
         {

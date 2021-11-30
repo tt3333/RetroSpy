@@ -14,7 +14,7 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < PACKET_SIZE)
             {
@@ -120,7 +120,9 @@ namespace RetroSpy.Readers
                     break;
             }
 
+#pragma warning disable CA1508 // Avoid dead conditional code
             if (y != 0 || x != 0)
+#pragma warning restore CA1508 // Avoid dead conditional code
             {
                 // point on the unit circle at the same angle
                 double radian = Math.Atan2(y, x);

@@ -68,9 +68,11 @@ namespace RetroSpy
 
         static class NativeMethods
         {
+            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
             [DllImport("user32.dll")]
             public static extern IntPtr GetMessageExtraInfo();
 
+            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
             [DllImport("user32.dll", SetLastError = true)]
             public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
         }
@@ -98,16 +100,19 @@ namespace RetroSpy
             _ = NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
         }
 
+        [CLSCompliant(false)]
         static public void PressKey(ushort key)
         {
             SendInputs(InputForKey(key, false));
         }
 
+        [CLSCompliant(false)]
         static public void ReleaseKey(ushort key)
         {
             SendInputs(InputForKey(key, true));
         }
 
+        [CLSCompliant(false)]
         static public void PressAndReleaseKey(ushort key)
         {
             SendInputs(

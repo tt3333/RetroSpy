@@ -18,14 +18,14 @@ namespace RetroSpy
         private readonly byte[] Packet;
     }
 
-    public delegate void PacketEventHandler(object sender, PacketDataEventArgs e);
+    //public delegate void PacketEventHandler(object sender, PacketDataEventArgs e);
 
     public class SerialMonitor : IDisposable
     {
         private const int BAUD_RATE = 115200;
         private const int TIMER_MS = 1;
 
-        public event PacketEventHandler PacketReceived;
+        public event EventHandler<PacketDataEventArgs> PacketReceived;
 
         public event EventHandler Disconnected;
 

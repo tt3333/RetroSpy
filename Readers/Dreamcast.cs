@@ -55,10 +55,11 @@ namespace RetroSpy.Readers
             return (float)(input - 128) / 128;
         }
 
+#pragma warning disable CA1508 // Avoid dead conditional code
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
-                throw new NullReferenceException();
+                throw new ArgumentNullException(nameof(packet));
 
             if (packet.Length < FRAME_HEADER_SIZE)
             {
@@ -340,5 +341,6 @@ namespace RetroSpy.Readers
 
             return null;
         }
+#pragma warning restore CA1508 // Avoid dead conditional code
     }
 }

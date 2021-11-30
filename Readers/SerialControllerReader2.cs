@@ -4,7 +4,7 @@ namespace RetroSpy.Readers
 {
     public sealed class SerialControllerReader2 : IControllerReader, IDisposable
     {
-        public event StateEventHandler ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler ControllerDisconnected;
 
