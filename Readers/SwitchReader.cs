@@ -18,12 +18,7 @@ namespace RetroSpy.Readers
 
         private static float ReadStick(byte input)
         {
-            if (input < 127)
-            {
-                return (float)input / 128;
-            }
-
-            return (float)(255 - input) / -128;
+            return input < 127 ? (float)input / 128 : (float)(255 - input) / -128;
         }
 
         private static float ReadPokkenStick(byte input, bool invert)
@@ -34,7 +29,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < PRO_PACKET_SIZE)
             {
@@ -55,7 +52,7 @@ namespace RetroSpy.Readers
                     polishedPacket[24 + i] = 0;
                     for (byte j = 0; j < 8; ++j)
                     {
-                        polishedPacket[24 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
+                        polishedPacket[24 + i] |= (byte)((packet[24 + (i * 8) + j] == 0x30 ? 0 : 1) << j);
                     }
                 }
 
@@ -96,7 +93,7 @@ namespace RetroSpy.Readers
                     polishedPacket[17 + i] = 0;
                     for (byte j = 0; j < 8; ++j)
                     {
-                        polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
+                        polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8) + j] == 0x30 ? 0 : 1) << j);
                     }
                 }
 

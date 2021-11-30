@@ -60,7 +60,7 @@ namespace RetroSpy.Readers
 
         private static float ReadTrigger(byte input)
         {
-            return (float)(input) / 256;
+            return (float)input / 256;
         }
 
         private static readonly byte[] keyboardData = new byte[3];
@@ -68,12 +68,16 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromSecondPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length == 3)
             {
                 for (int i = 0; i < 3; ++i)
+                {
                     keyboardData[i] = packet[i];
+                }
             }
 
             return null;
@@ -82,7 +86,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length == 3)
             {
@@ -99,14 +105,18 @@ namespace RetroSpy.Readers
                 for (int i = 0; i < packet.Length; ++i)
                 {
                     if (KEYS[packet[i]] != null)
+                    {
                         state1.SetButton(KEYS[packet[i]], true);
+                    }
                 }
 
                 state1.SetButton("Function", false);
                 for (int i = 0; i < packet.Length; ++i)
                 {
                     if (FUNCTION_KEYS[packet[i]] != null)
+                    {
                         state1.SetButton(FUNCTION_KEYS[packet[i]], true);
+                    }
                 }
 
                 return state1.Build();
@@ -140,14 +150,18 @@ namespace RetroSpy.Readers
             for (int i = 0; i < keyboardData.Length; ++i)
             {
                 if (KEYS[keyboardData[i]] != null)
+                {
                     state.SetButton(KEYS[keyboardData[i]], true);
+                }
             }
 
             state.SetButton("Function", false);
             for (int i = 0; i < keyboardData.Length; ++i)
             {
                 if (FUNCTION_KEYS[keyboardData[i]] != null)
+                {
                     state.SetButton(FUNCTION_KEYS[keyboardData[i]], true);
+                }
             }
 
             state.SetAnalog("lstick_x", ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length)), SignalTool.ReadByte(packet, BUTTONS.Length));

@@ -85,11 +85,7 @@ namespace RetroSpy
 
         public int GetSelectedId()
         {
-            if (SelectedItem != null)
-            {
-                return _items.IndexOf(SelectedItem);
-            }
-            return -1;
+            return SelectedItem != null ? _items.IndexOf(SelectedItem) : -1;
         }
     }
 
@@ -126,13 +122,13 @@ namespace RetroSpy
             _excludedSources = new Collection<string>();
             _resources = Properties.Resources.ResourceManager;
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             string skinsDirectory = Path.Combine(strWorkPath, "skins");
 
             if (!Directory.Exists(skinsDirectory))
             {
-                MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
@@ -211,9 +207,12 @@ namespace RetroSpy
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
             _vm.Hostname = Properties.Settings.Default.Hostname;
 
-            var defaultMisterControllers = new List<uint>();
+            List<uint> defaultMisterControllers = new List<uint>();
             for (uint i = 0; i < 10; ++i)
+            {
                 defaultMisterControllers.Add(i);
+            }
+
             _vm.MisterGamepad.UpdateContents(defaultMisterControllers);
 
             if (results.ParseErrors.Count > 0)
@@ -228,8 +227,9 @@ namespace RetroSpy
                 GoButton_Click(null, null);
             }
             else
+            {
                 Show();
-
+            }
         }
 
         private void PopulateSources()
@@ -248,13 +248,13 @@ namespace RetroSpy
         private void ShowSkinParseErrors(Collection<string> errs)
         {
             StringBuilder msg = new StringBuilder();
-            msg.AppendLine("Some skins were unable to be parsed:");
+            _ = msg.AppendLine("Some skins were unable to be parsed:");
             foreach (string err in errs)
             {
-                msg.AppendLine(err);
+                _ = msg.AppendLine(err);
             }
 
-            MessageBox.Show(msg.ToString(), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+            _ = MessageBox.Show(msg.ToString(), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private readonly object updatePortLock = new object();
@@ -265,7 +265,7 @@ namespace RetroSpy
             {
                 try
                 {
-                    var arduinoPorts = SetupCOMPortInformation();
+                    List<string> arduinoPorts = SetupCOMPortInformation();
                     GetTeensyPorts(arduinoPorts);
 
                     arduinoPorts.Sort();
@@ -307,21 +307,24 @@ namespace RetroSpy
             const uint vid = 0x16C0;
             const uint serPid = 0x483;
             string vidStr = "'%USB_VID[_]" + vid.ToString("X", CultureInfo.CurrentCulture) + "%'";
-            using (var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr))
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr))
             {
-                foreach (var mgmtObject in searcher.Get())
+                foreach (ManagementBaseObject mgmtObject in searcher.Get())
                 {
-                    var DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
-                    if (DeviceIdParts[0] != "USB") break;
+                    string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
+                    if (DeviceIdParts[0] != "USB")
+                    {
+                        break;
+                    }
 
                     int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
                     uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
                     if (pid == serPid)
                     {
                         //uint serNum = Convert.ToUInt32(DeviceIdParts[2], CultureInfo.CurrentCulture);
-                        string port = (((string)mgmtObject["Caption"]).Split("()".ToArray()))[1];
+                        string port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
 
-                        var hwid = ((string[])mgmtObject["HardwareID"])[0];
+                        string hwid = ((string[])mgmtObject["HardwareID"])[0];
                         switch (hwid.Substring(hwid.IndexOf("REV_", StringComparison.Ordinal) + 4, 4))
                         {
                             case "0273":
@@ -384,8 +387,8 @@ namespace RetroSpy
         {
             List<COMPortInfo> comPortInformation = new List<COMPortInfo>();
 
-            String[] portNames = System.IO.Ports.SerialPort.GetPortNames();
-            foreach (String s in portNames)
+            string[] portNames = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (string s in portNames)
             {
                 // s is like "COM14"
                 COMPortInfo ci = new COMPortInfo
@@ -396,8 +399,8 @@ namespace RetroSpy
                 comPortInformation.Add(ci);
             }
 
-            String[] usbDevs = GetUSBCOMDevices();
-            foreach (String s in usbDevs)
+            string[] usbDevs = GetUSBCOMDevices();
+            foreach (string s in usbDevs)
             {
                 // Name will be like "USB Bridge (COM14)"
                 int start = s.IndexOf("(COM", StringComparison.Ordinal) + 1;
@@ -407,7 +410,7 @@ namespace RetroSpy
                     if (end >= 0)
                     {
                         // cname is like "COM14"
-                        String cname = s.Substring(start, end - start);
+                        string cname = s.Substring(start, end - start);
                         for (int i = 0; i < comPortInformation.Count; i++)
                         {
                             if (comPortInformation[i].PortName == cname)
@@ -420,15 +423,15 @@ namespace RetroSpy
             }
 
             List<string> ports = new List<string>();
-            foreach (var port in comPortInformation)
+            foreach (COMPortInfo port in comPortInformation)
             {
                 if (_vm.FilterCOMPorts || port.FriendlyName.Contains("Arduino"))
                 {
-                    ports.Add(String.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
+                    ports.Add(string.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
                 }
                 else if (port.FriendlyName.Contains("CH340") || port.FriendlyName.Contains("CH341"))
                 {
-                    ports.Add(String.Format(CultureInfo.CurrentCulture, "{0} (Generic Arduino)", port.PortName));
+                    ports.Add(string.Format(CultureInfo.CurrentCulture, "{0} (Generic Arduino)", port.PortName));
                 }
             }
 
@@ -461,9 +464,9 @@ namespace RetroSpy
             try
             {
                 List<uint> controllers = new List<uint>();
-                _client = new SshClient(this.txtHostname.Text, this.txtUsername.Text, txtPassword.Password);
+                _client = new SshClient(txtHostname.Text, txtUsername.Text, txtPassword.Password);
                 _client.Connect();
-                var _data = _client.CreateShellStream("", 0, 0, 0, 0, 1000);
+                ShellStream _data = _client.CreateShellStream("", 0, 0, 0, 0, 1000);
 
                 Thread.Sleep(5000);
 
@@ -472,15 +475,21 @@ namespace RetroSpy
 
                 while (true)
                 {
-                    while (!_data.DataAvailable) ;
-                    var line = _data.ReadLine();
+                    while (!_data.DataAvailable) { }
+
+                    string line = _data.ReadLine();
                     if (line.Contains("retrospy_end"))
+                    {
                         break;
+                    }
+
                     if (line.Contains("/dev/input/js"))
                     {
                         int i = line.LastIndexOf("/dev/input/js", StringComparison.Ordinal);
                         if (line.Substring(i + 13) != "*")
+                        {
                             controllers.Add(uint.Parse(line.Substring(i + 13), CultureInfo.CurrentCulture));
+                        }
                     }
                 }
 
@@ -490,12 +499,14 @@ namespace RetroSpy
             catch (Exception)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
-                MessageBox.Show("Couldn't connected to MiSTer to get connected controllers.");
+                _ = MessageBox.Show("Couldn't connected to MiSTer to get connected controllers.");
             }
             finally
             {
                 if (_client != null)
+                {
                     _client.Dispose();
+                }
             }
         }
 
@@ -585,12 +596,12 @@ namespace RetroSpy
 
                 if (_vm.Sources.SelectedItem == InputSource.PRINTER)
                 {
-                    new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                    _ = new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
                 }
                 else
                 {
                     _portListUpdateTimer.Stop();
-                    new ViewWindow(_vm.Skins.SelectedItem,
+                    _ = new ViewWindow(_vm.Skins.SelectedItem,
                                     _vm.Backgrounds.SelectedItem,
                                     reader, _vm.StaticViewerWindowName)
                         .ShowDialog();
@@ -598,15 +609,15 @@ namespace RetroSpy
             }
             catch (ConfigParseException ex)
             {
-                MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (System.Net.Sockets.SocketException)
             {
-                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show(string.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             _portListUpdateTimer.Start();
@@ -668,7 +679,7 @@ namespace RetroSpy
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            new AboutWindow().ShowDialog();
+            _ = new AboutWindow().ShowDialog();
             //MessageBox.Show(string.Format(CultureInfo.CurrentCulture, " RetroSpy Version {0}\n\nThis Release Supported By\n\n     40wattRange\n     Coltaho\n     Evan Grill\n     Filyx20\n     sk84uhlivin\n     watsonpunk", Assembly.GetEntryAssembly().GetName().Version), _resources.GetString("About", CultureInfo.CurrentUICulture),
             //    MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -676,13 +687,13 @@ namespace RetroSpy
         private void ReloadSkins_Click(object sender, RoutedEventArgs e)
         {
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             string skinsDirectory = Path.Combine(strWorkPath, "skins");
 
             if (!Directory.Exists(skinsDirectory))
             {
-                MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
@@ -715,7 +726,7 @@ namespace RetroSpy
 
         private void AddRemove_Click(object sender, RoutedEventArgs e)
         {
-            new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
+            _ = new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
 
             PopulateSources();
 
@@ -748,7 +759,7 @@ namespace RetroSpy
             }
 
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = System.IO.Path.GetDirectoryName(strExeFilePath);
+            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             string skinsDirectory = Path.Combine(strWorkPath, "skins");
             LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);

@@ -32,7 +32,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < PACKET_SIZE)
             {
@@ -205,10 +207,14 @@ namespace RetroSpy.Readers
                 sbyte roller_x = (sbyte)SignalTool.ReadByteBackwards(packet, 10);
 
                 if (Math.Abs(roller_x) != 0 && Math.Abs(roller_x) > maxX)
+                {
                     maxX = Math.Abs(roller_x);
+                }
 
                 if (Math.Abs(roller_y) != 0 && Math.Abs(roller_y) > maxY)
+                {
                     maxY = Math.Abs(roller_y);
+                }
 
                 SignalTool.SetMouseProperties(-1.0f * roller_x / maxX, -1.0f * roller_y / maxY, roller_x, roller_y, state);
             }
@@ -219,7 +225,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromSecondColecoVisionController(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length != ROLLER_PACKET_SIZE)
             {

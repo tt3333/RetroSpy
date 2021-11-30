@@ -36,7 +36,7 @@ namespace RetroSpy
 
             if (!File.Exists(xmlPath))
             {
-                throw new ConfigParseException(String.Format(CultureInfo.CurrentCulture, "Could not find {0}", XmlFilePath));
+                throw new ConfigParseException(string.Format(CultureInfo.CurrentCulture, "Could not find {0}", XmlFilePath));
             }
 
             XDocument doc = XDocument.Load(xmlPath);
@@ -65,9 +65,13 @@ namespace RetroSpy
 
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             if (_reader.GetType() == typeof(DelayedControllerReader))
+            {
                 ((DelayedControllerReader)_reader).ControllerStateChangedNoDelay += Reader_ControllerStateChanged;
+            }
             else
+            {
                 _reader.ControllerStateChanged += Reader_ControllerStateChanged;
+            }
         }
 
         public void Finish()
@@ -103,18 +107,9 @@ namespace RetroSpy
         {
             string upperName = name.ToUpperInvariant();
 
-            if (Regex.Match(upperName, "^[A-Z0-9]$").Success)
-            {
-                return upperName.ToCharArray()[0];
-            }
-            else if (VK_KEYWORDS.ContainsKey(upperName))
-            {
-                return VK_KEYWORDS[upperName];
-            }
-            else
-            {
-                return 0;
-            }
+            return Regex.Match(upperName, "^[A-Z0-9]$").Success
+                ? upperName.ToCharArray()[0]
+                : VK_KEYWORDS.ContainsKey(upperName) ? VK_KEYWORDS[upperName] : (ushort)0;
         }
 
         private static ushort VkConvert(Key key)

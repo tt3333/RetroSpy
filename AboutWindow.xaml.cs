@@ -51,12 +51,12 @@ namespace RetroSpy
             // cancel navigation to the clicked link in the webBrowser control
             e.Cancel = true;
 
-            var startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = e.Uri.ToString()
             };
 
-            Process.Start(startInfo);
+            _ = Process.Start(startInfo);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

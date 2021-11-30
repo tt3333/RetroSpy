@@ -207,6 +207,19 @@ cd ..\..\..
 ;copy SharpDX.DirectInput.dll ..\..\RetroSpy-Setup
 ;cd ..\..
 
+cd bin\Release\
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip System.Buffers.dll
+;copy System.Buffers.dll ..\..\RetroSpy-Setup
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip System.Memory.dll
+;copy System.Memory.dll ..\..\RetroSpy-Setup
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip System.Numerics.Vectors.dll
+;copy System.Numerics.Vectors.dll ..\..\RetroSpy-Setup\
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip System.Resources.Extensions.dll
+;copy System.Resources.Extensions.dll ..\..\RetroSpy-Setup\
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip System.Runtime.CompilerServices.Unsafe.dll
+;copy System.Runtime.CompilerServices.Unsafe.dll ..\..\RetroSpy-Setup\
+cd ..\..
+
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip Renci.SshNet.dll
 ;copy Renci.SshNet.dll RetroSpy-Setup
 

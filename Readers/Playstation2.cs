@@ -36,30 +36,7 @@ namespace RetroSpy.Readers
 
         private static float ReadMouse(bool over, byte data)
         {
-            float val;
-            if (over)
-            {
-                if (data >= 128)
-                {
-                    val = -1.0f;
-                }
-                else
-                {
-                    val = 1.0f;
-                }
-            }
-            else
-            {
-                if (data >= 128)
-                {
-                    val = (-1.0f * (255 - data)) / 127.0f;
-                }
-                else
-                {
-                    val = data / 127.0f;
-                }
-            }
-
+            float val = over ? data >= 128 ? -1.0f : 1.0f : data >= 128 ? -1.0f * (255 - data) / 127.0f : data / 127.0f;
             return val;
         }
 
@@ -67,9 +44,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
-
-
+            }
 
             if (packet.Length < PACKET_SIZE_WO_RUMBLE)
             {
@@ -107,7 +84,7 @@ namespace RetroSpy.Readers
                 polishedPacket[17 + i] = 0;
                 for (byte j = 0; j < 8; ++j)
                 {
-                    polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0 ? 0 : 1) << j);
+                    polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8) + j] == 0 ? 0 : 1) << j);
                 }
             }
 
@@ -118,7 +95,7 @@ namespace RetroSpy.Readers
                     polishedPacket[21 + i] = 0;
                     for (byte j = 0; j < 8; ++j)
                     {
-                        polishedPacket[21 + i] |= (byte)((packet[56 + (i * 8 + j)] == 0 ? 0 : 1) << j);
+                        polishedPacket[21 + i] |= (byte)((packet[56 + (i * 8) + j] == 0 ? 0 : 1) << j);
                     }
                 }
             }
@@ -128,7 +105,7 @@ namespace RetroSpy.Readers
                 polishedPacket[33 + i] = 0;
                 for (byte j = 0; j < 8; ++j)
                 {
-                    polishedPacket[33 + i] |= (byte)((packet[152 + (i * 8 + j)] == 0 ? 0 : 1) << j);
+                    polishedPacket[33 + i] |= (byte)((packet[152 + (i * 8) + j] == 0 ? 0 : 1) << j);
                 }
             }
 

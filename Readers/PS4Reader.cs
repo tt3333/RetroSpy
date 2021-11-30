@@ -18,23 +18,15 @@ namespace RetroSpy.Readers
         }
         private static float ReadTouchPad(int input, int maxValue)
         {
-            if (input > maxValue)
-            {
-                return 1.0f;
-            }
-
-            if (input < 0)
-            {
-                return 0.0f;
-            }
-
-            return input / (float)maxValue;
+            return input > maxValue ? 1.0f : input < 0 ? 0.0f : input / (float)maxValue;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < PACKET_SIZE)
             {
@@ -53,7 +45,7 @@ namespace RetroSpy.Readers
                 polishedPacket[20 + i] = 0;
                 for (byte j = 0; j < 8; ++j)
                 {
-                    polishedPacket[20 + i] |= (byte)((packet[PACKET_HEADER + 20 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
+                    polishedPacket[20 + i] |= (byte)((packet[PACKET_HEADER + 20 + (i * 8) + j] == 0x30 ? 0 : 1) << j);
                 }
             }
 

@@ -12,13 +12,15 @@ namespace RetroSpy.Readers
 
         private static float ReadStick(byte input)
         {
-            return (float)((sbyte)input) / 128;
+            return (float)(sbyte)input / 128;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length != PACKET_SIZE)
             {

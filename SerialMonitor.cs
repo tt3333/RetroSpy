@@ -50,7 +50,10 @@ namespace RetroSpy
 
             _localBuffer.Clear();
             if (_printerMode)
+            {
                 _datPort.ReadBufferSize = 1000000;
+            }
+
             _datPort.Open();
 
             _timer = new DispatcherTimer
@@ -98,7 +101,7 @@ namespace RetroSpy
                 }
 
                 byte[] readBuffer = new byte[readCount];
-                _datPort.Read(readBuffer, 0, readCount);
+                _ = _datPort.Read(readBuffer, 0, readCount);
                 //_datPort.DiscardInBuffer();
                 _localBuffer.AddRange(readBuffer);
             }
@@ -126,9 +129,9 @@ namespace RetroSpy
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
 
-            if (_printerMode == true)
+            if (_printerMode)
             {
-                var array = _localBuffer.ToArray();
+                byte[] array = _localBuffer.ToArray();
                 string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
                 if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)"))

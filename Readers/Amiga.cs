@@ -20,7 +20,7 @@ namespace RetroSpy.Readers
             null, "2", "1", "right", "left", "down", "up", "Joy22", "Joy22", "Joy2Right", "Joy2Left", "Joy2Down", "Joy2Up", null, null, null, null, null, null, null, null, null, null, null, null, null
         };
 
-        static readonly string[] BUTTONS_AMIGA_ANALOG = {
+        private static readonly string[] BUTTONS_AMIGA_ANALOG = {
             "1", "2", "3", "4", null
         };
 
@@ -30,12 +30,14 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket2(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length == 6)
             {
                 AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
-                AmigaAnalogXAxisDataRaw = ((packet[4] >> 4) | (packet[5]));
+                AmigaAnalogXAxisDataRaw = (packet[4] >> 4) | (packet[5]);
             }
             return null;
         }
@@ -43,7 +45,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             ControllerStateBuilder state = null;
             if (packet.Length == 13)
@@ -54,11 +58,15 @@ namespace RetroSpy.Readers
             {
                 for (int i = 0; i < BUTTONS_AMIGA_ANALOG.Length; ++i)
                 {
-                    if (string.IsNullOrEmpty(BUTTONS_AMIGA_ANALOG[i])) continue;
+                    if (string.IsNullOrEmpty(BUTTONS_AMIGA_ANALOG[i]))
+                    {
+                        continue;
+                    }
+
                     state.SetButton(BUTTONS_AMIGA_ANALOG[i], packet[i] != 0x00);
                 }
 
-                state.SetAnalog("y", (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f, ((packet[4] >> 4) | (packet[5])));
+                state.SetAnalog("y", (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f, (packet[4] >> 4) | (packet[5]));
                 state.SetAnalog("x", AmigaAnalogXAxisData, AmigaAnalogXAxisDataRaw);
             }
             if (packet.Length == BUTTONS_CD32.Length)

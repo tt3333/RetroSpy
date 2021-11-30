@@ -17,23 +17,16 @@ namespace RetroSpy.Readers
 
         private static float ReadMouse(bool sign, byte data)
         {
-            float val;
-            if (sign)
-            {
-                val = -1 * (0x7F - data);
-            }
-            else
-            {
-                val = data;
-            }
-
+            float val = sign ? -1 * (0x7F - data) : data;
             return val / 127;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < 1)
             {

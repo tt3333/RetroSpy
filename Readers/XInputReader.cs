@@ -30,7 +30,7 @@ namespace RetroSpy.Readers
 
         private static class NativeMethods
         {
-            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
             [DllImport("xinput9_1_0.dll")]
             public static extern uint XInputGetState(uint userIndex, ref XInputState inputState);
         }

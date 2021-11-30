@@ -12,7 +12,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < 16)
             {
@@ -51,7 +53,7 @@ namespace RetroSpy.Readers
                 axesValues[i] = 0;
                 for (byte j = 0; j < 32; ++j)
                 {
-                    axesValues[i] |= (packet[16 + buttons + i * 32 + j] == 0x30 ? 0 : 1) << j;
+                    axesValues[i] |= (packet[16 + buttons + (i * 32) + j] == 0x30 ? 0 : 1) << j;
                 }
             }
 

@@ -15,17 +15,17 @@ namespace RetroSpy
     {
         public void CalculateMagic()
         {
-            _magicHeight = Height - _originalHeight;
-            _magicWidth = Width - _originalWidth;
+            MagicHeight = Height - _originalHeight;
+            MagicWidth = Width - _originalWidth;
         }
 
-        public double MagicHeight => _magicHeight;
+        public double MagicHeight { get; private set; }
 
-        public double MagicWidth => _magicWidth;
+        public double MagicWidth { get; private set; }
 
-        public double AdjustedHeight => Height - _magicHeight;
+        public double AdjustedHeight => Height - MagicHeight;
 
-        public double AdjustedWidth => Width - _magicWidth;
+        public double AdjustedWidth => Width - MagicWidth;
 
         public double Ratio => _originalWidth / _originalHeight;
 
@@ -110,11 +110,11 @@ namespace RetroSpy
 
         private class NativeMethods
         {
-            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
             [DllImport("user32.dll")]
             public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
-            [DefaultDllImportSearchPathsAttribute(DllImportSearchPath.System32)]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
             [DllImport("user32.dll")]
             public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
         }
@@ -133,8 +133,6 @@ namespace RetroSpy
 
         private readonly double _originalHeight;
         private readonly double _originalWidth;
-        private double _magicWidth;
-        private double _magicHeight;
         private readonly Skin _skin;
         private readonly IControllerReader _reader;
         private readonly Keybindings _keybindings;
@@ -200,23 +198,22 @@ namespace RetroSpy
             DataContext = this;
 
             if (reader == null)
+            {
                 throw new ArgumentNullException(nameof(reader));
+            }
             else if (skin == null)
+            {
                 throw new ArgumentNullException(nameof(skin));
+            }
             else if (skinBackground == null)
+            {
                 throw new ArgumentNullException(nameof(skinBackground));
+            }
 
             _skin = skin;
             _reader = reader;
 
-            if (staticViewerWindowName)
-            {
-                Title = "RetroSpy Viewer";
-            }
-            else
-            {
-                Title = skin.Name;
-            }
+            Title = staticViewerWindowName ? "RetroSpy Viewer" : skin.Name;
 
             ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
             ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
@@ -236,10 +233,10 @@ namespace RetroSpy
                     Height = skinBackground.Image.PixelHeight
                 };
 
-                ControllerGrid.Children.Add(img);
+                _ = ControllerGrid.Children.Add(img);
             }
 
-            foreach (RetroSpy.Detail detail in _skin.Details)
+            foreach (Detail detail in _skin.Details)
             {
                 if (BgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
@@ -247,7 +244,7 @@ namespace RetroSpy
                     detail.Config.Y = detail.Config.OriginalY;
                     Image image = GetImageForElement(detail.Config);
                     _detailsWithImages.Add(new Tuple<Detail, Image>(detail, image));
-                    ControllerGrid.Children.Add(image);
+                    _ = ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -259,7 +256,7 @@ namespace RetroSpy
                     trigger.Config.Y = trigger.Config.OriginalY;
                     Grid grid = GetGridForAnalogTrigger(trigger);
                     _triggersWithGridImages.Add(new Tuple<AnalogTrigger, Grid>(trigger, grid));
-                    ControllerGrid.Children.Add(grid);
+                    _ = ControllerGrid.Children.Add(grid);
                 }
             }
 
@@ -270,7 +267,7 @@ namespace RetroSpy
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
                     Image image = GetImageForElement(button.Config);
-                    var tuple = new Tuple<Button, Image>(button, image);
+                    Tuple<Button, Image> tuple = new Tuple<Button, Image>(button, image);
                     _buttonsWithImages.Add(tuple);
                     if (_dictOfButtonsWithImages.ContainsKey(button.Name))
                     {
@@ -278,14 +275,14 @@ namespace RetroSpy
                     }
                     else
                     {
-                        var list = new List<Tuple<Button, Image>>
+                        List<Tuple<Button, Image>> list = new List<Tuple<Button, Image>>
                         {
                             tuple
                         };
                         _dictOfButtonsWithImages.Add(button.Name, list);
                     }
                     image.Visibility = Visibility.Hidden;
-                    ControllerGrid.Children.Add(image);
+                    _ = ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -298,7 +295,7 @@ namespace RetroSpy
                     Image image = GetImageForElement(button.Config);
                     _rangeButtonsWithImages.Add(new Tuple<RangeButton, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
-                    ControllerGrid.Children.Add(image);
+                    _ = ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -317,7 +314,7 @@ namespace RetroSpy
                         image.Visibility = Visibility.Hidden;
                     }
 
-                    ControllerGrid.Children.Add(image);
+                    _ = ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -332,7 +329,7 @@ namespace RetroSpy
                     Image image = GetImageForElement(touchpad.Config);
                     _touchPadWithImages.Add(new Tuple<TouchPad, Image>(touchpad, image));
                     image.Visibility = Visibility.Hidden;
-                    ControllerGrid.Children.Add(image);
+                    _ = ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -342,7 +339,7 @@ namespace RetroSpy
                 {
                     Label label = GetLabelForElement(analogtext);
                     _analogTextBoxes.Add(new Tuple<AnalogText, Label>(analogtext, label));
-                    ControllerGrid.Children.Add(label);
+                    _ = ControllerGrid.Children.Add(label);
                 }
             }
 
@@ -355,7 +352,7 @@ namespace RetroSpy
             }
             catch (ConfigParseException)
             {
-                MessageBox.Show("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
+                _ = MessageBox.Show("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
             }
 
             MassBlinkReductionEnabled = Properties.Settings.Default.MassFilter;
@@ -366,11 +363,7 @@ namespace RetroSpy
 
         private static bool BgIsActive(string bgName, Collection<string> eligableBgs, Collection<string> ignoreBgs)
         {
-            if (ignoreBgs.Contains(bgName))
-            {
-                return false;
-            }
-            return eligableBgs.Count == 0 || eligableBgs.Contains(bgName);
+            return !ignoreBgs.Contains(bgName) && (eligableBgs.Count == 0 || eligableBgs.Contains(bgName));
         }
 
         private static Image GetImageForElement(ElementConfig config)
@@ -432,7 +425,7 @@ namespace RetroSpy
                 Height = trigger.Config.Height
             };
 
-            grid.Children.Add(img);
+            _ = grid.Children.Add(img);
 
             return grid;
         }
@@ -445,14 +438,7 @@ namespace RetroSpy
 
         private void AllBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
         {
-            if (ButtonBlinkReductionEnabled && AnalogBlinkReductionEnabled && MassBlinkReductionEnabled)
-            {
-                AllBlinkReductionEnabled = false;
-            }
-            else
-            {
-                AllBlinkReductionEnabled = true;
-            }
+            AllBlinkReductionEnabled = !ButtonBlinkReductionEnabled || !AnalogBlinkReductionEnabled || !MassBlinkReductionEnabled;
             Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
             Properties.Settings.Default.AnalogFilter = AnalogBlinkReductionEnabled;
             Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
@@ -491,7 +477,7 @@ namespace RetroSpy
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
             if (_keybindings != null)
@@ -580,9 +566,14 @@ namespace RetroSpy
             {
                 float value = 0;
                 if (e.Analogs.ContainsKey(text.Item1.Name))
+                {
                     value = e.Analogs[text.Item1.Name] * text.Item1.Range;
+                }
                 else if (e.RawAnalogs.ContainsKey(text.Item1.Name))
+                {
                     value = e.RawAnalogs[text.Item1.Name] * text.Item1.Range;
+                }
+
                 text.Item2.Content = (int)value;
             }
 
@@ -607,23 +598,16 @@ namespace RetroSpy
                 float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
                 float x = e.Analogs.ContainsKey(skin.XName)
-                      ? skin.Config.X + xrange * e.Analogs[skin.XName]
+                      ? skin.Config.X + (xrange * e.Analogs[skin.XName])
                       : skin.Config.X;
 
                 float y = e.Analogs.ContainsKey(skin.YName)
-                      ? skin.Config.Y + yrange * e.Analogs[skin.YName]
+                      ? skin.Config.Y + (yrange * e.Analogs[skin.YName])
                       : skin.Config.Y;
 
-                Visibility visibility;
-                if (skin.VisibilityName.Length > 0)
-                {
-                    visibility = (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
-                }
-                else
-                {
-                    visibility = Visibility.Visible;
-                }
-
+                Visibility visibility = skin.VisibilityName.Length > 0
+                    ? (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden
+                    : Visibility.Visible;
                 if (image.Dispatcher.CheckAccess())
                 {
                     image.Margin = new Thickness(x, y, 0, 0);
@@ -788,10 +772,12 @@ namespace RetroSpy
                             });
                         }
                         break;
+                    default:
+                        break;
                 }
             }
 
-            foreach (var analog in e.Analogs)
+            foreach (KeyValuePair<string, float> analog in e.Analogs)
             {
                 string[] buttonNames = { analog.Key + '-', analog.Key + '+' };
                 bool[] buttonStates = { false, false };
@@ -812,7 +798,7 @@ namespace RetroSpy
                 {
                     if (_dictOfButtonsWithImages.ContainsKey(buttonNames[i]))
                     {
-                        foreach (var button in _dictOfButtonsWithImages[buttonNames[i]])
+                        foreach (Tuple<Button, Image> button in _dictOfButtonsWithImages[buttonNames[i]])
                         {
                             if (button.Item2.Dispatcher.CheckAccess())
                             {
@@ -853,7 +839,7 @@ namespace RetroSpy
             _calculatedMagic = false;
             _window = window;
             _ratio = window.Ratio;
-            ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
+            ((HwndSource)PresentationSource.FromVisual(window)).AddHook(DragHook);
         }
 
         public static void Register(ViewWindow window)

@@ -31,13 +31,15 @@ namespace RetroSpy.Readers
 
         private static float ReadAnalogButton(byte input)
         {
-            return (float)(input) / 256;
+            return (float)input / 256;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length != PACKET_SIZE && packet.Length != KEYBOARD_PACKET_SIZE)
             {

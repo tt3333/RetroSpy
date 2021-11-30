@@ -15,7 +15,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length == 46 || packet.Length == 50)
             {
@@ -280,11 +282,11 @@ namespace RetroSpy.Readers
 
                 for (byte i = 0; i < 6; i++)
                 {
-                    ans[i] = (ans_tbl[idx][i]);
+                    ans[i] = ans_tbl[idx][i];
                 }
                 for (byte i = 0; i < 10; i++)
                 {
-                    t0[i] = (sboxes[0][wm_rand[i]]);
+                    t0[i] = sboxes[0][wm_rand[i]];
                 }
 
                 tkey[0] = (byte)((Wm_ror8((byte)(ans[0] ^ t0[5]), (byte)(t0[2] % 8)) - t0[9]) ^ t0[4]);

@@ -45,7 +45,7 @@ namespace RetroSpy.Readers
 
         private static float ReadTrigger(byte input)
         {
-            return (float)(input) / 256;
+            return (float)input / 256;
         }
 
         private static float ReadStick(byte input)
@@ -55,20 +55,7 @@ namespace RetroSpy.Readers
 
         private static float ReadMouse(bool sign, bool over, byte data)
         {
-            float val;
-            if (over)
-            {
-                val = 1.0f;
-            }
-            else if (sign)
-            {
-                val = 0xFF - data;
-            }
-            else
-            {
-                val = data;
-            }
-
+            float val = over ? 1.0f : sign ? 0xFF - data : data;
             return val * (sign ? -1 : 1) / 255;
         }
 
@@ -76,7 +63,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length == PACKET_SIZE)
             {
@@ -118,7 +107,7 @@ namespace RetroSpy.Readers
                         for (byte k = 0; k < 8; ++k)
                         {
                             j--;
-                            polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + k)] == 0 ? 0 : 1) << j);
+                            polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8) + k] == 0 ? 0 : 1) << j);
                         }
                     }
 
@@ -218,14 +207,16 @@ namespace RetroSpy.Readers
                 {
                     if (KEYS[i] != null)
                     {
-                        state.SetButton(KEYS[i], (reconstructedPacket[(i / 8)] & (1 << (i % 8))) != 0);
+                        state.SetButton(KEYS[i], (reconstructedPacket[i / 8] & (1 << (i % 8))) != 0);
                     }
                 }
 
                 return state.Build();
             }
             else
+            {
                 return null;
+            }
         }
     }
 }

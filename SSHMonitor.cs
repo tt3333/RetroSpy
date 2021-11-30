@@ -29,10 +29,7 @@ namespace RetroSpy
         {
             _localBuffer = new List<byte>();
             _client = new SshClient(hostname, username, password);
-            if (!string.IsNullOrEmpty(commandSub))
-                _command = String.Format(CultureInfo.CurrentCulture, command, commandSub);
-            else
-                _command = command;
+            _command = !string.IsNullOrEmpty(commandSub) ? string.Format(CultureInfo.CurrentCulture, command, commandSub) : command;
             _delayInMilliseconds = delayInMilliseconds;
         }
 
@@ -103,7 +100,7 @@ namespace RetroSpy
                 }
 
                 byte[] readBuffer = new byte[readCount];
-                _data.Read(readBuffer, 0, readCount);
+                _ = _data.Read(readBuffer, 0, readCount);
                 _localBuffer.AddRange(readBuffer);
             }
             catch (IOException)

@@ -5,24 +5,20 @@ namespace RetroSpy.Readers
 {
     public sealed class DelayedControllerReader : IControllerReader, IDisposable
     {
-        private readonly IControllerReader baseControllerReader;
-        private readonly int delayInMilliseconds;
-        private readonly bool legacyKeybindingBehavior;
-
         public event EventHandler ControllerDisconnected;
 
         public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
         public event EventHandler<ControllerStateEventArgs> ControllerStateChangedNoDelay;
 
-        public IControllerReader BaseControllerReader => baseControllerReader;
-        public int DelayInMilliseconds => delayInMilliseconds;
-        public bool LegacyKeybindingBehavior => legacyKeybindingBehavior;
+        public IControllerReader BaseControllerReader { get; }
+        public int DelayInMilliseconds { get; }
+        public bool LegacyKeybindingBehavior { get; }
         public DelayedControllerReader(IControllerReader baseControllerReader, int delayInMilliseconds, bool legacyKeybindingBehavior)
         {
-            this.baseControllerReader = baseControllerReader;
-            this.delayInMilliseconds = delayInMilliseconds;
-            this.legacyKeybindingBehavior = legacyKeybindingBehavior;
+            BaseControllerReader = baseControllerReader;
+            DelayInMilliseconds = delayInMilliseconds;
+            LegacyKeybindingBehavior = legacyKeybindingBehavior;
 
             BaseControllerReader.ControllerStateChanged += BaseControllerReader_ControllerStateChanged;
             BaseControllerReader.ControllerDisconnected += BaseControllerReader_ControllerDisconnected;
@@ -37,13 +33,17 @@ namespace RetroSpy.Readers
         {
             if (!disposedValue)
             {
-                if (!legacyKeybindingBehavior)
+                if (!LegacyKeybindingBehavior)
+                {
                     ControllerStateChangedNoDelay?.Invoke(this, e);
+                }
 
-                await Task.Delay(delayInMilliseconds).ConfigureAwait(true);
+                await Task.Delay(DelayInMilliseconds).ConfigureAwait(true);
 
-                if (legacyKeybindingBehavior)
+                if (LegacyKeybindingBehavior)
+                {
                     ControllerStateChangedNoDelay?.Invoke(this, e);
+                }
 
                 ControllerStateChanged?.Invoke(this, e);
             }

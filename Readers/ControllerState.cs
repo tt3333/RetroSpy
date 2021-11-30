@@ -8,12 +8,7 @@ namespace RetroSpy.Readers
         public static readonly ControllerStateEventArgs Zero = new ControllerStateEventArgs
             (new Dictionary<string, bool>(), new Dictionary<string, float>(), new Dictionary<string, int>());
 
-        private readonly string _rawPrinterData;
-
-        public string RawPrinterData
-        {
-            get { return _rawPrinterData; }
-        }
+        public string RawPrinterData { get; }
 
         public IReadOnlyDictionary<string, bool> Buttons { get; private set; }
         public IReadOnlyDictionary<string, float> Analogs { get; private set; }
@@ -21,7 +16,7 @@ namespace RetroSpy.Readers
 
         public ControllerStateEventArgs(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs, IReadOnlyDictionary<string, int> rawAnalogs, string rawPrinterData = null)
         {
-            _rawPrinterData = rawPrinterData;
+            RawPrinterData = rawPrinterData;
             Buttons = buttons;
             Analogs = analogs;
             RawAnalogs = rawAnalogs;

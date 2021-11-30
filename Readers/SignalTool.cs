@@ -15,7 +15,7 @@ namespace RetroSpy.Readers
             {
                 if ((packet[i + offset] & mask) != 0)
                 {
-                    val |= (byte)(1 << ((numBits - 1) - i));
+                    val |= (byte)(1 << (numBits - 1 - i));
                 }
             }
             return val;
@@ -40,38 +40,16 @@ namespace RetroSpy.Readers
             // number. Enter only if a > b
             if (a > b)
             {
-                if (b > c)
-                {
-                    return b;
-                }
-                else if (a > c)
-                {
-                    return c;
-                }
-                else
-                {
-                    return a;
-                }
+                return b > c ? b : a > c ? c : a;
             }
             else
             {
                 // Decided a is not greater than b.
-                if (a > c)
-                {
-                    return a;
-                }
-                else if (b > c)
-                {
-                    return c;
-                }
-                else
-                {
-                    return b;
-                }
+                return a > c ? a : b > c ? c : b;
             }
         }
 
-        class SlidingWindow
+        private class SlidingWindow
         {
             public SlidingWindow()
             {
@@ -87,19 +65,25 @@ namespace RetroSpy.Readers
             public int windowPositionY;
         }
 
-        static readonly Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
+        private static readonly Dictionary<string, SlidingWindow> windows = new Dictionary<string, SlidingWindow>();
 
         public static void SetMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             if (!windows.ContainsKey(""))
+            {
                 windows[""] = new SlidingWindow();
+            }
+
             SetMouseProperties(x, y, xRaw, yRaw, state, maxCircleSize, windows[""], "");
         }
 
         public static void SetPCMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             if (!windows.ContainsKey("PC_"))
+            {
                 windows["PC_"] = new SlidingWindow();
+            }
+
             SetMouseProperties(x, y, xRaw, yRaw, state, maxCircleSize, windows["PC_"], "PC_");
         }
 

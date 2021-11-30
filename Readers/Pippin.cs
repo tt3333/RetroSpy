@@ -43,14 +43,7 @@
 
         private static float ReadMouse(byte data)
         {
-            if (data >= 64)
-            {
-                return (-1.0f * (128 - data)) / 64.0f;
-            }
-            else
-            {
-                return data / 64.0f;
-            }
+            return data >= 64 ? -1.0f * (128 - data) / 64.0f : data / 64.0f;
         }
 
         private static float ReadJoystick(byte data)
@@ -60,26 +53,29 @@
 
         private static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
         {
-            float newValue = ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
-            if (newValue > newMax)
-                return (int)newMax;
-            if (newValue < newMin)
-                return (int)newMin;
-
-            return (int)newValue;
+            float newValue = ((oldValue - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin;
+            return newValue > newMax ? (int)newMax : newValue < newMin ? (int)newMin : (int)newValue;
         }
 
         private static void SetTablet(int X, int Y, ControllerStateBuilder state)
         {
             if (X < minX)
+            {
                 minX = X;
+            }
             else if (X > maxX)
+            {
                 maxX = X;
+            }
 
             if (Y < minY)
+            {
                 minY = Y;
+            }
             else if (Y > maxY)
+            {
                 maxY = Y;
+            }
 
             state.SetAnalog("touchpad_x", ScaleInteger(X, minX, maxX, 0, 1024) / 1024.0f, X);
             state.SetAnalog("touchpad_y", ScaleInteger(Y, minY, maxY, 0, 16384) / 16384.0f, Y);
@@ -211,7 +207,9 @@
                 return state.Build();
             }
             else
+            {
                 return null;
+            }
         }
     }
 }

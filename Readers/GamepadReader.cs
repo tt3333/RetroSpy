@@ -25,7 +25,7 @@ namespace RetroSpy.Readers
         [CLSCompliant(false)]
         public static Collection<uint> GetDevices()
         {
-            var input = new DirectInput();
+            DirectInput input = new DirectInput();
             int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
             input.Dispose();
             Collection<uint> result = new Collection<uint>();
@@ -77,7 +77,7 @@ namespace RetroSpy.Readers
 
         private static int OctantAngle(int octant)
         {
-            return 2750 + 4500 * octant;
+            return 2750 + (4500 * octant);
         }
 
         private void Tick(object sender, EventArgs e)

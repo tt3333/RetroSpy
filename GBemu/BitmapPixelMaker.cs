@@ -141,6 +141,7 @@ namespace GBPemu
         public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
         {
             for (int i = x1; i < width + x1; ++i)
+            {
                 for (int j = y1; j < height + y1; ++j)
                 {
                     SetAlpha(i, j, 255);
@@ -149,6 +150,7 @@ namespace GBPemu
                     SetBlue(i, j, blue);
 
                 }
+            }
         }
 
         public void ReplaceColor(Pixel oldColor, Pixel newColor)
@@ -159,7 +161,9 @@ namespace GBPemu
                 {
                     Pixel pixel = GetPixel(i, j);
                     if (pixel == oldColor)
+                    {
                         SetPixel(i, j, newColor);
+                    }
                 }
             }
         }

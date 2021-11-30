@@ -12,7 +12,7 @@ using System.Text;
 
 namespace GBPUpdater
 {
-    class Program
+    internal class Program
     {
         public class COMPortInfo
         {
@@ -47,8 +47,8 @@ namespace GBPUpdater
         {
             List<COMPortInfo> comPortInformation = new List<COMPortInfo>();
 
-            String[] portNames = System.IO.Ports.SerialPort.GetPortNames();
-            foreach (String s in portNames)
+            string[] portNames = SerialPort.GetPortNames();
+            foreach (string s in portNames)
             {
                 // s is like "COM14"
                 COMPortInfo ci = new COMPortInfo
@@ -59,8 +59,8 @@ namespace GBPUpdater
                 comPortInformation.Add(ci);
             }
 
-            String[] usbDevs = GetUSBCOMDevices();
-            foreach (String s in usbDevs)
+            string[] usbDevs = GetUSBCOMDevices();
+            foreach (string s in usbDevs)
             {
                 // Name will be like "USB Bridge (COM14)"
                 int start = s.IndexOf("(COM", StringComparison.Ordinal) + 1;
@@ -70,7 +70,7 @@ namespace GBPUpdater
                     if (end >= 0)
                     {
                         // cname is like "COM14"
-                        String cname = s.Substring(start, end - start);
+                        string cname = s.Substring(start, end - start);
                         for (int i = 0; i < comPortInformation.Count; i++)
                         {
                             if (comPortInformation[i].PortName == cname)
@@ -83,7 +83,7 @@ namespace GBPUpdater
             }
 
             List<string> ports = new List<string>();
-            foreach (var port in comPortInformation)
+            foreach (COMPortInfo port in comPortInformation)
             {
                 if (port.FriendlyName.Contains("Arduino"))
                 {
@@ -99,13 +99,13 @@ namespace GBPUpdater
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "I am fishing for the GBP, so I expect failures. I also want to report any errors that occur.")]
-        static void Main()
+        private static void Main()
         {
 
             try
             {
                 string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                Directory.CreateDirectory(tempDirectory);
+                _ = Directory.CreateDirectory(tempDirectory);
 
                 Console.WriteLine(tempDirectory);
 
@@ -125,11 +125,11 @@ namespace GBPUpdater
 
                 SerialPort _serialPort = null;
 
-                var arduinoPorts = SetupCOMPortInformation();
+                List<string> arduinoPorts = SetupCOMPortInformation();
                 string gbpemuPort = "";
                 bool foundPort = false;
 
-                foreach (var port in arduinoPorts)
+                foreach (string port in arduinoPorts)
                 {
                     using (_serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
                     {
@@ -190,7 +190,7 @@ namespace GBPUpdater
 
                     Console.WriteLine(Properties.Resources.ResourceManager.GetString("Updating", CultureInfo.CurrentUICulture));
 
-                    var processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
+                    ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
                     {
                         CreateNoWindow = true,
                         UseShellExecute = false,
@@ -215,7 +215,7 @@ namespace GBPUpdater
                 }
 
                 Console.WriteLine(Properties.Resources.ResourceManager.GetString("Exit", CultureInfo.CurrentUICulture));
-                Console.Read();
+                _ = Console.Read();
 
             }
             catch (Exception ex)
@@ -223,7 +223,7 @@ namespace GBPUpdater
                 Console.WriteLine("\nUpdater encountered an error.  Message: " + ex.Message);
                 Console.WriteLine("");
                 Console.WriteLine(Properties.Resources.ResourceManager.GetString("Exit", CultureInfo.CurrentUICulture));
-                Console.ReadLine();
+                _ = Console.ReadLine();
             }
 
         }

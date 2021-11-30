@@ -2,26 +2,34 @@
 
 namespace RetroSpy.Readers
 {
-    static public class Tg16Mini
+    public static class Tg16Mini
     {
-        const int PACKET_SIZE = 8;
-
-        static readonly string[] BUTTONS = {
+        private const int PACKET_SIZE = 8;
+        private static readonly string[] BUTTONS = {
             "2", "1", "select", "run", "up", "right", "down", "left"
         };
 
-        static public ControllerStateEventArgs ReadFromPacket(byte[] packet)
+        public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE)
+            {
+                return null;
+            }
 
-            var state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new ControllerStateBuilder();
 
             for (int i = 0; i < BUTTONS.Length; ++i)
             {
-                if (string.IsNullOrEmpty(BUTTONS[i])) continue;
+                if (string.IsNullOrEmpty(BUTTONS[i]))
+                {
+                    continue;
+                }
+
                 state.SetButton(BUTTONS[i], packet[i] == 0x31);
             }
 

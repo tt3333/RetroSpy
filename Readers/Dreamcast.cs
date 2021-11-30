@@ -47,7 +47,7 @@ namespace RetroSpy.Readers
 
         private static float ReadTrigger(byte input)
         {
-            return (float)(input) / 256;
+            return (float)input / 256;
         }
 
         private static float ReadStick(byte input)
@@ -59,7 +59,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length < FRAME_HEADER_SIZE)
             {
@@ -204,7 +206,7 @@ namespace RetroSpy.Readers
                     {
                         for (k = 0; k < 4; ++k)
                         {
-                            axis1 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis1 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
                             axis1 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
                             j += 2;
                         }
@@ -215,7 +217,7 @@ namespace RetroSpy.Readers
                     {
                         for (k = 0; k < 4; ++k)
                         {
-                            axis2 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis2 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
                             axis2 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
                             j += 2;
                         }
@@ -228,7 +230,7 @@ namespace RetroSpy.Readers
                     {
                         for (k = 0; k < 4; ++k)
                         {
-                            axis3 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis3 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
                             axis3 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
                             j += 2;
                         }
@@ -262,7 +264,9 @@ namespace RetroSpy.Readers
                         j += 2;
                     }
                     if (KEYS[keycode[1]] != null)
+                    {
                         state.SetButton(KEYS[keycode[1]], true);
+                    }
 
                     keycode[0] = 0;
                     for (int i = 0; i < 4; ++i)
@@ -272,7 +276,9 @@ namespace RetroSpy.Readers
                         j += 2;
                     }
                     if (KEYS[keycode[0]] != null)
+                    {
                         state.SetButton(KEYS[keycode[0]], true);
+                    }
 
                     int k = 0;
                     for (int i = 0; i < MODIFER_KEYS.Length / 2; ++i)
@@ -300,7 +306,9 @@ namespace RetroSpy.Readers
                     }
 
                     if (KEYS[keycode[5]] != null)
+                    {
                         state.SetButton(KEYS[keycode[5]], true);
+                    }
 
                     keycode[4] = 0;
                     for (int i = 0; i < 4; ++i)
@@ -311,7 +319,9 @@ namespace RetroSpy.Readers
                     }
 
                     if (KEYS[keycode[4]] != null)
+                    {
                         state.SetButton(KEYS[keycode[4]], true);
+                    }
 
                     keycode[3] = 0;
                     for (int i = 0; i < 4; ++i)
@@ -322,7 +332,9 @@ namespace RetroSpy.Readers
                     }
 
                     if (KEYS[keycode[3]] != null)
+                    {
                         state.SetButton(KEYS[keycode[3]], true);
+                    }
 
                     keycode[2] = 0;
                     for (int i = 0; i < 4; ++i)
@@ -333,8 +345,9 @@ namespace RetroSpy.Readers
                     }
 
                     if (KEYS[keycode[2]] != null)
+                    {
                         state.SetButton(KEYS[keycode[2]], true);
-
+                    }
                 }
                 return state.Build();
             }

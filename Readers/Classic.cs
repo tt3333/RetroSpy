@@ -15,7 +15,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length >= PACKET_SIZE)
             {
@@ -88,10 +90,14 @@ namespace RetroSpy.Readers
                 sbyte y = (sbyte)packet[1];
 
                 if (Math.Abs(x) != 0 && Math.Abs(x) > maxX)
+                {
                     maxX = Math.Abs(x);
+                }
 
                 if (Math.Abs(y) != 0 && Math.Abs(y) > maxY)
+                {
                     maxY = Math.Abs(y);
+                }
 
                 SignalTool.SetMouseProperties(-1.0f * x / maxX, y / maxY, x, y, state);
 
@@ -101,7 +107,9 @@ namespace RetroSpy.Readers
                 return state.Build();
             }
             else
+            {
                 return null;
+            }
         }
     }
 }

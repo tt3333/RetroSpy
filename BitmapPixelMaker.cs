@@ -35,7 +35,7 @@ namespace RetroSpy
         // Get a pixel's value.
         public void GetPixel(int x, int y, out byte red, out byte green, out byte blue, out byte alpha)
         {
-            int index = y * Stride + x * 4;
+            int index = (y * Stride) + (x * 4);
             blue = Pixels[index++];
             green = Pixels[index++];
             red = Pixels[index++];
@@ -44,25 +44,25 @@ namespace RetroSpy
 
         public byte GetBlue(int x, int y)
         {
-            return Pixels[y * Stride + x * 4];
+            return Pixels[(y * Stride) + (x * 4)];
         }
         public byte GetGreen(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 1];
+            return Pixels[(y * Stride) + (x * 4) + 1];
         }
         public byte GetRed(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 2];
+            return Pixels[(y * Stride) + (x * 4) + 2];
         }
         public byte GetAlpha(int x, int y)
         {
-            return Pixels[y * Stride + x * 4 + 3];
+            return Pixels[(y * Stride) + (x * 4) + 3];
         }
 
         // Set a pixel's value.
         public void SetPixel(int x, int y, byte red, byte green, byte blue, byte alpha)
         {
-            int index = y * Stride + x * 4;
+            int index = (y * Stride) + (x * 4);
             Pixels[index++] = blue;
             Pixels[index++] = green;
             Pixels[index++] = red;
@@ -70,24 +70,25 @@ namespace RetroSpy
         }
         public void SetBlue(int x, int y, byte blue)
         {
-            Pixels[y * Stride + x * 4] = blue;
+            Pixels[(y * Stride) + (x * 4)] = blue;
         }
         public void SetGreen(int x, int y, byte green)
         {
-            Pixels[y * Stride + x * 4 + 1] = green;
+            Pixels[(y * Stride) + (x * 4) + 1] = green;
         }
         public void SetRed(int x, int y, byte red)
         {
-            Pixels[y * Stride + x * 4 + 2] = red;
+            Pixels[(y * Stride) + (x * 4) + 2] = red;
         }
         public void SetAlpha(int x, int y, byte alpha)
         {
-            Pixels[y * Stride + x * 4 + 3] = alpha;
+            Pixels[(y * Stride) + (x * 4) + 3] = alpha;
         }
 
         public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
         {
             for (int i = x1; i < width + x1; ++i)
+            {
                 for (int j = y1; j < height + y1; ++j)
                 {
                     SetAlpha(i, j, 255);
@@ -96,20 +97,23 @@ namespace RetroSpy
                     SetBlue(i, j, blue);
 
                 }
+            }
         }
 
         public void ReplaceColor(byte oldRed, byte oldGreen, byte oldBlue, byte newRed, byte newGreen, byte newBlue)
         {
 
             for (int i = 0; i < Width; ++i)
+            {
                 for (int j = 0; j < Height; ++j)
                 {
                     GetPixel(i, j, out byte red, out byte green, out byte blue, out byte alpha);
                     if (red == oldRed && green == oldGreen && blue == oldBlue)
+                    {
                         SetPixel(i, j, newRed, newGreen, newBlue, alpha);
-
-
+                    }
                 }
+            }
         }
 
         // Set all pixels to a specific color.

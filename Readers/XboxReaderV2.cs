@@ -20,7 +20,7 @@ namespace RetroSpy.Readers
 
         private static float ReadTrigger(byte input)
         {
-            return (float)(input) / 256;
+            return (float)input / 256;
         }
 
         private static float ReadStick(short input)
@@ -31,7 +31,9 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
+            {
                 throw new ArgumentNullException(nameof(packet));
+            }
 
             if (packet.Length != PACKET_SIZE)
             {
