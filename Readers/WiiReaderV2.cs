@@ -75,7 +75,7 @@ namespace RetroSpy.Readers
 
                     byte stickX = unencryptedData[0];
                     byte stickY = unencryptedData[1];
-                    
+
                     _ = (ushort)((unencryptedData[2] << 2) | ((unencryptedData[5] & 0b0000000000001100) >> 2)); // Accelerometer X
                     _ = (ushort)((unencryptedData[3] << 2) | ((unencryptedData[5] & 0b0000000000110000) >> 2)); // Accelerometer Y
                     _ = (ushort)((unencryptedData[4] << 2) | ((unencryptedData[5] & 0b0000000011000000) >> 2)); // Accelerometer Z
@@ -188,11 +188,11 @@ namespace RetroSpy.Readers
 
                     byte stickX = unencryptedData[0];
                     byte stickY = unencryptedData[1];
-                    _ = (ushort)((unencryptedData[2] << 2) 
+                    _ = (ushort)((unencryptedData[2] << 2)
                         | ((unencryptedData[5] & 0b0000000000001100) >> 2)); // Accelerometer X
-                    _ = (ushort)((unencryptedData[3] << 2) 
+                    _ = (ushort)((unencryptedData[3] << 2)
                         | ((unencryptedData[5] & 0b0000000000110000) >> 2)); // Accelerometer Y
-                    _ = (ushort)((unencryptedData[4] << 2) 
+                    _ = (ushort)((unencryptedData[4] << 2)
                         | ((unencryptedData[5] & 0b0000000011000000) >> 2)); // Accelerometer Z
 
                     outState.SetButton("c", (unencryptedData[5] & 0b00000010) == 0);

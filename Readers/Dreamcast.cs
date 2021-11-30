@@ -298,7 +298,7 @@ namespace RetroSpy.Readers
                         keycode[5] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
                         j += 2;
                     }
-                    
+
                     if (KEYS[keycode[5]] != null)
                         state.SetButton(KEYS[keycode[5]], true);
 
@@ -334,7 +334,7 @@ namespace RetroSpy.Readers
 
                     if (KEYS[keycode[2]] != null)
                         state.SetButton(KEYS[keycode[2]], true);
-                
+
                 }
                 return state.Build();
             }

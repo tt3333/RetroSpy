@@ -8,7 +8,7 @@ namespace RetroSpy.Readers
 
         private static readonly string[] BUTTONS = {
             "A", "B", "G1", "C", "D", "G2", "W1", "W2", null, "options", "select", "start"
-          
+
         };
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)

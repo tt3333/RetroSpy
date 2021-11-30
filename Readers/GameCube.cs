@@ -14,10 +14,10 @@ namespace RetroSpy.Readers
         {
             null, null, null, null, null, null, "Home", "End",
             "PageUp", "PageDown", null, "ScrollLock", null, null, null, null,
-            "K_A", "K_B", "C", "D", "E", "F", "G", "H", 
+            "K_A", "K_B", "C", "D", "E", "F", "G", "H",
             "I", "J", "K", "K_L", "M", "N", "O", "P",
-            
-            "Q", "K_R", "S", "T", "U", "V", "W", "K_X", 
+
+            "Q", "K_R", "S", "T", "U", "V", "W", "K_X",
             "K_Y", "K_Z", "D1", "D2", "D3", "D4", "D5", "D6",
             "D7", "D8", "D9", "D0", "Minus", "Equals", "Yen", "LeftBracket",
             "RightBracket", "Semicolon", "Apostrophe", "LeftOfReturn", "Comma", "Period", "Slash", "JpSlash",
@@ -137,7 +137,7 @@ namespace RetroSpy.Readers
                 }
             }
 
-            for(int i = 0; i < keyboardData.Length; ++i)
+            for (int i = 0; i < keyboardData.Length; ++i)
             {
                 if (KEYS[keyboardData[i]] != null)
                     state.SetButton(KEYS[keyboardData[i]], true);

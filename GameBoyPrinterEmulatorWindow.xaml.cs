@@ -1,21 +1,13 @@
 ﻿using RetroSpy.Readers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RetroSpy
 {
@@ -88,7 +80,7 @@ namespace RetroSpy
             DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
 
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            
+
             if (DMGPaletteEnabled)
                 _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
             else
@@ -109,7 +101,7 @@ namespace RetroSpy
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
-            
+
         }
 
         private void Reader_ControllerDisconnected(object sender, EventArgs e)
@@ -174,7 +166,7 @@ namespace RetroSpy
             _image.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
             GameBoyPrinterEmulatorWindowGrid.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; ;
             GameBoyPrinterEmulatorWindowGrid.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
-            this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count; 
+            this.Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
             this.Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
             int tile_count = 0;
@@ -249,8 +241,8 @@ namespace RetroSpy
                     canvas.SetRect(pixel_x_offset + i * pixel_width,
                             pixel_y_offset + j * pixel_height,
                             pixel_width,
-                            pixel_height, 
-                            DMGPaletteEnabled ? DMG_colors_red[pixels[j * TILE_PIXEL_WIDTH + i]]  : colors_red[pixels[j * TILE_PIXEL_WIDTH + i]],
+                            pixel_height,
+                            DMGPaletteEnabled ? DMG_colors_red[pixels[j * TILE_PIXEL_WIDTH + i]] : colors_red[pixels[j * TILE_PIXEL_WIDTH + i]],
                             DMGPaletteEnabled ? DMG_colors_green[pixels[j * TILE_PIXEL_WIDTH + i]] : colors_green[pixels[j * TILE_PIXEL_WIDTH + i]],
                             DMGPaletteEnabled ? DMG_colors_blue[pixels[j * TILE_PIXEL_WIDTH + i]] : colors_blue[pixels[j * TILE_PIXEL_WIDTH + i]]);
                 }

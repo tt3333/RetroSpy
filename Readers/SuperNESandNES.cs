@@ -140,24 +140,24 @@ namespace RetroSpy.Readers
             state.SetAnalog("rotation", rotation / 11.0f, rotation);
 
             byte[] fingers = new byte[4];
-            for(int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 fingers[i] = 0;
-                for(int j = 0; j < 2; ++j)
+                for (int j = 0; j < 2; ++j)
                 {
                     fingers[i] |= (byte)(packet[40 + (i * 2) + j] == 0 ? 0 : (1 << j));
                 }
             }
-            for(int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 state.SetAnalog(BUTTONS_NES_POWERGLOVE_FINGERS[i], fingers[i] / 4.0f, fingers[i]);
             }
 
             byte buttons = SignalTool.ReadByte(packet, 48, 8);
-            for(int i = 0; i < BUTTONS_NES_POWERGLOVE.Length; ++i)
+            for (int i = 0; i < BUTTONS_NES_POWERGLOVE.Length; ++i)
             {
                 state.SetButton(BUTTONS_NES_POWERGLOVE[i], false);
-            }    
+            }
             switch (buttons)
             {
                 case 0x00:
@@ -292,7 +292,7 @@ namespace RetroSpy.Readers
                 {
                     float y = (float)(SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
                     float x = (float)(SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
-                    SignalTool.SetMouseProperties(x, y, SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1),SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1), state);
+                    SignalTool.SetMouseProperties(x, y, SignalTool.ReadByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1), SignalTool.ReadByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1), state);
                 }
             }
 

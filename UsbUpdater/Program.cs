@@ -1,10 +1,6 @@
 ﻿using Renci.SshNet;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UsbUpdater
 {
@@ -15,7 +11,8 @@ namespace UsbUpdater
         static void Main()
         {
 
-            try {
+            try
+            {
                 Console.WriteLine(Properties.Resources.ResourceManager.GetString("Title", CultureInfo.CurrentUICulture));
 
                 Console.Write(Properties.Resources.ResourceManager.GetString("HostnamePrompt", CultureInfo.CurrentUICulture));
@@ -24,7 +21,7 @@ namespace UsbUpdater
                 var username = Console.ReadLine();
                 Console.Write(Properties.Resources.ResourceManager.GetString("PasswordPrompt", CultureInfo.CurrentUICulture));
                 var password = Console.ReadLine();
-                
+
                 Console.Write("");
                 Console.WriteLine("\nLogging into " + (string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname) + "...");
 

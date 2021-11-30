@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Resources;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -36,7 +35,7 @@ namespace RetroSpy
             else
             {
                 TargetBackgrounds.Clear();
-                foreach(var background in list)
+                foreach (var background in list)
                     TargetBackgrounds.Add(background);
             }
         }
@@ -135,7 +134,7 @@ namespace RetroSpy
     public class AnalogText
     {
 
-        public uint X { get; set; } 
+        public uint X { get; set; }
         public uint Y { get; set; }
         public uint OriginalX { get; set; }
         public uint OriginalY { get; set; }
@@ -176,7 +175,7 @@ namespace RetroSpy
             }
         }
     }
-   
+
     public class LoadResults
     {
         [CLSCompliant(false)]
@@ -209,7 +208,7 @@ namespace RetroSpy
             else
             {
                 ParseErrors.Clear();
-                foreach(var parseError in list)
+                foreach (var parseError in list)
                     ParseErrors.Add(parseError);
             }
         }
@@ -289,7 +288,7 @@ namespace RetroSpy
             }
 
             int i = 0;
-            foreach (Tuple<InputSource,string> inputSource in types)
+            foreach (Tuple<InputSource, string> inputSource in types)
             {
                 Skin TempSkin = null;
                 if (i == 0)
@@ -391,7 +390,7 @@ namespace RetroSpy
 
                     ParseElements(elem, skinPath);
                 }
-            }       
+            }
         }
 
         private void ParseElements(XElement doc, string skinPath)
@@ -520,7 +519,7 @@ namespace RetroSpy
 
                 var x = ReadUintAttr(elem, "x");
                 var y = ReadUintAttr(elem, "y");
-               
+
                 var analogTextConfig = new AnalogText
                 {
                     X = x,
@@ -532,7 +531,7 @@ namespace RetroSpy
                     Font = font,
                     Color = brush,
                     Name = ReadStringAttr(elem, "name"),
-               };
+                };
                 analogTextConfig.SetTargetBackgrounds(targetBgs);
                 analogTextConfig.SetIgnoreBackgrounds(ignoreBgs);
 

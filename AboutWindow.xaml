@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="About - RetroSpy" Height="450.535" Width="438.834" Closing="Window_Closing"  ResizeMode="NoResize">
     <Grid>
-        <WebBrowser x:Name="wb"  Navigating="webBrowser1_Navigating" HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="421" Margin="0,0,0,-0.4"/>
+        <WebBrowser x:Name="wb"  Navigating="WebBrowser1_Navigating" HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="421" Margin="0,0,0,-0.4"/>
 
     </Grid>
 </Window>

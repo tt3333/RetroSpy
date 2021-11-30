@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -104,19 +100,15 @@ namespace RetroSpy
 
         public void ReplaceColor(byte oldRed, byte oldGreen, byte oldBlue, byte newRed, byte newGreen, byte newBlue)
         {
-   
+
             for (int i = 0; i < Width; ++i)
                 for (int j = 0; j < Height; ++j)
                 {
-                    byte red;
-                    byte green;
-                    byte blue;
-                    byte alpha;
-                    GetPixel(i, j, out red, out green, out blue, out alpha);
+                    GetPixel(i, j, out byte red, out byte green, out byte blue, out byte alpha);
                     if (red == oldRed && green == oldGreen && blue == oldBlue)
                         SetPixel(i, j, newRed, newGreen, newBlue, alpha);
 
-                    
+
                 }
         }
 

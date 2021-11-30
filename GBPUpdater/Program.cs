@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.IO;
-using System.IO.Compression;
-using System.Management;
-using System.IO.Ports;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.IO.Ports;
+using System.Linq;
+using System.Management;
+using System.Net;
+using System.Text;
 
 namespace GBPUpdater
 {
@@ -86,7 +85,7 @@ namespace GBPUpdater
             List<string> ports = new List<string>();
             foreach (var port in comPortInformation)
             {
-                if(port.FriendlyName.Contains("Arduino"))
+                if (port.FriendlyName.Contains("Arduino"))
                 {
                     ports.Add(port.PortName);
                 }
@@ -214,7 +213,7 @@ namespace GBPUpdater
 
                     Console.WriteLine(Properties.Resources.ResourceManager.GetString("Complete", CultureInfo.CurrentUICulture));
                 }
-            
+
                 Console.WriteLine(Properties.Resources.ResourceManager.GetString("Exit", CultureInfo.CurrentUICulture));
                 Console.Read();
 

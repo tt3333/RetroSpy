@@ -339,7 +339,7 @@ namespace RetroSpy
             foreach (AnalogText analogtext in _skin.AnalogTexts)
             {
                 if (BgIsActive(skinBackground.Name, analogtext.TargetBackgrounds, analogtext.IgnoreBackgrounds))
-                { 
+                {
                     Label label = GetLabelForElement(analogtext);
                     _analogTextBoxes.Add(new Tuple<AnalogText, Label>(analogtext, label));
                     ControllerGrid.Children.Add(label);
@@ -395,7 +395,7 @@ namespace RetroSpy
                 FontFamily = config.Font,
                 FontSize = config.Size,
                 Margin = new Thickness(config.X, config.Y, 0, 0),
-                Foreground =config.Color,
+                Foreground = config.Color,
             };
             return label;
         }
@@ -791,9 +791,9 @@ namespace RetroSpy
                 }
             }
 
-            foreach(var analog in e.Analogs)
+            foreach (var analog in e.Analogs)
             {
-                string[] buttonNames = { analog.Key + '-', analog.Key + '+'};
+                string[] buttonNames = { analog.Key + '-', analog.Key + '+' };
                 bool[] buttonStates = { false, false };
 
                 float posPrecision = _dictOfButtonsWithImages.ContainsKey(buttonNames[1]) ? _dictOfButtonsWithImages[buttonNames[1]].ToArray()[0].Item1.Precision : 0.0f;
@@ -807,13 +807,13 @@ namespace RetroSpy
                 {
                     buttonStates[1] = true;
                 }
-                
+
                 for (int i = 0; i < buttonNames.Length; ++i)
                 {
                     if (_dictOfButtonsWithImages.ContainsKey(buttonNames[i]))
                     {
-                        foreach( var button in _dictOfButtonsWithImages[buttonNames[i]])
-                        { 
+                        foreach (var button in _dictOfButtonsWithImages[buttonNames[i]])
+                        {
                             if (button.Item2.Dispatcher.CheckAccess())
                             {
                                 button.Item2.Visibility = buttonStates[i] ? Visibility.Visible : Visibility.Hidden;

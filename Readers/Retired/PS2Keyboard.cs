@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RetroSpy.Readers
+﻿namespace RetroSpy.Readers
 {
     class PS2Keyboard
     {
@@ -41,7 +35,7 @@ namespace RetroSpy.Readers
             int j = 0;
             for (int i = 0; i < 34; ++i)
             {
-                reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j+1]);
+                reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
                 j += 2;
             }
 

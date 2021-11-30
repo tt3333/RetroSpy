@@ -137,7 +137,7 @@ namespace RetroSpy.Readers
                 return null;
             }
 
-            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 
+            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79
                     && polishedPacket[0] != 0x12 && polishedPacket[0] != 0x23 && polishedPacket[0] != 0x53)
             {
                 return null;
@@ -185,7 +185,7 @@ namespace RetroSpy.Readers
                     state.SetAnalog("r_steering", 0.0f, 0);
                 }
                 else if (steering > 0)
-                { 
+                {
                     state.SetAnalog("l_steering", 0.0f, 0);
                     state.SetAnalog("r_steering", steering, polishedPacket[17]);
                 }

@@ -141,7 +141,7 @@ namespace RetroSpy
             }
             else
             {
- 
+
 
                 PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(packetStart, packetSize).ToArray()));
 

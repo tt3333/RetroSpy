@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace GBPemu
 {
@@ -31,47 +21,47 @@ namespace GBPemu
         private readonly byte[][][] palettes = {
                                                 new byte[][] {
                                                     new byte[] { 0xff, 0xaa, 0x55, 0x00 },
-                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 }, 
+                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 },
                                                     new byte[]  { 0xff, 0xaa, 0x55, 0x00 }
                                                 },   // Grayscale
                                                 new byte[][] {
-                                                    new byte[] { 0x9b, 0x77, 0x30, 0x0f }, 
-                                                    new byte[] { 0xbc, 0xa1, 0x62, 0x38 }, 
+                                                    new byte[] { 0x9b, 0x77, 0x30, 0x0f },
+                                                    new byte[] { 0xbc, 0xa1, 0x62, 0x38 },
                                                     new byte[] { 0x0f, 0x12, 0x30, 0x0f }
                                                 },   // DMG
-                                                new byte[][] { 
-                                                    new byte[] { 0xc4, 0x8b, 0x4d, 0x1f }, 
-                                                    new byte[] { 0xcf, 0x95, 0x53, 0x1f }, 
+                                                new byte[][] {
+                                                    new byte[] { 0xc4, 0x8b, 0x4d, 0x1f },
+                                                    new byte[] { 0xcf, 0x95, 0x53, 0x1f },
                                                     new byte[] { 0xa1, 0x6d, 0x3c, 0x1f }
                                                 },   // GameBoy Pocket
-                                                new byte[][] { 
-                                                    new byte[] { 0xff, 0x7b, 0x01, 0x00 }, 
-                                                    new byte[] { 0xff, 0xff, 0x63, 0x00 }, 
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0x7b, 0x01, 0x00 },
+                                                    new byte[] { 0xff, 0xff, 0x63, 0x00 },
                                                     new byte[] { 0xff, 0x30, 0xc6, 0x00 }
                                                 },   // GameBoy Color EU/US
                                                 new byte[][] {
-                                                    new byte[] { 0xff, 0xff, 0x83, 0x00 }, 
-                                                    new byte[] { 0xff, 0xad, 0x31, 0x00 }, 
+                                                    new byte[] { 0xff, 0xff, 0x83, 0x00 },
+                                                    new byte[] { 0xff, 0xad, 0x31, 0x00 },
                                                     new byte[] { 0xff, 0x63, 0x00, 0x00 }
                                                 },   // GameBoy Color JP
                                                 new byte[][] {
                                                     new byte[] { 0xe0, 0x88, 0x34, 0x08 },
-                                                    new byte[] { 0xf8, 0xc0, 0x68, 0x18 }, 
+                                                    new byte[] { 0xf8, 0xc0, 0x68, 0x18 },
                                                     new byte[] { 0xd0, 0x70, 0x56, 0x20 }
                                                 },   // BGB
                                                 new byte[][] {
-                                                    new byte[] { 0xe0, 0xa8, 0x70, 0x2b }, 
-                                                    new byte[] { 0xdb, 0x9f, 0x6b, 0x2b }, 
+                                                    new byte[] { 0xe0, 0xa8, 0x70, 0x2b },
+                                                    new byte[] { 0xdb, 0x9f, 0x6b, 0x2b },
                                                     new byte[] { 0xcd, 0x94, 0x66, 0x26 }
                                                 },   // GraphixKid Gray
-                                                new byte[][] { 
-                                                    new byte[] { 0x7e, 0xab, 0x7b, 0x4c }, 
-                                                    new byte[] { 0x84, 0xc3, 0x92, 0x62 }, 
+                                                new byte[][] {
+                                                    new byte[] { 0x7e, 0xab, 0x7b, 0x4c },
+                                                    new byte[] { 0x84, 0xc3, 0x92, 0x62 },
                                                     new byte[] { 0xb4, 0x96, 0x78, 0x5a }
                                                 },   // GraphixKid Green
-                                                new byte[][] { 
-                                                    new byte[] { 0x7e, 0x57, 0x38, 0x2e }, 
-                                                    new byte[] { 0x84, 0x7b, 0x5d, 0x46 }, 
+                                                new byte[][] {
+                                                    new byte[] { 0x7e, 0x57, 0x38, 0x2e },
+                                                    new byte[] { 0x84, 0x7b, 0x5d, 0x46 },
                                                     new byte[] { 0x16, 0x46, 0x49, 0x3d }
                                                 }    // Black Zero
         };
@@ -184,7 +174,7 @@ namespace GBPemu
                 Width = 480;
             }
         }
-    
+
         public GameBoyPrinterEmulatorWindow(IControllerReader reader)
         {
             InitializeComponent();
@@ -359,7 +349,7 @@ namespace GBPemu
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
 
             // Set the Image source.
-            _image.Source = wbitmap;      
+            _image.Source = wbitmap;
         }
 
         void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
@@ -414,7 +404,7 @@ namespace GBPemu
         {
             Properties.Settings.Default.Save();
             _reader.Finish();
-            System.Environment.Exit(0);  
+            System.Environment.Exit(0);
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)

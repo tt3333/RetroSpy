@@ -103,7 +103,7 @@ namespace RetroSpy.Readers
             SetMouseProperties(x, y, xRaw, yRaw, state, maxCircleSize, windows["PC_"], "PC_");
         }
 
-        private static void SetMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state, 
+        private static void SetMouseProperties(float x, float y, int xRaw, int yRaw, ControllerStateBuilder state,
             float maxCircleSize, SlidingWindow window, string prefix)
         {
             window.windowX[window.windowPositionX] = x;

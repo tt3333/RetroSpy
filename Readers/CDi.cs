@@ -1,5 +1,4 @@
-﻿using SharpDX.DirectInput;
-using System;
+﻿using System;
 
 namespace RetroSpy.Readers
 {
@@ -17,12 +16,12 @@ namespace RetroSpy.Readers
         private static readonly string[] KEYBOARD_CODES =
         {
 
-            "Escape", 
+            "Escape",
             null, "D1", "D2", "D3", "D4", "D5", "D6", "D7",
             null, "D8", "D9", "D0", "Minus", "Equals", "Back", "Home",
-            null, "A", "B", "C", "D", "E", "F", "G", 
-            null, "H", "I", "J", "K", "L", "M", "N", 
-            null, "O", "P", "Q", "R", "S", "T", "U", 
+            null, "A", "B", "C", "D", "E", "F", "G",
+            null, "H", "I", "J", "K", "L", "M", "N",
+            null, "O", "P", "Q", "R", "S", "T", "U",
             null, "V", "W", "X", "Y", "Z", "Tab", "LeftBracket",
             null, "RightBracket", "Backslash", "Semicolon", "Apostrophe", "Return", "Comma", "Period",
             null, "Slash", "Up", "Grave", "Space", "Delete", "Left", "Down",

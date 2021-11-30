@@ -3,9 +3,7 @@ using SharpDX.DirectInput;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Resources;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace RetroSpy.Readers

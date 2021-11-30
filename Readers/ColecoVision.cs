@@ -206,11 +206,11 @@ namespace RetroSpy.Readers
 
                 if (Math.Abs(roller_x) != 0 && Math.Abs(roller_x) > maxX)
                     maxX = Math.Abs(roller_x);
-                
+
                 if (Math.Abs(roller_y) != 0 && Math.Abs(roller_y) > maxY)
                     maxY = Math.Abs(roller_y);
 
-                SignalTool.SetMouseProperties(-1.0f * roller_x / maxX, -1.0f * roller_y / maxY, roller_x, roller_y, state);    
+                SignalTool.SetMouseProperties(-1.0f * roller_x / maxX, -1.0f * roller_y / maxY, roller_x, roller_y, state);
             }
 
             return state.Build();

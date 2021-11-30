@@ -74,7 +74,7 @@ namespace RetroSpy.Readers
             else if (packet.Length == 2)
             {
                 ControllerStateBuilder state = new ControllerStateBuilder();
-                
+
                 state.SetAnalog("paddle", packet[0] / 256.0f, packet[0]);
                 state.SetButton("1", packet[1] != 0);
 

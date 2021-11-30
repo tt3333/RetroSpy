@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Resources;
 using System.Windows.Threading;
 
@@ -25,12 +24,12 @@ namespace RetroSpy.Readers
 
         [CLSCompliant(false)]
         public static Collection<uint> GetDevices()
-        { 
+        {
             var input = new DirectInput();
             int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
             input.Dispose();
             Collection<uint> result = new Collection<uint>();
-           
+
             for (uint i = 0; i < amount; i++)
             {
                 result.Add(i);
@@ -84,8 +83,8 @@ namespace RetroSpy.Readers
         private void Tick(object sender, EventArgs e)
         {
             try
-            { 
-                _joystick.Poll(); 
+            {
+                _joystick.Poll();
             }
             catch (SharpDXException)
             {

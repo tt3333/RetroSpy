@@ -1,19 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Threading;
-
-using RetroSpy.Readers;
-using System.ComponentModel;
-using System.IO;
-using System.Text;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace RetroSpy
 {
@@ -38,7 +25,7 @@ namespace RetroSpy
         {
             IncludedListBox.Items.Clear();
             ExcludedListBox.Items.Clear();
-            foreach(var source in _allSources)
+            foreach (var source in _allSources)
             {
                 if (_excludedList.Contains(source.Name))
                 {
@@ -54,7 +41,7 @@ namespace RetroSpy
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             _originalExcludedList.Clear();
-            foreach(var source in _excludedList)
+            foreach (var source in _excludedList)
             {
                 _originalExcludedList.Add(source);
             }

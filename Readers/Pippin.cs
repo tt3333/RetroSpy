@@ -174,7 +174,7 @@
 
                 return state.Build();
             }
-            else if (packet.Length == TABLET_PACKET_SIZE )
+            else if (packet.Length == TABLET_PACKET_SIZE)
             {
                 ControllerStateBuilder state = new ControllerStateBuilder();
 
@@ -209,7 +209,7 @@
                 }
 
                 return state.Build();
-            }    
+            }
             else
                 return null;
         }

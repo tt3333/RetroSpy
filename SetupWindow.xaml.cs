@@ -9,7 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Threading;
@@ -104,7 +103,7 @@ namespace RetroSpy
         private readonly ResourceManager _resources;
         private bool isClosing;
 
-    private void UpdatePortListThread()
+        private void UpdatePortListThread()
         {
             Thread thread = new Thread(UpdatePortList);
             thread.Start();
@@ -117,7 +116,7 @@ namespace RetroSpy
             if (Properties.Settings.Default.UpgradeRequired)
             {
                 Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default. UpgradeRequired = false;
+                Properties.Settings.Default.UpgradeRequired = false;
                 Properties.Settings.Default.Save();
             }
 
@@ -154,7 +153,7 @@ namespace RetroSpy
 
             PopulateSources();
 
-            _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername 
+            _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername
                                                                           : Properties.Settings.Default.BeagleboneUsername;
 
             txtPassword.Password = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
@@ -292,7 +291,7 @@ namespace RetroSpy
                         _vm.Ports2.UpdateContents(ports2);
                     }
                 }
-                catch(TaskCanceledException)
+                catch (TaskCanceledException)
                 {
                     // Closing the window can cause this due to a race condition
                 }
@@ -495,7 +494,7 @@ namespace RetroSpy
             }
             finally
             {
-                if(_client != null)
+                if (_client != null)
                     _client.Dispose();
             }
         }
@@ -526,7 +525,7 @@ namespace RetroSpy
                 Properties.Settings.Default.BeaglebonePassword = _vm.DontSavePassword ? "" : txtPassword.Password;
             }
             Properties.Settings.Default.Save();
-            
+
             try
             {
                 IControllerReader reader;
@@ -545,7 +544,7 @@ namespace RetroSpy
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC ||
                          _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 ||
                          _vm.Sources.SelectedItem == InputSource.GENMINI || _vm.Sources.SelectedItem == InputSource.C64MINI ||
-                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3 
+                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3
                          || _vm.Sources.SelectedItem == InputSource.PS4 || _vm.Sources.SelectedItem == InputSource.TG16MINI)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader4(txtHostname.Text, txtUsername.Text, txtPassword.Password);
@@ -554,7 +553,7 @@ namespace RetroSpy
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text, txtUsername.Text, txtPassword.Password, _vm.MisterGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 
+                else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32
                             || _vm.Sources.SelectedItem == InputSource.ATARI5200 || _vm.Sources.SelectedItem == InputSource.COLECOVISION
                             || _vm.Sources.SelectedItem == InputSource.GAMECUBE)
                 {
@@ -596,14 +595,14 @@ namespace RetroSpy
                                     reader, _vm.StaticViewerWindowName)
                         .ShowDialog();
                 }
-                }
+            }
             catch (ConfigParseException ex)
             {
                 MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (System.Net.Sockets.SocketException)
             {
-                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);  
+                MessageBox.Show(String.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (UnauthorizedAccessException ex)
             {
