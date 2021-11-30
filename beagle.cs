@@ -3613,6 +3613,7 @@ namespace TotalPhase
 #pragma warning restore IDE0079 // Remove unnecessary suppression
 #pragma warning restore CA1062 // Validate arguments of public methods
 #pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning restore CA1051 // Do not declare visible instance fields
 #pragma warning restore CA1034 // Nested types should not be visible
 #pragma warning restore CA1028 // Enum Storage should be Int32
