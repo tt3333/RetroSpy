@@ -16,6 +16,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
