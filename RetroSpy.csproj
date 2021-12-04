@@ -1771,10 +1771,10 @@
     </EmbeddedResource>
     <None Include="experimental\retired\KeyboardController\KeyboardController.ino" />
     <Content Include="experimental\retired\Paddles\Paddles.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\retired\cdi\cdi.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <None Include="experimental\retired\dreamcast\dreamcast.ino" />
     <None Include="experimental\retired\AmigaMouse\AmigaMouse.ino" />

@@ -107,87 +107,89 @@ namespace RetroSpy
 
         public SetupWindow(bool skipSetup = false)
         {
-            InitializeComponent();
-
-            if (Properties.Settings.Default.UpgradeRequired)
+            try
             {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpgradeRequired = false;
-                Properties.Settings.Default.Save();
-            }
+                InitializeComponent();
 
-            isClosing = false;
-            _vm = new SetupWindowViewModel();
-            DataContext = _vm;
-            _excludedSources = new Collection<string>();
-            _resources = Properties.Resources.ResourceManager;
-            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
-
-            string skinsDirectory = Path.Combine(strWorkPath, "skins");
-
-            if (!Directory.Exists(skinsDirectory))
-            {
-                _ = MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
-                return;
-            }
-
-            LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
-            _skins = results.SkinsLoaded;
-
-            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
-
-            string[] hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
-            foreach (string source in hiddenConsoles)
-            {
-                if (source.Length > 0)
+                if (Properties.Settings.Default.UpgradeRequired)
                 {
-                    _excludedSources.Add(source);
+                    Properties.Settings.Default.Upgrade();
+                    Properties.Settings.Default.UpgradeRequired = false;
+                    Properties.Settings.Default.Save();
                 }
-            }
 
-            PopulateSources();
+                isClosing = false;
+                _vm = new SetupWindowViewModel();
+                DataContext = _vm;
+                _excludedSources = new Collection<string>();
+                _resources = Properties.Resources.ResourceManager;
+                string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
-            _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername
-                                                                          : Properties.Settings.Default.BeagleboneUsername;
+                string skinsDirectory = Path.Combine(strWorkPath, "skins");
 
-            txtPassword.Password = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
-                                                  : Properties.Settings.Default.BeaglebonePassword;
-
-            _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
-
-            _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
-
-            _vm.LegacyKeybindingBehavior = Properties.Settings.Default.LegacyKeybindingBehavior;
-
-            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
-
-            _vm.DontSavePassword = Properties.Settings.Default.DontSavePassword;
-
-            _vm.UseLagFix = Properties.Settings.Default.UseLagFix;
-
-            _portListUpdateTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
-            _portListUpdateTimer.Start();
-
-            _xiAndGamepadListUpdateTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-            _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
-            {
-                if (_vm.Sources.SelectedItem == InputSource.PAD)
+                if (!Directory.Exists(skinsDirectory))
                 {
-                    UpdateGamepadList();
+                    _ = MessageBox.Show("Could not find skins folder!", _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                    Close();
+                    return;
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PC360)
+
+                LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
+                _skins = results.SkinsLoaded;
+
+                _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
+
+                string[] hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
+                foreach (string source in hiddenConsoles)
                 {
-                    UpdateXIList();
+                    if (source.Length > 0)
+                    {
+                        _excludedSources.Add(source);
+                    }
                 }
+
+                PopulateSources();
+
+                _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername
+                                                                              : Properties.Settings.Default.BeagleboneUsername;
+
+                txtPassword.Password = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
+                                                      : Properties.Settings.Default.BeaglebonePassword;
+
+                _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
+
+                _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
+
+                _vm.LegacyKeybindingBehavior = Properties.Settings.Default.LegacyKeybindingBehavior;
+
+                _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
+
+                _vm.DontSavePassword = Properties.Settings.Default.DontSavePassword;
+
+                _vm.UseLagFix = Properties.Settings.Default.UseLagFix;
+
+                _portListUpdateTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(1)
+                };
+                _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
+                _portListUpdateTimer.Start();
+
+                _xiAndGamepadListUpdateTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(2)
+                };
+                _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
+                {
+                    if (_vm.Sources.SelectedItem == InputSource.PAD)
+                    {
+                        UpdateGamepadList();
+                    }
+                    else if (_vm.Sources.SelectedItem == InputSource.PC360)
+                    {
+                        UpdateXIList();
+                    }
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 //{
                 //    updateBeagleList();
@@ -197,38 +199,46 @@ namespace RetroSpy
                 //    updateBeagleI2CList();
                 //}
             };
-            _xiAndGamepadListUpdateTimer.Start();
+                _xiAndGamepadListUpdateTimer.Start();
 
-            UpdatePortList();
-            _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
-            _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
-            _vm.XIAndGamepad.SelectFirst();
-            _vm.Sources.SelectId(Properties.Settings.Default.Source);
-            _vm.Skins.SelectId(Properties.Settings.Default.Skin);
-            _vm.Hostname = Properties.Settings.Default.Hostname;
+                UpdatePortList();
+                _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
+                _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
+                _vm.XIAndGamepad.SelectFirst();
+                _vm.Sources.SelectId(Properties.Settings.Default.Source);
+                _vm.Skins.SelectId(Properties.Settings.Default.Skin);
+                _vm.Hostname = Properties.Settings.Default.Hostname;
 
-            List<uint> defaultMisterControllers = new List<uint>();
-            for (uint i = 0; i < 10; ++i)
-            {
-                defaultMisterControllers.Add(i);
+                List<uint> defaultMisterControllers = new List<uint>();
+                for (uint i = 0; i < 10; ++i)
+                {
+                    defaultMisterControllers.Add(i);
+                }
+
+                _vm.MisterGamepad.UpdateContents(defaultMisterControllers);
+
+                if (results.ParseErrors.Count > 0)
+                {
+                    ShowSkinParseErrors(results.ParseErrors);
+                }
+
+                if (skipSetup)
+                {
+                    SourceSelectComboBox_SelectionChanged(null, null);
+                    Skin_SelectionChanged(null, null);
+                    GoButton_Click(null, null);
+                }
+                else
+                {
+                    Show();
+                }
             }
-
-            _vm.MisterGamepad.UpdateContents(defaultMisterControllers);
-
-            if (results.ParseErrors.Count > 0)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
-                ShowSkinParseErrors(results.ParseErrors);
-            }
-
-            if (skipSetup)
-            {
-                SourceSelectComboBox_SelectionChanged(null, null);
-                Skin_SelectionChanged(null, null);
-                GoButton_Click(null, null);
-            }
-            else
-            {
-                Show();
+                _ = MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(-1);
             }
         }
 
@@ -618,6 +628,12 @@ namespace RetroSpy
             catch (UnauthorizedAccessException ex)
             {
                 _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+            {
+                _ = MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             _portListUpdateTimer.Start();
