@@ -7,7 +7,8 @@ namespace RetroSpy
 {
     public class InputSource
     {
-        public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "killall retrospy ; /media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000));
+        public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "/media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000));
+        //public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "killall retrospy ; /media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000));
 
         public static readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Classic.ReadFromPacket));
         public static readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, DrivingController.ReadFromPacket));
