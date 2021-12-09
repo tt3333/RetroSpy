@@ -58,9 +58,9 @@ namespace RetroSpy.Readers
             return (float)(input - 128) / 128;
         }
 
-        private static float ReadTrigger(byte input)
+        private static float ReadTrigger(byte input, float maxVal = 256)
         {
-            return (float)input / 256;
+            return (float)input / maxVal;
         }
 
         private static readonly byte[] keyboardData = new byte[3];
@@ -83,6 +83,7 @@ namespace RetroSpy.Readers
             return null;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "<Pending>")]
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
             if (packet == null)
@@ -122,7 +123,7 @@ namespace RetroSpy.Readers
                 return state1.Build();
             }
 
-            if (packet.Length != PACKET_SIZE)
+            if (packet.Length != PACKET_SIZE && packet.Length != PACKET_SIZE - 8)
             {
                 return null;
             }
@@ -168,9 +169,16 @@ namespace RetroSpy.Readers
             state.SetAnalog("lstick_y", ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length + 8)), SignalTool.ReadByte(packet, BUTTONS.Length + 8));
             state.SetAnalog("cstick_x", ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length + 16)), SignalTool.ReadByte(packet, BUTTONS.Length + 16));
             state.SetAnalog("cstick_y", ReadStick(SignalTool.ReadByte(packet, BUTTONS.Length + 24)), SignalTool.ReadByte(packet, BUTTONS.Length + 24));
-            state.SetAnalog("trig_l", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 32)), SignalTool.ReadByte(packet, BUTTONS.Length + 32));
-            state.SetAnalog("trig_r", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 40)), SignalTool.ReadByte(packet, BUTTONS.Length + 40));
-
+            if (packet.Length == PACKET_SIZE)
+            {
+                state.SetAnalog("trig_l", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 32)), SignalTool.ReadByte(packet, BUTTONS.Length + 32));
+                state.SetAnalog("trig_r", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 40)), SignalTool.ReadByte(packet, BUTTONS.Length + 40));
+            }
+            else
+            {
+                state.SetAnalog("trig_l", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 32, 4), 15), SignalTool.ReadByte(packet, BUTTONS.Length + 32, 4));
+                state.SetAnalog("trig_r", ReadTrigger(SignalTool.ReadByte(packet, BUTTONS.Length + 36, 4), 15), SignalTool.ReadByte(packet, BUTTONS.Length + 36, 4));
+            }
             return state.Build();
         }
     }

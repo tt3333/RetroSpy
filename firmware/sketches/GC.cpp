@@ -26,6 +26,8 @@
 
 #include "GC.h"
 
+bool isLuigisMansion = false;
+
 #if defined(__arm__) && defined(CORE_TEENSY)
 
 static int show = 0;
@@ -187,7 +189,7 @@ printData:
 	interrupts();
 #if !defined(DEBUG)
 	if (headerVal == 0x40)
-		sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+		sendRawData(rawData, GC_PREFIX, (rawData[14] | rawData[15]) == 0 ? GC_BITCOUNT - 8 : GC_BITCOUNT);
 	else if (headerVal == 0x14 && ++show % 2 == 0)  // Gameboy Player polls too damn many times, slows down display.
 		writeSerial();  								// This doesn't seem to negatively affect other games.
 	else if(headerVal == 0x54)
@@ -198,7 +200,7 @@ printData:
 	else if (headerVal == 0x14)
 		debugSerial();
 	else
-		sendRawDataDebug(rawData, 25, 65);
+		sendRawDataDebug(rawData, 0, GC_BITCOUNT + GC_PREFIX);
 #endif
 	betweenLowSignal = 0;
 	goto findcmdinit;
@@ -311,9 +313,9 @@ void GCSpy::loop() {
 		if (checkPrefixGC() || checkPrefixLuigisMansion())
 		{
 #if !defined(DEBUG)
-			sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+			sendRawData(rawData, GC_PREFIX, isLuigisMansion ? GC_BITCOUNT - 8 : GC_BITCOUNT);
 #else
-			sendRawDataDebug(rawData, 0, GC_BITCOUNT);
+			sendRawDataDebug(rawData, 0, GC_BITCOUNT + GC_PREFIX);
 #endif
 		}
 		else if (checkPrefixKeyboard())
@@ -531,7 +533,7 @@ inline bool GCSpy::checkPrefixGC()
 
 inline bool GCSpy::checkPrefixLuigisMansion()
 {
-	
+	isLuigisMansion = false;
 	if (rawData[0] != 0) return false; // 0
 	if(rawData[1] == 0) return false;  // 1
 	if(rawData[2] != 0) return false;  // 0
@@ -558,6 +560,7 @@ inline bool GCSpy::checkPrefixLuigisMansion()
 	if(rawData[23] != 0) return false;  // 0
 	if(rawData[24] == 0) return false;  // 1
 	seenGC2N64 = false;
+	isLuigisMansion = true;
 	return true;
 }
 
