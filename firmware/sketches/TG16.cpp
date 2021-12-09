@@ -27,6 +27,7 @@
 #include "TG16.h"
 
 void TG16Spy::loop() {
+
 	noInterrupts();
 	updateState();
 	interrupts();
@@ -37,7 +38,8 @@ void TG16Spy::loop() {
 #endif
 	delay(1);
 }
-
+static bool has6buttons = false;
+static int roundsSince6Button = 0;
 void TG16Spy::updateState() {
 	word temp = 0;
 	currentState = 0;
@@ -47,19 +49,27 @@ void TG16Spy::updateState() {
 	temp = ((PIND & 0b00111100) >> 2);
 	if ((temp & 0b00001111) == 0b00000000) {
 		currentState |= lastDirections;
-		highButtons = false;
 		seenHighButtons = true;
+		has6buttons = true;
+		roundsSince6Button = 0;
 	}
 	else {
+		
+		if (++roundsSince6Button == 2)
+		{
+			has6buttons = false;
+			lastHighButtons = 0x00F0;
+		}
+		
+		seenHighButtons = false;
 		currentState |= temp;
 		lastDirections = temp;
-		highButtons = true;
 	}
 
 	while ((PIND & 0b01000000) != 0) {}
 	asm volatile(MICROSECOND_NOPS);
 	temp = ((PIND & 0b00111100) << 2);
-	if (highButtons == true && seenHighButtons == true) {
+	if (seenHighButtons == has6buttons ? false : true) {
 		currentState |= (temp << 4);
 		lastHighButtons = temp;
 		currentState |= lastButtons;
@@ -67,12 +77,7 @@ void TG16Spy::updateState() {
 	else {
 		currentState |= temp;
 		lastButtons = temp;
-		if (seenHighButtons) {
-			currentState |= (lastHighButtons << 4);
-		}
-		else {
-			currentState |= 0b0000111100000000;
-		}
+		currentState |= (lastHighButtons << 4);
 	}
 
 	currentState = ~currentState;

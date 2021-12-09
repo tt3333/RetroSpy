@@ -38,7 +38,7 @@ public:
 
 private:
 	word lastDirections = 0;
-	word lastHighButtons = 0;
+	word lastHighButtons = 0x00F0;
 	word lastButtons = 0;
 	bool highButtons = true;
 	bool seenHighButtons = false;
