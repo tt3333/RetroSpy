@@ -62,11 +62,12 @@ namespace RetroSpy
         {
             if (_data != null)
             {
-                try
-                { // If the device has been unplugged, Close will throw an IOException.  This is fine, we'll just keep cleaning up.
-                    _data.Close();
-                }
-                catch (IOException) { }
+                // This should be fine, but on disconnect it locks up everything.  No closing it doesn't seem to have any adverse effects.
+                //try
+                //{ // If the device has been unplugged, Close will throw an IOException.  This is fine, we'll just keep cleaning up. 
+                //    //_data.Close();
+                //}
+                //catch (IOException) { }
                 _data = null;
                 if (_client != null)
                 {
@@ -82,6 +83,8 @@ namespace RetroSpy
             }
         }
 
+        private int numNoReads;
+
         private void Tick(object sender, EventArgs e)
         {
             if (_data == null || !_data.CanRead || PacketReceived == null)
@@ -96,9 +99,14 @@ namespace RetroSpy
                 int readCount = (int)_data.Length;
                 if (readCount < 1)
                 {
+                    numNoReads++;
+                    if (numNoReads == 10)
+                    {
+                        throw new SSHMonitorDisconnectException();
+                    }
                     return;
                 }
-
+                numNoReads = 0;
                 byte[] readBuffer = new byte[readCount];
                 _ = _data.Read(readBuffer, 0, readCount);
                 _localBuffer.AddRange(readBuffer);
