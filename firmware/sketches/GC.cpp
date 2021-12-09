@@ -26,8 +26,6 @@
 
 #include "GC.h"
 
-bool isLuigisMansion = false;
-
 #if defined(__arm__) && defined(CORE_TEENSY)
 
 static int show = 0;
@@ -303,6 +301,8 @@ void GCSpy::writeKeyboard()
 }
 
 #else
+
+bool isLuigisMansion = false;
 
 void GCSpy::loop() {
 	if (!seenGC2N64) {
