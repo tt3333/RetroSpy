@@ -340,7 +340,7 @@ void GCSpy::loop() {
 		else
 		{
 #if defined(DEBUG)
-			sendRawDataDebug(rawData, 0, GC_BITCOUNT);
+			sendRawDataDebug(rawData, 0, GC_BITCOUNT + GC_PREFIX);
 #endif
 		}
 	}
@@ -521,7 +521,7 @@ inline bool GCSpy::checkPrefixGC()
 	if (rawData[16] != 0) return false; // 0
 	if (rawData[17] != 0) return false; // 0
 	if (rawData[18] != 0) return false; // 0
-	if (rawData[19] != 0) return false; // 0
+	//if (rawData[19] != 0) return false; // 0 or 1
 	if (rawData[20] != 0) return false; // 0
 	if (rawData[21] != 0) return false; // 0
 	//if (rawData[22] != 0) return false; // 0 or 1
