@@ -223,6 +223,7 @@
     <Compile Include="Readers\SignalTool.cs" />
     <Compile Include="Skin.cs" />
     <Compile Include="ConfigParseException.cs" />
+    <Compile Include="SSHMonitorDisconnectException.cs" />
     <Compile Include="ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>

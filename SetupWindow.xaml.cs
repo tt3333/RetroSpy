@@ -519,9 +519,9 @@ namespace RetroSpy
                 }
             }
         }
-
         private void GoButton_Click(object sender, RoutedEventArgs e)
         {
+            ViewWindow v = null;
             Hide();
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
             Properties.Settings.Default.Port2 = _vm.Ports2.SelectedItem;
@@ -611,10 +611,10 @@ namespace RetroSpy
                 else
                 {
                     _portListUpdateTimer.Stop();
-                    _ = new ViewWindow(_vm.Skins.SelectedItem,
+                    v = new ViewWindow(_vm.Skins.SelectedItem,
                                     _vm.Backgrounds.SelectedItem,
-                                    reader, _vm.StaticViewerWindowName)
-                        .ShowDialog();
+                                    reader, _vm.StaticViewerWindowName);
+                    v.ShowDialog();
                 }
             }
             catch (ConfigParseException ex)
@@ -629,11 +629,16 @@ namespace RetroSpy
             {
                 _ = MessageBox.Show(ex.Message, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (SSHMonitorDisconnectException)
+            {
+                v?.Close();
+            }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 _ = MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace, _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), MessageBoxButton.OK, MessageBoxImage.Error);
+                v?.Close();
             }
 
             _portListUpdateTimer.Start();
