@@ -168,5 +168,47 @@ namespace RetroSpy.Readers
             state.SetAnalog(xName, x, 0);
             state.SetAnalog(yName, y, 0);
         }
+
+        public static void GenerateFakeStick(ControllerStateBuilder state, string xname, string yname, bool up, bool down, bool left, bool right)
+        {
+            float x = 0;
+            float y = 0;
+
+            if (right)
+            {
+                x = 1;
+            }
+            else if (left)
+            {
+                x = -1;
+            }
+
+            if (up)
+            {
+                y = 1;
+            }
+            else if (down)
+            {
+                y = -1;
+            }
+
+            if (y != 0 || x != 0)
+            {
+                // point on the unit circle at the same angle
+                double radian = Math.Atan2(y, x);
+                float x1 = (float)Math.Cos(radian);
+                float y1 = (float)Math.Sin(radian);
+
+                // Don't let magnitude exceed the unit circle
+                if (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)) > 1.0)
+                {
+                    x = x1;
+                    y = y1;
+                }
+            }
+
+            state.SetAnalog(xname, x, 0);
+            state.SetAnalog(yname, y, 0);
+        }
     }
 }
