@@ -19,7 +19,9 @@ namespace RetroSpy
         public event EventHandler Disconnected;
 
         private SshClient _client;
-        private ShellStream _data;
+#pragma warning disable CA2213 // Disposable fields should be disposed
+        private ShellStream _data; // Disposing this on a disconnect locks up the UI.  It seems to cleanup itself when the connection is terminated.
+#pragma warning restore CA2213 // Disposable fields should be disposed
         private readonly List<byte> _localBuffer;
         private readonly string _command;
         private readonly int _delayInMilliseconds;
