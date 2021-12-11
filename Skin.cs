@@ -103,7 +103,8 @@ namespace RetroSpy
         public uint OriginalYRange { get; set; }
         public bool XReverse { get; set; }
         public bool YReverse { get; set; }
-        public float Precision { get; set; }
+        public float XPrecision { get; set; }
+        public float YPrecision { get; set; }
     }
 
     [CLSCompliant(false)]
@@ -447,7 +448,8 @@ namespace RetroSpy
                     OriginalYRange = ReadUintAttr(elem, "yrange"),
                     XReverse = ReadBoolAttr(elem, "xreverse"),
                     YReverse = ReadBoolAttr(elem, "yreverse"),
-                    Precision = ReadFloatConfig(elem, "precision", false)
+                    XPrecision = ReadFloatConfig(elem, "xprecision", false),
+                    YPrecision = ReadFloatConfig(elem, "yprecision", false)
                 });
             }
 
@@ -607,8 +609,8 @@ namespace RetroSpy
                 }
             }
 
-            if (!float.TryParse(ReadStringAttr(elem, attrName), out float ret))
-            {
+            if (!float.TryParse(ReadStringAttr(elem, attrName), NumberStyles.Any, CultureInfo.InvariantCulture, out float ret))
+            { 
                 throw new ConfigParseException("Failed to parse number for property '" + attrName + "' in element '" + elem.Name + "'.");
             }
             return ret;
