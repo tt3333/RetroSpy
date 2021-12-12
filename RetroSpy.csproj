@@ -119,6 +119,11 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="skins\nuon-digital\circle.png" />
+    <None Remove="skins\nuon-digital\circle2.png" />
+    <None Remove="skins\nuon-digital\noun-background.png" />
+    <None Remove="skins\nuon-digital\saturn.png" />
+    <None Remove="skins\nuon-digital\skin.xml" />
     <None Remove="skins\xbox-s\circle.png" />
     <None Remove="skins\xbox-s\lstick.png" />
     <None Remove="skins\xbox-s\rstick.png" />
@@ -276,6 +281,15 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="beagle.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\noun-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\xbox-s\circle.png">

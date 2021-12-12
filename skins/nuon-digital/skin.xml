@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Nuon HPI Warrior" author="zoggins" type="nuon">
+
+  <background name="Default" image="noun-background.png" />
+
+  <button name="A" image="circle.png" x="717" y="330" width="85" height="85" />
+  <button name="B" image="circle.png" x="648" y="239" width="85" height="85" />
+  
+    <button name="CL" image="circle.png" x="762" y="212" width="70" height="70" />
+	<button name="CU" image="circle.png" x="834" y="143" width="70" height="70" />
+	<button name="CR" image="circle.png" x="906" y="212" width="70" height="70" />
+	<button name="CD" image="circle.png" x="839" y="284" width="70" height="70" />
+
+	<button name="LT" image="circle.png" x="335" y="14" width="200" height="60" />
+	<button name="RT" image="circle.png" x="701" y="14" width="200" height="60" />
+
+	<button name="start" image="circle.png" x="536" y="213" width="70" height="70" />
+	<button name="nuon" image="circle.png" x="591" y="123" width="70" height="70" />
+
+  <button name="up" image="circle.png" x="356" y="173" width="70" height="70" />
+  <button name="left" image="circle.png" x="284" y="240" width="70" height="70" />
+  <button name="down" image="circle.png" x="356" y="321" width="70" height="70" />
+  <button name="right" image="circle.png" x="426" y="240" width="70" height="70" />
+</skin>

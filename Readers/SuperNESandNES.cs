@@ -4,7 +4,7 @@ namespace RetroSpy.Readers
 {
     public static class SuperNESandNES
     {
-        private static ControllerStateEventArgs ReadPacketButtons(byte[] packet, string[] buttons)
+        private static ControllerStateEventArgs ReadPacketButtons(byte[] packet, string[] buttons, byte mask = 0xFF)
         {
             if (packet.Length < buttons.Length)
             {
@@ -20,7 +20,7 @@ namespace RetroSpy.Readers
                     continue;
                 }
 
-                state.SetButton(buttons[i], packet[i] != 0x00);
+                state.SetButton(buttons[i], (packet[i] & mask) != 0x00);
             }
 
             return state.Build();
@@ -99,6 +99,11 @@ namespace RetroSpy.Readers
         private static readonly string[] BUTTONS_VIRTUALBOY =
 {
             "r_down", "r_left", "select", "start", "up", "down", "left", "right", "r_right", "r_up", "lt", "rt", "b", "a", null, null
+        };
+
+        private static readonly string[] BUTTONS_NUON =
+        {
+            "CD", "A", "start", "nuon", "down", "left", "up", "right", null, null, "LT", "RT", "B", "CL", "CU", "CR"
         };
 
         public static ControllerStateEventArgs ReadFromPacketIntellivision(byte[] packet)
@@ -225,6 +230,11 @@ namespace RetroSpy.Readers
         public static ControllerStateEventArgs ReadFromPacketVB(byte[] packet)
         {
             return packet == null ? throw new ArgumentNullException(nameof(packet)) : ReadPacketButtons(packet, BUTTONS_VIRTUALBOY);
+        }
+
+        public static ControllerStateEventArgs ReadFromPacketNuon(byte[] packet)
+        {
+            return packet == null ? throw new ArgumentNullException(nameof(packet)) : ReadPacketButtons(packet, BUTTONS_NUON, 0x04);
         }
 
         public static ControllerStateEventArgs ReadFromPacketPCFX(byte[] packet)

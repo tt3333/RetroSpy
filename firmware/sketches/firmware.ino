@@ -45,6 +45,7 @@
 //#define MODE_WII
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
+//#define MODE_NUON
 
 //Bridge GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
@@ -129,6 +130,7 @@
 #include "ColecoVisionRoller.h"
 #include "AtariPaddles.h"
 #include "PowerGlove.h"
+#include "Nuon.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -249,6 +251,9 @@ ColecoVisionRollerSpy ColecoVisionRollerSpy;
 #endif
 #if defined(MODE_ATARI_PADDLES)                                                  
 AtariPaddlesSpy AtariPaddlesSpy;
+#endif
+#if defined(MODE_NUON)                                                  
+NuonSpy NuonSpy;
 #endif
 #if defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
@@ -403,6 +408,8 @@ void setup()
 	ColecoVisionRollerSpy.setup(VIDEO_OUTPUT);
 #elif defined(MODE_ATARI_PADDLES)
 	AtariPaddlesSpy.setup();
+#elif defined(MODE_NUON)
+	NuonSpy.setup();
 #endif
 
   #pragma GCC diagnostic push
@@ -516,6 +523,8 @@ void loop()
 	ColecoVisionRollerSpy.loop();
 #elif defined(MODE_ATARI_PADDLES)
 	AtariPaddlesSpy.loop();
+#elif defined(MODE_NUON)
+	NuonSpy.loop();
 #elif defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 

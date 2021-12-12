@@ -9,7 +9,7 @@
 
 //        DispatcherTimer _timer;
 
-//        public event StateEventHandler ControllerStateChanged;
+//       // public event StateEventHandler ControllerStateChanged;
 //        public event EventHandler ControllerDisconnected;
 
 //        public MouseTester(string portName)
@@ -19,6 +19,8 @@
 //            _timer.Tick += tick;
 //            _timer.Start();
 //        }
+
+//        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
 
 //        bool buttonsOn = false;
 //        float theta = 0;
@@ -88,6 +90,13 @@
 //            outState.SetButton("r1", buttonsOn);
 //            outState.SetButton("r_up", buttonsOn);
 //            outState.SetButton("r_down", buttonsOn);
+//            outState.SetButton("RT", buttonsOn);
+//            outState.SetButton("LT", buttonsOn);
+//            outState.SetButton("CL", buttonsOn);
+//            outState.SetButton("CU", buttonsOn);
+//            outState.SetButton("CR", buttonsOn);
+//            outState.SetButton("CD", buttonsOn);
+//            outState.SetButton("nuon", buttonsOn);
 
 //            outState.SetButton("wired-1", buttonsOn);
 //            outState.SetButton("wired-1a", buttonsOn);
@@ -157,23 +166,23 @@
 
 //            outState.SetButton("mouse_center", true);
 
-//            outState.SetAnalog("stick_x", x1);
-//            outState.SetAnalog("stick_y", y1);
+//            //outState.SetAnalog("stick_x", x1);
+//            //outState.SetAnalog("stick_y", y1);
 
-//            outState.SetAnalog("x", x1);
-//            outState.SetAnalog("y", y1);
+//            //outState.SetAnalog("x", x1);
+//            //outState.SetAnalog("y", y1);
 
-//            outState.SetAnalog("x_2", x1);
-//            outState.SetAnalog("y_2", y1);
+//            //outState.SetAnalog("x_2", x1);
+//            //outState.SetAnalog("y_2", y1);
 
-//            outState.SetAnalog("II", analog / 255.0f);
-//            outState.SetAnalog("I", analog / 255.0f);
-//            outState.SetAnalog("l1", analog / 255.0f);
+//            //outState.SetAnalog("II", analog / 255.0f);
+//            //outState.SetAnalog("I", analog / 255.0f);
+//            //outState.SetAnalog("l1", analog / 255.0f);
 
-//            outState.SetAnalog("l_steering", analog / 255.0f);
-//            outState.SetAnalog("r_steering", analog / 255.0f);
+//            //outState.SetAnalog("l_steering", analog / 255.0f);
+//            //outState.SetAnalog("r_steering", analog / 255.0f);
 
-//            SignalTool.SetMouseProperties(x, y, outState);
+//            //SignalTool.SetMouseProperties(x, y, outState);
 
 //            if (ControllerStateChanged != null) ControllerStateChanged(this, outState.Build());
 //        }
