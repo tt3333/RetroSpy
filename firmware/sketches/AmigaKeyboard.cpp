@@ -160,8 +160,16 @@ void AmigaKeyboardSpy::writeSerial() {}
 void AmigaKeyboardSpy::debugSerial() {}
 
 void AmigaKeyboardSpy::updateState() {}
-#elsevoid AmigaKeyboardSpy::setup() {}void AmigaKeyboardSpy::loop() {}void AmigaKeyboardSpy::writeSerial() {}
+
+#else
+void AmigaKeyboardSpy::setup() {}
+
+void AmigaKeyboardSpy::loop() {}
+
+void AmigaKeyboardSpy::writeSerial() {}
 
 void AmigaKeyboardSpy::debugSerial() {}
 
-void AmigaKeyboardSpy::updateState() {}#endif
+void AmigaKeyboardSpy::updateState() {}
+
+#endif
