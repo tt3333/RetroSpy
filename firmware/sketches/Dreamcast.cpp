@@ -28,7 +28,7 @@
 
 #define DETECT_FALLING_EDGE rawData[byteCount] = (GPIOD_PDIR & 0x3); do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIOD_PDIR & 0x3); } while( rawData[byteCount] >= prevPin);
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined (ARDUINO_TEENSY35)
 void DreamcastSpy::setup() {
 	pinMode(2, INPUT);
 	pinMode(14, INPUT);

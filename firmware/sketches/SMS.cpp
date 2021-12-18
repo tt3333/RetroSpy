@@ -26,6 +26,8 @@
 
 #include "SMS.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void SMSSpy::setup(uint8_t outputType) {
 	this->outputType = outputType;
 	setup();
@@ -169,3 +171,15 @@ void SMSSpy::debugSerial() {
 		break;
 	}
 }
+#else
+void SMSSpy::setup() {}
+
+void SMSSpy::loop() {}
+
+void SMSSpy::writeSerial() {}
+
+void SMSSpy::debugSerial() {}
+
+void SMSSpy::updateState() {}
+
+#endif

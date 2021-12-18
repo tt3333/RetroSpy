@@ -30,6 +30,8 @@
 
 #include "AmigaKeyboard.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 #define BUFFER_SIZE 45
 static volatile uint8_t buffer[BUFFER_SIZE];
 static volatile uint8_t head, tail;
@@ -158,3 +160,8 @@ void AmigaKeyboardSpy::writeSerial() {}
 void AmigaKeyboardSpy::debugSerial() {}
 
 void AmigaKeyboardSpy::updateState() {}
+#elsevoid AmigaKeyboardSpy::setup() {}void AmigaKeyboardSpy::loop() {}void AmigaKeyboardSpy::writeSerial() {}
+
+void AmigaKeyboardSpy::debugSerial() {}
+
+void AmigaKeyboardSpy::updateState() {}#endif

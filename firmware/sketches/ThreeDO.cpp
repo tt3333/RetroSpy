@@ -26,6 +26,8 @@
 
 #include "ThreeDO.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 void ThreeDOSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -63,3 +65,14 @@ void ThreeDOSpy::writeSerial() {
 void ThreeDOSpy::debugSerial() {
 	sendRawDataDebug(rawData, 0, bytesToReturn);
 }
+
+#else
+void ThreeDOSpy::loop() {}
+
+void ThreeDOSpy::writeSerial() {}
+
+void ThreeDOSpy::debugSerial() {}
+
+void ThreeDOSpy::updateState() {}
+
+#endif

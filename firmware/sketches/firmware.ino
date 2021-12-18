@@ -10,6 +10,7 @@
 
 // ---------- Uncomment one of these options to select operation mode ---------
 // 
+//-- Arduino or Teensy 3.5
 //#define MODE_NES
 //#define MODE_POWERGLOVE
 //#define MODE_SNES
@@ -40,17 +41,19 @@
 //#define MODE_CDI_KEYBOARD
 //#define MODE_GAMEBOY_PRINTER
 
-//--- Teensy Only
+//--- Teensy 3.5 Only
 //#define MODE_DREAMCAST
 //#define MODE_WII
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
+
+//--- Teensy 4.0 Only
 //#define MODE_NUON
 
 //Bridge GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 
-//--- Require 3rd Party Libraries.  Setup is more complicated
+//--- Require Arduino + 3rd Party Libraries.  Setup is more complicated
 //#define MODE_CDI
 //#define MODE_CDTV_WIRED
 //#define MODE_CDTV_WIRELESS

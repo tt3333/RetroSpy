@@ -24,200 +24,154 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Nuon.h"
+//Enable for VERY verbose debugging output
+//#define TRACE
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#include "Nuon.h"
+ 
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY40)
 
 #include "elapsedMillis.h"
 
-#define CLOCK_DELAY "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
-
-
-FASTRUN void NuonSpy::loop()
-{
-	updateState();
-
-	if (((rawData[0] & 0b00000100) != 0 && (rawData[1] & 0b00000100) != 0 && (rawData[2] & 0b00000100) == 0 && (rawData[3] & 0b00000100) == 0 && (rawData[4] & 0b00000100) == 0 
-			&& (rawData[5] & 0b00000100) == 0 && (rawData[6] & 0b00000100) != 0 && (rawData[7] & 0b00000100) == 0 
-			&& (rawData[11] & 0b00000100) != 0 && (rawData[12] & 0b00000100) != 0 && (rawData[14] & 0b00000100) == 0))
-	{
-#if !defined(DEBUG)
-		writeSerial();
-#else
-		debugSerial();
-#endif
-	}
-}
+static signed char tmp;
+static bool waitTmp = false;
+static unsigned long lastReadTime;
+static byte buffer[19];
 
 FASTRUN void NuonSpy::writeSerial()
 {
-	rawData[55] = '\n';
-	Serial.write(&rawData[39], 17);
+	buffer[18] = '\n';
+	
+	if (max(micros() - lastReadTime, 0U) < 2000)
+	{
+		// Not enough time has elapsed, return
+		return;
+	}
+	Serial.write(buffer, 19);
+	lastReadTime = micros();
 }
 
 FASTRUN void NuonSpy::debugSerial()
 {
-	for (int i = 0; i < 128; ++i)
+	buffer[18] = '\n';
+	
+	for (int i = 0; i < 64; ++i)
 	{
 		if (i % 8 == 0)
 			Serial.print("|"); 
-        
-		Serial.print((rawData[i] & 0b00000100) == 0 ? "0" : "1");
+ 
+		Serial.print((rawData[i] == LOW) ? "0" : "1");
 	}
-	Serial.print("\n");	
+	Serial.print("|");
+	Serial.print((signed char)buffer[16]);
+	Serial.print("|");
+	Serial.print((signed char)buffer[17]);
+	Serial.print("|");
+	Serial.print(waitTmp);
+	Serial.print("|");
+	Serial.print(tmp);
+	Serial.print("\n"); 
 }
 
 FASTRUN void NuonSpy::updateState()
 {
-	elapsedMicros restPeriod;
+  
+	elapsedMicros restPeriod = 0;
 
 start:
-	while ((GPIOD_PDIR & 0b00001000)) ;
-	do 
-	{
-		rawData[0] = (GPIOD_PDIR);
-	} while (!(rawData[0] & 0b00001000));
-	
-	if ((rawData[0] & 0b00000100) == 0)
+
+	while (digitalReadFast(NUON_CLOCK_PIN) == HIGH) ;
+	while (digitalReadFast(NUON_CLOCK_PIN) == LOW) ;
+
+	if ((rawData[0] = digitalReadFast(NUON_DATA_PIN)) == LOW)
 	{ 
+		//Serial.println("here3");;
 		goto start;
 	}
 	else if (restPeriod < 40)
 	{
+		//Serial.println("here4");
 		restPeriod = 0;
 		goto start;
 	}
 	else
 	{
-		restPeriod = 0;
 		noInterrupts();
-		asm volatile(CLOCK_DELAY);
-		rawData[1] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[2] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[3] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[4] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[5] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[6] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[7] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[8] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[9] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[10] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[11] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[12] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[13] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[14] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[15] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[16] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[17] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[18] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[19] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[20] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[21] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[22] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[23] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[24] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[25] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[26] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[27] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[28] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[29] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[30] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[31] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[32] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[33] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[34] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[35] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[36] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[37] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[38] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[39] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[40] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[41] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[42] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[43] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[44] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[45] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[46] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[47] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[48] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[49] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[50] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[51] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[52] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[53] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[54] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[55] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[56] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[57] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[58] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[59] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[60] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[61] = GPIOD_PDIR;
-		asm volatile(CLOCK_DELAY);
-		rawData[62] = GPIOD_PDIR;  
-		asm volatile(CLOCK_DELAY);
-		rawData[63] = GPIOD_PDIR;
+		restPeriod = 0;
+   
+		for (int i = 1; i < 64; ++i)
+		{
+			while (digitalReadFast(NUON_CLOCK_PIN) == HIGH) ;
+			while (digitalReadFast(NUON_CLOCK_PIN) == LOW) ;
+			rawData[i] = digitalReadFast(NUON_DATA_PIN);
+		}
 		interrupts();
+	}
+
+	if ((rawData[0] == HIGH && rawData[1] == HIGH && rawData[2] == LOW && rawData[3] == LOW && rawData[4] == LOW
+	      && rawData[5] == LOW && rawData[6] == HIGH && rawData[7] == LOW     
+	      && rawData[11] == HIGH && rawData[12] == HIGH))
+	{
+      
+		if (rawData[14] == LOW)
+		{
+			memcpy(buffer, &rawData[39], 16);
+#if defined(DEBUG) || defined(TRACE)
+			Serial.print("!");
+			debugSerial();
+			waitTmp = false;
+#endif  
+		}
+		else
+		{
+			tmp = 0;
+			for (int i = 0; i < 7; ++i)
+				tmp |= (rawData[40 + i] == HIGH) ? ((1 << (6 - i))) : 0;
+			if (rawData[39] == LOW)
+				tmp |= 128;
+          
+			waitTmp = true;
+        
+#if defined(TRACE)
+			Serial.print("$");
+			debugSerial();
+#endif          
+		}
+	}
+	else if (waitTmp)
+	{
+		if (rawData[7] == HIGH && rawData[6] == HIGH && rawData[22] == LOW && rawData[31] == LOW)
+		{
+			tmp *= -1;
+			if (tmp == 10)
+				tmp = 11;
+			buffer[17] = tmp;
+		}
+		else if (rawData[22] == LOW)
+		{
+			if (tmp == 10)
+				tmp = 11;
+			buffer[16] = tmp;
+		}
+		waitTmp = false;
+#if defined(TRACE)
+		Serial.print("#");
+		debugSerial();
+#endif
+	}
+
+
+}
+
+FASTRUN void NuonSpy::loop()
+{
+	while (true)
+	{
+		updateState();
+      
+#if !defined(DEBUG) && !defined(TRACE)
+		writeSerial();
+#endif
 	}
 }
 

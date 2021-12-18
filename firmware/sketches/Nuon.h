@@ -38,7 +38,7 @@ public:
 
 private:
 
-	byte rawData[128];
+	byte rawData[64];
 };
 
 #endif

@@ -331,8 +331,13 @@ namespace RetroSpy
                     uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
                     if (pid == serPid)
                     {
+                        mgmtObject.ToString();
                         //uint serNum = Convert.ToUInt32(DeviceIdParts[2], CultureInfo.CurrentCulture);
-                        string port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
+                        string port;
+                        if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
+                            port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
+                        else
+                            continue;
 
                         string hwid = ((string[])mgmtObject["HardwareID"])[0];
                         switch (hwid.Substring(hwid.IndexOf("REV_", StringComparison.Ordinal) + 4, 4))
@@ -358,7 +363,7 @@ namespace RetroSpy
                                 break;
 
                             case "0279":
-                                //board = PJRC_Board.Teensy_40;
+                                arduinoPorts.Add(port + " (Teensy 4.0)");
                                 break;
 
                             default:

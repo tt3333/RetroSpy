@@ -26,6 +26,8 @@
 
 #include "NES.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void NESSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -64,3 +66,15 @@ void NESSpy::updateState() {
 	} while (--bits > 0);
 #endif
 }
+
+#else
+
+void NESSpy::loop() {}
+
+void NESSpy::writeSerial() {}
+
+void NESSpy::debugSerial() {}
+
+void NESSpy::updateState() {}
+
+#endif

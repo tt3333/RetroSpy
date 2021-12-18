@@ -29,7 +29,7 @@
 
 #include "FMTownsKeyboardAndMouse.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 
 static byte rawData[32];
 static byte mouseData[4];

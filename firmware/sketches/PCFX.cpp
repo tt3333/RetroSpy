@@ -26,6 +26,8 @@
 
 #include "PCFX.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 void PCFXSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -57,3 +59,14 @@ void PCFXSpy::writeSerial() {
 void PCFXSpy::debugSerial() {
 	sendRawDataDebug(rawData, 0, PCFX_BITCOUNT);
 }
+#else
+
+void PCFXSpy::loop() {}
+
+void PCFXSpy::writeSerial() {}
+
+void PCFXSpy::debugSerial() {}
+
+void PCFXSpy::updateState() {}
+
+#endif

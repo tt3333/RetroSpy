@@ -26,6 +26,8 @@
 
 #include "TG16.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 void TG16Spy::loop() {
 
 	noInterrupts();
@@ -105,3 +107,14 @@ void TG16Spy::debugSerial() {
 	Serial.print((currentState & 0b0000100000000000) ? "6" : "0");
 	Serial.print("\n");
 }
+
+#else
+void TG16Spy::loop() {}
+
+void TG16Spy::writeSerial() {}
+
+void TG16Spy::debugSerial() {}
+
+void TG16Spy::updateState() {}
+
+#endif

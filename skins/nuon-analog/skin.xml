@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Logitech Controller" author="zoggins" type="nuon">
+
+  <background name="Default" image="nuon-analog.png" />
+
+  <button name="A" image="circle2.png" x="373" y="110" width="35" height="35" />
+  <button name="CD" image="circle2.png" x="411" y="86" width="30" height="30" />
+  <button name="CR" image="circle2.png" x="439" y="56" width="30" height="30" />
+
+  <button name="B" image="circle2.png" x="339" y="75" width="35" height="35" />
+  <button name="CL" image="circle2.png" x="379" y="57" width="30" height="30" />
+  <button name="CU" image="circle2.png" x="409" y="29" width="30" height="30" />
+
+  <button name="LT" image="circle2.png" x="127" y="5" width="70" height="20" />
+  <button name="RT" image="circle2.png" x="365" y="5" width="70" height="20" />
+
+  <button name="start" image="circle2.png" x="322" y="154" width="30" height="30" />
+  <button name="nuon" image="circle2.png" x="234" y="64" width="90" height="45" />
+  
+  <button name="up" image="circle2.png" x="115" y="33" width="25" height="25" />
+  <button name="left" image="circle2.png" x="77" y="65" width="25" height="25" />
+  <button name="down" image="circle2.png" x="108" y="94" width="25" height="25" />
+  <button name="right" image="circle2.png" x="143" y="62" width="25" height="25" />
+
+  <stick xname="stick_x" yname="stick_y" image="stick.png"
+	   x="161" y="129" width="76" height="76" xrange="15" yrange="15" />
+</skin>

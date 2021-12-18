@@ -119,6 +119,10 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="skins\nuon-analog\circle2.png" />
+    <None Remove="skins\nuon-analog\nuon-analog.PNG" />
+    <None Remove="skins\nuon-analog\skin.xml" />
+    <None Remove="skins\nuon-analog\stick.PNG" />
     <None Remove="skins\nuon-digital\circle.png" />
     <None Remove="skins\nuon-digital\circle2.png" />
     <None Remove="skins\nuon-digital\noun-background.png" />
@@ -189,6 +193,7 @@
     <Compile Include="Readers\ColecoVision.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\C64mini.cs" />
+    <Compile Include="Readers\Nuon.cs" />
     <Compile Include="Readers\PCKeyboardReader.cs" />
     <Compile Include="Readers\GameBoyPrinter.cs" />
     <Compile Include="Readers\Retired\MouseTester.cs" />
@@ -281,6 +286,18 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="beagle.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\nuon-analog.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\stick.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\nuon-digital\circle.png">

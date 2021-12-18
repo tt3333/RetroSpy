@@ -26,6 +26,8 @@
 
 #include "PowerGlove.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 static bool sync = false;
 
 void PowerGloveSpy::loop() {
@@ -121,3 +123,15 @@ void PowerGloveSpy::updateState() {
 	
 	interrupts();
 }
+
+#else
+
+void PowerGloveSpy::loop() {}
+
+void PowerGloveSpy::writeSerial() {}
+
+void PowerGloveSpy::debugSerial() {}
+
+void PowerGloveSpy::updateState() {}
+
+#endif

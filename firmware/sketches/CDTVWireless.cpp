@@ -26,7 +26,7 @@
 
 #include "CDTVWireless.h"
 
-#if defined(TP_IRREMOTE)
+#if defined(TP_IRREMOTE) && !(defined(__arm__) && defined(CORE_TEENSY))
 #include <IRremote.h>
 
 #define WIRELESS_TIMEOUT 100

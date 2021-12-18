@@ -26,6 +26,8 @@
 
 #include "BoosterGrip.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 void BoosterGripSpy::setup() {
 	// TODO: Move these pin numbers to config.h
 	// Set pins
@@ -100,3 +102,9 @@ void BoosterGripSpy::debugSerial() {
 		lastState = currentState;
 	}
 }
+
+#elsevoid BoosterGripSpy::setup() {}void BoosterGripSpy::loop() {}void BoosterGripSpy::writeSerial() {}
+
+void BoosterGripSpy::debugSerial() {}
+
+void BoosterGripSpy::updateState() {}#endif

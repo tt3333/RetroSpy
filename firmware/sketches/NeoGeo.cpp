@@ -26,6 +26,8 @@
 
 #include "NeoGeo.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void NeoGeoSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -65,3 +67,15 @@ void NeoGeoSpy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+
+#else
+
+void NeoGeoSpy::loop() {}
+
+void NeoGeoSpy::writeSerial() {}
+
+void NeoGeoSpy::debugSerial() {}
+
+void NeoGeoSpy::updateState() {}
+
+#endif

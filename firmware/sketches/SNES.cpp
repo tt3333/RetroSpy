@@ -26,6 +26,8 @@
 
 #include "SNES.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void SNESSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -74,3 +76,14 @@ void SNESSpy::updateState() {
 	}
 #endif
 }
+
+#else
+void SNESSpy::loop() {}
+
+void SNESSpy::writeSerial() {}
+
+void SNESSpy::debugSerial() {}
+
+void SNESSpy::updateState() {}
+
+#endif

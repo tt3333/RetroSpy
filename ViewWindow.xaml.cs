@@ -601,14 +601,14 @@ namespace RetroSpy
                       ? skin.Config.X + (xrange * e.Analogs[skin.XName])
                       : skin.Config.X;
 
-                if (Math.Abs(e.Analogs[skin.XName]) < skin.XPrecision)
+                if (e.Analogs.ContainsKey(skin.XName) && Math.Abs(e.Analogs[skin.XName]) < skin.XPrecision)
                     x = skin.Config.X;
 
                 float y = e.Analogs.ContainsKey(skin.YName)
                       ? skin.Config.Y + (yrange * e.Analogs[skin.YName])
                       : skin.Config.Y;
 
-                if (Math.Abs(e.Analogs[skin.YName]) < skin.YPrecision)
+                if (e.Analogs.ContainsKey(skin.YName) && Math.Abs(e.Analogs[skin.YName]) < skin.YPrecision)
                     y = skin.Config.Y;
 
                 Visibility visibility = skin.VisibilityName.Length > 0

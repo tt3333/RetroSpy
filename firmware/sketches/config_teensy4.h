@@ -1,10 +1,10 @@
 //
-// FMTowns.cpp
+// config_teensy4.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
 //
-// Copyright (c) 2020 RetroSpy Technologies
+// Copyright (c) 2021 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,55 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "FMTowns.h"
+#define NUON_CLOCK_PIN			8
+#define NUON_DATA_PIN			7
 
-#if !(defined(__arm__) && defined(CORE_TEENSY))
+#define PIND_READ( pin ) (digitalReadFast(pin))
 
-void FMTownsSpy::loop() {
-	noInterrupts();
-	updateState();
-	interrupts();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-}
+#define MICROSECOND_NOPS ""
 
-void FMTownsSpy::updateState() {
-	rawData[0] = PIN_READ(2);
-	rawData[1] = PIN_READ(3);
-	rawData[2] = PIN_READ(4);
-	rawData[3] = PIN_READ(5);
-	rawData[4] = PIN_READ(6);
-	rawData[5] = PIN_READ(7);
-	rawData[6] = PINB_READ(0);
-	rawData[7] = PINB_READ(1);
-	rawData[8] = PINB_READ(2);
-}
-
-void FMTownsSpy::writeSerial() {
-	for (unsigned char i = 0; i < 9; ++i) {
-		Serial.write(rawData[i] ? ZERO : ONE);
-	}
-	Serial.write(SPLIT);
-}
-
-void FMTownsSpy::debugSerial() {
-	for (int i = 0; i < 9; ++i) {
-		Serial.print(rawData[i] ? "0" : "1");
-	}
-	Serial.print("\n");
-}
-
-#else
-
-void FMTownsSpy::loop() {}
-
-void FMTownsSpy::writeSerial() {}
-
-void FMTownsSpy::debugSerial() {}
-
-void FMTownsSpy::updateState() {}
-
-#endif
+#define T_DELAY( ms ) delay(ms)
+#define A_DELAY( ms ) delay(0)

@@ -26,7 +26,7 @@
 
 #include "Wii.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 void WiiSpy::setup() {
 	pinMode(19, INPUT);
 	pinMode(18, INPUT);

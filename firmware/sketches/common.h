@@ -26,7 +26,9 @@
 
 #include "Arduino.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if  defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY40)
+#include "config_teensy4.h"
+#elif defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 #include "config_teensy.h"
 #else
 #include "config_arduino.h"

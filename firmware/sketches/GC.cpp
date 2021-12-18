@@ -26,7 +26,7 @@
 
 #include "GC.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARUDINO_TEENSY35)
 
 static int show = 0;
 
@@ -300,7 +300,7 @@ void GCSpy::writeKeyboard()
 	Serial.write(SPLIT);
 }
 
-#else
+#elif defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 
 bool isLuigisMansion = false;
 
@@ -674,5 +674,11 @@ void GCSpy::writeKeyboard()
 	Serial.write(SPLIT);
 }
 
-#endif
+#else
 
+void GCSpy::loop() {}
+void GCSpy::writeSerial() {}
+void GCSpy::debugSerial() {}
+void GCSpy::updateState() {}
+
+#endif

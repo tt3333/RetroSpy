@@ -26,7 +26,7 @@
 
 #include "AmigaCd32.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 void AmigaCd32Spy::setup() {
 	// GPIOD_PDIR & 0xFF;
 	pinMode(2, INPUT_PULLUP);

@@ -26,6 +26,8 @@
 
 #include "PlayStation.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void PlayStationSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -129,3 +131,8 @@ void PlayStationSpy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+#else
+void PlayStationSpy::loop() {}
+void PlayStationSpy::debugSerial() {}
+void PlayStationSpy::updateState() {}
+#endif

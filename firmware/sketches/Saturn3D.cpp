@@ -26,6 +26,8 @@
 
 #include "Saturn3D.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 static bool isKeyboard = false;
 static byte keyboardData[18];
 static bool isMake = false;
@@ -228,3 +230,15 @@ void Saturn3DSpy::debugSerial() {
 	
 	Serial.print("\n");
 }
+#else
+void Saturn3DSpy::setup() {}
+
+void Saturn3DSpy::loop() {}
+
+void Saturn3DSpy::writeSerial() {}
+
+void Saturn3DSpy::debugSerial() {}
+
+void Saturn3DSpy::updateState() {}
+
+#endif

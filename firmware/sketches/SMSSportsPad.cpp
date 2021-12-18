@@ -26,6 +26,8 @@
 
 #include "SMSSportsPad.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 static bool sync = false;
 
 static byte x, y;
@@ -98,3 +100,16 @@ void SMSSportsPadSpy::updateState()
 	button2 = PIN_READ(7) == 0;
 	interrupts();
 }
+
+#else
+void SMSSportsPadSpy::setup() {}
+
+void SMSSportsPadSpy::loop() {}
+
+void SMSSportsPadSpy::writeSerial() {}
+
+void SMSSportsPadSpy::debugSerial() {}
+
+void SMSSportsPadSpy::updateState() {}
+
+#endif

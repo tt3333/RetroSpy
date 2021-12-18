@@ -26,6 +26,8 @@
 
 #include "Intellivision.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 const unsigned char IntellivisionSpy::buttonMasks[32] = {
 			0b01000000, 0b01000001, 0b01100001, 0b01100000, 0b00100000, 0b00100001, 0b00110001, 0b00110000,
 			0b00010000, 0b00010001, 0b10010001, 0b10010000, 0b10000000, 0b10000001, 0b11000001, 0b11000000,
@@ -159,3 +161,9 @@ void IntellivisionSpy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+
+#elsevoid IntellivisionSpy::loop() {}void IntellivisionSpy::writeSerial() {}
+
+void IntellivisionSpy::debugSerial() {}
+
+void IntellivisionSpy::updateState() {}#endif

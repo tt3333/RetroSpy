@@ -26,6 +26,8 @@
 
 #include "SMSPaddle.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 static int value;
 static bool button;
 
@@ -74,3 +76,16 @@ void SMSPaddleSpy::updateState()
 	button = PIN_READ(7) == 0;
 	interrupts();
 }
+
+#else
+void SMSPaddleSpy::setup() {}
+
+void SMSPaddleSpy::loop() {}
+
+void SMSPaddleSpy::writeSerial() {}
+
+void SMSPaddleSpy::debugSerial() {}
+
+void SMSPaddleSpy::updateState() {}
+
+#endif

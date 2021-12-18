@@ -9,7 +9,7 @@
 
 //        DispatcherTimer _timer;
 
-//       // public event StateEventHandler ControllerStateChanged;
+//        // public event StateEventHandler ControllerStateChanged;
 //        public event EventHandler ControllerDisconnected;
 
 //        public MouseTester(string portName)
@@ -166,8 +166,8 @@
 
 //            outState.SetButton("mouse_center", true);
 
-//            //outState.SetAnalog("stick_x", x1);
-//            //outState.SetAnalog("stick_y", y1);
+//            outState.SetAnalog("stick_x", x1, 255);
+//            outState.SetAnalog("stick_y", y1, 255);
 
 //            //outState.SetAnalog("x", x1);
 //            //outState.SetAnalog("y", y1);

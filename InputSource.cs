@@ -67,7 +67,7 @@ namespace RetroSpy
         public static readonly InputSource PS4 = new InputSource("playstation4", "Sony PlayStation 4", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 ds4drv ; sudo ds4drv --hidraw --dump-reports", PS4Reader.ReadFromPacket, username, password, null, 0));
         public static readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -y", SuperNESandNES.ReadFromPacketPSClassic, username, password, null, 0));
 
-        public static readonly InputSource NUON = new InputSource("nuon", "VM Labs Nuon", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, SuperNESandNES.ReadFromPacketNuon));
+        public static readonly InputSource NUON = new InputSource("nuon", "VM Labs Nuon", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Nuon.ReadFromPacket));
 
         // Retired/Non-Functional
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, false, false, false, (port, useLagFix) => new MouseTester(port));

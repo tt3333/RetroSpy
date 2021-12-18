@@ -26,10 +26,12 @@
 
 #include "GenesisMouse.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 #define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
 
 void GenesisMouseSpy::setup() {
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 	// GPIOD_PDIR & 0xFF;
 	pinMode(2, INPUT_PULLUP);
 	pinMode(14, INPUT_PULLUP);
@@ -109,3 +111,16 @@ void GenesisMouseSpy::debugSerial() {
 			Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
 	Serial.print("\n");
 }
+
+#else
+void GenesisMouseSpy::setup() {}
+
+void GenesisMouseSpy::loop() {}
+
+void GenesisMouseSpy::writeSerial() {}
+
+void GenesisMouseSpy::debugSerial() {}
+
+void GenesisMouseSpy::updateState() {}
+
+#endif

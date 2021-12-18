@@ -26,6 +26,8 @@
 
 #include "Genesis.h"
 
+#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+
 void GenesisSpy::setup() {
 #if defined(__arm__) && defined(CORE_TEENSY)
 	// GPIOD_PDIR & 0xFF;
@@ -138,3 +140,16 @@ void GenesisSpy::debugSerial() {
 		lastState = currentState;
 	}
 }
+
+#else
+void GenesisSpy::setup() {}
+
+void GenesisSpy::loop() {}
+
+void GenesisSpy::writeSerial() {}
+
+void GenesisSpy::debugSerial() {}
+
+void GenesisSpy::updateState() {}
+
+#endif

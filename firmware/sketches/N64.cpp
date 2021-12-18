@@ -26,7 +26,7 @@
 
 #include "N64.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(__arm__) && defined(CORE_TEENSY) & defined(ARDUINO_TEENSY35)
 
 void N64Spy::loop() 
 {
@@ -182,7 +182,7 @@ void N64Spy::debugSerial() {
 	Serial.print("\n");
 }
 
-#else
+#elif defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 
 static bool getControllerInfo = false;
 
@@ -334,5 +334,12 @@ void N64Spy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+
+#else
+
+void N64Spy::loop() {}
+void N64Spy::writeSerial() {}
+void N64Spy::debugSerial() {}
+void N64Spy::updateState() {}
 
 #endif

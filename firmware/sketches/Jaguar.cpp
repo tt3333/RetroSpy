@@ -26,6 +26,8 @@
 
 #include "Jaguar.h"
 
+#if !(defined(__arm__) && defined(CORE_TEENSY))
+
 void JaguarSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -95,3 +97,14 @@ void JaguarSpy::debugSerial() {
 
 	Serial.print("\n");
 }
+#else
+
+void JaguarSpy::loop() {}
+
+void JaguarSpy::writeSerial() {}
+
+void JaguarSpy::debugSerial() {}
+
+void JaguarSpy::updateState() {}
+
+#endif
