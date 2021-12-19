@@ -413,6 +413,8 @@ void setup()
 	AtariPaddlesSpy.setup();
 #elif defined(MODE_NUON)
 	NuonSpy.setup();
+#else
+#error "No Console Mode Selected!"
 #endif
 
   #pragma GCC diagnostic push
