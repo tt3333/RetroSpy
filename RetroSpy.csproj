@@ -208,6 +208,7 @@
     <Compile Include="Readers\NeoGeoMini.cs" />
     <Compile Include="Readers\MiSTerReader.cs" />
     <Compile Include="Readers\TG16Mini.cs" />
+    <Compile Include="Readers\VCS.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
     <Compile Include="Readers\XboxReaderV2.cs" />

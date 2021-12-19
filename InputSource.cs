@@ -7,7 +7,7 @@ namespace RetroSpy
 {
     public class InputSource
     {
-        public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "/media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000));
+        public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "/media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000, true));
         //public static readonly InputSource MISTER = new InputSource("mister", "MiSTer", false, false, true, false, true, (hostname, username, password, commandSub) => new SSHControllerReader(hostname, "killall retrospy ; /media/fat/retrospy/retrospy /dev/input/js{0}", MiSTerReader.ReadFromPacket, username, password, commandSub, 5000));
 
         public static readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Classic.ReadFromPacket));
@@ -17,6 +17,7 @@ namespace RetroSpy
 
         public static readonly InputSource ATARI5200 = new InputSource("atari5200", "Atari 5200", true, false, false, true, false, (port, port2, useLagFix) => new SerialControllerReader2(port, port2, useLagFix, SuperNESandNES.ReadFromPacketAtari52001, SuperNESandNES.ReadFromPacketAtari52002));
         public static readonly InputSource JAGUAR = new InputSource("jaguar", "Atari Jaguar", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, SuperNESandNES.ReadFromPacketJaguar));
+        public static readonly InputSource ATARIVCS = new InputSource("vcs", "Atari VCS", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -V", VCS.ReadFromPacket, username, password, null, 0));
 
         public static readonly InputSource PIPPIN = new InputSource("pippin", "Bandai Pippin", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Pippin.ReadFromPacket));
 
@@ -77,7 +78,7 @@ namespace RetroSpy
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
 
         public static readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
-            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON
         };
 
         public static readonly InputSource DEFAULT = NES;

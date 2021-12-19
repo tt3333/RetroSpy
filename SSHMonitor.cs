@@ -26,13 +26,15 @@ namespace RetroSpy
         private readonly string _command;
         private readonly int _delayInMilliseconds;
         private DispatcherTimer _timer;
+        private readonly bool quickDisconnect;
 
-        public SSHMonitor(string hostname, string command, string username, string password, string commandSub, int delayInMilliseconds)
+        public SSHMonitor(string hostname, string command, string username, string password, string commandSub, int delayInMilliseconds, bool useQuickDisconnect)
         {
             _localBuffer = new List<byte>();
             _client = new SshClient(hostname, username, password);
             _command = !string.IsNullOrEmpty(commandSub) ? string.Format(CultureInfo.CurrentCulture, command, commandSub) : command;
             _delayInMilliseconds = delayInMilliseconds;
+            quickDisconnect = useQuickDisconnect;
         }
 
         public void Start()
@@ -99,7 +101,7 @@ namespace RetroSpy
             try
             {
                 int readCount = (int)_data.Length;
-                if (readCount < 1)
+                if (quickDisconnect && readCount < 1)
                 {
                     numNoReads++;
                     if (numNoReads == 10)
