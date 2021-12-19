@@ -128,6 +128,12 @@
     <None Remove="skins\nuon-digital\noun-background.png" />
     <None Remove="skins\nuon-digital\saturn.png" />
     <None Remove="skins\nuon-digital\skin.xml" />
+    <None Remove="skins\vcs-demo\circle.png" />
+    <None Remove="skins\vcs-demo\pad.png" />
+    <None Remove="skins\vcs-demo\skin.xml" />
+    <None Remove="skins\vcs-demo\stick.png" />
+    <None Remove="skins\vcs-demo\trig-l.png" />
+    <None Remove="skins\vcs-demo\trig-r.png" />
     <None Remove="skins\xbox-s\circle.png" />
     <None Remove="skins\xbox-s\lstick.png" />
     <None Remove="skins\xbox-s\rstick.png" />
@@ -208,6 +214,7 @@
     <Compile Include="Readers\NeoGeoMini.cs" />
     <Compile Include="Readers\MiSTerReader.cs" />
     <Compile Include="Readers\TG16Mini.cs" />
+    <Compile Include="Readers\VCS.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
     <Compile Include="Readers\XboxReaderV2.cs" />
@@ -307,6 +314,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\nuon-digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vcs-demo\trig-r.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\xbox-s\circle.png">
