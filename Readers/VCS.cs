@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
-    public  class VCS
+    public static class VCS
     {
-        private const int PACKET_SIZE_CLASSIC = 10;
+        private const int PACKET_SIZE_CLASSIC = 11;
         
-        private const int PACKET_SIZE_MODERN = 30;
+        private const int PACKET_SIZE_MODERN = 31;
         
         private static readonly string[] BUTTONS_1 = {
             "a", "b", "x", "y", "l", "r", "l3", "r3",
@@ -24,9 +24,9 @@ namespace RetroSpy.Readers
             "lstick_x", "lstick_y", "rstick_x", "rstick_y", "trig_l", "trig_r"
         };
 
-        private static float ReadAnalog(short input)
+        private static float ReadAnalog(short input, short maxValue = short.MaxValue)
         {
-            return (float)input / short.MaxValue;
+            return (float)input / maxValue;
         }
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
@@ -142,9 +142,9 @@ namespace RetroSpy.Readers
                 int j = 0;
                 for (int i = 0; i < 6; ++i)
                 {
-                    short val = binaryPacket[4 + j];
-                    val += (short)(binaryPacket[5 + j] << 8);
-                    outState.SetAnalog(ANALOGS[i], ReadAnalog(val), val);
+                    short val = binaryPacket[3 + j];
+                    val += (short)(binaryPacket[4 + j] << 8);
+                    outState.SetAnalog(ANALOGS[i], i < 4 ? ReadAnalog(val) : ReadAnalog(val, 0x3ff), val);
                     j += 2;
                 }
 
@@ -155,7 +155,10 @@ namespace RetroSpy.Readers
         private static void GenerateDigitalDirections(byte[] binaryPacket, ControllerStateBuilder outState)
         {
             byte directions = (byte)(binaryPacket[2] >> 4);
-            bool up = false, left = false, right = false, down = false;
+            bool up = false;
+            bool left = false;
+            bool right = false; 
+            bool down = false;
             switch (directions)
             {
                 case 1:
@@ -166,21 +169,21 @@ namespace RetroSpy.Readers
                     break;
                 case 2:
                     up = true;
-                    left = true;
+                    left = false;
                     down = false;
-                    right = false;
+                    right = true;
                     break;
                 case 3:
                     up = false;
-                    left = true;
+                    left = false;
                     down = false;
-                    right = false;
+                    right = true;
                     break;
                 case 4:
                     up = false;
-                    left = true;
+                    left = false;
                     down = true;
-                    right = false;
+                    right = true;
                     break;
                 case 5:
                     up = false;
@@ -190,21 +193,21 @@ namespace RetroSpy.Readers
                     break;
                 case 6:
                     up = false;
-                    left = false;
+                    left = true;
                     down = true;
-                    right = true;
+                    right = false;
                     break;
                 case 7:
                     up = false;
-                    left = false;
+                    left = true;
                     down = false;
-                    right = true;
+                    right = false;
                     break;
                 case 8:
                     up = true;
-                    left = false;
+                    left = true;
                     down = false;
-                    right = true;
+                    right = false;
                     break;
             }
 
