@@ -22,6 +22,16 @@
                     <MenuItem Name="Palette_GKGreen" Header="Graphix Kid Green" Click="Palette_Click" IsCheckable="true" />
                     <MenuItem Name="Palette_BZ" Header="Black Zero" Click="Palette_Click" IsCheckable="true" />
                 </MenuItem>
+                <MenuItem Header="Print Size">
+                    <MenuItem Name="Size_1x" Header="1x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_2x" Header="2x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_3x" Header="3x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_4x" Header="4x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_5x" Header="5x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_6x" Header="6x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_7x" Header="7x" Click="Size_Click" IsCheckable="true" />
+                    <MenuItem Name="Size_8x" Header="8x" Click="Size_Click" IsCheckable="true" />
+                </MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

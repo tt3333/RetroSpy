@@ -70,6 +70,60 @@ namespace GBPemu
         private BitmapPixelMaker _imageBuffer;
         private readonly IControllerReader _reader;
 
+        private int PrintSize;
+
+        private void Size_Click(object sender, EventArgs e)
+        {
+            if (sender == Size_1x)
+            {
+                PrintSize = 1;
+            }
+            else if (sender == Size_2x)
+            {
+                PrintSize = 2;
+            }
+            else if(sender == Size_3x)
+            {
+                PrintSize = 3;
+            }
+            else if (sender == Size_4x)
+            {
+                PrintSize = 4;
+            }
+            else if (sender == Size_5x)
+            {
+                PrintSize = 5;
+            }
+            else if (sender == Size_6x)
+            {
+                PrintSize = 6;
+            }
+            else if (sender == Size_7x)
+            {
+                PrintSize = 7;
+            }
+            else if (sender == Size_8x)
+            {
+                PrintSize = 8;
+            }
+
+            CheckSize(PrintSize);
+
+            Properties.Settings.Default.PrintSize = PrintSize;
+        }
+
+        private void CheckSize(int sizeId)
+        {
+            Size_1x.IsChecked = sizeId == 1;
+            Size_2x.IsChecked = sizeId == 2;
+            Size_3x.IsChecked = sizeId == 3;
+            Size_4x.IsChecked = sizeId == 4;
+            Size_5x.IsChecked = sizeId == 5;
+            Size_6x.IsChecked = sizeId == 6;
+            Size_7x.IsChecked = sizeId == 7;
+            Size_8x.IsChecked = sizeId == 8;
+        }
+
         private int SelectedPalette;
 
         private void CheckPalette(int paletteId)
@@ -139,6 +193,7 @@ namespace GBPemu
         private void DisplayError()
         {
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
+            PrintSize = Properties.Settings.Default.PrintSize;
 
             using (Bitmap bmp = new Bitmap(Properties.Resources.ErrorImage))
             {
@@ -177,12 +232,20 @@ namespace GBPemu
 
         public GameBoyPrinterEmulatorWindow(IControllerReader reader)
         {
+            if (Properties.Settings.Default.UpgradeRequired)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeRequired = false;
+                Properties.Settings.Default.Save();
+            }
+
             InitializeComponent();
             DataContext = this;
 
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
+            PrintSize = Properties.Settings.Default.PrintSize;
 
             using (Bitmap bmp = new Bitmap(Properties.Resources.PrintImage))
             {
@@ -220,6 +283,7 @@ namespace GBPemu
                 _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
                 CheckPalette(SelectedPalette);
+                CheckSize(PrintSize);
 
             }
         }
@@ -243,7 +307,7 @@ namespace GBPemu
         {
             _imageBuffer.SetColor(0, 0, 0, 255);
 
-            int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
+            int square_width = PrintSize;// 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
             int square_height = square_width;
 
             string[] tiles_rawBytes_array = e.RawPrinterData.Split('\n');
@@ -350,6 +414,7 @@ namespace GBPemu
 
             // Set the Image source.
             _image.Source = wbitmap;
+
         }
 
         private void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
