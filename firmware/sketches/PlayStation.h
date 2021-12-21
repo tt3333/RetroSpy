@@ -35,6 +35,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 private:
 	unsigned char rawData[168]; // 8 + 16 + 128 + 16 (for rumble starts at 152)

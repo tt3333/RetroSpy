@@ -77,6 +77,11 @@ void SNESSpy::updateState() {
 #endif
 }
 
+const char* SNESSpy::startupMsg()
+{
+	return "Starting up in SNES mode";
+}
+
 #else
 void SNESSpy::loop() {}
 
@@ -85,5 +90,10 @@ void SNESSpy::writeSerial() {}
 void SNESSpy::debugSerial() {}
 
 void SNESSpy::updateState() {}
+
+const char* SNESSpy::startupMsg()
+{
+	return "Mode not compatible with this hardware";
+}
 
 #endif

@@ -287,9 +287,6 @@ void setup()
 
 #if defined(MODE_DETECT)
     if ( !PINC_READ(MODEPIN_SNES)) {
-	    delay(1000);
-		Serial.println("Starting up in SNES mode");
-	    delay(1000);
         SNESSpy.setup();
     } else if ( !PINC_READ(MODEPIN_N64))  {
 	    delay(1000);

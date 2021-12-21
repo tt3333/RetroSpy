@@ -131,8 +131,18 @@ void PlayStationSpy::debugSerial() {
 	}
 	Serial.print("\n");
 }
+
+const char* PlayStationSpy::startupMsg()
+{
+	return "Starting up in PlayStation mode";
+}
+
 #else
 void PlayStationSpy::loop() {}
 void PlayStationSpy::debugSerial() {}
 void PlayStationSpy::updateState() {}
+const char* PlayStationSpy::startupMsg()
+{
+	return "Mode not compatible with this hardware";
+}
 #endif

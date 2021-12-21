@@ -42,6 +42,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 private:
 	unsigned char rawData[SNES_BITCOUNT_EXT];

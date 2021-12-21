@@ -28,17 +28,22 @@
 #define ControllerSpy_h
 
 #include "common.h"
+#include <string.h>
 
 class ControllerSpy {
 public:
 	virtual void setup()
 	{
+		delay(1000);
+		Serial.println(startupMsg());
+		delay(1000);
 		common_pin_setup();
 	}
 	virtual void loop() = 0;
 	virtual void writeSerial() = 0;
 	virtual void debugSerial() = 0;
 	virtual void updateState() = 0;
+	virtual const char* startupMsg() { return "Default Startup Message";}; 
 };
 
 #endif
