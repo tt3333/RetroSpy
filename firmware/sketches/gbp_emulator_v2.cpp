@@ -29,6 +29,13 @@
 
 #if !defined(__arm__) || !defined(CORE_TEENSY)
 
+// See /WEBUSB.md for details
+#if USB_VERSION == 0x210
+#include <WebUSB.h>
+WebUSB WebUSBSerial(1, "herrzatacke.github.io/gb-printer-web/#/webusb");
+#define Serial WebUSBSerial
+#endif
+
 #define GBP_OUTPUT_RAW_PACKETS false // by default, packets are parsed. if enabled, output will change to raw data packets for parsing and decompressing later
 #define GBP_USE_PARSE_DECOMPRESSOR false // embedded decompressor can be enabled for use with parse mode but it requires fast hardware (SAMD21, SAMD51, ESP8266, ESP32)
 
@@ -144,7 +151,7 @@ void serialClock_ISR(void)
 {
 	// Serial Clock (1 = Rising Edge) (0 = Falling Edge); Master Output Slave Input (This device is slave)
 #ifdef GBP_FEATURE_USING_RISING_CLOCK_ONLY_ISR
-	  const bool txBit = gpb_serial_io_OnRising_ISR(digitalRead(GBP_SO_PIN));
+	const bool txBit = gpb_serial_io_OnRising_ISR(digitalRead(GBP_SO_PIN));
 #else
 	const bool txBit = gpb_serial_io_OnChange_ISR(digitalRead(GBP_SC_PIN), digitalRead(GBP_SO_PIN));
 #endif
@@ -161,6 +168,10 @@ void GameBoyPrinterEmulator::setup(void)
 	// Config Serial
 	// Has to be fast or it will not transfer the image fast enough to the computer
 	Serial.begin(115200);
+
+	// Wait for Serial to be ready
+	while (!Serial) {
+		;}
 
 	/* Pins from gameboy link cable */
 	pinMode(GBP_SC_PIN, INPUT);
@@ -179,14 +190,14 @@ void GameBoyPrinterEmulator::setup(void)
 
 	/* Attach ISR */
 #ifdef GBP_FEATURE_USING_RISING_CLOCK_ONLY_ISR
-	attachInterrupt(digitalPinToInterrupt(GBP_SC_PIN), serialClock_ISR, RISING);   // attach interrupt handler
+	attachInterrupt(digitalPinToInterrupt(GBP_SC_PIN), serialClock_ISR, RISING); // attach interrupt handler
 #else
-	  attachInterrupt(digitalPinToInterrupt(GBP_SC_PIN), serialClock_ISR, CHANGE);   // attach interrupt handler
+	attachInterrupt(digitalPinToInterrupt(GBP_SC_PIN), serialClock_ISR, CHANGE); // attach interrupt handler
 #endif
 
-	    /* Packet Parser */
+	  /* Packet Parser */
 #ifdef GBP_FEATURE_PARSE_PACKET_MODE
-	      gbp_pkt_init(&gbp_pktState);
+	gbp_pkt_init(&gbp_pktState);
 #endif
 
 
@@ -207,6 +218,8 @@ void GameBoyPrinterEmulator::setup(void)
 	Serial.println("// This is free software, and you are welcome to redistribute it");
 	Serial.println("// under certain conditions. Refer to LICENSE file for detail.");
 	Serial.println("// ---");
+
+	Serial.flush();
 } // setup()
 
 void GameBoyPrinterEmulator::loop()
@@ -235,6 +248,7 @@ void GameBoyPrinterEmulator::loop()
 			Serial.print("B out of ");
 			Serial.print(gbp_serial_io_dataBuff_max());
 			Serial.println("B)");
+			Serial.flush();
 			digitalWrite(LED_STATUS_PIN, LOW);
 
 #ifdef GBP_FEATURE_PARSE_PACKET_MODE
@@ -248,7 +262,7 @@ void GameBoyPrinterEmulator::loop()
 	last_millis = curr_millis;
 
 	// Diagnostics Console
-	while(Serial.available() > 0)
+	while (Serial.available() > 0)
 	{
 		switch (Serial.read())
 		{
@@ -325,31 +339,32 @@ inline void gbp_parse_packet_loop(void)
 				{
 					//!{"command":"DATA", "compressed":0, "more":0}
 #ifdef GBP_FEATURE_PARSE_PACKET_USE_DECOMPRESSOR
-					            Serial.print(", \"compressed\":0");  // Already decompressed by us, so no need to do so
+					Serial.print(", \"compressed\":0"); // Already decompressed by us, so no need to do so
 #else
-					                        Serial.print(", \"compressed\":");
+					Serial.print(", \"compressed\":");
 					Serial.print(gbp_pktState.compression);
 #endif
 					Serial.print(", \"more\":");
 					Serial.print((gbp_pktState.dataLength != 0) ? '1' : '0');
 				}
 				Serial.println((char)'}');
+				Serial.flush();
 			}
 			else
 			{
 #ifdef GBP_FEATURE_PARSE_PACKET_USE_DECOMPRESSOR
 				// Required for more complex games with compression support
-				while(gbp_pkt_decompressor(&gbp_pktState, gbp_pktbuff, gbp_pktbuffSize, &tileBuff))
+				while (gbp_pkt_decompressor(&gbp_pktState, gbp_pktbuff, gbp_pktbuffSize, &tileBuff))
 				{
 					if (gbp_pkt_tileAccu_tileReadyCheck(&tileBuff))
 					{
 						// Got Tile
-						for(int i = 0 ; i < GBP_TILE_SIZE_IN_BYTE ; i++)
+						for (int i = 0; i < GBP_TILE_SIZE_IN_BYTE; i++)
 						{
 							const uint8_t data_8bit = tileBuff.tile[i];
 							if (i == GBP_TILE_SIZE_IN_BYTE - 1) {
 								Serial.print((char)nibbleToCharLUT[(data_8bit >> 4) & 0xF]);
-								Serial.println((char)nibbleToCharLUT[(data_8bit >> 0) & 0xF]);  // use println on last byte to reduce serial calls
+								Serial.println((char)nibbleToCharLUT[(data_8bit >> 0) & 0xF]); // use println on last byte to reduce serial calls
 							}
 							else {
 								Serial.print((char)nibbleToCharLUT[(data_8bit >> 4) & 0xF]);
@@ -357,20 +372,21 @@ inline void gbp_parse_packet_loop(void)
 								Serial.print((char)' ');
 							}
 						}
+						Serial.flush();
 					}
 				}
 #else
 				// Simplified support for gameboy camera only application
 				// Dev Note: Good for checking if everything above decompressor is working
-				if(gbp_pktbuffSize > 0)
+				if (gbp_pktbuffSize > 0)
 				{
 					// Got Tile
-					for(int i = 0 ; i < gbp_pktbuffSize ; i++)
+					for (int i = 0; i < gbp_pktbuffSize; i++)
 					{
 						const uint8_t data_8bit = gbp_pktbuff[i];
 						if (i == gbp_pktbuffSize - 1) {
 							Serial.print((char)nibbleToCharLUT[(data_8bit >> 4) & 0xF]);
-							Serial.println((char)nibbleToCharLUT[(data_8bit >> 0) & 0xF]);  // use println on last byte to reduce serial calls
+							Serial.println((char)nibbleToCharLUT[(data_8bit >> 0) & 0xF]); // use println on last byte to reduce serial calls
 						}
 						else {
 							Serial.print((char)nibbleToCharLUT[(data_8bit >> 4) & 0xF]);
@@ -378,6 +394,7 @@ inline void gbp_parse_packet_loop(void)
 							Serial.print((char)' ');
 						}
 					}
+					Serial.flush();
 				}
 #endif
 			}
@@ -403,9 +420,9 @@ inline void gbp_packet_capture_loop()
 		uint8_t data_8bit = 0;
 		for (int i = 0; i < dataBuffCount; i++)
 		{
-			 // Display the data payload encoded in hex
+			// Display the data payload encoded in hex
 		  // Start of a new packet
-		  if(pktByteIndex == 0)
+			if (pktByteIndex == 0)
 			{
 				pktDataLength = gbp_serial_io_dataBuff_getByte_Peek(4);
 				pktDataLength |= (gbp_serial_io_dataBuff_getByte_Peek(5) << 8) & 0xFF00;
@@ -422,7 +439,7 @@ inline void gbp_packet_capture_loop()
 			Serial.print((char)nibbleToCharLUT[(data_8bit >> 4) & 0xF]);
 			Serial.print((char)nibbleToCharLUT[(data_8bit >> 0) & 0xF]);
 			// Splitting packets for convenience
-			if((pktByteIndex > 5)&&(pktByteIndex >= (9 + pktDataLength)))
+			if ((pktByteIndex > 5)&&(pktByteIndex >= (9 + pktDataLength)))
 			{
 				digitalWrite(LED_STATUS_PIN, LOW);
 				Serial.println("");
@@ -432,10 +449,11 @@ inline void gbp_packet_capture_loop()
 			else
 			{
 				Serial.print((char)' ');
-				pktByteIndex++;  // Byte hex split counter
-				byteTotal++;  // Byte total counter
+				pktByteIndex++; // Byte hex split counter
+				byteTotal++; // Byte total counter
 			}
 		}
+		Serial.flush();
 	}
 }
 #endif

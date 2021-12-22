@@ -53,13 +53,13 @@ bool gbp_pkt_processByte(gbp_pkt_t *_pkt, const uint8_t _byte, uint8_t buffer[],
 
 	// Dev Note: Minimum required size of 4 bytes for printer instruction packet
 	//  data payload can be streamed so doesn't have to fit full size
-	if(bufferMax < 4)
-	  return false;
+	if (bufferMax < 4)
+		return false;
 
 	_pkt->received = GBP_REC_NONE;
 
 	// Parsing fixed packet header
-	if(_pkt->pktByteIndex <= 5)
+	if (_pkt->pktByteIndex <= 5)
 	{
 		if (_pkt->pktByteIndex == 1)
 		{
@@ -83,7 +83,7 @@ bool gbp_pkt_processByte(gbp_pkt_t *_pkt, const uint8_t _byte, uint8_t buffer[],
 		}
 
 		// Data packets are streamed
-		if(_pkt->pktByteIndex == 6)
+		if (_pkt->pktByteIndex == 6)
 		{
 			if (bufferMax > _pkt->dataLength)
 			{
@@ -102,7 +102,7 @@ bool gbp_pkt_processByte(gbp_pkt_t *_pkt, const uint8_t _byte, uint8_t buffer[],
 	}
 
 	// Capture Bytes to buffer if needed
-	if((6 <= _pkt->pktByteIndex) && (_pkt->pktByteIndex < (6 + _pkt->dataLength)))
+	if ((6 <= _pkt->pktByteIndex) && (_pkt->pktByteIndex < (6 + _pkt->dataLength)))
 	{
 		// Byte is from payload... add to buffer
 		const uint16_t payloadIndex = _pkt->pktByteIndex - 6;
@@ -119,23 +119,23 @@ bool gbp_pkt_processByte(gbp_pkt_t *_pkt, const uint8_t _byte, uint8_t buffer[],
 			_pkt->received = GBP_REC_GOT_PAYLOAD_PARTAL;
 		}
 	}
-	else if(_pkt->pktByteIndex == (6 + _pkt->dataLength))
+	else if (_pkt->pktByteIndex == (6 + _pkt->dataLength))
 	{
 		*bufferSize = _pkt->dataLength % bufferMax;
 	}
 
 	// Increment
-	if(_pkt->pktByteIndex == (8 + _pkt->dataLength))
+	if (_pkt->pktByteIndex == (8 + _pkt->dataLength))
 	{
 		_pkt->printerID = _byte;
 	}
-	else if(_pkt->pktByteIndex == (8 + _pkt->dataLength + 1))
+	else if (_pkt->pktByteIndex == (8 + _pkt->dataLength + 1))
 	{
 		// End of packet reached
 		_pkt->status = _byte;
 		_pkt->pktByteIndex = 0;
 		// Indicate received packet
-		if(bufferMax > _pkt->dataLength)
+		if (bufferMax > _pkt->dataLength)
 		{
 			// Payload fits into buffer
 			_pkt->received = GBP_REC_GOT_PACKET;
@@ -186,10 +186,10 @@ bool gbp_pkt_decompressor(gbp_pkt_t *_pkt, const uint8_t buff[], const size_t bu
 	if (!_pkt->compression)
 	{
 		// Uncompressed payload // e.g. Gameboy Camera
-		while(1)
+		while (1)
 		{
 			// for (buffIndex = 0; buffIndex < buffSize ; buffIndex++)
-			if(_pkt->buffIndex < buffSize)
+			if (_pkt->buffIndex < buffSize)
 			{
 				if (gbp_pkt_tileAccu_insertByte(tileBuff, buff[_pkt->buffIndex++]))
 				{
@@ -198,7 +198,7 @@ bool gbp_pkt_decompressor(gbp_pkt_t *_pkt, const uint8_t buff[], const size_t bu
 			}
 			else
 			{
-				_pkt->buffIndex = 0;  // Reset for next buffer
+				_pkt->buffIndex = 0; // Reset for next buffer
 				return false;
 			}
 		}
@@ -206,14 +206,14 @@ bool gbp_pkt_decompressor(gbp_pkt_t *_pkt, const uint8_t buff[], const size_t bu
 	else
 	{
 		// Compressed payload (Run length encoding) // e.g. Pokemon Trading Card
-		while(1)
+		while (1)
 		{
 			// for (buffIndex = 0; buffIndex < buffSize ; buffIndex++)
 			// Dev Note: Need to also check if we have completed adding looped byte even if all incoming bytes have been read
-			if((_pkt->buffIndex < buffSize) || (_pkt->compressedRun && !_pkt->repeatByteGet && (_pkt->loopRunLength != 0)))
+			if ((_pkt->buffIndex < buffSize) || (_pkt->compressedRun && !_pkt->repeatByteGet && (_pkt->loopRunLength != 0)))
 			{
 				// Incoming Bytes Avaliable
-				if(_pkt->loopRunLength == 0)
+				if (_pkt->loopRunLength == 0)
 				{
 					// Start of either a raw run of byte or compressed run of byte
 					uint8_t b = buff[_pkt->buffIndex++];
@@ -231,7 +231,7 @@ bool gbp_pkt_decompressor(gbp_pkt_t *_pkt, const uint8_t buff[], const size_t bu
 						_pkt->repeatByteGet = true;
 					}
 				}
-				else if(_pkt->repeatByteGet)
+				else if (_pkt->repeatByteGet)
 				{
 					// Grab loop byte
 					uint8_t b = buff[_pkt->buffIndex++];
@@ -250,7 +250,7 @@ bool gbp_pkt_decompressor(gbp_pkt_t *_pkt, const uint8_t buff[], const size_t bu
 			}
 			else
 			{
-				_pkt->buffIndex = 0;  // Reset for next buffer
+				_pkt->buffIndex = 0; // Reset for next buffer
 				return false;
 			}
 		}

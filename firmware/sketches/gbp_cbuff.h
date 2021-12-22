@@ -36,16 +36,16 @@
 
 typedef struct gpb_cbuff_t
 {
-	size_t capacity;  ///< Maximum number of items in the buffer
-	size_t count;     ///< Number of items in the buffer
-	uint8_t *buffer;  ///< Data Buffer
-	size_t head;      ///< Head Index
-	size_t tail;      ///< Tail Index
+	size_t capacity; ///< Maximum number of items in the buffer
+	size_t count; ///< Number of items in the buffer
+	uint8_t *buffer; ///< Data Buffer
+	size_t head; ///< Head Index
+	size_t tail; ///< Tail Index
 
 #ifdef FEATURE_CHECKSUM_SUPPORTED
 	  // Temp
-	  size_t countTemp;     ///< Number of items in the buffer
-	  size_t headTemp;      ///< Head Index
+	size_t countTemp; ///< Number of items in the buffer
+	size_t headTemp; ///< Head Index
 #endif // FEATURE_CHECKSUM_SUPPORTED
 } gpb_cbuff_t;
 
@@ -55,7 +55,7 @@ static inline bool gpb_cbuff_Init(gpb_cbuff_t *cb, size_t capacity, uint8_t *buf
 	if ((cb == NULL) || (buffPtr == NULL))
 		return false; ///< Failed
 	  // Init Struct
-	  *cb = emptyCB;
+	*cb = emptyCB;
 	cb->capacity = capacity;
 	cb->buffer   = buffPtr;
 	cb->count    = 0;
@@ -75,9 +75,9 @@ static inline bool gpb_cbuff_Reset(gpb_cbuff_t *cb)
 static inline bool gpb_cbuff_Enqueue(gpb_cbuff_t *cb, uint8_t b)
 {
 	// Full
-	if(cb->count >= cb->capacity)
-	  return false;  ///< Failed
-	// Push value
+	if (cb->count >= cb->capacity)
+		return false; ///< Failed
+	  // Push value
 	cb->buffer[cb->head] = b;
 	// Increment head
 	cb->head = (cb->head + 1) % cb->capacity;
@@ -88,9 +88,9 @@ static inline bool gpb_cbuff_Enqueue(gpb_cbuff_t *cb, uint8_t b)
 static inline bool gpb_cbuff_Dequeue(gpb_cbuff_t *cb, uint8_t *b)
 {
 	// Empty
-	if(cb->count == 0)
-	  return false;  ///< Failed
-	// Pop value
+	if (cb->count == 0)
+		return false; ///< Failed
+	  // Pop value
 	*b = cb->buffer[cb->tail];
 	// Increment tail
 	cb->tail = (cb->tail + 1) % cb->capacity;
@@ -101,11 +101,11 @@ static inline bool gpb_cbuff_Dequeue(gpb_cbuff_t *cb, uint8_t *b)
 static inline bool gpb_cbuff_Dequeue_Peek(gpb_cbuff_t *cb, uint8_t *b, uint32_t offset)
 {
 	// Empty
-	if(cb->count == 0)
-	  return false;  ///< Failed
-	if(cb->count < offset)
-	  return false;  ///< Failed
-	// Pop value
+	if (cb->count == 0)
+		return false; ///< Failed
+	if (cb->count < offset)
+		return false; ///< Failed
+	  // Pop value
 	*b = cb->buffer[(cb->tail + offset) % cb->capacity];
 	return true; ///< Successful
 }
@@ -133,9 +133,9 @@ static inline bool gpb_cbuff_AcceptTemp(gpb_cbuff_t *cb)
 static inline bool gpb_cbuff_EnqueueTemp(gpb_cbuff_t *cb, uint8_t b)
 {
 	// Full
-	if(cb->countTemp >= (cb->capacity - cb->count))
-	  return false;  ///< Failed
-	// Push value
+	if (cb->countTemp >= (cb->capacity - cb->count))
+		return false; ///< Failed
+	  // Push value
 	cb->buffer[cb->headTemp] = b;
 	// Increment headTemp
 	cb->headTemp = (cb->headTemp + 1) % cb->capacity;
