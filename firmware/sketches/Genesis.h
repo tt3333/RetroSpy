@@ -47,7 +47,7 @@
 #if defined(__arm__) && defined(CORE_TEENSY)
 #define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
 #else
-#define WAIT_FOR_LINES_TO_SETTLE
+#define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS)
 #endif
 
 class GenesisSpy : public ControllerSpy {
