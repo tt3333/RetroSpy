@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
 
 namespace RetroSpy
 {
+
     /// <summary>
     /// Interaction logic for AboutWindow.xaml
     /// </summary>
@@ -25,6 +27,7 @@ namespace RetroSpy
 <BR>
         <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
             <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>            
+            <TR><td ALIGN='CENTER'>40wattrange</TD></TR>            
             <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/watsonpunk"">watsonpunk</A></TD></TR>            
             <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
@@ -34,9 +37,10 @@ namespace RetroSpy
             <TR><td ALIGN='CENTER'><A HREF=""https://discord.gg/tyvzPbu5fv"">peco_de_guile</A></TD></TR>
             <TR><td ALIGN='CENTER'>Mellified</TD></TR> 
             <TR><td ALIGN='CENTER'>Karl W. Reinsch</TD></TR>
+            <TR><td ALIGN='CENTER'><A HREF=""https://github.com/Avasam"">Avasam</A></TD></TR>
         </TABLE>
     </BODY>
-</HTML>", Assembly.GetEntryAssembly().GetName().Version, DateTime.Now));
+</HTML>", Assembly.GetEntryAssembly().GetName().Version, Properties.Resources.BuildDate));
 
         }
         private void WebBrowser1_Navigating(object sender, NavigatingCancelEventArgs e)
