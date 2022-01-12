@@ -40,6 +40,7 @@
 //#define MODE_AMIGA_MOUSE
 //#define MODE_CDI_KEYBOARD
 //#define MODE_GAMEBOY_PRINTER
+//#define MODE_VFLASH
 
 //--- Teensy 3.5 Only
 //#define MODE_DREAMCAST
@@ -136,6 +137,7 @@
 #include "PowerGlove.h"
 #include "Nuon.h"
 #include "VSmile.h"
+#include "VFlash.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -262,6 +264,9 @@ NuonSpy NuonSpy;
 #endif
 #if defined(MODE_VSMILE)                                                  
 VSmileSpy VSmileSpy;
+#endif
+#if defined(MODE_VFLASH)                                                  
+VFlashSpy VFlashSpy;
 #endif
 #if defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
@@ -417,6 +422,8 @@ void setup()
 	NuonSpy.setup();
 #elif defined(MODE_VSMILE)
 	VSmileSpy.setup();
+#elif defined(MODE_VFLASH)
+	VFlashSpy.setup();
 #else
 #warning  "No Console Mode Selected!"
 #endif
@@ -536,6 +543,8 @@ void loop()
 	NuonSpy.loop();
 #elif defined(MODE_VSMILE)
 	VSmileSpy.loop();
+#elif defined(MODE_VFLASH)
+	VFlashSpy.loop();
 #elif defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 

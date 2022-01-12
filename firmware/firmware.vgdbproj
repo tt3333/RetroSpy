@@ -71,6 +71,7 @@
         <string>sketches\config_teensy4.h</string>
         <string>sketches\Nuon.h</string>
         <string>sketches\VSmile.h</string>
+        <string>sketches\VFlash.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
