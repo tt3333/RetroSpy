@@ -71,6 +71,7 @@ namespace RetroSpy
         public static readonly InputSource NUON = new InputSource("nuon", "VM Labs Nuon", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Nuon.ReadFromPacket));
         
         public static readonly InputSource VSMILE = new InputSource("vsmile", "VTech V.Smile", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, VSmile.ReadFromPacket));
+        public static readonly InputSource VFLASH = new InputSource("vflash", "VTech V.Flash", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, VFlash.ReadFromPacket));
 
         // Retired/Non-Functional
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, false, false, false, (port, useLagFix) => new MouseTester(port));
@@ -80,7 +81,7 @@ namespace RetroSpy
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
 
         public static readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
-            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON, VSMILE
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON, VSMILE, VFLASH
         };
 
         public static readonly InputSource DEFAULT = NES;

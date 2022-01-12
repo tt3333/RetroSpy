@@ -209,6 +209,7 @@
     <Compile Include="Readers\MiSTerReader.cs" />
     <Compile Include="Readers\TG16Mini.cs" />
     <Compile Include="Readers\VCS.cs" />
+    <Compile Include="Readers\VFlash.cs" />
     <Compile Include="Readers\VSmile.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
