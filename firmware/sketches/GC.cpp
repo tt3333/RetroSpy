@@ -26,7 +26,7 @@
 
 #include "GC.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARUDINO_TEENSY35)
+#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 
 static int show = 0;
 

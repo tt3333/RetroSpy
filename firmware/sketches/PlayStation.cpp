@@ -26,7 +26,7 @@
 
 #include "PlayStation.h"
 
-#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 
 void PlayStationSpy::loop() {
 	noInterrupts();

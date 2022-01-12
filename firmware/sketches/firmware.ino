@@ -46,6 +46,7 @@
 //#define MODE_WII
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
+//#define MODE_VSMILE
 
 //--- Teensy 4.0 Only
 //#define MODE_NUON
@@ -134,6 +135,7 @@
 #include "AtariPaddles.h"
 #include "PowerGlove.h"
 #include "Nuon.h"
+#include "VSmile.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -257,6 +259,9 @@ AtariPaddlesSpy AtariPaddlesSpy;
 #endif
 #if defined(MODE_NUON)                                                  
 NuonSpy NuonSpy;
+#endif
+#if defined(MODE_VSMILE)                                                  
+VSmileSpy VSmileSpy;
 #endif
 #if defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
@@ -410,6 +415,8 @@ void setup()
 	AtariPaddlesSpy.setup();
 #elif defined(MODE_NUON)
 	NuonSpy.setup();
+#elif defined(MODE_VSMILE)
+	VSmileSpy.setup();
 #else
 #warning  "No Console Mode Selected!"
 #endif
@@ -527,6 +534,8 @@ void loop()
 	AtariPaddlesSpy.loop();
 #elif defined(MODE_NUON)
 	NuonSpy.loop();
+#elif defined(MODE_VSMILE)
+	VSmileSpy.loop();
 #elif defined(MODE_KEYBOARD_CONTROLLER) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 

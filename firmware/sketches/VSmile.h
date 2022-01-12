@@ -1,10 +1,10 @@
 //
-// SMSPaddle.cpp
+// VSmile.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
 //
-// Copyright (c) 2020 RetroSpy Technologies
+// Copyright (c) 2022 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,68 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SMSPaddle.h"
+#ifndef VSmile_h
+#define VSmile_h
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+#include "ControllerSpy.h"
 
-static int value;
-static bool button;
+class VSmileSpy : public ControllerSpy {
+public:
+	void setup();
+	void loop();
+	void writeSerial();
+	void debugSerial();
+	void updateState();
 
-void SMSPaddleSpy::setup()
-{
-	// Setup input pins
-	for(byte i = 2 ; i <= 8 ; i++)
-	{
-		pinMode(i, INPUT_PULLUP);
-	}
-	
-}
+private:
 
-void SMSPaddleSpy::loop()
-{
-	updateState();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-}
-
-void SMSPaddleSpy::writeSerial()
-{
-	Serial.write(value == 10 ? 11 : value);
-	Serial.write(button == true ? ONE : ZERO);
-	Serial.write(SPLIT);
-}
-
-void SMSPaddleSpy::debugSerial()
-{
-	Serial.print(value);
-	Serial.print("|");
-	Serial.println(button == true ? "B" : "0");
-}
-
-void SMSPaddleSpy::updateState()
-{
-	noInterrupts();
-	value = 0;
-	WAIT_FALLING_EDGEB(0);
-	value |= (PIND & 0b00111100) >> 2;
-	WAIT_LEADING_EDGEB(0);
-	value |= (PIND & 0b00111100) << 2;
-	button = PIN_READ(7) == 0;
-	interrupts();
-}
-
-#else
-void SMSPaddleSpy::setup() {}
-
-void SMSPaddleSpy::loop() {}
-
-void SMSPaddleSpy::writeSerial() {}
-
-void SMSPaddleSpy::debugSerial() {}
-
-void SMSPaddleSpy::updateState() {}
+};
 
 #endif

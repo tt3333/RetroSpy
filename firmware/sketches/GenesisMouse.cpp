@@ -26,7 +26,7 @@
 
 #include "GenesisMouse.h"
 
-#if defined(ARUDINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
 
 #define WAIT_FOR_LINES_TO_SETTLE asm volatile (MICROSECOND_NOPS MICROSECOND_NOPS)
 
