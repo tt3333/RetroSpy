@@ -100,12 +100,15 @@ namespace RetroSpy.Readers
                 }
             }
 
-            for (int i = 0; i < 2; ++i)
+            if (hasRumble)
             {
-                polishedPacket[33 + i] = 0;
-                for (byte j = 0; j < 8; ++j)
+                for (int i = 0; i < 2; ++i)
                 {
-                    polishedPacket[33 + i] |= (byte)((packet[152 + (i * 8) + j] == 0 ? 0 : 1) << j);
+                    polishedPacket[33 + i] = 0;
+                    for (byte j = 0; j < 8; ++j)
+                    {
+                        polishedPacket[33 + i] |= (byte)((packet[152 + (i * 8) + j] == 0 ? 0 : 1) << j);
+                    }
                 }
             }
 

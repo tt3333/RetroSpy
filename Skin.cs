@@ -749,7 +749,7 @@ namespace RetroSpy
             Collection<string> errs = new Collection<string>();
 
             LoadAllSkinsFromSubFolder(path, skins, errs);
-            if (!string.IsNullOrEmpty(customPath))
+            if (!string.IsNullOrEmpty(customPath) && Directory.Exists(customPath))
                 LoadAllSkinsFromSubFolder(customPath, skins, errs);
 
             var lr = new LoadResults();
