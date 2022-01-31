@@ -115,7 +115,7 @@ namespace RetroSpy.Readers
                 outState.SetButton("down", pov[0] > OctantAngle(2) && pov[0] < OctantAngle(5));
                 outState.SetButton("left", pov[0] > OctantAngle(4) && pov[0] < OctantAngle(7));
             }
-            else  // For SN30
+            else if (_joystick.Information.ProductName == "8Bitdo SF30 Wireless Controller") // For SN30
             {
                 outState.SetButton("up", (float)state.Y / RANGE == -1.0);
                 outState.SetButton("down", (float)state.Y / RANGE == 1.0);
