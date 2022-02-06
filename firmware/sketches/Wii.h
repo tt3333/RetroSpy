@@ -36,6 +36,7 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	const char* startupMsg();
 
 private:
 	uint8_t   current_portb = 0;

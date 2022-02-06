@@ -35,6 +35,12 @@ void WiiSpy::setup() {
 	cleanData[1] = -1;
 	cleanData[46] = '\n';
 	cleanData[50] = '\n';
+	
+	delay(1000);
+	Serial.println(startupMsg());
+	delay(1000);
+	
+	
 }
 
 void WiiSpy::loop() {
@@ -269,6 +275,12 @@ void WiiSpy::debugSerial()
 
 void WiiSpy::updateState() {
 }
+
+const char* WiiSpy::startupMsg()
+{
+	return "Starting up in Wii mode";
+}
+
 #else
 void WiiSpy::setup() {
 }
@@ -284,4 +296,10 @@ void WiiSpy::debugSerial() {
 
 void WiiSpy::updateState() {
 }
+
+const char* WiiSpy::startupMsg()
+{
+	return "This board is not compatible with Wii mode";
+}
+
 #endif
