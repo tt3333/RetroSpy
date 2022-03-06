@@ -26,7 +26,10 @@
 
 #include "VFlash.h"
 
-#if !(defined(__arm__) && defined(CORE_TEENSY))
+#if !defined(TP_PINCHANGEINTERRUPT) && defined(TP_IRLIB2) && !(defined(__arm__) && defined(CORE_TEENSY))
+
+#include <SoftwareSerial.h>
+#include <IRLibAll.h>
 
 #include <SoftwareSerial.h>
 
