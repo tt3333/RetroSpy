@@ -21,6 +21,8 @@ namespace RetroSpy
 
         public static readonly InputSource PIPPIN = new InputSource("pippin", "Bandai Pippin", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Pippin.ReadFromPacket));
 
+        public static readonly InputSource EVERCADE = new InputSource("evercade", "Blaze Evercade Vs", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -n", EVS.ReadFromPacket, username, password, null, 0));
+
         public static readonly InputSource COLECOVISION = new InputSource("colecovision", "ColecoVision", true, false, false, true, false, (port, port2, useLagFix) => new SerialControllerReader2(port, port2, useLagFix, ColecoVision.ReadFromPacket, ColecoVision.ReadFromSecondColecoVisionController));
 
         public static readonly InputSource CDTV = new InputSource("cdtv", "Commodore CDTV", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Amiga.ReadFromPacket));
@@ -81,7 +83,7 @@ namespace RetroSpy
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
 
         public static readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
-            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON, VSMILE, VFLASH
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC, NUON, VSMILE, VFLASH
         };
 
         public static readonly InputSource DEFAULT = NES;

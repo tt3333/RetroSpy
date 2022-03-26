@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ 
 echo "Installing RetroSpy for Beaglebone"
 echo " "
 

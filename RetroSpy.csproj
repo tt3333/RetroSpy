@@ -193,6 +193,7 @@
     <Compile Include="Readers\ColecoVision.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\C64mini.cs" />
+    <Compile Include="Readers\EVS.cs" />
     <Compile Include="Readers\Nuon.cs" />
     <Compile Include="Readers\PCKeyboardReader.cs" />
     <Compile Include="Readers\GameBoyPrinter.cs" />
