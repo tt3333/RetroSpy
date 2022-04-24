@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<VisualGDBProjectSettings2 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ConfigurationName>Release</ConfigurationName>
   <Project xsi:type="com.visualgdb.project.linux">
     <CustomSourceDirectories>
@@ -7,11 +7,27 @@
       <PathStyle>Unknown</PathStyle>
     </CustomSourceDirectories>
     <AutoProgramSPIFFSPartition>true</AutoProgramSPIFFSPartition>
-    <DeploymentHost>
-      <HostName>192.168.1.121</HostName>
-      <Transport>SSH</Transport>
-      <UserName>root</UserName>
-    </DeploymentHost>
+    <MainSourceTransferCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <LocalDirectory>$(ProjectDir)</LocalDirectory>
+      <RemoteDirectory>/tmp/VisualGDB/$(ProjectDirUnixStyle)</RemoteDirectory>
+      <FileMasks>
+        <string>*.cpp</string>
+        <string>*.h</string>
+        <string>*.hpp</string>
+        <string>*.c</string>
+        <string>*.cc</string>
+        <string>*.cxx</string>
+        <string>*.mak</string>
+        <string>Makefile</string>
+        <string>*.txt</string>
+        <string>*.cmake</string>
+      </FileMasks>
+      <TransferNewFilesOnly>true</TransferNewFilesOnly>
+      <IncludeSubdirectories>true</IncludeSubdirectories>
+      <DeleteDisappearedFiles>false</DeleteDisappearedFiles>
+      <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
+    </MainSourceTransferCommand>
     <AllowChangingHostForMainCommands>false</AllowChangingHostForMainCommands>
     <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
     <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
@@ -148,9 +164,12 @@
       <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
       <DisableSignals>false</DisableSignals>
       <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+      <AsyncModeSupportsBreakpoints>true</AsyncModeSupportsBreakpoints>
+      <TemporaryBreakConsolidationTimeout>0</TemporaryBreakConsolidationTimeout>
       <EnableNonStopMode>false</EnableNonStopMode>
       <MaxBreakpointLimit>0</MaxBreakpointLimit>
       <EnableVerboseMode>true</EnableVerboseMode>
+      <EnablePrettyPrinters>false</EnablePrettyPrinters>
     </AdditionalGDBSettings>
     <LaunchGDBSettings xsi:type="GDBLaunchParametersNewInstance">
       <DebuggedProgram>$(TargetPath)</DebuggedProgram>
