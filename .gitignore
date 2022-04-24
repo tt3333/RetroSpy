@@ -135,3 +135,4 @@ Backup*/
 .visualgdb
 *.editorconfig
 /GBP_Firmware.zip
+/Resources/BuildDate.txt
