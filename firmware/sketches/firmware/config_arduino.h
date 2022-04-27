@@ -1,10 +1,10 @@
 //
-// config_every.h
+// config_arduino.h
 //
 // Author:
 //       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
 //
-// Copyright (c) 2021 RetroSpy Technologies
+// Copyright (c) 2020 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@
 #define DIGITAL_PIN_09	   1
 #define DIGITAL_PIN_10	   2
 #define DIGITAL_PIN_11	   3
+#define DIGITAL_PIN_12	   4
 
 #define ANALOG_PIN_00	   0
 #define ANALOG_PIN_01	   1
@@ -139,12 +140,12 @@
 #define GENESIS_TR            DIGITAL_PIN_07
 #define GENESIS_TL            DIGITAL_PIN_06
 
-#define PIND_READ( pin ) ((PORTD.IN << 2)&(1<<(pin)))
-#define PINB_READ( pin ) (PORTA.IN & (1<<(pin)))
-#define PINC_READ( pin ) digitalRead(pin)
+#define PIND_READ( pin ) (PIND&(1<<(pin)))
+#define PINB_READ( pin ) (PINB&(1<<(pin)))
+#define PINC_READ( pin ) (PINC&(1<<(pin)))
 
-#define READ_PORTD( mask ) ((PORTD.IN << 2) & mask)
-#define READ_PORTB( mask ) (PORTA.IN & mask)
+#define READ_PORTD( mask ) (PIND & mask)
+#define READ_PORTB( mask ) (PINB & mask)
 
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
