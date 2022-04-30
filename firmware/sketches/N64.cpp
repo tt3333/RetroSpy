@@ -26,7 +26,7 @@
 
 #include "N64.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY) & defined(ARDUINO_TEENSY35)
+#if defined(__arm__) && defined(CORE_TEENSY) & defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_NANO_EVERY)
 
 void N64Spy::loop() 
 {

@@ -26,14 +26,13 @@
 
 #define NOT_CONNECTED	   NA
 
-#define DIGITAL_PIN_17	   0
-#define DIGITAL_PIN_16	   1
-#define DIGITAL_PIN_15	   2
-#define DIGITAL_PIN_14	   3
-#define DIGITAL_PIN_20	   4
-#define DIGITAL_PIN_21	   5
-//#define DIGITAL_PIN_XX	   6
-//#define DIGITAL_PIN_XX	   7
+#define DIGITAL_PIN_17	   2
+#define DIGITAL_PIN_16	   3
+#define DIGITAL_PIN_15	   4
+#define DIGITAL_PIN_14	   5
+#define DIGITAL_PIN_20	   6
+#define DIGITAL_PIN_21	   7
+
 #define DIGITAL_PIN_02	   0
 #define DIGITAL_PIN_07	   1
 #define DIGITAL_PIN_18	   2
@@ -135,14 +134,14 @@
 #define GENESIS_TR            DIGITAL_PIN_21
 #define GENESIS_TL            DIGITAL_PIN_20
 
-#define PIND_READ( pin ) ((PORTD.IN << 2)&(1<<(pin)))
-#define PINB_READ( pin ) (PORTA.IN & (1<<(pin)))
+#define PIND_READ( pin ) ((VPORTD.IN << 2)&(1<<(pin)))
+#define PINB_READ( pin ) (VPORTA.IN & (1<<(pin)))
 #define PINC_READ( pin ) digitalRead(pin)
 
-#define READ_PORTD( mask ) ((PORTD.IN << 2) & mask)
-#define READ_PORTB( mask ) (PORTA.IN & mask)
+#define READ_PORTD( mask ) ((VPORTD.IN << 2) & mask)
+#define READ_PORTB( mask ) (VPORTA.IN & mask)
 
-#define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+#define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
 #define T_DELAY( ms ) delay(0)
 #define A_DELAY( ms ) delay(ms)

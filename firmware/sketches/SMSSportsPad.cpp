@@ -26,7 +26,7 @@
 
 #include "SMSSportsPad.h"
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY)
 
 static bool sync = false;
 
@@ -88,13 +88,13 @@ void SMSSportsPadSpy::updateState()
 	
 	noInterrupts();
 	WAIT_FALLING_EDGEB(0);
-	y |= (PIND & 0b00111100) >> 2;
+	y |= (READ_PORTD(0b00111100)) >> 2;
 	WAIT_LEADING_EDGEB(0);
-	x |= (PIND & 0b00111100) << 2;
+	x |= (READ_PORTD(0b00111100)) << 2 ;
 	WAIT_FALLING_EDGEB(0);
-	x |= (PIND & 0b00111100) >> 2;
+	x |= (READ_PORTD(0b00111100)) >> 2 ;
 	WAIT_LEADING_EDGEB(0);
-	y |= (PIND & 0b00111100) << 2;
+	y |= (READ_PORTD(0b00111100)) << 2 ;
 	
 	button1 = PIN_READ(6) == 0;
 	button2 = PIN_READ(7) == 0;

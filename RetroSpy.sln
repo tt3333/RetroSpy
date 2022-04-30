@@ -95,8 +95,8 @@ Global
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano.Build.0 = Debug|Win32
-		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano_Every.ActiveCfg = Debug|Arduino_Nano_Every
-		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano_Every.Build.0 = Debug|Arduino_Nano_Every
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano_Every.ActiveCfg = Debug|Win32
+		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Nano_Every.Build.0 = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.ActiveCfg = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Arduino_Uno.Build.0 = Debug|Win32
 		{974FC0E2-EAF9-441F-83DC-ACED8390CC9B}.Debug|Teensy_3 5.ActiveCfg = Debug|Win32

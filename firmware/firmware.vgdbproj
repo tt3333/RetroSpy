@@ -80,7 +80,7 @@
     <BuildLogMode xsi:nil="true" />
     <IgnoreNormalLibraryDirectories>false</IgnoreNormalLibraryDirectories>
     <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
-    <EnableVerboseBuild>false</EnableVerboseBuild>
+    <EnableVerboseBuild>true</EnableVerboseBuild>
     <PreprocessorMacros />
     <AutoBuildSPIFFSPartition>true</AutoBuildSPIFFSPartition>
   </Build>

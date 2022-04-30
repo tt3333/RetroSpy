@@ -26,7 +26,7 @@
 
 #include "SMSPaddle.h"
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY)
 
 static int value;
 static bool button;
@@ -70,9 +70,9 @@ void SMSPaddleSpy::updateState()
 	noInterrupts();
 	value = 0;
 	WAIT_FALLING_EDGEB(0);
-	value |= (PIND & 0b00111100) >> 2;
+	value |= (READ_PORTD(0b00111100)) >> 2;
 	WAIT_LEADING_EDGEB(0);
-	value |= (PIND & 0b00111100) << 2;
+	value |= (READ_PORTD(0b00111100)) << 2;
 	button = PIN_READ(7) == 0;
 	interrupts();
 }
