@@ -284,8 +284,14 @@ namespace RetroSpy
                 {
                     type1 = type;
                 }
-                types.Add(new Tuple<InputSource, string>(InputSource.ALL.First(x => x.TypeTag == type1), orgType));
 
+                foreach(var src in InputSource.ALL)
+                {
+                    if(src.TypeTag == orgType)
+                    {
+                        types.Add(new Tuple<InputSource, string>(src, orgType));
+                    }
+                }
             }
 
             int i = 0;

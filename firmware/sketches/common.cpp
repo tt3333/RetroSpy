@@ -28,7 +28,21 @@
 
 void common_pin_setup()
 {
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(ARDUINO_AVR_NANO_EVERY)
+  // (PORTD.IN & 0x3F) << 2;
+  pinMode(17, INPUT_PULLUP);
+  pinMode(16, INPUT_PULLUP);
+  pinMode(15, INPUT_PULLUP);
+  pinMode(14, INPUT_PULLUP);
+  pinMode(20, INPUT_PULLUP);
+  pinMode(21, INPUT_PULLUP);
+
+  // PORTA.IN & 0xF;
+  pinMode(2, INPUT_PULLUP);
+  pinMode(7, INPUT_PULLUP);
+  pinMode(18, INPUT_PULLUP);
+  pinMode(19, INPUT_PULLUP);
+#elif defined(__arm__) && defined(CORE_TEENSY)
 	// GPIOD_PDIR & 0xFF;
 	pinMode(2, INPUT_PULLUP);
 	pinMode(14, INPUT_PULLUP);

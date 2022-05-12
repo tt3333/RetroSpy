@@ -26,7 +26,7 @@
 
 #include "AmigaAnalog.h"
 
-#if !(defined(__arm__) && defined(CORE_TEENSY))
+#if !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(ARDUINO_AVR_NANO_EVERY)
 
 static volatile int lastVal = 0;
 static volatile int analogVal = 0;

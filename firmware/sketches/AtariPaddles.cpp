@@ -26,7 +26,7 @@
 
 #include "AtariPaddles.h"
 
-#if !(defined(__arm__) && defined(CORE_TEENSY))
+#if !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(ARDUINO_AVR_NANO_EVERY)
 
 static int nominal_min = 1024;
 static int nominal_max = 0;

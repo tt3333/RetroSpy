@@ -30,6 +30,8 @@
 #include "config_teensy4.h"
 #elif defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
 #include "config_teensy.h"
+#elif defined(ARDUINO_AVR_NANO_EVERY)
+#include "config_every.h"
 #else
 #include "config_arduino.h"
 #endif
