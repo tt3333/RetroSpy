@@ -282,11 +282,13 @@ void setup()
 #if defined(__arm__) && defined(CORE_TEENSY)
   for(int i = 33; i < 40; ++i)
     pinMode(i, INPUT_PULLUP);
-#else
-#if !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif defined(ARDUINO_AVR_NANO_EVERY)
+  for(int i = 3; i < 9; ++i)
+    if (i != 7)
+      pinMode(i, INPUT_PULLUP);
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
-#endif
 #endif
 
 #ifdef LAG_FIX

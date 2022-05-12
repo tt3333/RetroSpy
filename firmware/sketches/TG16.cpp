@@ -46,9 +46,9 @@ void TG16Spy::updateState() {
 	word temp = 0;
 	currentState = 0;
 
-	while ((PIND & 0b01000000) == 0) {}
+	while ((READ_PORTD(0b01000000)) == 0) {}
 	asm volatile("nop\nnop\n");
-	temp = ((PIND & 0b00111100) >> 2);
+	temp = ((READ_PORTD(0b00111100)) >> 2);
 	if ((temp & 0b00001111) == 0b00000000) {
 		currentState |= lastDirections;
 		seenHighButtons = true;
@@ -68,9 +68,9 @@ void TG16Spy::updateState() {
 		lastDirections = temp;
 	}
 
-	while ((PIND & 0b01000000) != 0) {}
+	while ((READ_PORTD(0b01000000)) != 0) {}
 	asm volatile(MICROSECOND_NOPS);
-	temp = ((PIND & 0b00111100) << 2);
+	temp = ((READ_PORTD(0b00111100)) << 2);
 	if (seenHighButtons == has6buttons ? false : true) {
 		currentState |= (temp << 4);
 		lastHighButtons = temp;
