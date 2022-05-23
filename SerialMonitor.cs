@@ -38,7 +38,9 @@ namespace RetroSpy
         {
             _printerMode = printerMode;
             _localBuffer = new List<byte>();
-            _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", useLagFix ? 57600 : BAUD_RATE);
+-           _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", useLagFix ? 57600 : BAUD_RATE);
+-           _datPort.Handshake = Handshake.RequestToSend; // Improves support for devices expecting RTS & DTR signals.
+-           _datPort.DtrEnable = true;
         }
 
         public void Start()

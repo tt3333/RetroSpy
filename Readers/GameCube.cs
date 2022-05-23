@@ -5,9 +5,17 @@ namespace RetroSpy.Readers
     public static class GameCube
     {
         private const int PACKET_SIZE = 64;
+        private const int NICOHOOD_PACKET_SIZE = 8;
 
         private static readonly string[] BUTTONS = {
             null, null, null, "start", "y", "x", "b", "a", null, "l", "r", "z", "up", "down", "right", "left"
+        };
+				
+        // Button order for the Nicohood Nintendo API
+        // https://github.com/NicoHood/Nintendo
+        // Each byte is reverse from the buttons above
+        static readonly string[] NICOHOOD_BUTTONS = {
+            "a", "b", "x", "y", "start", null, null, null, "left", "right", "down", "up", "z", "r", "l", null
         };
 
         private static readonly string[] KEYS =
@@ -121,6 +129,28 @@ namespace RetroSpy.Readers
                 }
 
                 return state1.Build();
+            }
+
+            if (packet.Length == NICOHOOD_PACKET_SIZE) // Packets are written as bytes when writing from the NicoHood API, so we're looking for a packet size of 8 (interpreted as bytes)
+            {
+
+                ControllerStateBuilder stateNico = new ControllerStateBuilder();
+
+                for (int i = 0; i < 16; i++) // Handles the two button bytes
+                {
+                    if (string.IsNullOrEmpty(NICOHOOD_BUTTONS[i])) continue;
+                    int bitPacket = (packet[i / 8] >> (i % 8)) & 0x1;
+                    stateNico.SetButton(NICOHOOD_BUTTONS[i], bitPacket != 0x00);
+                }
+
+                stateNico.SetAnalog("lstick_x", ReadStick(packet[2]),packet[2]);
+                stateNico.SetAnalog("lstick_y", ReadStick(packet[3]),packet[3]);
+                stateNico.SetAnalog("cstick_x", ReadStick(packet[4]),packet[4]);
+                stateNico.SetAnalog("cstick_y", ReadStick(packet[5]),packet[5]);
+                stateNico.SetAnalog("trig_l", ReadTrigger(packet[6]),packet[6]);
+                stateNico.SetAnalog("trig_r", ReadTrigger(packet[7]),packet[7]);
+
+                return stateNico.Build();
             }
 
             if (packet.Length != PACKET_SIZE && packet.Length != PACKET_SIZE - 8)
