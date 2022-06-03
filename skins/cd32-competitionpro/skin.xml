@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Amiga CD32 Competition Pro" author="chmaller" type="cd32;classic">
+<skin name="Amiga CD32 Competition Pro" author="chmaller" type="cd32;classic;a500">
 
     <background name="Default" image="controller.png" />
 
@@ -18,5 +18,7 @@
   <button name="left" image="circle2.png" x="81" y="218" width="25" height="25" />
   <button name="right" image="circle2.png" x="182" y="222" width="25" height="25" />
 
-  <button name="pause" image="circle2.png" x="280" y="272" width="45" height="15" />
+  <button name="pause" image="circle2.png" x="280" y="272" width="45" height="15" /> 
+  <button name="menu" image="circle2.png" x="280" y="272" width="45" height="15" />
+  <button name="home" image="circle2.png" x="346" y="272" width="45" height="15" />
 </skin>
