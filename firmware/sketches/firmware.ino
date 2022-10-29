@@ -43,7 +43,7 @@
 //#define MODE_VFLASH
 
 //--- Teensy 3.5 or Raspberry Pi Pico
-//#define MODE_WII
+#define MODE_WII
 
 //--- Teensy 3.5 Only
 //#define MODE_DREAMCAST
