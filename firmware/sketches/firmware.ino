@@ -164,7 +164,7 @@ void setup()
 #elif defined(RS_VISION) || defined(RS_VISION_CDI)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2) && !defined(RASPBERRYPI_PICO)
 	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
 	DDRC  = 0x00;
 #endif
@@ -201,12 +201,14 @@ void loop()
 		currentSpy->loop();
 }
 
+#if defined(RS_VISION) || defined(RS_VISION_CDI)
 byte ReadAnalog()
 {
 	byte retVal = PINC;
 	
 	return (~retVal  & 0b00111111);
 }
+#endif
 
 #if defined(RS_VISION_ULTRA)
 byte ReadAnalog4()

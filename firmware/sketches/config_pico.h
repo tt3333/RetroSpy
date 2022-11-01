@@ -1,10 +1,10 @@
 //
-// PCFX.cpp
+// config_pico.h
 //
 // Author:
-//       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
+//       T.T <tt3333@tt-server.net>
 //
-// Copyright (c) 2020 RetroSpy Technologies
+// Copyright (c) 2022 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,54 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "PCFX.h"
+#define PIND_READ( pin ) (gpio_get(pin))
 
-#if !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(RASPBERRYPI_PICO)
+#define MICROSECOND_NOPS ""
 
-void PCFXSpy::loop() {
-	noInterrupts();
-	updateState();
-	interrupts();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-}
+#define T_DELAY( ms ) delay(0)
+#define A_DELAY( ms ) delay(0)
 
-void PCFXSpy::updateState() {
-	unsigned char bits = PCFX_BITCOUNT;
-	unsigned char *rawDataPtr = rawData;
-
-	WAIT_FALLING_EDGE(PCFX_LATCH);
-
-	do {
-		WAIT_FALLING_EDGE(PCFX_CLOCK);
-		*rawDataPtr = !PIN_READ(PCFX_DATA);
-		++rawDataPtr;
-	} while (--bits > 0);
-}
-
-void PCFXSpy::writeSerial() {
-	sendRawData(rawData, 0, PCFX_BITCOUNT);
-}
-
-void PCFXSpy::debugSerial() {
-	sendRawDataDebug(rawData, 0, PCFX_BITCOUNT);
-}
-#else
-
-void PCFXSpy::loop() {}
-
-void PCFXSpy::writeSerial() {}
-
-void PCFXSpy::debugSerial() {}
-
-void PCFXSpy::updateState() {}
-
-#endif
-
-const char* PCFXSpy::startupMsg()
-{
-	return "PC-FX";
-}
+#define FASTRUN
