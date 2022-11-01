@@ -42,9 +42,11 @@
 //#define MODE_GAMEBOY_PRINTER
 //#define MODE_VFLASH
 
+//--- Teensy 3.5 or Raspberry Pi Pico
+//#define MODE_WII
+
 //--- Teensy 3.5 Only
 //#define MODE_DREAMCAST
-//#define MODE_WII
 //#define MODE_CD32
 //#define MODE_FMTOWNS_KEYBOARD_AND_MOUSE
 //#define MODE_VSMILE
@@ -286,7 +288,7 @@ void setup()
   for(int i = 3; i < 9; ++i)
     if (i != 7)
       pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2) && !defined(RASPBERRYPI_PICO)
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
 #endif

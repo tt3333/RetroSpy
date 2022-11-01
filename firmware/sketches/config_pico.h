@@ -1,10 +1,10 @@
 //
-// ThreeDO.cpp
+// config_pico.h
 //
 // Author:
-//       Christopher "Zoggins" Mallery <zoggins@retro-spy.com>
+//       T.T <tt3333@tt-server.net>
 //
-// Copyright (c) 2020 RetroSpy Technologies
+// Copyright (c) 2022 RetroSpy Technologies
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,55 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ThreeDO.h"
+#define PIND_READ( pin ) (gpio_get(pin))
 
-#if !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(RASPBERRYPI_PICO)
+#define MICROSECOND_NOPS ""
 
-void ThreeDOSpy::loop() {
-	noInterrupts();
-	updateState();
-	interrupts();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-}
+#define T_DELAY( ms ) delay(ms)
+#define A_DELAY( ms ) delay(0)
 
-void ThreeDOSpy::updateState() {
-	unsigned char *rawDataPtr = rawData;
-
-	unsigned char bits = 0;
-	WAIT_FALLING_EDGE(ThreeDO_LATCH);
-
-	do {
-		WAIT_LEADING_EDGE(ThreeDO_CLOCK);
-		*rawDataPtr = PIN_READ(ThreeDO_DATA);
-
-		if (bits == 0 && *rawDataPtr != 0)
-			bytesToReturn = bits = 32;
-		else if (bits == 0)
-			bytesToReturn = bits = 16;
-
-		++rawDataPtr;
-	} while (--bits > 0);
-}
-
-void ThreeDOSpy::writeSerial() {
-	sendRawData(rawData, 0, bytesToReturn);
-}
-
-void ThreeDOSpy::debugSerial() {
-	sendRawDataDebug(rawData, 0, bytesToReturn);
-}
-
-#else
-void ThreeDOSpy::loop() {}
-
-void ThreeDOSpy::writeSerial() {}
-
-void ThreeDOSpy::debugSerial() {}
-
-void ThreeDOSpy::updateState() {}
-
-#endif
+#define FASTRUN

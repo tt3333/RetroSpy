@@ -26,10 +26,22 @@
 
 #include "Wii.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
+#if defined(RASPBERRYPI_PICO)
+#define PIN_SCL		21
+#define PIN_SDA		20
+#define BIT_SCL		(1UL << PIN_SCL)
+#define BIT_SDA		(1UL << PIN_SDA)
+#else
+#define PIN_SCL		18
+#define PIN_SDA		19
+#define BIT_SCL		(1 << DIGITAL_PIN_18)
+#define BIT_SDA		(1 << DIGITAL_PIN_19)
+#endif
+
+#if (defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)) || defined(RASPBERRYPI_PICO)
 void WiiSpy::setup() {
-	pinMode(19, INPUT);
-	pinMode(18, INPUT);
+	pinMode(PIN_SDA, INPUT);
+	pinMode(PIN_SCL, INPUT);
 
 	cleanData[0] = 2;
 	cleanData[1] = -1;
@@ -44,20 +56,24 @@ void WiiSpy::setup() {
 }
 
 void WiiSpy::loop() {
-	last_portb = current_portb;
+	last_port = current_port;
 	noInterrupts();
-	current_portb = GPIOB_PDIR & 12;
+#if defined(RASPBERRYPI_PICO)
+	current_port = gpio_get_all() & (BIT_SCL|BIT_SDA);
+#else
+	current_port = GPIOB_PDIR & (BIT_SCL|BIT_SDA);
+#endif
 	interrupts();
-	bool bDataReady = current_portb != last_portb;
+	bool bDataReady = current_port != last_port;
 
 	if (bDataReady)
 	{
-		if ((last_portb == 0xC) && (current_portb == 0x8))
+		if ((last_port == (BIT_SCL|BIT_SDA)) && (current_port == BIT_SCL))
 		{
 			// START
 			i2c_index = 0;
 		}
-		else if ((last_portb == 0x8) && (current_portb == 0xC))
+		else if ((last_port == BIT_SCL) && (current_port == (BIT_SCL|BIT_SDA)))
 		{
 			// STOP
 			i2c_index -= (i2c_index % 9);
@@ -230,12 +246,12 @@ void WiiSpy::loop() {
 				}
 			}
 		}
-		else if ((last_portb == 0x4) && (current_portb == 0xC))
+		else if ((last_port == BIT_SDA) && (current_port == (BIT_SCL|BIT_SDA)))
 		{
 			// ONE
 			rawData[i2c_index++] = 1;
 		}
-		else if ((last_portb == 0x0) && (current_portb == 0x8))
+		else if ((last_port == 0x0) && (current_port == BIT_SCL))
 		{
 			// ZERO
 			rawData[i2c_index++] = 0;

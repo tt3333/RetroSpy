@@ -277,6 +277,7 @@ namespace RetroSpy
                 {
                     List<string> arduinoPorts = SetupCOMPortInformation();
                     GetTeensyPorts(arduinoPorts);
+                    GetRaspberryPiPorts(arduinoPorts);
 
                     arduinoPorts.Sort();
 
@@ -370,6 +371,42 @@ namespace RetroSpy
                                 //board = PJRC_Board.unknown;
                                 break;
                         }
+                    }
+                }
+            }
+        }
+
+        private static void GetRaspberryPiPorts(List<string> arduinoPorts)
+        {
+            const uint vid = 0x2E8A;
+            string vidStr = "'%USB_VID[_]" + vid.ToString("X", CultureInfo.CurrentCulture) + "%'";
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr))
+            {
+                foreach (ManagementBaseObject mgmtObject in searcher.Get())
+                {
+                    string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
+                    if (DeviceIdParts[0] != "USB")
+                    {
+                        break;
+                    }
+
+                    int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
+                    uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
+
+                    string port;
+                    if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
+                        port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
+                    else
+                        continue;
+
+                    switch (pid)
+                    {
+                        case 0x000A:
+                            arduinoPorts.Add(port + " (Raspberry Pi Pico)");
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }

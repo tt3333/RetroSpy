@@ -26,7 +26,7 @@
 
 #include "PCFX.h"
 
-#if !(defined(__arm__) && defined(CORE_TEENSY))
+#if !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(RASPBERRYPI_PICO)
 
 void PCFXSpy::loop() {
 	noInterrupts();

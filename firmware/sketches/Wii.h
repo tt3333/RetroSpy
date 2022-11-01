@@ -29,6 +29,12 @@
 
 #include "ControllerSpy.h"
 
+#if defined(RASPBERRYPI_PICO)
+typedef uint32_t port_t;
+#else
+typedef uint8_t port_t;
+#endif
+
 class WiiSpy : public ControllerSpy {
 public:
 	void setup();
@@ -39,8 +45,8 @@ public:
 	const char* startupMsg();
 
 private:
-	uint8_t   current_portb = 0;
-	uint8_t   last_portb;
+	port_t    current_port = 0;
+	port_t    last_port;
 	int       i2c_index = 0;
 	bool      isControllerPoll = false;
 	bool      isControllerID = false;
