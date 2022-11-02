@@ -38,7 +38,9 @@ typedef uint8_t port_t;
 class WiiSpy : public ControllerSpy {
 public:
 	void setup();
+	void setup1();
 	void loop();
+	void loop1();
 	void writeSerial();
 	void debugSerial();
 	void updateState();
@@ -56,6 +58,8 @@ private:
 	byte      keyThing[8];
 	byte      cleanData[274];
 	byte      rawData[16000];
+	byte      sendData[51];
+	volatile bool sendRequest = false;
 };
 
 #endif

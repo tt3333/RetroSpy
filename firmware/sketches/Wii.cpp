@@ -48,6 +48,16 @@
 
 #if defined(__arm__) && defined(CORE_TEENSY) && (defined(ARDUINO_TEENSY35) || defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)) || defined(RASPBERRYPI_PICO)
 void WiiSpy::setup() {
+#if !defined(RASPBERRYPI_PICO)
+	setup1();
+#endif
+
+	delay(1000);
+	Serial.println(startupMsg());
+	delay(1000);
+}
+
+void WiiSpy::setup1() {
 	pinMode(PIN_SDA, INPUT);
 	pinMode(PIN_SCL, INPUT);
 
@@ -55,15 +65,27 @@ void WiiSpy::setup() {
 	cleanData[1] = -1;
 	cleanData[46] = '\n';
 	cleanData[50] = '\n';
-	
-	delay(1000);
-	Serial.println(startupMsg());
-	delay(1000);
-	
-	
 }
 
 void WiiSpy::loop() {
+#if !defined(RASPBERRYPI_PICO)
+	loop1();
+#endif
+
+	if (sendRequest)
+	{
+		memcpy(sendData, cleanData, 51);
+		sendRequest = false;
+#ifdef DEBUG
+		debugSerial();
+#else
+		writeSerial();
+#endif
+	}
+}
+
+void WiiSpy::loop1()
+{
 	last_port = current_port;
 	noInterrupts();
 	current_port = READ_PINS & (BIT_SCL|BIT_SDA);
@@ -122,6 +144,10 @@ void WiiSpy::loop() {
 					if (rawData[i + 8] != 0) return; // Every other byte ends with ACK
 				}
 				i += 9;
+			}
+
+			while (sendRequest)
+			{
 			}
 
 			if (isWrite)
@@ -241,12 +267,7 @@ void WiiSpy::loop() {
 							j += 2;
 						}
 					}
-
-#ifdef DEBUG
-					debugSerial();
-#else
-					writeSerial();
-#endif
+					sendRequest = true;
 				}
 			}
 		}
@@ -265,27 +286,27 @@ void WiiSpy::loop() {
 
 void WiiSpy::writeSerial()
 {
-	if (cleanData[0] == 3)
-		Serial.write(cleanData, 51);
+	if (sendData[0] == 3)
+		Serial.write(sendData, 51);
 	else
-		Serial.write(cleanData, 47);
+		Serial.write(sendData, 47);
 }
 
 void WiiSpy::debugSerial()
 {
-	Serial.print(cleanData[0]);
+	Serial.print(sendData[0]);
 	Serial.print(' ');
-	Serial.print(cleanData[1]);
+	Serial.print(sendData[1]);
 	Serial.print(' ');
 	int j = 2;
 	int toPrint = 22;
-	if (cleanData[0] == 3)
+	if (sendData[0] == 3)
 	{
 		toPrint = 26;
 	}
 	for (int i = 0; i < toPrint; ++i)
 	{
-		byte data = (cleanData[j] | (cleanData[j + 1] >> 4));
+		byte data = (sendData[j] | (sendData[j + 1] >> 4));
 		Serial.print(data);
 		Serial.print(' ');
 		j += 2;

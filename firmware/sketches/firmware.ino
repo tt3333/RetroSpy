@@ -193,6 +193,17 @@ void setup()
  
 }
 
+#if defined(RASPBERRYPI_PICO)
+void setup1()
+{
+	ControllerSpy* volatile *p = &currentSpy;
+	while (*p == NULL)
+	{
+	}
+	currentSpy->setup1();
+}
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -200,6 +211,14 @@ void loop()
 	if (currentSpy != NULL)
 		currentSpy->loop();
 }
+
+#if defined(RASPBERRYPI_PICO)
+void loop1()
+{
+	if (currentSpy != NULL)
+		currentSpy->loop1();
+}
+#endif
 
 #if defined(RS_VISION) || defined(RS_VISION_CDI)
 byte ReadAnalog()
