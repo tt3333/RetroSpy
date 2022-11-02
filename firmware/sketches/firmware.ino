@@ -556,3 +556,27 @@ void loop()
 #endif
 
 }
+
+#if defined(RASPBERRYPI_PICO)
+void setup1()
+{
+#if defined(MODE_DETECT)
+    if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.setup1();
+    }
+#elif defined(MODE_WII)
+    WiiSpy.setup1();
+#endif
+}
+
+void loop1()
+{
+#if defined(MODE_DETECT)
+    if( !PINC_READ( MODEPIN_WII ) ) {
+        WiiSpy.loop1();
+    }
+#elif defined(MODE_WII)
+    WiiSpy.loop1();
+#endif
+}
+#endif
