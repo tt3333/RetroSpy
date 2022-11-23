@@ -91,7 +91,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ArrayList.cs" />
     <Compile Include="BitmapPixelMaker.cs" />
     <Compile Include="ControllerState.cs" />
     <Compile Include="ControllerStateBuilder.cs" />
