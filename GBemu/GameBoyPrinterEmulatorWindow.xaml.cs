@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -72,6 +73,172 @@ namespace GBPemu
 
         private int PrintSize;
 
+        private class GamePalette
+        {
+            public GamePalette(string name, byte[][] colors)
+            {
+                Name = name;
+                Colors = colors;
+            }
+
+            public string Name;
+            public byte[][] Colors;
+        };
+
+        private struct Game
+        {
+            public Game(string name)
+            {
+                Name = name;
+                Palettes = new List<GamePalette>();
+            }
+
+            public string Name;
+            public List<GamePalette> Palettes;
+        }
+
+        private List<Game> games;
+
+        private void parseGamePalettes()
+        {
+            bool getMaxRGBValue = false;
+            games = new List<Game>();
+            int currentGame = 0;
+            byte maxRGBValue = 255;
+            List<GamePalette> newPalettes = new List<GamePalette>();
+            bool lookingForGame = true;
+
+            foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
+            {
+                if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
+                {
+                    var gameName = line.Split(':')[1];
+                    Game g = new Game(gameName);
+                    games.Add(g);
+                    getMaxRGBValue = true;
+                    lookingForGame = false;
+                    continue;
+                }
+
+                if (lookingForGame)
+                    break;
+
+                if (lookingForGame == false && line.StartsWith("EndGame", System.StringComparison.Ordinal))
+                {
+                    currentGame++;
+                    lookingForGame = true;
+                    continue;
+                }
+
+                if (getMaxRGBValue)
+                {
+                    maxRGBValue = byte.Parse(line, CultureInfo.CurrentCulture);
+                    getMaxRGBValue = false;
+                    continue;
+                }
+
+                byte[][] colorValues = new byte[3][];
+                colorValues[0] = new byte[4];
+                colorValues[1] = new byte[4];
+                colorValues[2] = new byte[4];
+
+                var colors = line.Split(',');
+                var paletteName = colors[0];
+                for (int i = 1; i < 5; ++i)
+                {
+                    var comps = colors[i].Split(' ');
+                    colorValues[0][i-1] = (byte)(((byte.Parse(comps[0], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                    colorValues[1][i-1] = (byte)(((byte.Parse(comps[1], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                    colorValues[2][i-1] = (byte)(((byte.Parse(comps[2], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                }
+
+                games[currentGame].Palettes.Add(new GamePalette(paletteName, colorValues));
+            }
+
+
+            for (int i = 0; i < currentGame; ++i)
+            {
+                var gameMenu = new System.Windows.Controls.MenuItem();
+                gameMenu.Header = games[i].Name;
+
+                for (int j = 0; j < games[i].Palettes.Count; ++j)
+                {
+                    var paletteMenu = new System.Windows.Controls.MenuItem();
+                    paletteMenu.Header = games[i].Palettes[j].Name;
+                    paletteMenu.IsCheckable = true;
+                    paletteMenu.Click += Game_Palette_Click;
+                    gameMenu.Items.Add(paletteMenu);
+                }
+
+                Palette_Games.Items.Add(gameMenu);
+            }
+           
+        }
+
+        void ClearGamePalette(System.Windows.Controls.MenuItem menuItem)
+        {
+            foreach(System.Windows.Controls.MenuItem game in Palette_Games.Items)
+            {
+                foreach(System.Windows.Controls.MenuItem palette in game.Items)
+                {
+                    if (palette == menuItem)
+                        palette.IsChecked = true;
+                    else
+                        palette.IsChecked = false;
+                }
+            }
+        }
+
+        private void Game_Palette_Click(object sender, EventArgs e)
+        {
+            var menuItem  = (System.Windows.Controls.MenuItem)sender;
+
+            //Clear Checks
+            CheckPalette(9);
+            ClearGamePalette(menuItem);
+
+            GamePalette newPalette = null;
+
+            string gameName = (string)(((System.Windows.Controls.MenuItem)menuItem.Parent).Header);
+            foreach(Game game in games)
+            {
+                if (gameName == game.Name)
+                {
+                    foreach(GamePalette palette in game.Palettes)
+                    {
+                        if (palette.Name == (string)menuItem.Header)
+                        {
+                            newPalette = palette;
+                        }
+                    }    
+                }
+            }
+
+            if (SelectedPalette != -1)
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                            new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
+                                            new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                }
+            }
+
+            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            _image.Source = wbitmap;
+
+            SelectedPalette = -1;
+            SelectedGamePalette = newPalette;
+
+        }
+
         private void Size_Click(object sender, EventArgs e)
         {
             if (sender == Size_1x)
@@ -125,6 +292,7 @@ namespace GBPemu
         }
 
         private int SelectedPalette;
+        private GamePalette SelectedGamePalette;
 
         private void CheckPalette(int paletteId)
         {
@@ -177,12 +345,26 @@ namespace GBPemu
             }
 
             CheckPalette(newPalette);
+            ClearGamePalette(null);
 
-            for (int i = 0; i < 4; ++i)
+
+            if (SelectedPalette != -1)
             {
-                _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
-                                          new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                for (int i = 0; i < 4; ++i)
+                {
+                    _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                              new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                }
             }
+            else
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
+                          new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                }
+            }
+
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
             _image.Source = wbitmap;
 
@@ -241,6 +423,9 @@ namespace GBPemu
 
             InitializeComponent();
             DataContext = this;
+
+            parseGamePalettes();
+
 
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
@@ -429,13 +614,26 @@ namespace GBPemu
                 for (int j = 0; j < TILE_PIXEL_HEIGHT; j++)
                 {   // pixels along the tile's y axis
 
-                    canvas.SetRect(pixel_x_offset + (i * pixel_width),
-                            pixel_y_offset + (j * pixel_height),
-                            pixel_width,
-                            pixel_height,
-                            palettes[SelectedPalette][0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                            palettes[SelectedPalette][1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                            palettes[SelectedPalette][2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    if (SelectedPalette != -1)
+                    {
+                        canvas.SetRect(pixel_x_offset + (i * pixel_width),
+                                pixel_y_offset + (j * pixel_height),
+                                pixel_width,
+                                pixel_height,
+                                palettes[SelectedPalette][0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                palettes[SelectedPalette][1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                palettes[SelectedPalette][2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    }
+                    else
+                    {
+                        canvas.SetRect(pixel_x_offset + (i * pixel_width),
+                                pixel_y_offset + (j * pixel_height),
+                                pixel_width,
+                                pixel_height,
+                                SelectedGamePalette.Colors[0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette.Colors[1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette.Colors[2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    }
                 }
             }
         }

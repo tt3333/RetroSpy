@@ -21,6 +21,7 @@
                     <MenuItem Name="Palette_GKGray" Header="Graphix Kid Gray" Click="Palette_Click" IsCheckable="true" />
                     <MenuItem Name="Palette_GKGreen" Header="Graphix Kid Green" Click="Palette_Click" IsCheckable="true" />
                     <MenuItem Name="Palette_BZ" Header="Black Zero" Click="Palette_Click" IsCheckable="true" />
+                    <MenuItem Name="Palette_Games" Header="Games" />
                 </MenuItem>
                 <MenuItem Header="Print Size">
                     <MenuItem Name="Size_1x" Header="1x" Click="Size_Click" IsCheckable="true" />
