@@ -58,7 +58,7 @@ namespace RetroSpy
 
             _datPort.Open();
 
-            _timer = new DispatcherTimer
+            _timer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
