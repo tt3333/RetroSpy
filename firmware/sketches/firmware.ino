@@ -26,6 +26,7 @@
 //#define MODE_SATURN
 //#define MODE_SATURN3D
 //#define MODE_PLAYSTATION
+//#define MODE_GBA
 
 //-- Arduino Only
 //#define MODE_BOOSTER_GRIP
@@ -95,6 +96,7 @@
 #include "SNES.h"
 #include "N64.h"
 #include "GC.h"
+#include "GBA.h"
 
 #include "BoosterGrip.h"
 #include "Genesis.h"
@@ -153,6 +155,9 @@ N64Spy N64Spy;
 #endif
 #if defined(MODE_GC)
 GCSpy GCSpy;
+#endif
+#if defined(MODE_GBA)
+GBASpy GBASpy;
 #endif
 #if defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
@@ -340,6 +345,8 @@ void setup()
     N64Spy.setup();
 #elif defined(MODE_GC)
     GCSpy.setup();
+#elif defined(MODE_GBA)
+	GBASpy.setup();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.setup();
 #elif defined(MODE_GENESIS)
@@ -461,7 +468,9 @@ void loop()
   else {
         NESSpy.loop();
     }
-#elif defined(MODE_GC)
+#elif defined(MODE_GBA)
+	GBASpy.loop(); 
+# elif defined(MODE_GC)
     GCSpy.loop();
 #elif defined(MODE_N64)
     N64Spy.loop();

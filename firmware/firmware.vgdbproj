@@ -73,6 +73,7 @@
         <string>sketches\VSmile.h</string>
         <string>sketches\VFlash.h</string>
         <string>sketches\config_every.h</string>
+        <string>sketches\GBA.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
