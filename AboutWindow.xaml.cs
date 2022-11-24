@@ -25,7 +25,7 @@ namespace RetroSpy
 <CENTER>Version: {0}</CENTER>
 <CENTER>Build Timestamp: {1}</CENTER>
 <BR>
-        <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
+<!--        <TABLE WIDTH='100%' BORDER='0' PADDING='0' >
             <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>            
             <TR><td ALIGN='CENTER'>40wattrange</TD></TR>            
             <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
@@ -38,7 +38,7 @@ namespace RetroSpy
             <TR><td ALIGN='CENTER'>Mellified</TD></TR> 
             <TR><td ALIGN='CENTER'>Karl W. Reinsch</TD></TR>
             <TR><td ALIGN='CENTER'><A HREF=""https://github.com/Avasam"">Avasam</A></TD></TR>
-        </TABLE>
+        </TABLE>-->
     </BODY>
 </HTML>", Assembly.GetEntryAssembly().GetName().Version, Properties.Resources.BuildDate));
 
