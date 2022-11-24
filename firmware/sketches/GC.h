@@ -44,7 +44,8 @@ private:
 	bool checkBothGCPrefixOnRaphnet();
 	void sendRawGBAData();
 	bool checkPrefixLuigisMansion();
-
+	bool checkPrefixSNES2GC();
+	
 	void debugKeyboard();
 	void writeKeyboard();
 	

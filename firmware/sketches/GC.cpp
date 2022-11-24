@@ -310,7 +310,8 @@ void GCSpy::loop() {
 		readBits = GC_PREFIX + GC_BITCOUNT;
 		updateState();
 		interrupts();
-		if (checkPrefixGC() || checkPrefixLuigisMansion())
+
+		if (checkPrefixGC() || checkPrefixLuigisMansion() || checkPrefixSNES2GC())
 		{
 #if !defined(DEBUG)
 			sendRawData(rawData, GC_PREFIX, isLuigisMansion ? GC_BITCOUNT - 8 : GC_BITCOUNT);
@@ -386,6 +387,7 @@ read_loop:
 
 	goto read_loop;
 }
+
 
 void GCSpy::writeSerial() {
 	Serial.write(ZERO);
@@ -464,6 +466,36 @@ inline bool GCSpy::checkPrefixGBA()
 	if (rawData[10] != 0) return false; // 0
 	if (rawData[11] == 0) return false; // 1
 	seenGC2N64 = false;
+	return true;
+}
+
+inline bool GCSpy::checkPrefixSNES2GC()
+{
+	if (rawData[0] != 0) return false; // 0
+	if (rawData[1] == 0) return false;  // 1
+	if (rawData[2] != 0) return false;  // 0
+	if (rawData[3] != 0) return false;  // 0
+	if (rawData[4] != 0) return false;  // 0
+	if (rawData[5] != 0) return false;  // 0
+	if (rawData[6] != 0) return false;  // 0
+	if (rawData[7] != 0) return false;  // 0
+	if (rawData[8] != 0) return false;  // 0
+	if (rawData[9] != 0) return false;  // 0
+	if (rawData[10] != 0) return false;  // 0
+	if (rawData[11] != 0) return false;  // 0
+	if (rawData[12] != 0) return false;  // 0
+	if (rawData[13] != 0) return false;  // 0
+	if (rawData[14] == 0) return false;  // 1
+	if (rawData[15] == 0) return false;  // 1
+	if (rawData[16] != 0) return false;  // 0
+	if (rawData[17] != 0) return false;  // 0
+	if (rawData[18] != 0) return false;  // 0
+	if (rawData[19] != 0) return false;  // 0
+	if (rawData[20] != 0) return false;  // 0
+	if (rawData[21] != 0) return false;  // 0
+	if (rawData[22] != 0) return false; // 0
+	if (rawData[23] != 0) return false;  // 0
+	
 	return true;
 }
 
