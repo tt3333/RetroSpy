@@ -28,6 +28,7 @@
 #define NUON_DATA_PIN			7
 
 #define N64_PIN					2
+#define GC_PIN					5
 
 #define PIND_READ( pin ) (digitalReadFast(pin))
 
