@@ -26,26 +26,43 @@
 
 #include "SNES.h"
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E) || defined(RASPBERRYPI_PICO)
 
 void SNESSpy::loop() {
+#if !defined(RASPBERRYPI_PICO)
+	loop1();
+#endif
+
+	if (sendRequest)
+	{
+		sendBytes = bytesToReturn;
+		memcpy(sendData, rawData, SNES_BITCOUNT_EXT);
+		sendRequest = false;
+#ifdef DEBUG
+		debugSerial();
+#else
+		writeSerial();
+#endif
+		T_DELAY(5);
+	}
+}
+
+void SNESSpy::loop1() {
+	while (sendRequest)
+	{
+	}
 	noInterrupts();
 	updateState();
 	interrupts();
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-	T_DELAY(5);
+	sendRequest = true;
 }
 
 void SNESSpy::writeSerial() {
-	sendRawData(rawData, 0, bytesToReturn);
+	sendRawData(sendData, 0, sendBytes);
 }
 
 void SNESSpy::debugSerial() {
-	sendRawDataDebug(rawData, 0, bytesToReturn);
+	sendRawDataDebug(sendData, 0, sendBytes);
 }
 
 void SNESSpy::updateState() {
