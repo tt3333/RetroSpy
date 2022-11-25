@@ -26,13 +26,23 @@
 
 #include "Dreamcast.h"
 
-#define DETECT_FALLING_EDGE rawData[byteCount] = (GPIOD_PDIR & 0x3); do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIOD_PDIR & 0x3); } while( rawData[byteCount] >= prevPin);
 
-#if defined(__arm__) && defined(CORE_TEENSY) && defined (ARDUINO_TEENSY35)
+
+
+#if defined(__arm__) && defined(CORE_TEENSY) && (defined (ARDUINO_TEENSY35) || defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41))
+
+#if defined (ARDUINO_TEENSY35)
+#define DETECT_FALLING_EDGE rawData[byteCount] = (GPIOD_PDIR & 0x3); do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIOD_PDIR & 0x3); } while( rawData[byteCount] >= prevPin);
+#elif defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41)
+#define DETECT_FALLING_EDGE rawData[byteCount] = (GPIO6_PSR >> 2) & 0x03; do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIO6_PSR >> 2) & 0x03; } while( rawData[byteCount] >= prevPin);
+#endif
+
 void DreamcastSpy::setup() {
 	pinMode(2, INPUT);
 	pinMode(14, INPUT);
-
+	pinMode(0, INPUT);
+	pinMode(1, INPUT);
+	
 	p = &rawData[6];
 }
 
@@ -318,7 +328,7 @@ FASTRUN void DreamcastSpy::debugSerial() {
 
 FASTRUN void DreamcastSpy::updateState() {
 	byte prevPin;
-
+	
 	//start_state:
 state1:
 	interrupts();
@@ -335,6 +345,7 @@ state1:
 	++byteCount;
 
 state3:
+
 	DETECT_FALLING_EDGE
 		if (prevPin != 0x2 || rawData[byteCount] != 0x0)  // Pin 5 drops 3 more times, pin 1 says low
 			goto state1;
