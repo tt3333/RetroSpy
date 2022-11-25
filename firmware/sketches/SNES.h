@@ -39,15 +39,23 @@
 class SNESSpy : public ControllerSpy {
 public:
 	void loop();
+	void loop1();
+
 	void writeSerial();
 	void debugSerial();
 	void updateState();
-	
+
 	virtual const char* startupMsg();
 
 private:
 	unsigned char rawData[SNES_BITCOUNT_EXT];
 	unsigned char bytesToReturn = SNES_BITCOUNT;
+
+#if defined(RASPBERRYPI_PICO)
+    unsigned char sendData[SNES_BITCOUNT_EXT];
+    unsigned char sendBytes = SNES_BITCOUNT;
+    volatile bool sendRequest = false;
+#endif
 };
 
 #endif

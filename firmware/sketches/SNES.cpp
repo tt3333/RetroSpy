@@ -26,26 +26,58 @@
 
 #include "SNES.h"
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E) || defined(RASPBERRYPI_PICO)
 
 void SNESSpy::loop() {
+#if !defined(RASPBERRYPI_PICO)
+    loop1();
+#else
+	if (sendRequest)
+    {
+		sendBytes = bytesToReturn;
+        memcpy(sendData, rawData, SNES_BITCOUNT_EXT);
+        sendRequest = false;
+#ifdef DEBUG
+        debugSerial();
+#else
+        writeSerial();
+#endif
+    }
+#endif
+}
+
+void SNESSpy::loop1() {
 	noInterrupts();
 	updateState();
 	interrupts();
+
+#if !defined(RASPBERRYPI_PICO)
 #if !defined(DEBUG)
 	writeSerial();
 #else
 	debugSerial();
 #endif
 	T_DELAY(5);
+#else
+	sendRequest = true;
+	while (sendRequest) { }
+#endif
 }
 
 void SNESSpy::writeSerial() {
+#if !defined(RASPBERRYPI_PICO)
 	sendRawData(rawData, 0, bytesToReturn);
+#else
+	sendRawData(sendData, 0, sendBytes);
+#endif
 }
 
 void SNESSpy::debugSerial() {
+#if !defined(RASPBERRYPI_PICO)
 	sendRawDataDebug(rawData, 0, bytesToReturn);
+#else
+	sendRawDataDebug(sendData, 0, sendBytes);
+#endif
 }
 
 void SNESSpy::updateState() {
@@ -84,11 +116,10 @@ const char* SNESSpy::startupMsg()
 
 #else
 void SNESSpy::loop() {}
+void SNESSpy::loop1() {}
 
 void SNESSpy::writeSerial() {}
-
 void SNESSpy::debugSerial() {}
-
 void SNESSpy::updateState() {}
 
 const char* SNESSpy::startupMsg()

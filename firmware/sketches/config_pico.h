@@ -31,4 +31,8 @@
 #define T_DELAY( ms ) delay(ms)
 #define A_DELAY( ms ) delay(0)
 
+#define SNES_LATCH         2
+#define SNES_CLOCK         3
+#define SNES_DATA          4
+
 #define FASTRUN
