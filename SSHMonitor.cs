@@ -104,7 +104,7 @@ namespace RetroSpy
                 if (quickDisconnect && readCount < 1)
                 {
                     numNoReads++;
-                    if (numNoReads == 10)
+                    if (numNoReads == 100)
                     {
                         throw new SSHMonitorDisconnectException();
                     }
