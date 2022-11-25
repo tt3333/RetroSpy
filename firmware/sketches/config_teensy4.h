@@ -27,6 +27,8 @@
 #define NUON_CLOCK_PIN			8
 #define NUON_DATA_PIN			7
 
+#define N64_PIN					7
+
 #define PIND_READ( pin ) (digitalReadFast(pin))
 
 #define MICROSECOND_NOPS ""
