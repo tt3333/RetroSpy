@@ -13,7 +13,7 @@
 //-- Arduino or Teensy 3.5
 //#define MODE_NES
 //#define MODE_POWERGLOVE
-//#define MODE_SNES
+#define MODE_SNES
 //#define MODE_N64
 //#define MODE_GC
 //#define MODE_SMS
@@ -43,7 +43,7 @@
 //#define MODE_VFLASH
 
 //--- Teensy 3.5 or Raspberry Pi Pico
-#define MODE_WII
+//#define MODE_WII
 
 //--- Teensy 3.5 Only
 //#define MODE_DREAMCAST
@@ -577,6 +577,8 @@ void loop1()
     }
 #elif defined(MODE_WII)
     WiiSpy.loop1();
+#elif defined(MODE_SNES)
+    SNESSpy.loop1();
 #endif
 }
 #endif
