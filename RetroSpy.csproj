@@ -128,6 +128,36 @@
     <None Remove="skins\nuon-digital\noun-background.png" />
     <None Remove="skins\nuon-digital\saturn.png" />
     <None Remove="skins\nuon-digital\skin.xml" />
+    <None Remove="skins\Tron-V2 Standard\A fill.png" />
+    <None Remove="skins\Tron-V2 Standard\B button.png" />
+    <None Remove="skins\Tron-V2 Standard\Background.png" />
+    <None Remove="skins\Tron-V2 Standard\C stick.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad bottom.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad left.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad top.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad-right.png" />
+    <None Remove="skins\Tron-V2 Standard\L stick.png" />
+    <None Remove="skins\Tron-V2 Standard\skin.xml" />
+    <None Remove="skins\Tron-V2 Standard\Start fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Trigger Fill.png" />
+    <None Remove="skins\Tron-V2 Standard\X fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Y fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Z fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\A fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\B button.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Background.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\C stick.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad bottom.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad left.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad top.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad-right.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\L stick.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\skin.xml" />
+    <None Remove="skins\Tron-V2 with D-Pad\Start fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Trigger Fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\X fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Y fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Z fill.png" />
     <None Remove="skins\xbox-s\circle.png" />
     <None Remove="skins\xbox-s\lstick.png" />
     <None Remove="skins\xbox-s\rstick.png" />
@@ -312,6 +342,96 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\nuon-digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\A fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\B button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\C stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad-right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\L stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Start fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Trigger Fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\X fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Y fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Z fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\A fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\B button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\C stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad-right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\L stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Start fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Trigger Fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\X fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Y fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Z fill.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\xbox-s\circle.png">
