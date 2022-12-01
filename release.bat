@@ -125,8 +125,10 @@ if exist "..\..\..\..\certs\codesign.pfx" (
 )
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip GBPemu.exe
 "C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip GBPemu.exe.config
+"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip games_palettes.cfg
 copy GBPemu.exe ..\..\RetroSpy-Setup
 copy GBPemu.exe.config ..\..\RetroSpy-Setup
+copy games_palettes.cfg ..\..\RetroSpy-Setup
 
 if exist "..\..\..\..\certs\codesign.pfx" (
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a UsbUpdater.exe
