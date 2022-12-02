@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -426,7 +427,6 @@ namespace GBPemu
 
             parseGamePalettes();
 
-
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
@@ -490,6 +490,8 @@ namespace GBPemu
 
         private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
         {
+            bool isCompressed = false;
+
             _imageBuffer.SetColor(0, 0, 0, 255);
 
             int square_width = PrintSize;// 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
@@ -521,10 +523,21 @@ namespace GBPemu
                     continue;
                 }
                 else if (tile_element.StartsWith("{", StringComparison.Ordinal))
-                {   // Skip lines used for comments
+                {   
+                    if (tile_element.Contains("\"compressed\":1"))
+                    {
+                        isCompressed = true;
+                    }
                     continue;
                 }
                 total_tile_count++;
+            }
+
+            List<byte[]> decompressedData = new List<byte[]>();
+
+            if (isCompressed)
+            {
+                total_tile_count = Decompress(tiles_rawBytes_array, decompressedData);
             }
 
             int tile_height_count = total_tile_count / TILES_PER_LINE;
@@ -544,7 +557,105 @@ namespace GBPemu
             Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
             Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
-            int tile_count = 0;
+            if (!isCompressed)
+            {
+                int tile_count = 0;
+                for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
+                {
+                    string tile_element = tiles_rawBytes_array[tile_i];
+
+                    // Check for invalid raw lines
+                    if (tile_element.Length == 0)
+                    {   // Skip lines with no bytes (can happen with .split() )
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("!", StringComparison.Ordinal))
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("#", StringComparison.Ordinal))
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("//", StringComparison.Ordinal))
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+                    else if (tile_element.StartsWith("{", StringComparison.Ordinal))
+                    {   // Skip lines used for comments
+                        continue;
+                    }
+
+                    // Gameboy Tile Offset
+                    int tile_x_offset = tile_count % TILES_PER_LINE;
+                    int tile_y_offset = tile_count / TILES_PER_LINE;
+
+                    byte[] pixels = Decode(tile_element);
+
+                    if (pixels != null)
+                    {
+                        Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                    }
+                    else
+                    {
+                        //status = false;
+                    }
+
+
+                    // Increment Tile Count Tracker
+                    tile_count++;
+
+                }
+            }
+            else
+            {
+                for (int i = 0; i < decompressedData.Count; i++)
+                {
+                    int tile_x_offset = i % TILES_PER_LINE;
+                    int tile_y_offset = i / TILES_PER_LINE;
+
+                    byte[] pixels = ProcessRawBytesToPixels(decompressedData[i]);
+
+                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+
+                }
+            }
+            //imageBuffer.SetColor(0, 0, 0);
+            // Convert the pixel data into a WriteableBitmap.
+            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+            // Set the Image source.
+            _image.Source = wbitmap;
+
+        }
+
+        private class Tile
+        {
+            public byte[] tile_bytes = new byte[16];
+            public int tile_bytes_idx;
+        }
+
+        private class packet
+        {
+            public packet()
+            {
+                loopRunLength = 0;
+                compressedRun = false;
+                repeatByteGet = false;
+                buffIndex = 0;
+            }
+
+            public int loopRunLength;
+            public bool compressedRun;
+            public bool repeatByteGet;
+            public int buffIndex;
+            public byte repeatByte;
+
+        }
+
+        private static int Decompress(string[] tiles_rawBytes_array, List<byte[]> decompressedData)
+        {
+            List<byte[]> compressedBytes = new List<byte[]>();
 
             for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
@@ -572,34 +683,92 @@ namespace GBPemu
                     continue;
                 }
 
-                // Gameboy Tile Offset
-                int tile_x_offset = tile_count % TILES_PER_LINE;
-                int tile_y_offset = tile_count / TILES_PER_LINE;
+                string bytes = tile_element.Replace(" ", "").Replace("\r", "");
 
-                byte[] pixels = Decode(tile_element);
-
-                if (pixels != null)
+                byte[] byteArray = new byte[bytes.Length/2];
+                for (int i = 0; i < byteArray.Length; i++)
                 {
-                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
-                }
-                else
-                {
-                    //status = false;
+                    byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
                 }
 
+                compressedBytes.Add(byteArray);
+            }
 
-                // Increment Tile Count Tracker
-                tile_count++;
+            int tile_count = 0;
+
+            packet p = new packet();
+            Tile t = new Tile();
+            for (int i = 0; i < compressedBytes.Count; i++)
+            {
+                bool done;
+                do
+                {
+                    done = !Packet_decompressor(p, compressedBytes[i], compressedBytes[i].Length, t);
+                    if (!done)
+                    {
+                        decompressedData.Add(t.tile_bytes);
+                        tile_count++;
+                        t = new Tile();
+                    }
+
+                } while (!done);
 
             }
 
-            //imageBuffer.SetColor(0, 0, 0);
-            // Convert the pixel data into a WriteableBitmap.
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            return tile_count;
+        }
 
-            // Set the Image source.
-            _image.Source = wbitmap;
-
+        private static bool Packet_decompressor(packet _pkt, byte[] buff, int buffSize, Tile tileBuff)
+        {
+            while (true)
+            {
+                // for (buffIndex = 0; buffIndex < buffSize ; buffIndex++)
+                // Dev Note: Need to also check if we have completed adding looped byte even if all incoming bytes have been read
+                if ((_pkt.buffIndex < buffSize) || (_pkt.compressedRun && !_pkt.repeatByteGet && (_pkt.loopRunLength != 0)))
+                {
+                    // Incoming Bytes Avaliable
+                    if (_pkt.loopRunLength == 0)
+                    {
+                        // Start of either a raw run of byte or compressed run of byte
+                        byte b = buff[_pkt.buffIndex++];
+                        if (b < 128)
+                        {
+                            // (0x7F=127) its a classical run, read the n bytes after (Raphael-Boichot)
+                            _pkt.loopRunLength = b + 1;
+                            _pkt.compressedRun = false;
+                        }
+                        else if (b >= 128)
+                        {
+                            // (0x80 = 128) its a compressed run, read the next byte and repeat (Raphael-Boichot)
+                            _pkt.loopRunLength = b - 128 + 2;
+                            _pkt.compressedRun = true;
+                            _pkt.repeatByteGet = true;
+                        }
+                    }
+                    else if (_pkt.repeatByteGet)
+                    {
+                        // Grab loop byte
+                        _pkt.repeatByte = buff[_pkt.buffIndex++];
+                        _pkt.repeatByteGet = false;
+                    }
+                    else
+                    {
+                        byte b = (_pkt.compressedRun) ? _pkt.repeatByte : buff[_pkt.buffIndex++];
+                        _pkt.loopRunLength--;
+                        tileBuff.tile_bytes[tileBuff.tile_bytes_idx++] = b;
+                        if (tileBuff.tile_bytes_idx == 16)
+                        {
+                            tileBuff.tile_bytes_idx = 0;
+                            return true; // Got tile
+                        }
+                    }
+                }
+                else
+                {
+                    _pkt.buffIndex = 0; // Reset for next buffer
+                    return false;
+                }
+            }
         }
 
         private void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
@@ -652,6 +821,11 @@ namespace GBPemu
                 byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
             }
 
+            return ProcessRawBytesToPixels(byteArray);
+        }
+
+        private byte[] ProcessRawBytesToPixels(byte[] byteArray)
+        {
             byte[] pixels = new byte[TILE_PIXEL_WIDTH * TILE_PIXEL_HEIGHT];
             for (int j = 0; j < TILE_PIXEL_HEIGHT; j++)
             {
