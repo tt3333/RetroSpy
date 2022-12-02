@@ -100,7 +100,7 @@ namespace GBPemu
 
         private List<Game> games;
 
-        private void parseGamePalettes()
+        private void ParseGamePalettes()
         {
             bool getMaxRGBValue = false;
             games = new List<Game>();
@@ -159,14 +159,18 @@ namespace GBPemu
 
             for (int i = 0; i < currentGame; ++i)
             {
-                var gameMenu = new System.Windows.Controls.MenuItem();
-                gameMenu.Header = games[i].Name;
+                var gameMenu = new System.Windows.Controls.MenuItem
+                {
+                    Header = games[i].Name
+                };
 
                 for (int j = 0; j < games[i].Palettes.Count; ++j)
                 {
-                    var paletteMenu = new System.Windows.Controls.MenuItem();
-                    paletteMenu.Header = games[i].Palettes[j].Name;
-                    paletteMenu.IsCheckable = true;
+                    var paletteMenu = new System.Windows.Controls.MenuItem
+                    {
+                        Header = games[i].Palettes[j].Name,
+                        IsCheckable = true
+                    };
                     paletteMenu.Click += Game_Palette_Click;
                     gameMenu.Items.Add(paletteMenu);
                 }
@@ -425,7 +429,7 @@ namespace GBPemu
             InitializeComponent();
             DataContext = this;
 
-            parseGamePalettes();
+            ParseGamePalettes();
 
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
@@ -490,7 +494,6 @@ namespace GBPemu
 
         private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
         {
-            bool isCompressed = false;
 
             _imageBuffer.SetColor(0, 0, 0, 255);
 
@@ -498,47 +501,10 @@ namespace GBPemu
             int square_height = square_width;
 
             string[] tiles_rawBytes_array = e.RawPrinterData.Split('\n');
+            
+            List<byte[]> decompressedTiles = new List<byte[]>();
 
-            int total_tile_count = 0;
-
-            for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
-            {
-                string tile_element = tiles_rawBytes_array[tile_i];
-
-                // Check for invalid raw lines
-                if (tile_element.Length == 0)
-                {   // Skip lines with no bytes (can happen with .split() )
-                    continue;
-                }
-                else if (tile_element.StartsWith("!", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("#", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("//", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("{", StringComparison.Ordinal))
-                {   
-                    if (tile_element.Contains("\"compressed\":1"))
-                    {
-                        isCompressed = true;
-                    }
-                    continue;
-                }
-                total_tile_count++;
-            }
-
-            List<byte[]> decompressedData = new List<byte[]>();
-
-            if (isCompressed)
-            {
-                total_tile_count = Decompress(tiles_rawBytes_array, decompressedData);
-            }
+            int total_tile_count = Decompress(tiles_rawBytes_array, decompressedTiles);
 
             int tile_height_count = total_tile_count / TILES_PER_LINE;
 
@@ -557,69 +523,16 @@ namespace GBPemu
             Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
             Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
-            if (!isCompressed)
+            for (int i = 0; i < decompressedTiles.Count; i++)
             {
-                int tile_count = 0;
-                for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
-                {
-                    string tile_element = tiles_rawBytes_array[tile_i];
+                int tile_x_offset = i % TILES_PER_LINE;
+                int tile_y_offset = i / TILES_PER_LINE;
 
-                    // Check for invalid raw lines
-                    if (tile_element.Length == 0)
-                    {   // Skip lines with no bytes (can happen with .split() )
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("!", StringComparison.Ordinal))
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("#", StringComparison.Ordinal))
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("//", StringComparison.Ordinal))
-                    {   // Skip lines used for comments
-                        continue;
-                    }
-                    else if (tile_element.StartsWith("{", StringComparison.Ordinal))
-                    {   // Skip lines used for comments
-                        continue;
-                    }
+                byte[] pixels = Decode(decompressedTiles[i]);
 
-                    // Gameboy Tile Offset
-                    int tile_x_offset = tile_count % TILES_PER_LINE;
-                    int tile_y_offset = tile_count / TILES_PER_LINE;
-
-                    byte[] pixels = Decode(tile_element);
-
-                    if (pixels != null)
-                    {
-                        Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
-                    }
-                    else
-                    {
-                        //status = false;
-                    }
-
-
-                    // Increment Tile Count Tracker
-                    tile_count++;
-
-                }
+                Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
             }
-            else
-            {
-                for (int i = 0; i < decompressedData.Count; i++)
-                {
-                    int tile_x_offset = i % TILES_PER_LINE;
-                    int tile_y_offset = i / TILES_PER_LINE;
 
-                    byte[] pixels = ProcessRawBytesToPixels(decompressedData[i]);
-
-                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
-
-                }
-            }
             //imageBuffer.SetColor(0, 0, 0);
             // Convert the pixel data into a WriteableBitmap.
             WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
@@ -632,17 +545,25 @@ namespace GBPemu
         private class Tile
         {
             public byte[] tile_bytes = new byte[16];
-            public int tile_bytes_idx;
+            private int tile_bytes_idx;
+
+            public bool Add(byte b)
+            {
+                tile_bytes[tile_bytes_idx++] = b;
+                return tile_bytes_idx == 16;
+            }
         }
 
-        private class packet
+        private class DecompressState
         {
-            public packet()
+            public DecompressState(bool _isCompressed)
             {
+
                 loopRunLength = 0;
                 compressedRun = false;
                 repeatByteGet = false;
                 buffIndex = 0;
+                isCompressed = _isCompressed;
             }
 
             public int loopRunLength;
@@ -650,12 +571,13 @@ namespace GBPemu
             public bool repeatByteGet;
             public int buffIndex;
             public byte repeatByte;
-
+            public bool isCompressed;
         }
 
-        private static int Decompress(string[] tiles_rawBytes_array, List<byte[]> decompressedData)
+        private static int Decompress(string[] tiles_rawBytes_array, List<byte[]> decompressedTiles)
         {
             List<byte[]> compressedBytes = new List<byte[]>();
+            bool isCompressed = false;
 
             for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
@@ -680,6 +602,10 @@ namespace GBPemu
                 }
                 else if (tile_element.StartsWith("{", StringComparison.Ordinal))
                 {   // Skip lines used for comments
+                    if (tile_element.Contains("\"compressed\":1"))
+                    {
+                        isCompressed = true;
+                    }
                     continue;
                 }
 
@@ -696,17 +622,17 @@ namespace GBPemu
 
             int tile_count = 0;
 
-            packet p = new packet();
+            DecompressState state = new DecompressState(isCompressed);
             Tile t = new Tile();
             for (int i = 0; i < compressedBytes.Count; i++)
             {
                 bool done;
                 do
                 {
-                    done = !Packet_decompressor(p, compressedBytes[i], compressedBytes[i].Length, t);
-                    if (!done)
+                    done = !ProcessBuffer(state, compressedBytes[i], t);
+                    if (!done) // Filled a tile, so need a new one
                     {
-                        decompressedData.Add(t.tile_bytes);
+                        decompressedTiles.Add(t.tile_bytes);
                         tile_count++;
                         t = new Tile();
                     }
@@ -718,55 +644,68 @@ namespace GBPemu
             return tile_count;
         }
 
-        private static bool Packet_decompressor(packet _pkt, byte[] buff, int buffSize, Tile tileBuff)
+        private static bool ProcessBuffer(DecompressState state, byte[] buffer, Tile tile)
         {
-            while (true)
+            if (!state.isCompressed)
             {
-                // for (buffIndex = 0; buffIndex < buffSize ; buffIndex++)
-                // Dev Note: Need to also check if we have completed adding looped byte even if all incoming bytes have been read
-                if ((_pkt.buffIndex < buffSize) || (_pkt.compressedRun && !_pkt.repeatByteGet && (_pkt.loopRunLength != 0)))
+                while (true)
                 {
-                    // Incoming Bytes Avaliable
-                    if (_pkt.loopRunLength == 0)
+                    if (state.buffIndex < buffer.Length)
                     {
-                        // Start of either a raw run of byte or compressed run of byte
-                        byte b = buff[_pkt.buffIndex++];
-                        if (b < 128)
+                        if(tile.Add(buffer[state.buffIndex++]))
                         {
-                            // (0x7F=127) its a classical run, read the n bytes after (Raphael-Boichot)
-                            _pkt.loopRunLength = b + 1;
-                            _pkt.compressedRun = false;
+                            return true;
                         }
-                        else if (b >= 128)
-                        {
-                            // (0x80 = 128) its a compressed run, read the next byte and repeat (Raphael-Boichot)
-                            _pkt.loopRunLength = b - 128 + 2;
-                            _pkt.compressedRun = true;
-                            _pkt.repeatByteGet = true;
-                        }
-                    }
-                    else if (_pkt.repeatByteGet)
-                    {
-                        // Grab loop byte
-                        _pkt.repeatByte = buff[_pkt.buffIndex++];
-                        _pkt.repeatByteGet = false;
                     }
                     else
                     {
-                        byte b = (_pkt.compressedRun) ? _pkt.repeatByte : buff[_pkt.buffIndex++];
-                        _pkt.loopRunLength--;
-                        tileBuff.tile_bytes[tileBuff.tile_bytes_idx++] = b;
-                        if (tileBuff.tile_bytes_idx == 16)
-                        {
-                            tileBuff.tile_bytes_idx = 0;
-                            return true; // Got tile
-                        }
+                        state.buffIndex = 0;
+                        return false;
                     }
                 }
-                else
+            }
+            else
+            {
+                while (true)
                 {
-                    _pkt.buffIndex = 0; // Reset for next buffer
-                    return false;
+                    if ((state.buffIndex < buffer.Length) || (state.compressedRun && !state.repeatByteGet && (state.loopRunLength != 0)))
+                    {
+                        if (state.loopRunLength == 0)
+                        {
+                            byte b = buffer[state.buffIndex++];
+                            if (b < 128)
+                            {
+                                state.loopRunLength = b + 1;
+                                state.compressedRun = false;
+                            }
+                            else if (b >= 128)
+                            {
+                                state.loopRunLength = b - 128 + 2;
+                                state.compressedRun = true;
+                                state.repeatByteGet = true;
+                            }
+                        }
+                        else if (state.repeatByteGet)
+                        {
+                            state.repeatByte = buffer[state.buffIndex++];
+                            state.repeatByteGet = false;
+                        }
+                        else
+                        {
+                            byte b = (state.compressedRun) ? state.repeatByte : buffer[state.buffIndex++];
+                            state.loopRunLength--;
+
+                            if (tile.Add(b))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        state.buffIndex = 0;
+                        return false;
+                    }
                 }
             }
         }
@@ -807,24 +746,7 @@ namespace GBPemu
             }
         }
 
-        private byte[] Decode(string rawBytes)
-        {
-            string bytes = rawBytes.Replace(" ", "").Replace("\r", "");
-            if (bytes.Length != 32)
-            {
-                return null;
-            }
-
-            byte[] byteArray = new byte[16];
-            for (int i = 0; i < byteArray.Length; i++)
-            {
-                byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
-            }
-
-            return ProcessRawBytesToPixels(byteArray);
-        }
-
-        private byte[] ProcessRawBytesToPixels(byte[] byteArray)
+        private byte[] Decode(byte[] byteArray)
         {
             byte[] pixels = new byte[TILE_PIXEL_WIDTH * TILE_PIXEL_HEIGHT];
             for (int j = 0; j < TILE_PIXEL_HEIGHT; j++)
