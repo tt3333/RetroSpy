@@ -61,7 +61,8 @@ namespace RetroSpy
         public static readonly InputSource SEGA = new InputSource("genesis", "Sega Genesis", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Sega.ReadFromPacket));
         public static readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, SS3D.ReadFromPacket));
         public static readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Dreamcast.ReadFromPacket));
-        public static readonly InputSource GENMINI = new InputSource("genesismini", "Sega Genesis Mini 1/2", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -6", GenesisMiniReader.ReadFromPacket, username, password, null, 0));
+        public static readonly InputSource GENMINI = new InputSource("genesismini", "Sega Genesis Mini 1", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -z", GenesisMiniReader.ReadFromPacket, username, password, null, 0));
+        public static readonly InputSource GENMINI2 = new InputSource("genesismini2", "Sega Genesis Mini 2", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -6", GenesisMiniReader.ReadFromPacket, username, password, null, 0));
 
         public static readonly InputSource NEOGEO = new InputSource("neogeo", "SNK NeoGeo", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, NeoGeo.ReadFromPacket));
         public static readonly InputSource NEOGEOMINI = new InputSource("neogeomini", "SNK NeoGeo Mini", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -g", NeoGeoMini.ReadFromPacket, username, password, null, 0));
@@ -85,7 +86,7 @@ namespace RetroSpy
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
 
         public static readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
-            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, GENMINI2, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
         };
 
         public static readonly InputSource DEFAULT = NES;
