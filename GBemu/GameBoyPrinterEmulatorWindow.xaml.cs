@@ -351,7 +351,7 @@ namespace GBPemu
             {
                 _imageBuffer = new BitmapPixelMaker(480, 432);
 
-                _imageBuffer.SetColor(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3]);
+                _imageBuffer.SetColor(palettes[SelectedPalette == -1 ? 0 : SelectedPalette][0][3], palettes[SelectedPalette == -1 ? 0 : SelectedPalette][1][3], palettes[SelectedPalette == -1 ? 0 : SelectedPalette][2][3]);
 
                 for (int i = 0; i < bmp.Width; ++i)
                 {
@@ -360,9 +360,9 @@ namespace GBPemu
                         System.Drawing.Color pixel = bmp.GetPixel(i, j);
                         if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                         {
-                            _imageBuffer.SetRed(i, j, palettes[SelectedPalette][0][0]);
-                            _imageBuffer.SetGreen(i, j, palettes[SelectedPalette][1][0]);
-                            _imageBuffer.SetBlue(i, j, palettes[SelectedPalette][2][0]);
+                            _imageBuffer.SetRed(i, j, palettes[SelectedPalette == -1 ? 0 : SelectedPalette][0][0]);
+                            _imageBuffer.SetGreen(i, j, palettes[SelectedPalette == -1 ? 0 : SelectedPalette][1][0]);
+                            _imageBuffer.SetBlue(i, j, palettes[SelectedPalette == -1 ? 0 : SelectedPalette][2][0]);
                         }
                     }
                 }
