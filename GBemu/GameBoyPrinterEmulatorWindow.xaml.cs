@@ -70,6 +70,7 @@ namespace GBPemu
 
         private readonly System.Windows.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
+        private List<byte[]> decompressedTiles;
         private readonly IControllerReader _reader;
 
         private int PrintSize;
@@ -219,29 +220,10 @@ namespace GBPemu
                 }
             }
 
-            if (SelectedPalette != -1)
-            {
-                for (int i = 0; i < 4; ++i)
-                {
-                    _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
-                                            new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
-                }
-            }
-            else
-            {
-                for (int i = 0; i < 4; ++i)
-                {
-                    _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
-                                            new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
-                }
-            }
-
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-            _image.Source = wbitmap;
-
             SelectedPalette = -1;
             SelectedGamePalette = newPalette;
-
+            
+            DisplayImage(PrintSize, PrintSize);
         }
 
         private void Size_Click(object sender, EventArgs e)
@@ -352,29 +334,12 @@ namespace GBPemu
             CheckPalette(newPalette);
             ClearGamePalette(null);
 
-
-            if (SelectedPalette != -1)
-            {
-                for (int i = 0; i < 4; ++i)
-                {
-                    _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
-                                              new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
-                }
-            }
-            else
-            {
-                for (int i = 0; i < 4; ++i)
-                {
-                    _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
-                          new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
-                }
-            }
-
-            WriteableBitmap wbitmap = _imageBuffer.MakeBitmap(96, 96);
-            _image.Source = wbitmap;
-
             SelectedPalette = newPalette;
             Properties.Settings.Default.SelectedPalette = SelectedPalette;
+            
+            DisplayImage(PrintSize, PrintSize);
+ 
+
         }
 
         private void DisplayError()
@@ -501,8 +466,8 @@ namespace GBPemu
             int square_height = square_width;
 
             string[] tiles_rawBytes_array = e.RawPrinterData.Split('\n');
-            
-            List<byte[]> decompressedTiles = new List<byte[]>();
+
+            decompressedTiles = new List<byte[]>();
 
             int total_tile_count = Decompress(tiles_rawBytes_array, decompressedTiles);
 
@@ -523,6 +488,12 @@ namespace GBPemu
             Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
             Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
+            DisplayImage(square_width, square_height);
+
+        }
+
+        private void DisplayImage(int square_width, int square_height)
+        {
             for (int i = 0; i < decompressedTiles.Count; i++)
             {
                 int tile_x_offset = i % TILES_PER_LINE;
@@ -539,7 +510,6 @@ namespace GBPemu
 
             // Set the Image source.
             _image.Source = wbitmap;
-
         }
 
         private class Tile
