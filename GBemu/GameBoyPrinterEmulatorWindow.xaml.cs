@@ -399,6 +399,9 @@ namespace GBPemu
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
+            if (SelectedPalette == -1)  // This shouldn't happen, but it probably can in certain corner cases
+                SelectedPalette = 1;
+
             PrintSize = Properties.Settings.Default.PrintSize;
 
             using (Bitmap bmp = new Bitmap(Properties.Resources.PrintImage))
