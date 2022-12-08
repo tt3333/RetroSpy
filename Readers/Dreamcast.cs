@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace RetroSpy.Readers
 {
@@ -83,273 +84,282 @@ namespace RetroSpy.Readers
             // Skip sender and receiver address
             j += 16;
 
-            byte dcCommand = 0;
-            for (int i = 0; i < 4; ++i)
+            try
             {
-                dcCommand |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                dcCommand |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                j += 2;
-            }
 
-            if (dcCommand == 8 && numWords >= 1)
-            {
-                uint controllerType = 0;
-                for (int i = 0; i < 2; i++)
+                byte dcCommand = 0;
+                for (int i = 0; i < 4; ++i)
                 {
-                    for (int k = 0; k < 4; ++k)
-                    {
-                        controllerType |= (uint)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
-                        controllerType |= (uint)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
-                        j += 2;
-                    }
+                    dcCommand |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                    dcCommand |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                    j += 2;
                 }
 
-                j += 16;
-
-                if (controllerType == 1 && numWords == 3)
+                if (dcCommand == 8 && numWords >= 1)
                 {
-                    byte ltrigger = 0;
-                    for (int i = 0; i < 4; ++i)
+                    uint controllerType = 0;
+                    for (int i = 0; i < 2; i++)
                     {
-                        ltrigger |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        ltrigger |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    byte rtrigger = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        rtrigger |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        rtrigger |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    int k = 0;
-                    for (int i = 0; i < BUTTONS.Length / 2; ++i)
-                    {
-                        if (!string.IsNullOrEmpty(BUTTONS[k]))
+                        for (int k = 0; k < 4; ++k)
                         {
-                            state.SetButton(BUTTONS[k], (packet[j] & 0x2) == 0x0);
-                        }
-
-                        if (!string.IsNullOrEmpty(BUTTONS[k + 1]))
-                        {
-                            state.SetButton(BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
-                        }
-
-                        k += 2;
-                        j += 2;
-                    }
-
-                    byte joyy2 = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        joyy2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        joyy2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    byte joyx2 = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        joyx2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        joyx2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    byte joyy = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        joyy |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        joyy |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    byte joyx = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        joyx |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        joyx |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    state.SetAnalog("stick_x", ReadStick(joyx), joyx);
-                    state.SetAnalog("stick_y", ReadStick(joyy), joyy);
-                    state.SetAnalog("stick_x2", ReadStick(joyx2), joyx2);
-                    state.SetAnalog("stick_y2", ReadStick(joyy2), joyy2);
-                    state.SetAnalog("trig_r", ReadTrigger(rtrigger), rtrigger);
-                    state.SetAnalog("trig_l", ReadTrigger(ltrigger), ltrigger);
-                }
-                else if (controllerType == 0x200 && numWords == 6)
-                {
-                    j += 24;
-
-                    int k = 0;
-                    for (int i = 0; i < MOUSE_BUTTONS.Length / 2; ++i)
-                    {
-                        if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k]))
-                        {
-                            state.SetButton(MOUSE_BUTTONS[k], (packet[j] & 0x2) == 0x0);
-                        }
-
-                        if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k + 1]))
-                        {
-                            state.SetButton(MOUSE_BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
-                        }
-
-                        k += 2;
-                        j += 2;
-                    }
-
-                    ushort axis1 = 0;
-                    for (int i = 1; i >= 0; --i)
-                    {
-                        for (k = 0; k < 4; ++k)
-                        {
-                            axis1 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
-                            axis1 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
-                            j += 2;
-                        }
-                    }
-
-                    ushort axis2 = 0;
-                    for (int i = 1; i >= 0; --i)
-                    {
-                        for (k = 0; k < 4; ++k)
-                        {
-                            axis2 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
-                            axis2 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                            controllerType |= (uint)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+                            controllerType |= (uint)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
                             j += 2;
                         }
                     }
 
                     j += 16;
 
-                    ushort axis3 = 0;
-                    for (int i = 1; i >= 0; --i)
+                    if (controllerType == 1 && numWords == 3)
                     {
-                        for (k = 0; k < 4; ++k)
+                        byte ltrigger = 0;
+                        for (int i = 0; i < 4; ++i)
                         {
-                            axis3 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
-                            axis3 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                            ltrigger |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            ltrigger |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
                             j += 2;
                         }
+
+                        byte rtrigger = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            rtrigger |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            rtrigger |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        int k = 0;
+                        for (int i = 0; i < BUTTONS.Length / 2; ++i)
+                        {
+                            if (!string.IsNullOrEmpty(BUTTONS[k]))
+                            {
+                                state.SetButton(BUTTONS[k], (packet[j] & 0x2) == 0x0);
+                            }
+
+                            if (!string.IsNullOrEmpty(BUTTONS[k + 1]))
+                            {
+                                state.SetButton(BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+                            }
+
+                            k += 2;
+                            j += 2;
+                        }
+
+                        byte joyy2 = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            joyy2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            joyy2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        byte joyx2 = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            joyx2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            joyx2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        byte joyy = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            joyy |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            joyy |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        byte joyx = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            joyx |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            joyx |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        state.SetAnalog("stick_x", ReadStick(joyx), joyx);
+                        state.SetAnalog("stick_y", ReadStick(joyy), joyy);
+                        state.SetAnalog("stick_x2", ReadStick(joyx2), joyx2);
+                        state.SetAnalog("stick_y2", ReadStick(joyy2), joyy2);
+                        state.SetAnalog("trig_r", ReadTrigger(rtrigger), rtrigger);
+                        state.SetAnalog("trig_l", ReadTrigger(ltrigger), ltrigger);
                     }
+                    else if (controllerType == 0x200 && numWords == 6)
+                    {
+                        j += 24;
 
-                    float x = (axis2 - 512) / 512.0f;
-                    float y = -1 * (axis1 - 512) / 512.0f;
+                        int k = 0;
+                        for (int i = 0; i < MOUSE_BUTTONS.Length / 2; ++i)
+                        {
+                            if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k]))
+                            {
+                                state.SetButton(MOUSE_BUTTONS[k], (packet[j] & 0x2) == 0x0);
+                            }
 
-                    SignalTool.SetMouseProperties(x, y, axis2, axis1, state);
+                            if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k + 1]))
+                            {
+                                state.SetButton(MOUSE_BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+                            }
 
-                    state.SetButton("scroll_up", axis3 < 512);
-                    state.SetButton("scroll_down", axis3 > 512);
+                            k += 2;
+                            j += 2;
+                        }
+
+                        ushort axis1 = 0;
+                        for (int i = 1; i >= 0; --i)
+                        {
+                            for (k = 0; k < 4; ++k)
+                            {
+                                axis1 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+                                axis1 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                                j += 2;
+                            }
+                        }
+
+                        ushort axis2 = 0;
+                        for (int i = 1; i >= 0; --i)
+                        {
+                            for (k = 0; k < 4; ++k)
+                            {
+                                axis2 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+                                axis2 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                                j += 2;
+                            }
+                        }
+
+                        j += 16;
+
+                        ushort axis3 = 0;
+                        for (int i = 1; i >= 0; --i)
+                        {
+                            for (k = 0; k < 4; ++k)
+                            {
+                                axis3 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+                                axis3 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                                j += 2;
+                            }
+                        }
+
+                        float x = (axis2 - 512) / 512.0f;
+                        float y = -1 * (axis1 - 512) / 512.0f;
+
+                        SignalTool.SetMouseProperties(x, y, axis2, axis1, state);
+
+                        state.SetButton("scroll_up", axis3 < 512);
+                        state.SetButton("scroll_down", axis3 > 512);
+                    }
+                    else if (controllerType == 0x40 && numWords == 3)
+                    {
+                        for (int i = 0; i < KEYS.Length; ++i)
+                        {
+                            if (KEYS[i] != null)
+                            {
+                                state.SetButton(KEYS[i], false);
+                            }
+                        }
+
+                        byte[] keycode = new byte[6];
+
+                        keycode[1] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[1] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[1] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+                        if (KEYS[keycode[1]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[1]], true);
+                        }
+
+                        keycode[0] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[0] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[0] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+                        if (KEYS[keycode[0]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[0]], true);
+                        }
+
+                        int k = 0;
+                        for (int i = 0; i < MODIFER_KEYS.Length / 2; ++i)
+                        {
+                            if (!string.IsNullOrEmpty(MODIFER_KEYS[k]))
+                            {
+                                state.SetButton(MODIFER_KEYS[k], (packet[j] & 0x2) != 0x0);
+                            }
+
+                            if (!string.IsNullOrEmpty(MODIFER_KEYS[k + 1]))
+                            {
+                                state.SetButton(MODIFER_KEYS[k + 1], (packet[j + 1] & 0x1) != 0x0);
+                            }
+
+                            k += 2;
+                            j += 2;
+                        }
+
+                        keycode[5] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[5] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[5] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        if (KEYS[keycode[5]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[5]], true);
+                        }
+
+                        keycode[4] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[4] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[4] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        if (KEYS[keycode[4]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[4]], true);
+                        }
+
+                        keycode[3] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[3] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[3] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        if (KEYS[keycode[3]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[3]], true);
+                        }
+
+                        keycode[2] = 0;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            keycode[2] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                            keycode[2] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                            j += 2;
+                        }
+
+                        if (KEYS[keycode[2]] != null)
+                        {
+                            state.SetButton(KEYS[keycode[2]], true);
+                        }
+                    }
+                    return state.Build();
                 }
-                else if (controllerType == 0x40 && numWords == 3)
-                {
-                    for (int i = 0; i < KEYS.Length; ++i)
-                    {
-                        if (KEYS[i] != null)
-                        {
-                            state.SetButton(KEYS[i], false);
-                        }
-                    }
 
-                    byte[] keycode = new byte[6];
-
-                    keycode[1] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[1] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[1] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-                    if (KEYS[keycode[1]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[1]], true);
-                    }
-
-                    keycode[0] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[0] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[0] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-                    if (KEYS[keycode[0]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[0]], true);
-                    }
-
-                    int k = 0;
-                    for (int i = 0; i < MODIFER_KEYS.Length / 2; ++i)
-                    {
-                        if (!string.IsNullOrEmpty(MODIFER_KEYS[k]))
-                        {
-                            state.SetButton(MODIFER_KEYS[k], (packet[j] & 0x2) != 0x0);
-                        }
-
-                        if (!string.IsNullOrEmpty(MODIFER_KEYS[k + 1]))
-                        {
-                            state.SetButton(MODIFER_KEYS[k + 1], (packet[j + 1] & 0x1) != 0x0);
-                        }
-
-                        k += 2;
-                        j += 2;
-                    }
-
-                    keycode[5] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[5] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[5] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    if (KEYS[keycode[5]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[5]], true);
-                    }
-
-                    keycode[4] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[4] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[4] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    if (KEYS[keycode[4]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[4]], true);
-                    }
-
-                    keycode[3] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[3] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[3] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    if (KEYS[keycode[3]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[3]], true);
-                    }
-
-                    keycode[2] = 0;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        keycode[2] |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                        keycode[2] |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
-                        j += 2;
-                    }
-
-                    if (KEYS[keycode[2]] != null)
-                    {
-                        state.SetButton(KEYS[keycode[2]], true);
-                    }
-                }
-                return state.Build();
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
             }
 
             return null;
