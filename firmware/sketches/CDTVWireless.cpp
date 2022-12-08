@@ -228,3 +228,8 @@ void CDTVWirelessSpy::debugSerial() {}
 void CDTVWirelessSpy::updateState() {}
 
 #endif
+
+const char* CDTVWirelessSpy::startupMsg()
+{
+	return "CDTV Wireless";
+}

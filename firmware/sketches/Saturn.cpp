@@ -138,3 +138,8 @@ void SaturnSpy::debugSerial() {}
 void SaturnSpy::updateState() {}
 
 #endif
+
+const char* SaturnSpy::startupMsg()
+{
+	return "Saturn";
+}

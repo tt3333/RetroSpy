@@ -215,3 +215,8 @@ void FMTownsKeyboardAndMouseSpy::debugSerial() {}
 void FMTownsKeyboardAndMouseSpy::updateState() {}
 void FMTownsKeyboardAndMouseSpy::setup(){}
 #endif
+
+const char* FMTownsKeyboardAndMouseSpy::startupMsg()
+{
+	return "FM Towns Keyboard & Mouse";
+}

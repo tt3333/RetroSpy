@@ -113,3 +113,8 @@ void SMSSportsPadSpy::debugSerial() {}
 void SMSSportsPadSpy::updateState() {}
 
 #endif
+
+const char* SMSSportsPadSpy::startupMsg()
+{
+	return "SMS Sports Pad";
+}

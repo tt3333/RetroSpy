@@ -183,3 +183,8 @@ void SMSSpy::debugSerial() {}
 void SMSSpy::updateState() {}
 
 #endif
+
+const char* SMSSpy::startupMsg()
+{
+	return "SMS";
+}

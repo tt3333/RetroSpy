@@ -153,3 +153,8 @@ void VFlashSpy::updateState() {
 }
 
 #endif
+
+const char* VFlashSpy::startupMsg()
+{
+	return "V.Flash";
+}

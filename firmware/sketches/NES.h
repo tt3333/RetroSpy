@@ -42,6 +42,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 private:
 	unsigned char rawData[NES_BITCOUNT * 3];

@@ -276,10 +276,6 @@ void WiiSpy::debugSerial()
 void WiiSpy::updateState() {
 }
 
-const char* WiiSpy::startupMsg()
-{
-	return "Starting up in Wii mode";
-}
 
 #else
 void WiiSpy::setup() {
@@ -297,9 +293,9 @@ void WiiSpy::debugSerial() {
 void WiiSpy::updateState() {
 }
 
+#endif
+
 const char* WiiSpy::startupMsg()
 {
-	return "This board is not compatible with Wii mode";
+	return "Wii";
 }
-
-#endif

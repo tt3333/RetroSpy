@@ -89,3 +89,8 @@ void SMSPaddleSpy::debugSerial() {}
 void SMSPaddleSpy::updateState() {}
 
 #endif
+
+const char* SMSPaddleSpy::startupMsg()
+{
+	return "SMS Paddle";
+}

@@ -162,8 +162,19 @@ void IntellivisionSpy::debugSerial() {
 	Serial.print("\n");
 }
 
-#elsevoid IntellivisionSpy::loop() {}void IntellivisionSpy::writeSerial() {}
+#else
+
+void IntellivisionSpy::loop() {}
+
+void IntellivisionSpy::writeSerial() {}
 
 void IntellivisionSpy::debugSerial() {}
 
-void IntellivisionSpy::updateState() {}#endif
+void IntellivisionSpy::updateState() {}
+
+#endif
+
+const char* IntellivisionSpy::startupMsg()
+{
+	return "Intellivision";
+}

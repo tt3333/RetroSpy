@@ -178,3 +178,8 @@ void ColecoVisionSpy::writeSerial() {}
 void ColecoVisionSpy::debugSerial() {}
 void ColecoVisionSpy::updateState() {}
 #endif
+
+const char* ColecoVisionSpy::startupMsg()
+{
+	return "Colecovision";
+}

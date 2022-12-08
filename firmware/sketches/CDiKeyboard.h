@@ -46,6 +46,8 @@ public:
 	void debugSerial();
 	void updateState();
 	
+	virtual const char* startupMsg();
+	
 private:
 	SoftwareSerial vSerial;
 	byte rawData[10];

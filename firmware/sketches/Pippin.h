@@ -37,6 +37,8 @@ public:
 	void updateState();
 	void setup(byte controllerAddress, byte mouseAddress);
 
+	virtual const char* startupMsg();
+	
 private:
 	byte controllerAddress;
 	byte mouseAddress;

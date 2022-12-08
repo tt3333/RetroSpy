@@ -179,3 +179,8 @@ void CDTVWiredSpy::writeSerial() {}
 void CDTVWiredSpy::debugSerial() {}
 void CDTVWiredSpy::updateState() {}
 #endif
+
+const char* CDTVWiredSpy::startupMsg()
+{
+	return "CDTV Wired";
+}

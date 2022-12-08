@@ -34,11 +34,20 @@ class ControllerSpy {
 public:
 	virtual void setup()
 	{
-		delay(1000);
-		Serial.println(startupMsg());
-		delay(1000);
 		common_pin_setup();
 	}
+	
+	virtual void printFirmwareInfo()
+	{
+		delay(1000);
+		Serial.print("Starting up in ");
+		Serial.print(startupMsg());
+		Serial.println(" mode");
+		Serial.print("Version: ");
+		Serial.println("5.2.3"); /*VERSIONINFO*/
+		delay(1000);		
+	}
+	
 	virtual void loop() = 0;
 	virtual void writeSerial() = 0;
 	virtual void debugSerial() = 0;

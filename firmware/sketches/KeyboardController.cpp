@@ -240,3 +240,13 @@ void KeyboardControllerSpy::debugSerial() {}
 void KeyboardControllerSpy::updateState() {}
 
 #endif
+
+const char* KeyboardControllerSpy::startupMsg()
+{
+	if (currentControllerMode == MODE_NORMAL)
+		return "Atari Keyboard Controller (MODE_NORMAL)";
+	else if (currentControllerMode == MODE_STAR_RAIDERS)
+		return "Atari Keyboard Controller (MODE_STAR_RAIDERS)";
+	else
+		return "Atari Keyboard Controller (MODE_BIG_BIRD)";
+}

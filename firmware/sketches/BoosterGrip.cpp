@@ -103,8 +103,19 @@ void BoosterGripSpy::debugSerial() {
 	}
 }
 
-#elsevoid BoosterGripSpy::setup() {}void BoosterGripSpy::loop() {}void BoosterGripSpy::writeSerial() {}
+#else
+void BoosterGripSpy::setup() {}
+
+void BoosterGripSpy::loop() {}
+
+void BoosterGripSpy::writeSerial() {}
 
 void BoosterGripSpy::debugSerial() {}
 
-void BoosterGripSpy::updateState() {}#endif
+void BoosterGripSpy::updateState() {}
+#endif
+
+const char* BoosterGripSpy::startupMsg()
+{
+	return "Booster Grip";
+}

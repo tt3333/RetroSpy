@@ -118,3 +118,8 @@ void TG16Spy::debugSerial() {}
 void TG16Spy::updateState() {}
 
 #endif
+
+const char* TG16Spy::startupMsg()
+{
+	return "TG16";
+}

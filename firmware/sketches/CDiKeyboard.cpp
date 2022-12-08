@@ -235,3 +235,8 @@ void CDiKeyboardSpy::updateState() {
 }
 
 #endif
+
+const char* CDiKeyboardSpy::startupMsg()
+{
+	return "CDi Keyboard";
+}

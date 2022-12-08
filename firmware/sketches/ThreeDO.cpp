@@ -76,3 +76,8 @@ void ThreeDOSpy::debugSerial() {}
 void ThreeDOSpy::updateState() {}
 
 #endif
+
+const char* ThreeDOSpy::startupMsg()
+{
+	return "3DO";
+}

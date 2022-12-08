@@ -188,3 +188,8 @@ void AtariPaddlesSpy::debugSerial() {}
 void AtariPaddlesSpy::updateState() {}
 
 #endif
+
+const char* AtariPaddlesSpy::startupMsg()
+{
+	return "Atari Paddles";
+}

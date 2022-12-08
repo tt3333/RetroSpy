@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// RetroSpy Firmware for Arduino Uno & Teensy 3.5
-// v5.2
+// RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
+// Version: 5.2.3
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -75,6 +75,9 @@
 //#define MODE_COLECOVISION_ROLLER
 //#define MODE_ATARI_PADDLES
 
+// Don't use this.  Its for something else.
+//#define RS_VISION
+
 // Some consoles care about PAL/NTSC for timing purposes
 #define VIDEO_OUTPUT VIDEO_PAL
 
@@ -141,159 +144,29 @@
 #include "VSmile.h"
 #include "VFlash.h"
 
-#if defined(MODE_NES)
-NESSpy NESSpy;
-#endif
-#if defined(MODE_POWERGLOVE)
-PowerGloveSpy PowerGloveSpy;
-#endif
-#if defined(MODE_SNES)
-SNESSpy SNESSpy;
-#endif
-#if defined(MODE_N64)
-N64Spy N64Spy;
-#endif
-#if defined(MODE_GC)
-GCSpy GCSpy;
-#endif
-#if defined(MODE_GBA)
-GBASpy GBASpy;
-#endif
-#if defined(MODE_BOOSTER_GRIP)
-BoosterGripSpy BoosterGripSpy;
-#endif
-#if defined(MODE_GENESIS)
-GenesisSpy GenesisSpy;
-#endif
-#if defined(MODE_GENESIS_MOUSE)
-GenesisMouseSpy GenesisMouseSpy;
-#endif
-#if defined(MODE_SMS)
-SMSSpy SMSSpy;
-#endif
-#if defined(MODE_SMS_PADDLE)
-SMSPaddleSpy SMSPaddleSpy;
-#endif
-#if defined(MODE_SMS_SPORTS_PAD)
-SMSSportsPadSpy SMSSportsPadSpy;
-#endif
-#if defined(MODE_SMS_ON_GENESIS)
-SMSSpy SMSOnGenesisSpy;
-#endif
-#if defined(MODE_SATURN)
-SaturnSpy SaturnSpy;
-#endif
-#if defined(MODE_SATURN3D)
-Saturn3DSpy Saturn3DSpy;
-#endif
-#if defined(MODE_COLECOVISION)
-ColecoVisionSpy ColecoVisionSpy;
-#endif
-#if defined(MODE_FMTOWNS)
-FMTownsSpy FMTownsSpy;
-#endif
-#if defined(MODE_INTELLIVISION)
-IntellivisionSpy IntelliVisionSpy;
-#endif
-#if defined(MODE_JAGUAR)
-JaguarSpy JaguarSpy;
-#endif
-#if defined(MODE_NEOGEO)
-NeoGeoSpy NeoGeoSpy;
-#endif
-#if defined(MODE_PCFX)
-PCFXSpy PCFXSpy;
-#endif
-#if  defined(MODE_PLAYSTATION)
-PlayStationSpy PlayStationSpy;
-#endif
-#if defined(MODE_TG16)
-TG16Spy TG16Spy;
-#endif
-#if defined(MODE_3DO)
-ThreeDOSpy ThreeDOSpy;
-#endif
-#if defined(MODE_DREAMCAST)
-DreamcastSpy DCSpy;
-#endif
-#if defined(MODE_WII)
-WiiSpy WiiSpy;
-#endif
-#if defined(MODE_CD32)
-AmigaCd32Spy Cd32Spy;
-#endif
-#if defined(MODE_DRIVING_CONTROLLER)
-DrivingControllerSpy DrivingControllerSpy;
-#endif
-#if defined(MODE_PIPPIN)
-PippinSpy PippinSpy;
-#endif
-#if defined(MODE_AMIGA_KEYBOARD)
-AmigaKeyboardSpy AmigaKeyboardSpy;
-#endif
-#if defined(MODE_AMIGA_MOUSE)                                            
-AmigaMouseSpy AmigaMouseSpy;
-#endif
-#if defined(MODE_CDTV_WIRED)
-CDTVWiredSpy CDTVWiredSpy;
-#endif
-#if defined(MODE_CDTV_WIRELESS)
-CDTVWirelessSpy CDTVWirelessSpy;
-#endif
-#if defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
-FMTownsKeyboardAndMouseSpy FMTownsKeyboardAndMouseSpy;
-#endif
-#if defined(MODE_CDI)
-CDiSpy CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
-#endif
-#if defined(MODE_CDI_KEYBOARD)
-CDiKeyboardSpy CDiKeyboardSpy;
-#endif
-#if defined(MODE_GAMEBOY_PRINTER)
-GameBoyPrinterEmulator GameBoyPrinterEmulator;
-#endif
-#if defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
-AmigaAnalogSpy AmigaAnalogSpy;
-#endif
-#if defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
-Atari5200Spy Atari5200Spy;
-#endif
-#if defined(MODE_COLECOVISION_ROLLER)                                                  
-ColecoVisionRollerSpy ColecoVisionRollerSpy;
-#endif
-#if defined(MODE_ATARI_PADDLES)                                                  
-AtariPaddlesSpy AtariPaddlesSpy;
-#endif
-#if defined(MODE_NUON)                                                  
-NuonSpy NuonSpy;
-#endif
-#if defined(MODE_VSMILE)                                                  
-VSmileSpy VSmileSpy;
-#endif
-#if defined(MODE_VFLASH)                                                  
-VFlashSpy VFlashSpy;
-#endif
-#if defined(MODE_KEYBOARD_CONTROLLER) \
-	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
-	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
-KeyboardControllerSpy KeyboardControllerSpy;
-#endif
+bool CreateSpy();
+
+ControllerSpy* currentSpy = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-  // for MODE_DETECT
+
+	// FOR MODE DETECTION
 #if defined(__arm__) && defined(CORE_TEENSY)
-  for(int i = 33; i < 40; ++i)
-    pinMode(i, INPUT_PULLUP);
+	for (int i = 33; i < 40; ++i)
+		pinMode(i, INPUT_PULLUP);
 #elif defined(ARDUINO_AVR_NANO_EVERY)
-  for(int i = 3; i < 9; ++i)
-    if (i != 7)
-      pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
-    PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
-    DDRC  = 0x00;
+	for (int i = 3; i < 9; ++i)
+		if (i != 7)
+			pinMode(i, INPUT_PULLUP);
+#elif !defined(RS_VISION) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
+	DDRC  = 0x00;
+#elif defined(RS_VISION)
+	for (int i = A0; i <= A7; ++i)
+		pinMode(i, INPUT_PULLUP);
 #endif
 
 #ifdef LAG_FIX
@@ -302,264 +175,293 @@ void setup()
 	Serial.begin(115200);
 #endif
 
-#if defined(MODE_DETECT)
-    if ( !PINC_READ(MODEPIN_SNES)) {
-        SNESSpy.setup();
-    } else if ( !PINC_READ(MODEPIN_N64))  {
-	    delay(1000);
-	    Serial.println("Starting up in N64 mode");
-	    delay(1000);
-        N64Spy.setup();
-    } else if ( !PINC_READ(MODEPIN_GC)) {
-	    delay(1000);
-	    Serial.println("Starting up in Gamecube mode");
-	    delay(1000);
-        GCSpy.setup();
-    }
-#if defined(__arm__) && defined(CORE_TEENSY)
-  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-	  delay(1000);
-	  Serial.println("Starting up in Dreamcast mode");
-	  delay(1000);
-       DCSpy.setup();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
-	    delay(1000);
-	    Serial.println("Starting up in Wii mode");
-	    delay(1000);
-        WiiSpy.setup();
-    }
-#endif 
-    else {
-	    delay(1000);
-	    Serial.println("Starting up in NES mode");
-	    delay(1000);
-        NESSpy.setup();
-    }
-#elif defined(MODE_NES)
-    NESSpy.setup();
-#elif defined(MODE_POWERGLOVE)
-	PowerGloveSpy.setup();
-#elif defined(MODE_SNES)
-    SNESSpy.setup();
-#elif defined(MODE_N64)
-    N64Spy.setup();
-#elif defined(MODE_GC)
-    GCSpy.setup();
-#elif defined(MODE_GBA)
-	GBASpy.setup();
-#elif defined(MODE_BOOSTER_GRIP)
-    BoosterGripSpy.setup();
-#elif defined(MODE_GENESIS)
-    GenesisSpy.setup();
-#elif defined(MODE_GENESIS_MOUSE)
-    GenesisMouseSpy.setup();
-#elif defined(MODE_SMS)
-    SMSSpy.setup();
-#elif defined(MODE_SMS_PADDLE)
-	SMSPaddleSpy.setup();
-#elif defined(MODE_SMS_SPORTS_PAD)
-	SMSSportsPadSpy.setup();
-#elif defined(MODE_SMS_ON_GENESIS)
-    SMSOnGenesisSpy.setup(SMSSpy::OUTPUT_GENESIS);
-#elif defined(MODE_SATURN)
-    SaturnSpy.setup();
-#elif defined(MODE_SATURN3D)
-    Saturn3DSpy.setup();
-#elif defined(MODE_COLECOVISION)
-    ColecoVisionSpy.setup();
-#elif defined(MODE_FMTOWNS)
-    FMTownsSpy.setup();
-#elif defined(MODE_INTELLIVISION)
-    IntelliVisionSpy.setup();
-#elif defined(MODE_JAGUAR)
-    JaguarSpy.setup();
-#elif defined(MODE_NEOGEO)
-    NeoGeoSpy.setup();
-#elif defined(MODE_PCFX)
-    PCFXSpy.setup();
-#elif defined(MODE_PLAYSTATION)
-    PlayStationSpy.setup();
-#elif defined(MODE_TG16)
-    TG16Spy.setup();
-#elif defined(MODE_3DO)
-    ThreeDOSpy.setup();
-#elif defined(MODE_DREAMCAST)
-    DCSpy.setup();
-#elif defined(MODE_WII)
-    WiiSpy.setup();
-#elif defined(MODE_CD32)
-    Cd32Spy.setup();    
-#elif defined(MODE_DRIVING_CONTROLLER)
-	DrivingControllerSpy.setup();
-#elif defined(MODE_PIPPIN)
-	PippinSpy.setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
-#elif defined(MODE_AMIGA_KEYBOARD)
-	AmigaKeyboardSpy.setup();
-#elif defined(MODE_AMIGA_MOUSE)
-	AmigaMouseSpy.setup(VIDEO_OUTPUT);
-#elif defined(MODE_CDTV_WIRED)
-	CDTVWiredSpy.setup();
-#elif defined(MODE_CDTV_WIRELESS)
-	CDTVWirelessSpy.setup();
-#elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
-	FMTownsKeyboardAndMouseSpy.setup();
-#elif defined(MODE_CDI)
-	CDiSpy.setup();
-#elif defined(MODE_CDI_KEYBOARD)
-	CDiKeyboardSpy.setup();
-#elif defined(MODE_GAMEBOY_PRINTER)
-	GameBoyPrinterEmulator.setup();
-#elif defined(MODE_AMIGA_ANALOG_1)
-	AmigaAnalogSpy.setup(false);
-#elif defined(MODE_AMIGA_ANALOG_2)
-	AmigaAnalogSpy.setup(true);
-#elif defined(MODE_ATARI5200_1)
-	Atari5200Spy.setup(false);
-#elif defined(MODE_ATARI5200_2)
-	Atari5200Spy.setup(true);
-#elif defined(MODE_KEYBOARD_CONTROLLER)
-	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_NORMAL);
-#elif defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS)
-	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
-#elif defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
-	KeyboardControllerSpy.setup(KeyboardControllerSpy::MODE_BIG_BIRD);
-#elif defined(MODE_COLECOVISION_ROLLER)
-	ColecoVisionRollerSpy.setup(VIDEO_OUTPUT);
-#elif defined(MODE_ATARI_PADDLES)
-	AtariPaddlesSpy.setup();
-#elif defined(MODE_NUON)
-	NuonSpy.setup();
-#elif defined(MODE_VSMILE)
-	VSmileSpy.setup();
-#elif defined(MODE_VFLASH)
-	VFlashSpy.setup();
-#else
-#warning  "No Console Mode Selected!"
-#endif
+	if (!CreateSpy() && currentSpy != NULL)	
+	{
+		currentSpy->setup();
+	}
 
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wunused-value"
-  T_DELAY(5000);
-  A_DELAY(200);
-  #pragma GCC diagnostic pop
-  
+	if (currentSpy != NULL)
+	{
+		currentSpy->printFirmwareInfo();
+	}
 
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wunused-value"
+	T_DELAY(5000);
+	A_DELAY(200);
+	#pragma GCC diagnostic pop
+ 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
 {
-#if defined(MODE_DETECT)
-    if( !PINC_READ( MODEPIN_SNES ) ) {
-        SNESSpy.loop();
-    } else if( !PINC_READ( MODEPIN_N64 ) ) {
-        N64Spy.loop();
-    } else if( !PINC_READ( MODEPIN_GC ) ) {
-        GCSpy.loop();
-    } 
-#if defined(__arm__) && defined(CORE_TEENSY)
-  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-        DCSpy.loop();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
-        WiiSpy.loop();
-    }
-#endif
-  else {
-        NESSpy.loop();
-    }
-#elif defined(MODE_GBA)
-	GBASpy.loop(); 
-# elif defined(MODE_GC)
-    GCSpy.loop();
-#elif defined(MODE_N64)
-    N64Spy.loop();
-#elif defined(MODE_SNES)
-    SNESSpy.loop();
-#elif defined(MODE_NES)
-    NESSpy.loop();
-#elif defined(MODE_POWERGLOVE)
-	PowerGloveSpy.loop();
-#elif defined(MODE_BOOSTER_GRIP)
-    BoosterGripSpy.loop();
-#elif defined(MODE_GENESIS)
-    GenesisSpy.loop();
-#elif defined(MODE_GENESIS_MOUSE)
-    GenesisMouseSpy.loop();
-#elif defined(MODE_SMS)
-    SMSSpy.loop();
-#elif defined(MODE_SMS_PADDLE)
-	SMSPaddleSpy.loop();
-#elif defined(MODE_SMS_SPORTS_PAD)
-	SMSSportsPadSpy.loop();
-#elif defined(MODE_SMS_ON_GENESIS)
-    SMSOnGenesisSpy.loop();
-#elif defined(MODE_SATURN)
-    SaturnSpy.loop();
-#elif defined(MODE_SATURN3D)
-    Saturn3DSpy.loop();
-#elif defined(MODE_COLECOVISION)
-    ColecoVisionSpy.loop();
-#elif defined(MODE_FMTOWNS)
-    FMTownsSpy.loop();
-#elif defined(MODE_INTELLIVISION)
-    IntelliVisionSpy.loop();
-#elif defined(MODE_JAGUAR)
-    JaguarSpy.loop();
-#elif defined(MODE_NEOGEO)
-    NeoGeoSpy.loop();
-#elif defined(MODE_PCFX)
-    PCFXSpy.loop();
-#elif defined(MODE_PLAYSTATION)
-    PlayStationSpy.loop();
-#elif defined(MODE_TG16)
-    TG16Spy.loop();
-#elif defined(MODE_3DO)
-    ThreeDOSpy.loop();
-#elif defined(MODE_DREAMCAST)
-    DCSpy.loop();
-#elif defined(MODE_WII)
-    WiiSpy.loop();
-#elif defined(MODE_CD32)
-   Cd32Spy.loop();
-#elif defined(MODE_DRIVING_CONTROLLER)
-   DrivingControllerSpy.loop();
-#elif defined(MODE_PIPPIN)
-	PippinSpy.loop();
-#elif defined(MODE_AMIGA_KEYBOARD)
-	AmigaKeyboardSpy.loop();
-#elif defined(MODE_AMIGA_MOUSE)
-	AmigaMouseSpy.loop();
-#elif defined(MODE_CDTV_WIRED)
-	CDTVWiredSpy.loop();
-#elif defined(MODE_CDTV_WIRELESS)
-	CDTVWirelessSpy.loop();
-#elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
-	FMTownsKeyboardAndMouseSpy.loop();
-#elif defined(MODE_CDI)
-	CDiSpy.loop();
-#elif defined(MODE_CDI_KEYBOARD)
-	CDiKeyboardSpy.loop();
-#elif defined(MODE_GAMEBOY_PRINTER)
-	GameBoyPrinterEmulator.loop();
-#elif defined(MODE_AMIGA_ANALOG_1) || defined(MODE_AMIGA_ANALOG_2)
-	AmigaAnalogSpy.loop();
-#elif defined(MODE_ATARI5200_1) || defined(MODE_ATARI5200_2)
-	Atari5200Spy.loop();
-#elif defined(MODE_COLECOVISION_ROLLER)
-	ColecoVisionRollerSpy.loop();
-#elif defined(MODE_ATARI_PADDLES)
-	AtariPaddlesSpy.loop();
-#elif defined(MODE_NUON)
-	NuonSpy.loop();
-#elif defined(MODE_VSMILE)
-	VSmileSpy.loop();
-#elif defined(MODE_VFLASH)
-	VFlashSpy.loop();
-#elif defined(MODE_KEYBOARD_CONTROLLER) \
-	|| defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) \
-	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD) 
-	KeyboardControllerSpy.loop();
-#endif
+	if (currentSpy != NULL)
+		currentSpy->loop();
+}
 
+byte ReadAnalog()
+{
+	byte retVal = 0;
+	for (int i = A2; i <= A7; ++i) 
+		retVal |= (!analogRead(i) >> (i - A2));
+	
+	return retVal;
+}
+
+bool CreateSpy()
+{
+	bool customSetup = false;
+#if defined(RS_VISION)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new NESSpy();
+		break;
+	case 0x01:
+		currentSpy = new PowerGloveSpy();
+		break;
+	case 0x02:
+		currentSpy = new SNESSpy();
+		break;
+	case 0x03:
+		currentSpy = new N64Spy();
+		break;
+	case 0x04:
+		currentSpy = new GCSpy();
+		break;
+	case 0x05:
+		currentSpy = new SMSSpy();
+		break;	
+	case 0x06:
+		currentSpy = new SMSPaddleSpy();
+		break;
+	case 0x07:
+		currentSpy = new SMSSportsPadSpy();
+		break;
+	case 0x08:
+		currentSpy = new GenesisSpy();
+		break;
+	case 0x09:
+		currentSpy = new GenesisMouseSpy();
+		break;
+	case 0x0A:
+		currentSpy = new SaturnSpy();
+		break;
+	case 0x0B:
+		currentSpy = new Saturn3DSpy();
+		break;
+	case 0x0C:
+		currentSpy = new PlayStationSpy();
+		break;
+	case 0x0D:
+		currentSpy = new GBASpy();
+		break;
+	case 0x0E:
+		currentSpy = new BoosterGripSpy();
+		break;
+	case 0x0F:
+		currentSpy = new TG16Spy();
+		break;
+	case 0x10:
+		currentSpy = new NeoGeoSpy();
+		break;
+	case 0x11:
+		currentSpy = new ThreeDOSpy();
+		break;
+	case 0x12:
+		currentSpy = new IntellivisionSpy();
+		break;	
+	case 0x13:
+		currentSpy = new JaguarSpy();
+		break;
+	case 0x14:
+		currentSpy = new FMTownsSpy();
+		break;
+	case 0x15:
+		currentSpy = new PCFXSpy();
+		break;
+	case 0x16:
+		currentSpy = new AmigaKeyboardSpy();
+		break;
+	case 0x17:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL);
+		customSetup = true;
+		break;
+	case 0x18:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC);
+		customSetup = true;
+		break;
+	case 0x19:
+		currentSpy = CDTVWiredSpy();
+		break;
+	case 0x1A:
+		currentSpy = new ColecoVisionSpy();
+		break;
+	case 0x1B:
+		currentSpy = new PippinSpy();
+		((PippinSpy*)currentSpy)->setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
+		customSetup = true;
+		break;
+	case 0x1C:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL);
+		customSetup = true;
+		break;
+	case 0x1D:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
+		customSetup = true;
+		break;
+	case 0x1E:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+		customSetup = true;
+		break;
+	case 0x1F:
+		currentSpy = new DrivingControllerSpy();
+		break;	
+	}
+	
+#elif defined(MODE_DETECT)
+	if (!PINC_READ(MODEPIN_SNES))
+		currentSpy = new SNESSpy;
+	else if (!PINC_READ(MODEPIN_N64))
+		currentSpy = new N64Spy();
+	else if (!PINC_READ(MODEPIN_GC))
+		currentSpy = new GCSpy();
+#if defined(__arm__) && defined(CORE_TEENSY)
+	else if (!PINC_READ(MODEPIN_DREAMCAST))
+		currentSpy = new DreamcastSpy();
+	else if (!PINC_READ(MODEPIN_WII))
+		currentSpy = new WiiSpy();
+#endif 
+	else
+		currentSpy = new NESSpy();
+#elif defined(MODE_NES)
+	currentSpy = new NESSpy();
+#elif defined(MODE_POWERGLOVE)
+	currentSpy = new PowerGloveSpy();
+#elif defined(MODE_SNES)
+	currentSpy = new SNESSpy();
+#elif defined(MODE_N64)
+	currentSpy = new N64Spy();
+#elif defined(MODE_GC)
+	currentSpy = new GCSpy();
+#elif defined(MODE_GBA)
+	currentSpy = new GBASpy();
+#elif defined(MODE_BOOSTER_GRIP)
+	currentSpy = new BoosterGripSpy();
+#elif defined(MODE_GENESIS)
+	currentSpy = new GenesisSpy();
+#elif defined(MODE_GENESIS_MOUSE)
+	currentSpy = new GenesisMouseSpy();
+#elif defined(MODE_SMS)
+	currentSpy = new SMSSpy();
+#elif defined(MODE_SMS_PADDLE)
+	currentSpy = new SMSPaddleSpy();
+#elif defined(MODE_SMS_SPORTS_PAD)
+	currentSpy = new SMSSportsPadSpy();
+#elif defined(MODE_SMS_ON_GENESIS)
+	currentSpy = new SMSSpy();
+	((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS);
+	customSetup = true;
+#elif defined(MODE_SATURN)
+	currentSpy = new SaturnSpy();
+#elif defined(MODE_SATURN3D)
+	currentSpy = new Saturn3DSpy();
+#elif defined(MODE_COLECOVISION)
+	currentSpy = new ColecoVisionSpy();
+#elif defined(MODE_FMTOWNS)
+	currentSpy = new FMTownsSpy();
+#elif defined(MODE_INTELLIVISION)
+	currentSpy = new IntelliVisionSpy();
+#elif defined(MODE_JAGUAR)
+	currentSpy = new JaguarSpy();
+#elif defined(MODE_NEOGEO)
+	currentSpy = new NeoGeoSpy();
+# elif defined(MODE_PCFX)
+	currentSpy = new PCFXSpy();
+#elif  defined(MODE_PLAYSTATION)
+	currentSpy = new PlayStationSpy();
+#elif defined(MODE_TG16)
+	currentSpy = new TG16Spy();
+#elif defined(MODE_3DO)
+	currentSpy = new ThreeDOSpy();
+#elif defined(MODE_DREAMCAST)
+	currentSpy = new DCSpy();
+#elif defined(MODE_WII)
+	currentSpy = new WiiSpy();
+#elif defined(MODE_CD32)
+	currentSpy = new Cd32Spy();
+#elif defined(MODE_DRIVING_CONTROLLER)
+	currentSpy = new DrivingControllerSpy();
+#elif defined(MODE_PIPPIN)
+	currentSpy = new PippinSpy();
+	((PippinSpy*)currentSpy)->setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
+	customSetup = true;
+#elif defined(MODE_AMIGA_KEYBOARD)
+	currentSpy = new AmigaKeyboardSpy();
+#elif defined(MODE_AMIGA_MOUSE)                                            
+	currentSpy = new AmigaMouseSpy();
+	((AmigaMouseSpy*)currentSpy)->setup(VIDEO_OUTPUT);
+	customSetup = true;
+#elif defined(MODE_CDTV_WIRED)
+	currentSpy = new CDTVWiredSpy();
+#elif defined(MODE_CDTV_WIRELESS)
+	currentSpy = new CDTVWirelessSpy();
+#elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
+	currentSpy = new FMTownsKeyboardAndMouseSpy();
+#elif defined(MODE_CDI)
+	currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
+#elif defined(MODE_CDI_KEYBOARD)
+	currentSpy = new CDiKeyboardSpy();
+#elif defined(MODE_GAMEBOY_PRINTER)
+	currentSpy = new GameBoyPrinterEmulator();
+#elif defined(MODE_AMIGA_ANALOG_1)
+	currentSpy = new AmigaAnalogSpy();
+	((AmigaAnalogSpy*)currentSpy)->setup(false);
+	customSetup = true;
+#elif defined(MODE_AMIGA_ANALOG_2)
+	currentSpy = new AmigaAnalogSpy();
+	((AmigaAnalogSpy*)currentSpy)->setup(true);
+	customSetup = true;
+#elif defined(MODE_ATARI5200_1) 
+	currentSpy = new Atari5200Spy();
+	((Atari5200Spy*)currentSpy)->setup(false);
+	customSetup = true;
+#elif defined(MODE_ATARI5200_2)
+	currentSpy = new Atari5200Spy();
+	((Atari5200Spy*)currentSpy)->setup(true);
+	customSetup = true;
+#elif defined(MODE_COLECOVISION_ROLLER)                                                  
+	currentSpy = new ColecoVisionRollerSpy();
+	((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_OUTPUT);
+	customSetup = true;
+#elif defined(MODE_ATARI_PADDLES)                                                  
+	currentSpy = new AtariPaddlesSpy();
+#elif defined(MODE_NUON)                                                  
+	currentSpy = new NuonSpy();
+#elif defined(MODE_VSMILE)                                                  
+	currentSpy = new VSmileSpy();
+#elif defined(MODE_VFLASH)                                                  
+	currentSpy = new VFlashSpy();
+#elif defined(MODE_KEYBOARD_CONTROLLER) 
+	currentSpy = new KeyboardControllerSpy();
+	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL);
+	customSetup = true;
+#elif (MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) 
+	currentSpy = new KeyboardControllerSpy();
+	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
+	customSetup = true;
+#elif (MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+	currentSpy = new KeyboardControllerSpy();
+	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+	customSetup = true;
+#endif
+	
+	return customSetup;
 }

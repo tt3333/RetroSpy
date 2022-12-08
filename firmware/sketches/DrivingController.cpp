@@ -136,3 +136,8 @@ void DrivingControllerSpy::writeSerial() {}
 void DrivingControllerSpy::debugSerial() {}
 void DrivingControllerSpy::updateState() {}
 #endif
+
+const char* DrivingControllerSpy::startupMsg()
+{
+	return "Atari Driving Controller";
+}

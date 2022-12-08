@@ -108,3 +108,8 @@ void JaguarSpy::debugSerial() {}
 void JaguarSpy::updateState() {}
 
 #endif
+
+const char* JaguarSpy::startupMsg()
+{
+	return "Jaguar";
+}

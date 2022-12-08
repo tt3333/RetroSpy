@@ -196,3 +196,8 @@ void NuonSpy::updateState()
 	
 }
 #endif
+
+const char* NuonSpy::startupMsg()
+{
+	return "Nuon";
+}

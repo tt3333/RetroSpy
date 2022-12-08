@@ -135,3 +135,8 @@ void PowerGloveSpy::debugSerial() {}
 void PowerGloveSpy::updateState() {}
 
 #endif
+
+const char* PowerGloveSpy::startupMsg()
+{
+	return "Power Glove";
+}

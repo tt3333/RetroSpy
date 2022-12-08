@@ -76,3 +76,8 @@ void FMTownsSpy::debugSerial() {}
 void FMTownsSpy::updateState() {}
 
 #endif
+
+const char* FMTownsSpy::startupMsg()
+{
+	return "FM Towns";
+}
