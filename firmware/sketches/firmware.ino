@@ -75,6 +75,9 @@
 //#define MODE_COLECOVISION_ROLLER
 //#define MODE_ATARI_PADDLES
 
+// Don't use this.  Its for something else.
+//#define RS_VISION
+
 // Some consoles care about PAL/NTSC for timing purposes
 #define VIDEO_OUTPUT VIDEO_PAL
 
@@ -141,6 +144,9 @@
 #include "VSmile.h"
 #include "VFlash.h"
 
+#if defined(RS_VISION)
+ControllerSpy* currentSpy;
+#else
 #if defined(MODE_NES)
 NESSpy NESSpy;
 #endif
@@ -278,6 +284,7 @@ VFlashSpy VFlashSpy;
 	|| defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 KeyboardControllerSpy KeyboardControllerSpy;
 #endif
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -291,9 +298,12 @@ void setup()
   for(int i = 3; i < 9; ++i)
     if (i != 7)
       pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif !defined(RS_VISION) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+#elif defined(RS_VISION)
+	for (int i = A0; i <= A7; ++i)
+		pinMode(i, INPUT_PULLUP);
 #endif
 
 #ifdef LAG_FIX
@@ -302,7 +312,12 @@ void setup()
 	Serial.begin(115200);
 #endif
 
-#if defined(MODE_DETECT)
+#if defined(RS_VISION)
+
+	if (!CreateSpy())	
+		currentSpy->setup();
+	
+#elif defined(MODE_DETECT)
     if ( !PINC_READ(MODEPIN_SNES)) {
         SNESSpy.setup();
     } else if ( !PINC_READ(MODEPIN_N64))  {
@@ -450,7 +465,9 @@ void setup()
 // Arduino sketch main loop definition.
 void loop()
 {
-#if defined(MODE_DETECT)
+#if defined(RS_VISION)
+	currentSpy->loop();
+#elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
     } else if( !PINC_READ( MODEPIN_N64 ) ) {
@@ -563,3 +580,133 @@ void loop()
 #endif
 
 }
+
+byte ReadAnalog()
+{
+	byte retVal = 0;
+	for (int i = A2; i <= A7; ++i) 
+		retVal |= (!analogRead(i) >> (i - A2));
+	
+	return retVal;
+}
+
+#if defined(RS_VISION)
+bool CreateSpy()
+{
+	bool = false;
+	
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new NESSpy();
+		break;
+	case 0x01:
+		currentSpy = new PowerGloveSpy();
+		break;
+	case 0x02:
+		currentSpy = new SNESSpy();
+		break;
+	case 0x03:
+		currentSpy = new N64Spy();
+		break;
+	case 0x04:
+		currentSpy = new GCSpy();
+		break;
+	case 0x05:
+		currentSpy = new SMSSpy();
+		break;	
+	case 0x06:
+		currentSpy = new SMSPaddleSpy();
+		break;
+	case 0x07:
+		currentSpy = new SMSSportsPadSpy();
+		break;
+	case 0x08:
+		currentSpy = new GenesisSpy();
+		break;
+	case 0x09:
+		currentSpy = new GenesisMouseSpy();
+		break;
+	case 0x0A:
+		currentSpy = new SaturnSpy();
+		break;
+	case 0x0B:
+		currentSpy = new Saturn3DSpy();
+		break;
+	case 0x0C:
+		currentSpy = new PlayStationSpy();
+		break;
+	case 0x0D:
+		currentSpy = new GBASpy();
+		break;
+	case 0x0E:
+		currentSpy = new BoosterGripSpy();
+		break;
+	case 0x0F:
+		currentSpy = new TG16Spy();
+		break;
+	case 0x10:
+		currentSpy = new NeoGeoSpy();
+		break;
+	case 0x11:
+		currentSpy = new ThreeDOSpy();
+		break;
+	case 0x12:
+		currentSpy = new IntellivisionSpy();
+		break;	
+	case 0x13:
+		currentSpy = new JaguarSpy();
+		break;
+	case 0x14:
+		currentSpy = new FMTownsSpy();
+		break;
+	case 0x15:
+		currentSpy = new PCFXSpy();
+		break;
+	case 0x16:
+		currentSpy = new AmigaKeyboardSpy();
+		break;
+	case 0x17:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL);
+		customSetup = true;
+		break;
+	case 0x18:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC);
+		customSetup = true;
+		break;
+	case 0x19:
+		currentSpy = CDTVWiredSpy();
+		break;
+	case 0x1A:
+		currentSpy = new ColecoVisionSpy();
+		break;
+	case 0x1B:
+		currentSpy = new PippinSpy();
+		((PippinSpy*)currentSpy)->setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
+		customSetup = true;
+		break;
+	case 0x1C:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL);
+		customSetup = true;
+		break;
+	case 0x1D:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
+		customSetup = true;
+		break;
+	case 0x1E:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+		customSetup = true;
+		break;
+	case 0x1F:
+		currentSpy = new DrivingControllerSpy();
+		break;	
+	}
+	
+	return customSetup;
+}
+#endif
