@@ -366,6 +366,10 @@ namespace RetroSpy
                                 arduinoPorts.Add(port + " (Teensy 4.0)");
                                 break;
 
+                            case "0280":
+                                arduinoPorts.Add(port + " (Teensy 4.1)");
+                                break;
+
                             default:
                                 //board = PJRC_Board.unknown;
                                 break;
