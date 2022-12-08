@@ -393,3 +393,8 @@ void DreamcastSpy::debugSerial() {
 void DreamcastSpy::updateState() {
 }
 #endif
+
+const char* DreamcastSpy::startupMsg()
+{
+	return "Dreamcast";
+}

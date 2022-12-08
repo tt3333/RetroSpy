@@ -439,10 +439,29 @@ void PippinSpy::setup(byte controllerAddress, byte mouseAddress)
 	Timer1.detachInterrupt();
 }
 
+static char startupBuffer[100];
+const char* PippinSpy::startupMsg()
+{
+	char itoaBuff[10];
+	strcpy(startupBuffer, "Pippin (");
+	strcat(startupBuffer, itoa(controllerAddress, itoaBuff, 16));
+	strcat(startupBuffer, ",");
+	strcat(startupBuffer, itoa(mouseAddress, itoaBuff, 16));
+	strcat(startupBuffer, ")");
+	return startupBuffer;
+}
+
 #else
 void PippinSpy::loop() {}
 void PippinSpy::setup(byte controllerAddress, byte mouseAddress) {}
 void PippinSpy::writeSerial() {}
 void PippinSpy::debugSerial() {}
 void PippinSpy::updateState() {}
+
+const char* PippinSpy::startupMsg()
+{
+	return "Pippin (0,0)"
+}
+
 #endif
+

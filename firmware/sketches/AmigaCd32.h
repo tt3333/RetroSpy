@@ -36,6 +36,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 private:
 	byte      rawData[16000];

@@ -78,3 +78,8 @@ void NESSpy::debugSerial() {}
 void NESSpy::updateState() {}
 
 #endif
+
+const char* NESSpy::startupMsg()
+{
+	return "NES";
+}

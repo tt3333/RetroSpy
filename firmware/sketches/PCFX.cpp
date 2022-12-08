@@ -70,3 +70,8 @@ void PCFXSpy::debugSerial() {}
 void PCFXSpy::updateState() {}
 
 #endif
+
+const char* PCFXSpy::startupMsg()
+{
+	return "PC-FX";
+}

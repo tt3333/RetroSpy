@@ -261,3 +261,8 @@ void Saturn3DSpy::debugSerial() {}
 void Saturn3DSpy::updateState() {}
 
 #endif
+
+const char* Saturn3DSpy::startupMsg()
+{
+	return "Saturn 3D";
+}

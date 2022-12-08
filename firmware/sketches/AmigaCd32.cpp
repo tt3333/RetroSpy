@@ -107,3 +107,8 @@ void AmigaCd32Spy::debugSerial() {
 void AmigaCd32Spy::updateState() {
 }
 #endif
+
+const char* AmigaCd32Spy::startupMsg()
+{
+	return "Amiga CD32";
+}

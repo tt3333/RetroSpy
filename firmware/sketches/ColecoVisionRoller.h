@@ -37,6 +37,8 @@ public:
 	void updateState();
 	void setup(byte videoOutputType);
 	
+	virtual const char* startupMsg();
+	
 private:
 	
 };

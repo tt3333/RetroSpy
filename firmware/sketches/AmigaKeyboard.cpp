@@ -173,3 +173,8 @@ void AmigaKeyboardSpy::debugSerial() {}
 void AmigaKeyboardSpy::updateState() {}
 
 #endif
+
+const char* AmigaKeyboardSpy::startupMsg()
+{
+	return "Amiga Keyboard";
+}

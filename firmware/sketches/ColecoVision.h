@@ -37,6 +37,8 @@ public:
 	void updateState();
 	void setup();
 	
+	virtual const char* startupMsg();
+	
 private:
 	
 };

@@ -500,3 +500,8 @@ void GameBoyPrinterEmulator::updateState()
 	
 }
 #endif
+
+const char* GameBoyPrinterEmulator::startupMsg()
+{
+	return "GameBoy Printer Emulator";
+}

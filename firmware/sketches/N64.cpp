@@ -343,3 +343,8 @@ void N64Spy::debugSerial() {}
 void N64Spy::updateState() {}
 
 #endif
+
+const char* N64Spy::startupMsg()
+{
+	return "N64";
+}

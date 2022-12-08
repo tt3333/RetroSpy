@@ -39,6 +39,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 	enum controllerMode {
 		MODE_NORMAL = 0,

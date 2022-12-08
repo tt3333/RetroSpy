@@ -167,3 +167,8 @@ void VSmileSpy::updateState() {
 }
 
 #endif
+
+const char* VSmileSpy::startupMsg()
+{
+	return "V.Smile";
+}

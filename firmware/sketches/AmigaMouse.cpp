@@ -154,3 +154,11 @@ void AmigaMouseSpy::writeSerial() {}
 void AmigaMouseSpy::debugSerial() {}
 void AmigaMouseSpy::updateState() {}
 #endif
+
+const char* AmigaMouseSpy::startupMsg()
+{
+	if (OCR1A == 33332)
+		return "Amiga Mouse (VIDEO_NTSC)";
+	else
+		return "Amiga Mouse (VIDEO_PAL)";
+}

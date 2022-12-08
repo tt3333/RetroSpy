@@ -714,3 +714,8 @@ void GCSpy::debugSerial() {}
 void GCSpy::updateState() {}
 
 #endif
+
+const char* GCSpy::startupMsg()
+{
+	return "GC";
+}

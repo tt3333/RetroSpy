@@ -328,3 +328,11 @@ void Atari5200Spy::debugSerial() {}
 void Atari5200Spy::updateState() {}
 
 #endif
+
+const char* Atari5200Spy::startupMsg()
+{
+	if (isSecondArduino)
+		return "Atari 5200 (true)";
+	else
+		return "Atari 5200 (false)";
+}

@@ -124,3 +124,8 @@ void GenesisMouseSpy::debugSerial() {}
 void GenesisMouseSpy::updateState() {}
 
 #endif
+
+const char* GenesisMouseSpy::startupMsg()
+{
+	return "Genesis Mouse";
+}

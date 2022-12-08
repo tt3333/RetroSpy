@@ -153,3 +153,8 @@ void GenesisSpy::debugSerial() {}
 void GenesisSpy::updateState() {}
 
 #endif
+
+const char* GenesisSpy::startupMsg()
+{
+	return "Genesis";
+}

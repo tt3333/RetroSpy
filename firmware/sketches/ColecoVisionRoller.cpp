@@ -186,11 +186,25 @@ ISR(TIMER1_COMPA_vect) {
 	Serial.write(SPLIT);
 #endif
 }
+
+const char* ColecoVisionRollerSpy::startupMsg()
+{
+	if (OCR1A == 33332)
+		return "Colecovision Roller (VIDEO_NTSC)";
+	else
+		return "Colecovision Roller (VIDEO_PAL)";
+}
 #endif
 #else
 void ColecoVisionRollerSpy::loop() {}
 void ColecoVisionRollerSpy::setup(byte videoOutputType) {}
+
 void ColecoVisionRollerSpy::writeSerial() {}
 void ColecoVisionRollerSpy::debugSerial() {}
 void ColecoVisionRollerSpy::updateState() {}
 #endif
+
+const char* ColecoVisionRollerSpy::startupMsg()
+{
+		return "Colecovision Roller (NULL)";
+}

@@ -214,3 +214,11 @@ void AmigaAnalogSpy::debugSerial() {}
 void AmigaAnalogSpy::updateState() {}
 
 #endif
+
+const char* AmigaAnalogSpy::startupMsg()
+{
+	if (isSecondArduino)
+		return "Amiga Analog (true)";
+	else
+		return "Amiga Analog (false)";
+}

@@ -35,6 +35,8 @@ public:
 	void writeSerial();
 	void debugSerial();
 	void updateState();
+	
+	virtual const char* startupMsg();
 
 private:
 	bool seenGC2N64 = false;

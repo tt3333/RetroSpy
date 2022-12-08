@@ -79,3 +79,8 @@ void NeoGeoSpy::debugSerial() {}
 void NeoGeoSpy::updateState() {}
 
 #endif
+
+const char* NeoGeoSpy::startupMsg()
+{
+	return "Neo Geo";
+}
