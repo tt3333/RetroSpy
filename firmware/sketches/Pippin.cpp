@@ -460,7 +460,7 @@ void PippinSpy::updateState() {}
 
 const char* PippinSpy::startupMsg()
 {
-	return "Pippin (0,0)"
+	return "Pippin (0,0)";
 }
 
 #endif
