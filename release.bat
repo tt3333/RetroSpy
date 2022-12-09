@@ -306,10 +306,10 @@ del GBP_Firmware.zip
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\GBP_Firmware\libusb0.dll
 copy GBP_Firmware.zip RetroSpy-Upload
 )
-if exist "..\..\beaglebone\" (
-FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & goto end
-)
 if exist "..\..\kernel\kernel.tar.gz" (
 copy ..\..\kernel\kernel.tar.gz RetroSpy-Upload
+)
+if exist "..\..\beaglebone\" (
+FOR /F %%I IN ('DIR ..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\beaglebone\%%I RetroSpy-Upload & goto end
 )
 :end
