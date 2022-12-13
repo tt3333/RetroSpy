@@ -71,6 +71,7 @@ namespace GBPemu
         private readonly System.Windows.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
         private List<byte[]> decompressedTiles;
+        int tile_height_count;
         private readonly IControllerReader _reader;
 
         private int PrintSize;
@@ -264,6 +265,17 @@ namespace GBPemu
             CheckSize(PrintSize);
 
             Properties.Settings.Default.PrintSize = PrintSize;
+
+            _imageBuffer = new BitmapPixelMaker(PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE, PrintSize * TILE_PIXEL_HEIGHT * tile_height_count);
+
+            _image.Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count;
+            _image.Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            GameBoyPrinterEmulatorWindowGrid.Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count; ;
+            GameBoyPrinterEmulatorWindowGrid.Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count;
+            Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+
+            DisplayImage(PrintSize, PrintSize);
         }
 
         private void CheckSize(int sizeId)
@@ -474,7 +486,7 @@ namespace GBPemu
 
             int total_tile_count = Decompress(tiles_rawBytes_array, decompressedTiles);
 
-            int tile_height_count = total_tile_count / TILES_PER_LINE;
+            tile_height_count = total_tile_count / TILES_PER_LINE;
 
             if (tile_height_count == 0)
             {
