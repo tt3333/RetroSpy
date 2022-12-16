@@ -221,6 +221,26 @@ namespace GBPemu
                 }
             }
 
+            if (decompressedTiles == null)
+            {
+                if (SelectedPalette != -1)
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                                new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
+                                                new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                    }
+                }
+            }
+
             SelectedPalette = -1;
             SelectedGamePalette = newPalette;
             
@@ -345,6 +365,26 @@ namespace GBPemu
 
             CheckPalette(newPalette);
             ClearGamePalette(null);
+
+            if (decompressedTiles == null)
+            {
+                if (SelectedPalette != -1)
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                                  new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
+                              new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                    }
+                }
+            }
 
             SelectedPalette = newPalette;
             Properties.Settings.Default.SelectedPalette = SelectedPalette;
@@ -509,14 +549,17 @@ namespace GBPemu
 
         private void DisplayImage(int square_width, int square_height)
         {
-            for (int i = 0; i < decompressedTiles.Count; i++)
+            if (decompressedTiles != null)
             {
-                int tile_x_offset = i % TILES_PER_LINE;
-                int tile_y_offset = i / TILES_PER_LINE;
+                for (int i = 0; i < decompressedTiles.Count; i++)
+                {
+                    int tile_x_offset = i % TILES_PER_LINE;
+                    int tile_y_offset = i / TILES_PER_LINE;
 
-                byte[] pixels = Decode(decompressedTiles[i]);
+                    byte[] pixels = Decode(decompressedTiles[i]);
 
-                Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                }
             }
 
             //imageBuffer.SetColor(0, 0, 0);
