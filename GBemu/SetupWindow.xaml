@@ -6,5 +6,12 @@
 
     <Grid Height="432" Width="480">
         <Image x:Name="SetupImage_png" Source="SetupImage.png" Stretch="Fill"/>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="_Options" Name="OptionsMenu">
+                    <MenuItem x:Name="FilterCOM" Header="Don't Detect COM Port" HorizontalAlignment="Left" Width="Auto" IsChecked="{Binding FilterCOMPorts}" Checked="FilterCOM_Checked" Unchecked="FilterCOM_Unchecked" IsCheckable="True" />
+                </MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
     </Grid>
 </Window>
