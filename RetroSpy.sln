@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsbUpdater", "UsbUpdater\Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPUpdater", "GBPUpdater\GBPUpdater.csproj", "{50D008D5-68F4-4243-8DAB-69CCCC51FECF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroSpyX", "RetroSpyX\RetroSpyX.csproj", "{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -268,6 +270,46 @@ Global
 		{50D008D5-68F4-4243-8DAB-69CCCC51FECF}.Release|x64.Build.0 = Release|x64
 		{50D008D5-68F4-4243-8DAB-69CCCC51FECF}.Release|x86.ActiveCfg = Release|x86
 		{50D008D5-68F4-4243-8DAB-69CCCC51FECF}.Release|x86.Build.0 = Release|x86
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Nano.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Nano.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Nano_Every.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Nano_Every.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Uno.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Arduino_Uno.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|LGT8F328.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|LGT8F328.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_3 5.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_3 5.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_4 0.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_4 0.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_4 1.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Teensy_4 1.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|x64.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|x86.Build.0 = Debug|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Nano.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Nano.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Nano_Every.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Nano_Every.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Uno.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Arduino_Uno.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|LGT8F328.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|LGT8F328.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_3 5.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_3 5.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_4 0.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_4 0.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_4 1.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Teensy_4 1.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|x64.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|x64.Build.0 = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|x86.ActiveCfg = Release|Any CPU
+		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
