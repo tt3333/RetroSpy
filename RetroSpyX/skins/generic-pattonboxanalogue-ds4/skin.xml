@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Patton Box Analogue (DualShock 4)" author="Stuart John Patton (SJP176)" type="generic">
+
+    <background name="Default" image="bg.png" />
+	
+	<button name="up" image="24-button.png" x="253" y="635" />
+	<button name="up" image="24-button.png" x="1316" y="920" />
+	<button name="down" image="24-button.png" x="673" y="601" />
+	<button name="down" image="24-button.png" x="1092" y="920" />
+    <button name="left" image="24-button.png" x="459" y="600" />
+    <button name="left" image="24-button.png" x="525" y="1004" />
+    <button name="right" image="24-button.png" x="867" y="679" />
+    <button name="right" image="24-button.png" x="1883" y="1004" />
+	
+    <button name="b0" image="24-button.png" x="1541" y="680" />
+    <button name="b0" image="24-button.png" x="886" y="884" />
+	<button name="b1" image="24-button.png" x="1522" y="884" />
+	<button name="b1" image="24-button.png" x="478" y="804" />
+	<button name="b2" image="24-button.png" x="1716" y="806" />
+	<button name="b2" image="24-button.png" x="272" y="840" />
+	<button name="b3" image="24-button.png" x="1735" y="601" />
+	<button name="b3" image="24-button.png" x="692" y="807" />
+	
+	<button name="b4" image="24-button.png" x="2155" y="635" />
+	<button name="b5" image="24-button.png" x="1949" y="599" />
+	
+	<button name="b6" image="24-button.png" x="2136" y="840" />
+	<button name="b7" image="24-button.png" x="1930" y="804" />
+	
+	<button name="b8" image="24-button.png" x="477" y="167" />
+	<button name="b9" image="24-button.png" x="691" y="167" />
+	
+	<button name="b10" image="24-button.png" x="735" y="1028" />
+	<button name="b11" image="24-button.png" x="1673" y="1028" />
+
+	<button name="b12" image="24-button.png" x="905" y="167" />
+	<button name="b13" image="24-button.png" x="1503" y="167" />
+	<button name="b13" image="24-button.png" x="1718" y="167" />
+	<button name="b13" image="24-button.png" x="1930" y="167" />
+	
+    <analog name="x" image="30-button.png" x="335" y="376" 
+			direction="up" reverse="false" usenegative="true" />
+	<analog name="x" image="30-button.png" x="826" y="432" 
+			direction="up" reverse="false" usenegative="false" />
+	<analog name="y" image="30-button.png" x="92" y="436" 
+			direction="up" reverse="false" usenegative="true" />
+    <analog name="y" image="30-button.png" x="585" y="363" 
+			direction="up" reverse="false" usenegative="false" />
+	
+	<analog name="z" image="30-button.png" x="1540" y="432"
+			direction="up" reverse="false" usenegative="true" />
+    <analog name="z" image="30-button.png" x="2031" y="376"
+			direction="up" reverse="false" usenegative="false" />
+	<analog name="rz" image="30-button.png" x="2274" y="436"
+			direction="up" reverse="false" usenegative="true" />
+    <analog name="rz" image="30-button.png" x="1781" y="363"
+			direction="up" reverse="false" usenegative="false" />
+		   
+	<analog name="rx" image="30-button.png" x="931" y="1080"
+			direction="up" reverse="true" usenegative="true" />
+	<analog name="ry" image="30-button.png" x="1435" y="1080"
+			direction="up" reverse="true" usenegative="true" />
+	
+</skin>

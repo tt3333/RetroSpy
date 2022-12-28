@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Gravis Pro Analog Joystick" author="chmaller" type="pippin">
+
+    <background name="Default" image="gravis-pro.png" />
+
+    <button name="2" image="circle2.png" x="100" y="267" width="90" height="90" />
+	<button name="3" image="circle2.png" x="100" y="423" width="90" height="90" />
+    
+	<stick xname="x" yname="y" image="prostick.png"
+	   x="230" y="77" width="190" height="393" xrange="25" yrange="25" yreverse="true"/>
+
+	<stick xname="x" yname="y" visname="1" image="circle2.png"
+	   x="276" y="110" width="90" height="40" xrange="25" yrange="25" yreverse="true"/>
+	<stick xname="x" yname="y" visname="4" image="circle2.png"
+	   x="265" y="155" width="40" height="100" xrange="25" yrange="25" yreverse="true"/>
+	<stick xname="x" yname="y" visname="5" image="circle2.png"
+	   x="333" y="155" width="40" height="100" xrange="25" yrange="25" yreverse="true"/>
+	   
+</skin>

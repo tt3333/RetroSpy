@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="GameBoy Advance SP - Small" author ="zoggins" type="gamecube">
+
+	<background name="Black" image="gbasp_black.png" />
+	<background name="Blue" image="gbasp_blue.png" />
+	<background name="Dark Grey" image="gbasp_darkgrey.png" />
+	<background name="Green" image="gbasp_green.png" />
+	<background name="Pink" image="gbasp_pink.png" />
+	<background name="Purple" image="gbasp_purple.png" />
+	<background name="Red" image="gbasp_red.png" />
+	<background name="White" image="gbasp_white.png" />
+	<background name="Zelda" image="gbasp_zelda.png" />
+
+	<button name="a" image="abbutton.png" x="218" y="356" />
+	<button name="b" image="abbutton.png" x="175" y="370" />
+	<button name="start" image="startselect.png" x="158" y="491" />
+	<button name="z" image="startselect.png" x="109" y="491" />
+	<button name="l" image="lbutton.png" x="16" y="216" />
+	<button name="r" image="rbutton.png" x="245" y="216" />
+
+	<button name="up" image="up.png" x="62" y="346" width="21" height="19" />
+	<button name="down" image="down.png" x="62" y="391" width="21" height="18" />
+	<button name="left" image="left.png" x="41" y="367" width="19" height="21" />
+	<button name="right" image="right.png" x="85" y="367" width="19" height="21" />
+</skin>

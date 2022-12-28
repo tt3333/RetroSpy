@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Pippin Keyboard" author="zoggins" type="pippin">
+
+    <background name="Default" image="pippin-keyboard.png" />
+
+   <button name="Button" image="circle2.png" x="48" y="276" width="70" height="70" />
+  
+    <button name="Escape" image="circle2.png" x="518" y="903" width="50" height="50" />
+
+	<button name="Power" image="circle2.png" x="176" y="578" width="50" height="50" />
+  
+	<button name="Grave" image="circle2.png" x="30" y="900" width="50" height="50" />
+	<button name="D1" image="circle2.png" x="54" y="669" width="50" height="50" />
+	<button name="D2" image="circle2.png" x="126" y="669" width="50" height="50" />
+	<button name="D3" image="circle2.png" x="183" y="669" width="50" height="50" />
+	<button name="D4" image="circle2.png" x="242" y="672" width="50" height="50" />
+	<button name="D5" image="circle2.png" x="291" y="674" width="50" height="50" />
+	<button name="D6" image="circle2.png" x="354" y="674" width="50" height="50" />
+	<button name="D7" image="circle2.png" x="408" y="674" width="50" height="50" />
+	<button name="D8" image="circle2.png" x="464" y="674" width="50" height="50" />
+	<button name="D9" image="circle2.png" x="521" y="674" width="50" height="50" />
+	<button name="D0" image="circle2.png" x="578" y="674" width="50" height="50" />
+	<button name="Minus" image="circle2.png" x="635" y="677" width="50" height="50" />
+	<button name="Equals" image="circle2.png" x="692" y="677" width="50" height="50" />
+	<button name="Backslash" image="circle2.png" x="783" y="738" width="50" height="50" />
+	<button name="Back" image="circle2.png" x="768" y="677" width="50" height="50" />
+
+	<button name="Tab" image="circle2.png" x="38" y="725" width="50" height="50" />
+	<button name="Q" image="circle2.png" x="99" y="725" width="50" height="50" />
+	<button name="W" image="circle2.png" x="155" y="728" width="50" height="50" />
+	<button name="E" image="circle2.png" x="207" y="728" width="50" height="50" />
+	<button name="R" image="circle2.png" x="270" y="731" width="50" height="50" />
+	<button name="T" image="circle2.png" x="323" y="731" width="50" height="50" />
+	<button name="Y" image="circle2.png" x="383" y="731" width="50" height="50" />
+	<button name="U" image="circle2.png" x="435" y="731" width="50" height="50" />
+	<button name="I" image="circle2.png" x="495" y="732" width="50" height="50" />
+	<button name="O" image="circle2.png" x="552" y="734" width="50" height="50" />
+	<button name="P" image="circle2.png" x="611" y="734" width="50" height="50" />
+	<button name="LeftBracket" image="circle2.png" x="666" y="735" width="50" height="50" />
+	<button name="RightBracket" image="circle2.png" x="725" y="735" width="50" height="50" />
+
+	<button name="Capital" image="circle2.png" x="48" y="782" width="50" height="40" />
+	<button name="A" image="circle2.png" x="107" y="783" width="50" height="50" />
+	<button name="S" image="circle2.png" x="167" y="785" width="50" height="50" />
+	<button name="D" image="circle2.png" x="224" y="786" width="50" height="50" />
+	<button name="F" image="circle2.png" x="281" y="788" width="50" height="50" />
+	<button name="G" image="circle2.png" x="336" y="788" width="50" height="50" />
+	<button name="H" image="circle2.png" x="395" y="789" width="50" height="50" />
+	<button name="J" image="circle2.png" x="452" y="791" width="50" height="50" />
+	<button name="K" image="circle2.png" x="507" y="792" width="50" height="50" />
+	<button name="L" image="circle2.png" x="564" y="792" width="50" height="50" />
+	<button name="Semicolon" image="circle2.png" x="621" y="792" width="50" height="50" />
+	<button name="Apostrophe" image="circle2.png" x="680" y="794" width="50" height="50" />
+	<button name="Return" image="circle2.png" x="762" y="795" width="50" height="50" />
+
+	<button name="LeftShift" image="circle2.png" x="53" y="840" width="50" height="50" />
+	<button name="Z" image="circle2.png" x="137" y="843" width="50" height="50" />
+	<button name="X" image="circle2.png" x="192" y="843" width="50" height="50" />
+	<button name="C" image="circle2.png" x="252" y="845" width="50" height="50" />
+	<button name="V" image="circle2.png" x="306" y="845" width="50" height="50" />
+	<button name="B" image="circle2.png" x="365" y="846" width="50" height="50" />
+	<button name="N" image="circle2.png" x="423" y="846" width="50" height="50" />
+	<button name="M" image="circle2.png" x="479" y="848" width="50" height="50" />
+	<button name="Comma" image="circle2.png" x="537" y="849" width="50" height="50" />
+	<button name="Period" image="circle2.png" x="594" y="849" width="50" height="50" />
+	<button name="Slash" image="circle2.png" x="653" y="852" width="50" height="50" />
+	<button name="RightShift" image="circle2.png" x="776" y="854" width="50" height="50" />
+
+	<button name="LeftControl" image="circle2.png" x="89" y="900" width="50" height="50" />
+	<button name="LeftWindowsKey" image="circle2.png" x="149" y="900" width="50" height="50" />
+	<button name="LeftAlt" image="circle2.png" x="204" y="903" width="50" height="50" />
+	<button name="Space" image="circle2.png" x="350" y="906" width="50" height="50" />
+
+	<button name="Up" image="circle2.png" x="711" y="852" width="50" height="50" /> 
+
+	<button name="Left" image="circle2.png" x="647" y="911" width="50" height="50" />
+	<button name="Down" image="circle2.png" x="710" y="912" width="50" height="50" />
+	<button name="Right" image="circle2.png" x="780" y="912" width="50" height="50" />
+
+	<touchpad xname="touchpad_x" yname="touchpad_y" image="circle2.png" height="25" width="25" x="231" y="95" xrange="429" yrange="301" />
+
+</skin>

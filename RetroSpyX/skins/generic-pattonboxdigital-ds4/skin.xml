@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Patton Box Digital (DualShock 4)" author="Stuart John Patton (SJP176)" type="generic">
+
+    <background name="Default" image="bg.png" />
+	
+	<button name="up" image="24-button.png" x="299" y="429" />
+	<button name="up" image="24-button.png" x="1855" y="857" />
+    <button name="down" image="24-button.png" x="719" y="395" />
+	<button name="down" image="24-button.png" x="1456" y="899" />
+    <button name="left" image="24-button.png" x="505" y="393" />
+	<button name="left" image="24-button.png" x="1649" y="821" />
+    <button name="right" image="24-button.png" x="912" y="473" />
+    <button name="right" image="24-button.png" x="1389" y="1094" />
+	
+    <button name="b0" image="24-button.png" x="1492" y="473" />
+    <button name="b0" image="24-button.png" x="931" y="677" />
+	<button name="b1" image="24-button.png" x="1473" y="677" />
+	<button name="b1" image="24-button.png" x="524" y="597" />
+	<button name="b2" image="24-button.png" x="1666" y="599" />
+	<button name="b2" image="24-button.png" x="318" y="633" />
+	<button name="b3" image="24-button.png" x="1685" y="395" />
+	<button name="b3" image="24-button.png" x="738" y="599" />
+	
+	<button name="b4" image="24-button.png" x="2105" y="429" />
+	<button name="b5" image="24-button.png" x="1899" y="393" />
+	
+	<button name="b6" image="24-button.png" x="2086" y="633" />
+	<button name="b7" image="24-button.png" x="1880" y="597" />
+	
+	<button name="b8" image="24-button.png" x="89" y="390" />
+	<button name="b9" image="24-button.png" x="89" y="595" />
+	
+	<button name="b10" image="24-button.png" x="549" y="857" />
+	<button name="b11" image="24-button.png" x="1015" y="1094" />
+
+	<button name="b12" image="24-button.png" x="89" y="800" />
+	<button name="b13" image="24-button.png" x="2315" y="390" />
+	<button name="b13" image="24-button.png" x="2315" y="595" />
+	<button name="b13" image="24-button.png" x="2315" y="800" />
+	
+	<button name="x-" image="24-button.png" x="486" y="189" precision=".1" />
+    <button name="x+" image="24-button.png" x="893" y="269" precision=".1" />
+	<button name="y-" image="24-button.png" x="280" y="225" precision=".1" />
+    <button name="y+" image="24-button.png" x="700" y="191" precision=".1" />
+	
+	<button name="z-" image="24-button.png" x="1511" y="269" precision=".1" />
+    <button name="z+" image="24-button.png" x="1918" y="189" precision=".1" />
+	<button name="rz-" image="24-button.png" x="2124" y="225" precision=".1" />
+    <button name="rz+" image="24-button.png" x="1704" y="191" precision=".1" />
+		   
+	<button name="rx+" image="24-button.png" x="755" y="821" precision=".1" />
+	<button name="ry+" image="24-button.png" x="948" y="899" precision=".1" />
+	
+</skin>

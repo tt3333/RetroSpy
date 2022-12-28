@@ -20,6 +20,92 @@
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="skins\3do-controller\3dobackground.png" />
+    <None Remove="skins\3do-controller\circle2.png" />
+    <None Remove="skins\3do-controller\skin.xml" />
+    <None Remove="skins\3do-mouse\3do.png" />
+    <None Remove="skins\3do-mouse\circle.png" />
+    <None Remove="skins\3do-mouse\circle2.png" />
+    <None Remove="skins\3do-mouse\skin.xml" />
+    <None Remove="skins\atari5200-default\5200.png" />
+    <None Remove="skins\atari5200-default\5200joystick.png" />
+    <None Remove="skins\atari5200-default\circle2.png" />
+    <None Remove="skins\atari5200-default\skin.xml" />
+    <None Remove="skins\atarikeyboard-default\circle2.png" />
+    <None Remove="skins\atarikeyboard-default\keyboardcontroller.png" />
+    <None Remove="skins\atarikeyboard-default\skin.xml" />
+    <None Remove="skins\atarikeyboard-kids\circle2.png" />
+    <None Remove="skins\atarikeyboard-kids\kidscontroller.png" />
+    <None Remove="skins\atarikeyboard-kids\skin.xml" />
+    <None Remove="skins\atarikeyboard-starraiders\button.png" />
+    <None Remove="skins\atarikeyboard-starraiders\skin.xml" />
+    <None Remove="skins\atarikeyboard-starraiders\starraiders.png" />
+    <None Remove="skins\c64mini-default\c64mini.png" />
+    <None Remove="skins\c64mini-default\circle.png" />
+    <None Remove="skins\c64mini-default\knob1.png" />
+    <None Remove="skins\c64mini-default\skin.xml" />
+    <None Remove="skins\cd32-competitionpro\circle2.png" />
+    <None Remove="skins\cd32-competitionpro\controller.png" />
+    <None Remove="skins\cd32-competitionpro\skin.xml" />
+    <None Remove="skins\cd32-gravis-analog\analog.png" />
+    <None Remove="skins\cd32-gravis-analog\circle.png" />
+    <None Remove="skins\cd32-gravis-analog\joystick.png" />
+    <None Remove="skins\cd32-gravis-analog\skin.xml" />
+    <None Remove="skins\cd32-gravis-pro-analog\circle2.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\gravis-pro.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\prostick.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\skin.xml" />
+    <None Remove="skins\cd32-mouse\circle.png" />
+    <None Remove="skins\cd32-mouse\circle2.png" />
+    <None Remove="skins\cd32-mouse\commodore.png" />
+    <None Remove="skins\cd32-mouse\skin.xml" />
+    <None Remove="skins\cdi-controller-analog\cdicont2.png" />
+    <None Remove="skins\cdi-controller-analog\circle2.png" />
+    <None Remove="skins\cdi-controller-analog\skin.xml" />
+    <None Remove="skins\cdi-controller\cdicont2.png" />
+    <None Remove="skins\cdi-controller\circle2.png" />
+    <None Remove="skins\cdi-controller\skin.xml" />
+    <None Remove="skins\cdi-gamepad-analog\cdicont.png" />
+    <None Remove="skins\cdi-gamepad-analog\circle2.png" />
+    <None Remove="skins\cdi-gamepad-analog\skin.xml" />
+    <None Remove="skins\cdi-gamepad\cdicont.png" />
+    <None Remove="skins\cdi-gamepad\circle2.png" />
+    <None Remove="skins\cdi-gamepad\skin.xml" />
+    <None Remove="skins\cdi-ir-analog\cdiremote.png" />
+    <None Remove="skins\cdi-ir-analog\circle2.png" />
+    <None Remove="skins\cdi-ir-analog\skin.xml" />
+    <None Remove="skins\cdi-ir\cdiremote.png" />
+    <None Remove="skins\cdi-ir\circle2.png" />
+    <None Remove="skins\cdi-ir\skin.xml" />
+    <None Remove="skins\cdi-mouse\cdi-mouse.png" />
+    <None Remove="skins\cdi-mouse\circle.png" />
+    <None Remove="skins\cdi-mouse\circle2.png" />
+    <None Remove="skins\cdi-mouse\skin.xml" />
+    <None Remove="skins\cdi-roller\cdi-roller.png" />
+    <None Remove="skins\cdi-roller\circle.png" />
+    <None Remove="skins\cdi-roller\circle2.png" />
+    <None Remove="skins\cdi-roller\skin.xml" />
+    <None Remove="skins\cdi-thumbstick\cdi-thumbstick-stick.png" />
+    <None Remove="skins\cdi-thumbstick\cdi-thumbstick.png" />
+    <None Remove="skins\cdi-thumbstick\circle2.png" />
+    <None Remove="skins\cdi-thumbstick\skin.xml" />
+    <None Remove="skins\cdtv-keyboard-de\cdtv-keyboard-german.png" />
+    <None Remove="skins\cdtv-keyboard-de\circle2.png" />
+    <None Remove="skins\cdtv-keyboard-de\skin.xml" />
+    <None Remove="skins\cdtv-keyboard-us\cdtv-keyboard-us.png" />
+    <None Remove="skins\cdtv-keyboard-us\circle2.png" />
+    <None Remove="skins\cdtv-keyboard-us\skin.xml" />
+    <None Remove="skins\cdtv-remote\cdtv-remote.png" />
+    <None Remove="skins\cdtv-remote\circle.png" />
+    <None Remove="skins\cdtv-remote\skin.xml" />
+    <None Remove="skins\cdtv-trackball\cdtv-trackball.png" />
+    <None Remove="skins\cdtv-trackball\circle.png" />
+    <None Remove="skins\cdtv-trackball\circle1.png" />
+    <None Remove="skins\cdtv-trackball\circle2.png" />
+    <None Remove="skins\cdtv-trackball\skin.xml" />
+    <None Remove="skins\classic-7800\atari7800.png" />
+    <None Remove="skins\classic-7800\circle.png" />
+    <None Remove="skins\classic-7800\skin.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
@@ -41,6 +127,8 @@
     </PackageReference>
     <PackageReference Include="CefGlue.Avalonia" Version="91.4472.31" />
     <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
@@ -48,15 +136,6 @@
     <PackageReference Include="Zafiro.Avalonia" Version="2.5.10">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\SharpDX\net45\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DirectInput">
-      <HintPath>..\SharpDX\net45\SharpDX.DirectInput.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -87,5 +166,266 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="About.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="skins\3do-controller\3dobackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-controller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\3do.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\5200.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\5200joystick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\keyboardcontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\kidscontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\starraiders.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\c64mini.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\knob1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\controller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\analog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\joystick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\gravis-pro.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\prostick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\commodore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\cdicont2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\cdicont2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\cdicont.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\cdicont.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\cdiremote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\cdiremote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\cdi-mouse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\cdi-roller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\cdi-thumbstick-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\cdi-thumbstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\cdtv-keyboard-german.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\cdtv-keyboard-us.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\cdtv-remote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\cdtv-trackball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\atari7800.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
