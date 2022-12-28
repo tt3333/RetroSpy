@@ -15,10 +15,17 @@ namespace RetroSpy
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new SetupWindow();
+                desktop!.Startup += (sender, args) =>
+                {
+                    bool skipSetup = args.Args.Length == 1 && args.Args[0] == "-skipSetup";
+
+                    desktop.MainWindow = new SetupWindow(skipSetup);
+                };
             }
 
             base.OnFrameworkInitializationCompleted();
         }
+
+     
     }
 }

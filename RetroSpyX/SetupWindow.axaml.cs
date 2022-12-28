@@ -143,10 +143,13 @@ namespace RetroSpy
 
             PopulateSources();
         }
-
-        public SetupWindow()
+        public SetupWindow() : this(false)
         {
-            bool skipSetup = false;
+
+        }    
+
+        public SetupWindow(bool skipSetup = false)
+        {
             try
             {
                 InitializeComponent();
