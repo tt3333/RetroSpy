@@ -15,7 +15,6 @@ using System.Resources;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 
 namespace GBPemu
@@ -360,7 +359,7 @@ namespace GBPemu
                 }
                 searcher2.Dispose();
             }
-                
+
             // remove duplicates, sort alphabetically and convert to array
             string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
             return usbDevices;

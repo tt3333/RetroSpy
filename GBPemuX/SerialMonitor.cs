@@ -147,7 +147,7 @@ namespace GBPemu
                 byte[] array = _localBuffer.ToArray();
                 string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
-                if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("Memory Waterline:") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)") ||  lastCommand.Contains("// Timed Out (Memory Waterline: 6B out of 400B)"))
+                if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("Memory Waterline:") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)") || lastCommand.Contains("// Timed Out (Memory Waterline: 6B out of 400B)"))
                 {
                     PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(0, lastSplitIndex).ToArray()));
 

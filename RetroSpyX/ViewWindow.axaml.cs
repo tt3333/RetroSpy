@@ -21,26 +21,26 @@ namespace RetroSpy
         private readonly Skin _skin;
         private readonly IControllerReader _reader;
         private readonly Keybindings? _keybindings;
-        private readonly BlinkReductionFilter _blinkFilter = new BlinkReductionFilter();
-        private readonly List<Tuple<Detail, Image>> _detailsWithImages = new List<Tuple<Detail, Image>>();
-        private readonly List<Tuple<Button, Image>> _buttonsWithImages = new List<Tuple<Button, Image>>();
-        private readonly List<Tuple<TouchPad, Image>> _touchPadWithImages = new List<Tuple<TouchPad, Image>>();
-        private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new List<Tuple<RangeButton, Image>>();
-        private readonly List<Tuple<AnalogStick, Image>> _sticksWithImages = new List<Tuple<AnalogStick, Image>>();
-        private readonly List<Tuple<AnalogText, Label>> _analogTextBoxes = new List<Tuple<AnalogText, Label>>();
+        private readonly BlinkReductionFilter _blinkFilter = new();
+        private readonly List<Tuple<Detail, Image>> _detailsWithImages = new();
+        private readonly List<Tuple<Button, Image>> _buttonsWithImages = new();
+        private readonly List<Tuple<TouchPad, Image>> _touchPadWithImages = new();
+        private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new ();
+        private readonly List<Tuple<AnalogStick, Image>> _sticksWithImages = new();
+        private readonly List<Tuple<AnalogText, Label>> _analogTextBoxes = new();
 
-        private readonly Dictionary<string, List<Tuple<Button, Image>>> _dictOfButtonsWithImages = new Dictionary<string, List<Tuple<Button, Image>>>();
+        private readonly Dictionary<string, List<Tuple<Button, Image>>> _dictOfButtonsWithImages = new();
 
         // The triggers images are embedded inside of a Grid element so that we can properly mask leftwards and upwards
         // without the image aligning to the top left of its element.
-        private readonly List<Tuple<AnalogTrigger, Grid>> _triggersWithGridImages = new List<Tuple<AnalogTrigger, Grid>>();
+        private readonly List<Tuple<AnalogTrigger, Grid>> _triggersWithGridImages = new();
 
         public ViewWindow()
         {
             throw new NotImplementedException();
         }
 
-        private SetupWindow _sw;
+        private readonly SetupWindow _sw;
 
         public ViewWindow(SetupWindow sw, Skin? skin, Background? skinBackground, IControllerReader? reader, bool staticViewerWindowName)
         {
@@ -74,7 +74,7 @@ namespace RetroSpy
 
             Title = staticViewerWindowName ? "RetroSpy Viewer" : skin.Name;
 
-            SolidColorBrush brush = new SolidColorBrush(skinBackground.Color);
+            SolidColorBrush brush = new(skinBackground.Color);
             ControllerGrid.Background = brush;
 
             if (skinBackground.Image != null)
@@ -124,19 +124,19 @@ namespace RetroSpy
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
                     Image image = GetImageForElement(button.Config);
-                    Tuple<Button, Image> tuple = new Tuple<Button, Image>(button, image);
+                    Tuple<Button, Image> tuple = new(button, image);
                     _buttonsWithImages.Add(tuple);
-                    if (_dictOfButtonsWithImages.ContainsKey(button.Name))
+                    if (_dictOfButtonsWithImages.ContainsKey(button.Name ?? string.Empty))
                     {
-                        _dictOfButtonsWithImages[button.Name].Add(tuple);
+                        _dictOfButtonsWithImages[button.Name ?? string.Empty].Add(tuple);
                     }
                     else
                     {
-                        List<Tuple<Button, Image>> list = new List<Tuple<Button, Image>>
+                        List<Tuple<Button, Image>> list = new()
                         {
                             tuple
                         };
-                        _dictOfButtonsWithImages.Add(button.Name, list);
+                        _dictOfButtonsWithImages.Add(button.Name ?? string.Empty, list);
                     }
                     image.IsVisible = false;
                     ControllerGrid.Children.Add(image);
@@ -241,7 +241,7 @@ namespace RetroSpy
 
         private static Label GetLabelForElement(AnalogText config)
         {
-            Label label = new Label
+            Label label = new()
             {
                 FontFamily = config.Font,
                 FontSize = config.Size,
@@ -256,7 +256,7 @@ namespace RetroSpy
             e = _blinkFilter.Process(e);
 
             // This assumes you can't press left/right and up/down at the same time.  The code gets more complicated otherwise.
-            Dictionary<string, bool> compassDirectionStates = new Dictionary<string, bool>();
+            Dictionary<string, bool> compassDirectionStates = new();
             if (e.Buttons.ContainsKey("up") && e.Buttons.ContainsKey("left") && e.Buttons.ContainsKey("right") && e.Buttons.ContainsKey("down"))
             {
                 string[] compassDirections = { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
@@ -296,31 +296,31 @@ namespace RetroSpy
 
             foreach (Tuple<Button, Image> button in _buttonsWithImages)
             {
-                if (e.Buttons.ContainsKey(button.Item1.Name))
+                if (e.Buttons.ContainsKey(button.Item1.Name ?? string.Empty))
                 {
                     if (Dispatcher.UIThread.CheckAccess())
                     {
-                        button.Item2.IsVisible = e.Buttons[button.Item1.Name];
+                        button.Item2.IsVisible = e.Buttons[button.Item1.Name ?? string.Empty];
                     }
                     else
                     {
                         Dispatcher.UIThread.Post(() =>
                         {
-                            button.Item2.IsVisible = e.Buttons[button.Item1.Name];
+                            button.Item2.IsVisible = e.Buttons[button.Item1.Name ?? string.Empty];
                         });
                     }
                 }
-                else if (compassDirectionStates.ContainsKey(button.Item1.Name))
+                else if (compassDirectionStates.ContainsKey(button.Item1.Name ?? string.Empty))
                 {
                     if (Dispatcher.UIThread.CheckAccess())
                     {
-                        button.Item2.IsVisible = compassDirectionStates[button.Item1.Name];
+                        button.Item2.IsVisible = compassDirectionStates[button.Item1.Name ?? string.Empty];
                     }
                     else
                     {
                         Dispatcher.UIThread.Post(() =>
                         {
-                            button.Item2.IsVisible = compassDirectionStates[button.Item1.Name];
+                            button.Item2.IsVisible = compassDirectionStates[button.Item1.Name ?? string.Empty];
                         });
                     }
                 }
@@ -329,13 +329,13 @@ namespace RetroSpy
             foreach (Tuple<AnalogText, Label> text in _analogTextBoxes)
             {
                 float value = 0;
-                if (e.Analogs.ContainsKey(text.Item1.Name))
+                if (e.Analogs.ContainsKey(text.Item1.Name ?? string.Empty))
                 {
-                    value = e.Analogs[text.Item1.Name] * text.Item1.Range;
+                    value = e.Analogs[text.Item1.Name ?? string.Empty] * text.Item1.Range;
                 }
-                else if (e.RawAnalogs.ContainsKey(text.Item1.Name))
+                else if (e.RawAnalogs.ContainsKey(text.Item1.Name ?? string.Empty))
                 {
-                    value = e.RawAnalogs[text.Item1.Name] * text.Item1.Range;
+                    value = e.RawAnalogs[text.Item1.Name ?? string.Empty] * text.Item1.Range;
                 }
 
                 text.Item2.Content = (int)value;
@@ -343,12 +343,12 @@ namespace RetroSpy
 
             foreach (Tuple<RangeButton, Image> button in _rangeButtonsWithImages)
             {
-                if (!e.Analogs.ContainsKey(button.Item1.Name))
+                if (!e.Analogs.ContainsKey(button.Item1.Name ?? string.Empty))
                 {
                     continue;
                 }
 
-                float value = e.Analogs[button.Item1.Name];
+                float value = e.Analogs[button.Item1.Name ?? string.Empty];
                 bool visible = button.Item1.From <= value && value <= button.Item1.To;
                 button.Item2.IsVisible = visible;
             }
@@ -361,22 +361,21 @@ namespace RetroSpy
                 float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
                 float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                float x = e.Analogs.ContainsKey(skin.XName)
-                      ? skin.Config.X + (xrange * e.Analogs[skin.XName])
+                float x = e.Analogs.ContainsKey(skin.XName ?? string.Empty)
+                      ? skin.Config.X + (xrange * e.Analogs[skin.XName ?? string.Empty])
                       : skin.Config.X;
 
-                if (e.Analogs.ContainsKey(skin.XName) && Math.Abs(e.Analogs[skin.XName]) < skin.XPrecision)
+                if (e.Analogs.ContainsKey(skin.XName ?? string.Empty) && Math.Abs(e.Analogs[skin.XName ?? string.Empty]) < skin.XPrecision)
                     x = skin.Config.X;
 
-                float y = e.Analogs.ContainsKey(skin.YName)
-                      ? skin.Config.Y + (yrange * e.Analogs[skin.YName])
+                float y = e.Analogs.ContainsKey(skin.YName ?? string.Empty)
+                      ? skin.Config.Y + (yrange * e.Analogs[skin.YName ?? string.Empty])
                       : skin.Config.Y;
 
-                if (e.Analogs.ContainsKey(skin.YName) && Math.Abs(e.Analogs[skin.YName]) < skin.YPrecision)
+                if (e.Analogs.ContainsKey(skin.YName ?? string.Empty) && Math.Abs(e.Analogs[skin.YName ?? string.Empty]) < skin.YPrecision)
                     y = skin.Config.Y;
 
-                bool visibility = skin.VisibilityName.Length > 0
-                    ? (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]) : true;
+                bool visibility = skin.VisibilityName.Length == 0 || (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]);
                 if (Dispatcher.UIThread.CheckAccess())
                 {
                     image.Margin = new Thickness(x, y, 0, 0);
@@ -396,11 +395,11 @@ namespace RetroSpy
             {
                 TouchPad skin = touchpad.Item1;
 
-                if (e.Analogs.ContainsKey(skin.XName) && e.Analogs.ContainsKey(skin.YName))
+                if (e.Analogs.ContainsKey(skin.XName ?? string.Empty) && e.Analogs.ContainsKey(skin.YName ?? string.Empty))
                 {
                     // Show
-                    double x = (e.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width / 2);
-                    double y = (e.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height / 2);
+                    double x = (e.Analogs[skin.XName ?? string.Empty] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width / 2);
+                    double y = (e.Analogs[skin.YName ?? string.Empty] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height / 2);
 
                     if (Dispatcher.UIThread.CheckAccess())
                     {
@@ -437,12 +436,12 @@ namespace RetroSpy
                 AnalogTrigger skin = trigger.Item1;
                 Grid grid = trigger.Item2;
 
-                if (!e.Analogs.ContainsKey(skin.Name))
+                if (!e.Analogs.ContainsKey(skin.Name ?? string.Empty))
                 {
                     continue;
                 }
 
-                float val = e.Analogs[skin.Name];
+                float val = e.Analogs[skin.Name ?? string.Empty];
                 if (skin.UseNegative)
                 {
                     val *= -1;
@@ -591,10 +590,7 @@ namespace RetroSpy
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
-            if (_keybindings != null)
-            {
-                _keybindings.Finish();
-            }
+            _keybindings?.Finish();
             _reader.Finish();
 
         }
@@ -616,7 +612,7 @@ namespace RetroSpy
 
         private static Grid GetGridForAnalogTrigger(AnalogTrigger trigger)
         {
-            Image img = new Image
+            Image img = new()
             {
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
 
@@ -637,7 +633,7 @@ namespace RetroSpy
             img.Width = trigger.Config.Width;
             img.Height = trigger.Config.Height;
 
-            Grid grid = new Grid
+            Grid grid = new()
             {
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
@@ -652,7 +648,7 @@ namespace RetroSpy
         }
         private static Image GetImageForElement(ElementConfig config)
         {
-            Image img = new Image
+            Image img = new()
             {
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
@@ -667,7 +663,7 @@ namespace RetroSpy
 
         private static bool BgIsActive(string? bgName, Collection<string>? eligableBgs, Collection<string>? ignoreBgs)
         {
-            return ignoreBgs?.Contains(bgName ?? string.Empty) == false && (eligableBgs?.Count == 0 || eligableBgs?.Contains(bgName) == true);
+            return ignoreBgs?.Contains(bgName ?? string.Empty) == false && (eligableBgs?.Count == 0 || eligableBgs?.Contains(bgName ?? string.Empty) == true);
         }
 
         /// Expose the enabled status of the low-pass filter for data binding.

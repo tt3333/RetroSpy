@@ -1,11 +1,6 @@
-﻿
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
+﻿using Avalonia.Media.Imaging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Formats.Tga;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.IO;
@@ -205,7 +200,7 @@ namespace GBPemu
             GBImage retVal = new GBImage();
 
             retVal._rawImage = Pixels;
-   
+
             using (MemoryStream ms = new MemoryStream())
             {
                 retVal._rawImage.Save(ms, BmpFormat.Instance);
