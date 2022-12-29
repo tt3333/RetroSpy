@@ -97,11 +97,14 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, detail.Config?.TargetBackgrounds, detail.Config?.IgnoreBackgrounds))
                 {
-                    detail.Config.X = detail.Config.OriginalX;
-                    detail.Config.Y = detail.Config.OriginalY;
-                    Image image = GetImageForElement(detail.Config);
-                    _detailsWithImages.Add(new Tuple<Detail, Image>(detail, image));
-                    ControllerGrid.Children.Add(image);
+                    if (detail.Config != null)
+                    {
+                        detail.Config.X = detail.Config.OriginalX;
+                        detail.Config.Y = detail.Config.OriginalY;
+                        Image image = GetImageForElement(detail.Config);
+                        _detailsWithImages.Add(new Tuple<Detail, Image>(detail, image));
+                        ControllerGrid.Children.Add(image);
+                    }
                 }
             }
 
@@ -109,11 +112,15 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, trigger.Config?.TargetBackgrounds, trigger.Config?.IgnoreBackgrounds))
                 {
-                    trigger.Config.X = trigger.Config.OriginalX;
-                    trigger.Config.Y = trigger.Config.OriginalY;
-                    Grid grid = GetGridForAnalogTrigger(trigger);
-                    _triggersWithGridImages.Add(new Tuple<AnalogTrigger, Grid>(trigger, grid));
-                    ControllerGrid.Children.Add(grid);
+                    if (trigger.Config != null)
+                    {
+
+                        trigger.Config.X = trigger.Config.OriginalX;
+                        trigger.Config.Y = trigger.Config.OriginalY;
+                        Grid grid = GetGridForAnalogTrigger(trigger);
+                        _triggersWithGridImages.Add(new Tuple<AnalogTrigger, Grid>(trigger, grid));
+                        ControllerGrid.Children.Add(grid);
+                    }
                 }
             }
 
@@ -121,25 +128,28 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, button.Config?.TargetBackgrounds, button.Config?.IgnoreBackgrounds))
                 {
-                    button.Config.X = button.Config.OriginalX;
-                    button.Config.Y = button.Config.OriginalY;
-                    Image image = GetImageForElement(button.Config);
-                    Tuple<Button, Image> tuple = new(button, image);
-                    _buttonsWithImages.Add(tuple);
-                    if (_dictOfButtonsWithImages.ContainsKey(button.Name ?? string.Empty))
+                    if (button.Config != null)
                     {
-                        _dictOfButtonsWithImages[button.Name ?? string.Empty].Add(tuple);
-                    }
-                    else
-                    {
-                        List<Tuple<Button, Image>> list = new()
+                        button.Config.X = button.Config.OriginalX;
+                        button.Config.Y = button.Config.OriginalY;
+                        Image image = GetImageForElement(button.Config);
+                        Tuple<Button, Image> tuple = new(button, image);
+                        _buttonsWithImages.Add(tuple);
+                        if (_dictOfButtonsWithImages.ContainsKey(button.Name ?? string.Empty))
+                        {
+                            _dictOfButtonsWithImages[button.Name ?? string.Empty].Add(tuple);
+                        }
+                        else
+                        {
+                            List<Tuple<Button, Image>> list = new()
                         {
                             tuple
                         };
-                        _dictOfButtonsWithImages.Add(button.Name ?? string.Empty, list);
+                            _dictOfButtonsWithImages.Add(button.Name ?? string.Empty, list);
+                        }
+                        image.IsVisible = false;
+                        ControllerGrid.Children.Add(image);
                     }
-                    image.IsVisible = false;
-                    ControllerGrid.Children.Add(image);
                 }
             }
 
@@ -147,12 +157,15 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, button?.Config?.TargetBackgrounds, button?.Config?.IgnoreBackgrounds))
                 {
-                    button.Config.X = button.Config.OriginalX;
-                    button.Config.Y = button.Config.OriginalY;
-                    Image image = GetImageForElement(button.Config);
-                    _rangeButtonsWithImages.Add(new Tuple<RangeButton, Image>(button, image));
-                    image.IsVisible = false;
-                    ControllerGrid.Children.Add(image);
+                    if (button?.Config != null)
+                    {
+                        button.Config.X = button.Config.OriginalX;
+                        button.Config.Y = button.Config.OriginalY;
+                        Image image = GetImageForElement(button.Config);
+                        _rangeButtonsWithImages.Add(new Tuple<RangeButton, Image>(button, image));
+                        image.IsVisible = false;
+                        ControllerGrid.Children.Add(image);
+                    }
                 }
             }
 
@@ -160,18 +173,21 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, stick.Config?.TargetBackgrounds, stick.Config?.IgnoreBackgrounds))
                 {
-                    stick.Config.X = stick.Config.OriginalX;
-                    stick.Config.Y = stick.Config.OriginalY;
-                    stick.XRange = stick.OriginalXRange;
-                    stick.YRange = stick.OriginalYRange;
-                    Image image = GetImageForElement(stick.Config);
-                    _sticksWithImages.Add(new Tuple<AnalogStick, Image>(stick, image));
-                    if (stick.VisibilityName.Length > 0)
+                    if (stick.Config != null)
                     {
-                        image.IsVisible = false;
-                    }
+                        stick.Config.X = stick.Config.OriginalX;
+                        stick.Config.Y = stick.Config.OriginalY;
+                        stick.XRange = stick.OriginalXRange;
+                        stick.YRange = stick.OriginalYRange;
+                        Image image = GetImageForElement(stick.Config);
+                        _sticksWithImages.Add(new Tuple<AnalogStick, Image>(stick, image));
+                        if (stick?.VisibilityName?.Length > 0)
+                        {
+                            image.IsVisible = false;
+                        }
 
-                    ControllerGrid.Children.Add(image);
+                        ControllerGrid.Children.Add(image);
+                    }
                 }
             }
 
@@ -179,14 +195,17 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, touchpad.Config?.TargetBackgrounds, touchpad.Config?.IgnoreBackgrounds))
                 {
-                    touchpad.Config.X = touchpad.Config.OriginalX;
-                    touchpad.Config.Y = touchpad.Config.OriginalY;
-                    touchpad.XRange = touchpad.OriginalXRange;
-                    touchpad.YRange = touchpad.OriginalYRange;
-                    Image image = GetImageForElement(touchpad.Config);
-                    _touchPadWithImages.Add(new Tuple<TouchPad, Image>(touchpad, image));
-                    image.IsVisible = false;
-                    ControllerGrid.Children.Add(image);
+                    if (touchpad.Config != null)
+                    {
+                        touchpad.Config.X = touchpad.Config.OriginalX;
+                        touchpad.Config.Y = touchpad.Config.OriginalY;
+                        touchpad.XRange = touchpad.OriginalXRange;
+                        touchpad.YRange = touchpad.OriginalYRange;
+                        Image image = GetImageForElement(touchpad.Config);
+                        _touchPadWithImages.Add(new Tuple<TouchPad, Image>(touchpad, image));
+                        image.IsVisible = false;
+                        ControllerGrid.Children.Add(image);
+                    }
                 }
             }
 
@@ -243,7 +262,7 @@ namespace RetroSpy
         {
             Label label = new()
             {
-                FontFamily = config.Font,
+                FontFamily = config.Font ?? new("Segoe UI"),
                 FontSize = config.Size,
                 Margin = new Thickness(config.X, config.Y, 0, 0),
                 Foreground = config.Color,
@@ -627,7 +646,7 @@ namespace RetroSpy
                 ? Avalonia.Layout.VerticalAlignment.Bottom
                 : Avalonia.Layout.VerticalAlignment.Top;
 
-            img.Source = trigger.Config.Image;
+            img.Source = trigger.Config?.Image;
             img.Stretch = Stretch.Fill;
             img.Margin = new Thickness(0, 0, 0, 0);
             img.Width = trigger.Config.Width;
