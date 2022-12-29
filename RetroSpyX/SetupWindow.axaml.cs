@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
+
 using Zafiro.Core.ProgressReporting;
 using ComboBox = Avalonia.Controls.ComboBox;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
@@ -49,7 +49,7 @@ namespace RetroSpy
         private Collection<Skin>? _skins;
         private readonly Collection<string> _excludedSources;
         private readonly ResourceManager _resources;
-        private readonly bool isClosing;
+        private bool isClosing;
 
 
         private void KeybindingBehavior_Checked(object sender, RoutedEventArgs e)
@@ -143,6 +143,12 @@ namespace RetroSpy
 
             PopulateSources();
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            isClosing = true;
+        }
+
         public SetupWindow() : this(false)
         {
 
@@ -291,10 +297,10 @@ namespace RetroSpy
             }
         }
 
-        private void GoButton_Click(object? sender, RoutedEventArgs? e)
+        private async void GoButton_Click(object? sender, RoutedEventArgs? e)
         {
-            //ViewWindow v = null;
-            Hide();
+            ViewWindow? v = null;
+
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
             Properties.Settings.Default.Port2 = _vm.Ports2.SelectedItem;
             Properties.Settings.Default.Source = _vm.Sources.GetSelectedId();
@@ -390,22 +396,19 @@ namespace RetroSpy
 
                 if (_vm.Sources.SelectedItem == InputSource.PRINTER)
                 {
-                    //_ = new GameBoyPrinterEmulatorWindow(reader).ShowDialog();
+                    _portListUpdateTimer.Stop();
+                    var g = new GameBoyPrinterEmulatorWindow(this, reader);
+                    await g.ShowDialog(this);
                 }
                 else
                 {
                     _portListUpdateTimer.Stop();
-                    //v = new ViewWindow(_vm.Skins.SelectedItem,
-                    //               _vm.Backgrounds.SelectedItem,
-                    //               reader, _vm.StaticViewerWindowName);
-                    //v.ShowDialog();
+                    v = new ViewWindow(this, _vm.Skins.SelectedItem,
+                                   _vm.Backgrounds.SelectedItem,
+                                   reader, _vm.StaticViewerWindowName);
 
-                    Hide();
-                    using (var source = new CancellationTokenSource())
-                    {
-                        AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "ViewWindow Shows Up", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                    }
-                    Show();
+                    await v.ShowDialog(this);
+
                 }
             }
             catch (ConfigParseException ex)
@@ -423,12 +426,12 @@ namespace RetroSpy
             }
             catch (SSHMonitorDisconnectException)
             {
-                //v?.Close();
+                v?.Close();
             }
             catch (Exception ex)
             {
                 AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                //v?.Close();
+                v?.Close();
             }
 
             _portListUpdateTimer.Start();
@@ -873,7 +876,6 @@ namespace RetroSpy
         public ListView<Background> Backgrounds { get; set; }
         public ListView<InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
-        public bool StaticViewerWindowName { get; set; }
         public bool LegacyKeybindingBehavior { get; set; }
         public string? Hostname { get; set; }
         public bool FilterCOMPorts { get; set; }
@@ -942,6 +944,16 @@ namespace RetroSpy
             }
         }
 
+        private bool _staticViewerWindowName;
+        public bool StaticViewerWindowName
+        {
+            get => _staticViewerWindowName;
+            set
+            {
+                _staticViewerWindowName = value;
+                NotifyPropertyChanged("StaticViewerWindowName");
+            }
+        }
 
 
         public SetupWindowViewModel(SetupWindow setupWindow)

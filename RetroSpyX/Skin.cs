@@ -6,15 +6,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Resources;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Xml.Linq;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 
 namespace RetroSpy
 {
     public class ElementConfig
     {
-        public BitmapImage? Image { get; set; }
+        public Bitmap? Image { get; set; }
         public uint X { get; set; }
         public uint Y { get; set; }
         public uint OriginalX { get; set; }
@@ -58,7 +58,7 @@ namespace RetroSpy
     public class Background
     {
         public string? Name { get; set; }
-        public BitmapImage? Image { get; set; }
+        public Bitmap? Image { get; set; }
         public Color Color { get; set; }
         public uint Width { get; set; }
         public uint Height { get; set; }
@@ -331,20 +331,20 @@ namespace RetroSpy
                 foreach (XElement elem in bgElems)
                 {
                     string? imgPath = ReadStringAttr(elem, "image", false);
-                    BitmapImage? image = null;
+                    Bitmap? image = null;
                     uint width = 0;
                     uint height = 0;
                     if (!string.IsNullOrEmpty(imgPath))
                     {
                         image = LoadImage(skinPath, imgPath);
-                        width = (uint)image.PixelWidth;
+                        width = (uint)image.Size.Width;
                         IEnumerable<XAttribute> widthAttr = elem.Attributes("width");
                         if (widthAttr.Any())
                         {
                             width = uint.Parse(widthAttr.First().Value, CultureInfo.CurrentCulture);
                         }
 
-                        height = (uint)image.PixelHeight;
+                        height = (uint)image.Size.Height;
                         IEnumerable<XAttribute> heightAttr = elem.Attributes("height");
                         if (heightAttr.Any())
                         {
@@ -522,7 +522,7 @@ namespace RetroSpy
                     throw new ConfigParseException(_resources == null ? "Invalid Resource Handle" : _resources.GetString("AnalogTextNeedsColor", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: AnalogTextNeedsColor");
                 }
 
-                var converter = new System.Windows.Media.BrushConverter();
+                var converter = new BrushConverter();
                 var brush = (Brush?)converter.ConvertFromString(colorAttrs.First().Value);
 
                 Collection<string> targetBgs = GetArrayAttr(elem, "target", false);
@@ -602,7 +602,7 @@ namespace RetroSpy
                     return result;
                 }
             }
-            return (Color)ColorConverter.ConvertFromString(attrs.First().Value);
+            return Color.Parse(attrs.First().Value);
         }
 
         private static float ReadFloatConfig(XElement elem, string attrName, bool required = true)
@@ -636,11 +636,11 @@ namespace RetroSpy
             return ret;
         }
 
-        private static BitmapImage LoadImage(string skinPath, string fileName)
+        private static Bitmap LoadImage(string skinPath, string fileName)
         {
             try
             {
-                return new BitmapImage(new Uri(Path.Combine(skinPath, fileName)));
+                return new Bitmap(Path.Combine(skinPath, fileName));
             }
             catch (Exception e)
             {
@@ -656,16 +656,16 @@ namespace RetroSpy
                 throw new ConfigParseException("Attribute 'image' missing for element '" + elem.Name + "'.");
             }
 
-            BitmapImage image = LoadImage(skinPath, imageAttr.First().Value);
+            Bitmap image = LoadImage(skinPath, imageAttr.First().Value);
 
-            uint width = (uint)image.PixelWidth;
+            uint width = (uint)image.Size.Width;
             IEnumerable<XAttribute> widthAttr = elem.Attributes("width");
             if (widthAttr.Any())
             {
                 width = uint.Parse(widthAttr.First().Value, CultureInfo.CurrentCulture);
             }
 
-            uint height = (uint)image.PixelHeight;
+            uint height = (uint)image.Size.Height;
             IEnumerable<XAttribute> heightAttr = elem.Attributes("height");
             if (heightAttr.Any())
             {

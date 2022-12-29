@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="GBPemu.SetupWindow"
+       Title="RetroSpy - GameBoy Printer Emulator" SizeToContent="WidthAndHeight"  CanResize="false" Closing="Window_Closing" Opened="Window_Open">
+	<Grid Height="432" Width="480">
+		<Image x:Name="SetupImage_png" Source="/Assets/SetupImage.png" Stretch="Fill"/>
+		<Grid.ContextMenu>
+			<ContextMenu>
+				<MenuItem Header="_Options" Name="OptionsMenu">
+					<MenuItem x:Name="FilterCOM" Header="Don't Detect COM Port"  Click="FilterCOM_Checked" HorizontalAlignment="Left" >
+						<MenuItem.Icon>
+							<CheckBox Name="FilterCOMCheckbox" Width="20" BorderThickness="0" Click="FilterCOM_Checked"></CheckBox>
+						</MenuItem.Icon>		
+					</MenuItem>
+				</MenuItem>
+			</ContextMenu>
+		</Grid.ContextMenu>
+	</Grid>
+</Window>

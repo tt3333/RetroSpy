@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia" mc:Ignorable="d" d:DesignWidth="602" d:DesignHeight="515.015" Width="602" Height="515.015" Foreground="#FFFFFF" Background="#FF252526" CanResize="false" x:Class="RetroSpy.SetupWindow" Title="RetroSpy">
+    xmlns:avalonia="clr-namespace:Zafiro.Avalonia;assembly=Zafiro.Avalonia" mc:Ignorable="d" d:DesignWidth="602" d:DesignHeight="515.015" Width="602" Height="515.015" Foreground="#FFFFFF" Background="#FF252526" CanResize="false" x:Class="RetroSpy.SetupWindow" Title="RetroSpy" Closing="Window_Closing">
     <Window.Styles>
         <Style Selector="TextBox.NumberOnly">
             <Setter Property="(i:Interaction.Behaviors)">

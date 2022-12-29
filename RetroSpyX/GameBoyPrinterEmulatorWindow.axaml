@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="RetroSpy.GameBoyPrinterEmulatorWindow"
+        Title="RetroSpy - GameBoy Printer Emulator" SizeToContent="WidthAndHeight" CanResize="false"  Closing="Window_Closing" Opened="Window_Open">
+	<Grid x:Name="GameBoyPrinterEmulatorWindowGrid" Height="432" Width="480">
+		<Grid.ContextMenu>
+			<ContextMenu>
+				<MenuItem Header="Save As..." Click="SaveAs_Click" />
+				<Separator/>
+				<MenuItem Header="Use DMG Color Palette" Click="DMGPaletteEnabled_Click" >
+					<MenuItem.Icon>
+						<CheckBox Name="DMGCheckbox" Width="20" BorderThickness="0" Click="DMGPaletteEnabled_Click"></CheckBox>
+					</MenuItem.Icon>
+				</MenuItem>
+			</ContextMenu>
+		</Grid.ContextMenu>
+	</Grid>
+</Window>

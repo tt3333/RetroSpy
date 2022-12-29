@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>RetroSpy</RootNamespace>
     <AssemblyName>RetroSpy</AssemblyName>
     <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
     <BaseOutputPath>..\bin</BaseOutputPath>
-    <UseWPF>True</UseWPF>
+    <UseWPF>False</UseWPF>
     <NeutralLanguage>en-US</NeutralLanguage> 
   </PropertyGroup>
 	<PropertyGroup>
@@ -17,9 +17,12 @@
 		<Version>6.0</Version>
 		<Copyright>Copyright © 2022</Copyright>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<UseWindowsForms>False</UseWindowsForms>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="keybindings.xml" />
     <None Remove="skins\3do-controller\3dobackground.png" />
     <None Remove="skins\3do-controller\circle2.png" />
     <None Remove="skins\3do-controller\skin.xml" />
@@ -744,6 +747,9 @@
     <None Remove="skins\xbox360-controller\trig-r.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="keybindings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
     <Content Include="skins\classic-c64gs\cheetah-stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2673,7 +2679,9 @@
     <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
