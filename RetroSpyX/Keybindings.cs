@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace RetroSpy
 {
-    public class Keybindings
+    public partial class Keybindings
     {
         private class Binding
         {
@@ -30,7 +30,7 @@ namespace RetroSpy
         public const string XmlFilePath = "keybindings.xml";
 
         private readonly IControllerReader _reader;
-        private readonly List<Binding> _bindings = new List<Binding>();
+        private readonly List<Binding> _bindings = new();
 
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
@@ -53,7 +53,7 @@ namespace RetroSpy
                         continue;
                     }
 
-                    List<string> requiredButtons = new List<string>();
+                    List<string> requiredButtons = new();
                     foreach (XElement input in binding.Elements("input"))
                     {
                         string? buttonName = input?.Attribute("button")?.Value;
@@ -114,7 +114,7 @@ namespace RetroSpy
         {
             string upperName = name.ToUpperInvariant();
 
-            return Regex.Match(upperName, "^[A-Z0-9]$").Success
+            return MyRegex().Match(upperName).Success
                 ? upperName.ToCharArray()[0]
                 : VK_KEYWORDS.ContainsKey(upperName) ? VK_KEYWORDS[upperName] : (ushort)0;
         }
@@ -186,5 +186,8 @@ namespace RetroSpy
             { "DIVIDE", VkConvert (Key.Divide) },
             { "/", VkConvert (Key.Divide) }
         };
+
+        [GeneratedRegex("^[A-Z0-9]$")]
+        private static partial Regex MyRegex();
     }
 }

@@ -28,7 +28,7 @@ namespace RetroSpy.Readers
             DirectInput input = new();
             int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
             input.Dispose();
-            Collection<uint> result = new Collection<uint>();
+            Collection<uint> result = new();
 
             for (uint i = 0; i < amount; i++)
             {

@@ -380,33 +380,36 @@ namespace RetroSpy
                 float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
                 float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                float x = e.Analogs.ContainsKey(skin.XName ?? string.Empty)
+                if (skin.Config != null)
+                {
+                    float x = e.Analogs.ContainsKey(skin.XName ?? string.Empty)
                       ? skin.Config.X + (xrange * e.Analogs[skin.XName ?? string.Empty])
                       : skin.Config.X;
 
-                if (e.Analogs.ContainsKey(skin.XName ?? string.Empty) && Math.Abs(e.Analogs[skin.XName ?? string.Empty]) < skin.XPrecision)
-                    x = skin.Config.X;
+                    if (e.Analogs.ContainsKey(skin.XName ?? string.Empty) && Math.Abs(e.Analogs[skin.XName ?? string.Empty]) < skin.XPrecision)
+                        x = skin.Config.X;
 
-                float y = e.Analogs.ContainsKey(skin.YName ?? string.Empty)
-                      ? skin.Config.Y + (yrange * e.Analogs[skin.YName ?? string.Empty])
-                      : skin.Config.Y;
+                    float y = e.Analogs.ContainsKey(skin.YName ?? string.Empty)
+                          ? skin.Config.Y + (yrange * e.Analogs[skin.YName ?? string.Empty])
+                          : skin.Config.Y;
 
-                if (e.Analogs.ContainsKey(skin.YName ?? string.Empty) && Math.Abs(e.Analogs[skin.YName ?? string.Empty]) < skin.YPrecision)
-                    y = skin.Config.Y;
+                    if (e.Analogs.ContainsKey(skin.YName ?? string.Empty) && Math.Abs(e.Analogs[skin.YName ?? string.Empty]) < skin.YPrecision)
+                        y = skin.Config.Y;
 
-                bool visibility = skin.VisibilityName.Length == 0 || (e.Buttons.ContainsKey(skin.VisibilityName) && e.Buttons[skin.VisibilityName]);
-                if (Dispatcher.UIThread.CheckAccess())
-                {
-                    image.Margin = new Thickness(x, y, 0, 0);
-                    image.IsVisible = IsVisible;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
+                    bool visibility = skin.VisibilityName?.Length == 0 || (e.Buttons.ContainsKey(skin.VisibilityName ?? string.Empty) && e.Buttons[skin.VisibilityName ?? string.Empty]);
+                    if (Dispatcher.UIThread.CheckAccess())
                     {
                         image.Margin = new Thickness(x, y, 0, 0);
                         image.IsVisible = IsVisible;
-                    });
+                    }
+                    else
+                    {
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            image.Margin = new Thickness(x, y, 0, 0);
+                            image.IsVisible = IsVisible;
+                        });
+                    }
                 }
             }
 
@@ -416,22 +419,25 @@ namespace RetroSpy
 
                 if (e.Analogs.ContainsKey(skin.XName ?? string.Empty) && e.Analogs.ContainsKey(skin.YName ?? string.Empty))
                 {
-                    // Show
-                    double x = (e.Analogs[skin.XName ?? string.Empty] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width / 2);
-                    double y = (e.Analogs[skin.YName ?? string.Empty] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height / 2);
+                    if (skin.Config != null)
+                    {
+                        // Show
+                        double x = (e.Analogs[skin.XName ?? string.Empty] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width / 2);
+                        double y = (e.Analogs[skin.YName ?? string.Empty] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height / 2);
 
-                    if (Dispatcher.UIThread.CheckAccess())
-                    {
-                        touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
-                        touchpad.Item2.IsVisible = true;
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.Post(() =>
+                        if (Dispatcher.UIThread.CheckAccess())
                         {
                             touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
                             touchpad.Item2.IsVisible = true;
-                        });
+                        }
+                        else
+                        {
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
+                                touchpad.Item2.IsVisible = true;
+                            });
+                        }
                     }
                 }
                 else
@@ -476,91 +482,94 @@ namespace RetroSpy
                     val = 0;
                 }
 
-                switch (skin.Direction)
+                if (skin.Config != null)
                 {
-                    case AnalogTrigger.DirectionValue.Right:
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            grid.Width = skin.Config.Width * val;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(() =>
+                    switch (skin.Direction)
+                    {
+                        case AnalogTrigger.DirectionValue.Right:
+                            if (Dispatcher.UIThread.CheckAccess())
                             {
                                 grid.Width = skin.Config.Width * val;
-                            });
-                        }
-                        break;
+                            }
+                            else
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    grid.Width = skin.Config.Width * val;
+                                });
+                            }
+                            break;
 
-                    case AnalogTrigger.DirectionValue.Left:
-                        float width = skin.Config.Width * val;
-                        float offx = skin.Config.Width - width;
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
-                            grid.Width = width;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(() =>
+                        case AnalogTrigger.DirectionValue.Left:
+                            float width = skin.Config.Width * val;
+                            float offx = skin.Config.Width - width;
+                            if (Dispatcher.UIThread.CheckAccess())
                             {
                                 grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
                                 grid.Width = width;
-                            });
-                        }
-                        break;
+                            }
+                            else
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
+                                    grid.Width = width;
+                                });
+                            }
+                            break;
 
-                    case AnalogTrigger.DirectionValue.Down:
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            grid.Height = skin.Config.Height * val;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(() =>
+                        case AnalogTrigger.DirectionValue.Down:
+                            if (Dispatcher.UIThread.CheckAccess())
                             {
                                 grid.Height = skin.Config.Height * val;
-                            });
-                        }
-                        break;
+                            }
+                            else
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    grid.Height = skin.Config.Height * val;
+                                });
+                            }
+                            break;
 
-                    case AnalogTrigger.DirectionValue.Up:
-                        float height = skin.Config.Height * val;
-                        float offy = skin.Config.Height - height;
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
-                            grid.Height = height;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(() =>
+                        case AnalogTrigger.DirectionValue.Up:
+                            float height = skin.Config.Height * val;
+                            float offy = skin.Config.Height - height;
+                            if (Dispatcher.UIThread.CheckAccess())
                             {
                                 grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
                                 grid.Height = height;
-                            });
-                        }
-                        break;
+                            }
+                            else
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
+                                    grid.Height = height;
+                                });
+                            }
+                            break;
 
-                    case AnalogTrigger.DirectionValue.Fade:
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            grid.Height = skin.Config.Height;
-                            grid.Width = skin.Config.Width;
-                            grid.Opacity = val;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(() =>
+                        case AnalogTrigger.DirectionValue.Fade:
+                            if (Dispatcher.UIThread.CheckAccess())
                             {
                                 grid.Height = skin.Config.Height;
                                 grid.Width = skin.Config.Width;
                                 grid.Opacity = val;
-                            });
-                        }
-                        break;
-                    default:
-                        break;
+                            }
+                            else
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    grid.Height = skin.Config.Height;
+                                    grid.Width = skin.Config.Width;
+                                    grid.Opacity = val;
+                                });
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -649,16 +658,16 @@ namespace RetroSpy
             img.Source = trigger.Config?.Image;
             img.Stretch = Stretch.Fill;
             img.Margin = new Thickness(0, 0, 0, 0);
-            img.Width = trigger.Config.Width;
-            img.Height = trigger.Config.Height;
+            img.Width = trigger.Config?.Width ?? 0;
+            img.Height = trigger.Config?.Height ?? 0;
 
             Grid grid = new()
             {
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
-                Margin = new Thickness(trigger.Config.X, trigger.Config.Y, 0, 0),
-                Width = trigger.Config.Width,
-                Height = trigger.Config.Height
+                Margin = new Thickness(trigger.Config?.X ?? 0, trigger.Config?.Y ?? 0, 0, 0),
+                Width = trigger.Config?.Width ?? 0,
+                Height = trigger.Config?.Height ?? 0
             };
 
             grid.Children.Add(img);

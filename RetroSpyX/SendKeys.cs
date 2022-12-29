@@ -10,7 +10,7 @@ namespace RetroSpy
 
     static class KeyInterop
     {
-        private static readonly Dictionary<Key, int> s_virtualKeyFromKey = new Dictionary<Key, int>
+        private static readonly Dictionary<Key, int> s_virtualKeyFromKey = new()
         {
             { Key.None, 0 },
             { Key.Cancel, 3 },
@@ -195,7 +195,7 @@ namespace RetroSpy
         }
     }
 
-    public static class SendKeys
+    public static partial class SendKeys
     {
         //const int INPUT_MOUSE = 0;
         private const int INPUT_KEYBOARD = 1;
@@ -251,15 +251,15 @@ namespace RetroSpy
             public ushort wParamH;
         }
 
-        private static class NativeMethods
+        private static partial class NativeMethods
         {
             [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-            [DllImport("user32.dll")]
-            public static extern IntPtr GetMessageExtraInfo();
+            [LibraryImport("user32.dll")]
+            public static partial IntPtr GetMessageExtraInfo();
 
             [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-            [DllImport("user32.dll", SetLastError = true)]
-            public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+            [LibraryImport("user32.dll", SetLastError = true)]
+            public static partial uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
         }
 
         private static INPUT InputForKey(ushort key, bool releasing)
