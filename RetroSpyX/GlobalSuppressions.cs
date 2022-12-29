@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Performance", "CA1854:Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method", Justification = "Throwing the exception is gonna be slower than searching twice.", Scope = "member", Target = "~M:RetroSpy.ViewWindow.#ctor(RetroSpy.SetupWindow,RetroSpy.Skin,RetroSpy.Background,RetroSpy.Readers.IControllerReader,System.Boolean)")]
+[assembly: SuppressMessage("Performance", "CA1854:Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method", Justification = "Throwing the exception is gonna be slower than searching twice.", Scope = "member", Target = "~M:RetroSpy.ViewWindow.Reader_ControllerStateChanged(System.Object,RetroSpy.Readers.ControllerStateEventArgs)")]

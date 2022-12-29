@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.IO.Compression;
 using System.IO.Ports;
-using System.Linq;
 using System.Management;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -132,8 +127,8 @@ namespace GBPUpdater
 
                 Console.Write(Properties.Resources.ResourceManager.GetString("Downloading", CultureInfo.CurrentUICulture));
 
-                DownloadFirmware(tempDirectory);               
-                
+                DownloadFirmware(tempDirectory);
+
                 Console.WriteLine(Properties.Resources.ResourceManager.GetString("Done", CultureInfo.CurrentUICulture));
 
                 Console.Write(Properties.Resources.ResourceManager.GetString("Decompressing", CultureInfo.CurrentUICulture));

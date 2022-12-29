@@ -1,5 +1,4 @@
 ﻿using Renci.SshNet;
-using System;
 using System.Globalization;
 
 namespace UsbUpdater
