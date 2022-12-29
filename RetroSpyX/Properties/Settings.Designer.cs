@@ -310,5 +310,29 @@ namespace RetroSpy.Properties {
                 this["UseLagFix"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int PrintSize {
+            get {
+                return ((int)(this["PrintSize"]));
+            }
+            set {
+                this["PrintSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SelectedPalette {
+            get {
+                return ((int)(this["SelectedPalette"]));
+            }
+            set {
+                this["SelectedPalette"] = value;
+            }
+        }
     }
 }

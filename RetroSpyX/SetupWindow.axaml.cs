@@ -19,6 +19,7 @@ using System.Linq;
 using System.Management;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -397,7 +398,7 @@ namespace RetroSpy
                 if (_vm.Sources.SelectedItem == InputSource.PRINTER)
                 {
                     _portListUpdateTimer.Stop();
-                    var g = new GameBoyPrinterEmulatorWindow(this, reader);
+                    var g = new GameBoyPrinterEmulatorWindow(reader, this);
                     await g.ShowDialog(this);
                 }
                 else
@@ -657,61 +658,65 @@ namespace RetroSpy
             const uint vid = 0x16C0;
             const uint serPid = 0x483;
             string vidStr = "'%USB_VID[_]" + vid.ToString("X", CultureInfo.CurrentCulture) + "%'";
-            using ManagementObjectSearcher searcher = new("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr);
-            foreach (ManagementBaseObject mgmtObject in searcher.Get())
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
-                if (DeviceIdParts[0] != "USB")
+                using ManagementObjectSearcher searcher = new("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr);
+                foreach (ManagementBaseObject mgmtObject in searcher.Get())
                 {
-                    break;
-                }
-
-                int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
-                uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
-                if (pid == serPid)
-                {
-                    mgmtObject.ToString();
-                    //uint serNum = Convert.ToUInt32(DeviceIdParts[2], CultureInfo.CurrentCulture);
-                    string port;
-                    if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
-                        port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
-                    else
-                        continue;
-
-                    string hwid = ((string[])mgmtObject["HardwareID"])[0];
-                    switch (hwid.Substring(hwid.IndexOf("REV_", StringComparison.Ordinal) + 4, 4))
+                    string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
+                    if (DeviceIdParts[0] != "USB")
                     {
-                        case "0273":
-                            //board = PJRC_Board.Teensy_LC;
-                            break;
+                        break;
+                    }
 
-                        case "0274":
-                            //board = PJRC_Board.Teensy_30;
-                            break;
+                    int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
+                    uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
+                    if (pid == serPid)
+                    {
+                        mgmtObject.ToString();
+                        //uint serNum = Convert.ToUInt32(DeviceIdParts[2], CultureInfo.CurrentCulture);
+                        string port;
+                        if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
+                            port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
+                        else
+                            continue;
 
-                        case "0275":
-                            //board = PJRC_Board.Teensy_31_2;
-                            break;
+                        string hwid = ((string[])mgmtObject["HardwareID"])[0];
+                        switch (hwid.Substring(hwid.IndexOf("REV_", StringComparison.Ordinal) + 4, 4))
+                        {
+                            case "0273":
+                                //board = PJRC_Board.Teensy_LC;
+                                break;
 
-                        case "0276":
-                            arduinoPorts.Add(port + " (Teensy 3.5)");
-                            break;
+                            case "0274":
+                                //board = PJRC_Board.Teensy_30;
+                                break;
 
-                        case "0277":
-                            arduinoPorts.Add(port + " (Teensy 3.6)");
-                            break;
+                            case "0275":
+                                //board = PJRC_Board.Teensy_31_2;
+                                break;
 
-                        case "0279":
-                            arduinoPorts.Add(port + " (Teensy 4.0)");
-                            break;
+                            case "0276":
+                                arduinoPorts.Add(port + " (Teensy 3.5)");
+                                break;
 
-                        case "0280":
-                            arduinoPorts.Add(port + " (Teensy 4.1)");
-                            break;
+                            case "0277":
+                                arduinoPorts.Add(port + " (Teensy 3.6)");
+                                break;
 
-                        default:
-                            //board = PJRC_Board.unknown;
-                            break;
+                            case "0279":
+                                arduinoPorts.Add(port + " (Teensy 4.0)");
+                                break;
+
+                            case "0280":
+                                arduinoPorts.Add(port + " (Teensy 4.1)");
+                                break;
+
+                            default:
+                                //board = PJRC_Board.unknown;
+                                break;
+                        }
                     }
                 }
             }
@@ -721,20 +726,25 @@ namespace RetroSpy
         {
             List<string> list = new();
 
-            ManagementObjectSearcher searcher2 = new("SELECT * FROM Win32_PnPEntity");
-            foreach (ManagementObject mo2 in searcher2.Get().Cast<ManagementObject>())
-            {
-                if (mo2["Name"] != null)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            { 
+                ManagementObjectSearcher searcher2 = new("SELECT * FROM Win32_PnPEntity");
+                foreach (ManagementObject mo2 in searcher2.Get().Cast<ManagementObject>())
                 {
-                    string? name = mo2["Name"].ToString();
-                    // Name will have a substring like "(COM12)" in it.
-                    if (name != null && name.Contains("(COM"))
+                    if (mo2["Name"] != null)
                     {
-                        list.Add(name);
+                        string? name = mo2["Name"].ToString();
+                        // Name will have a substring like "(COM12)" in it.
+                        if (name != null && name.Contains("(COM"))
+                        {
+                            list.Add(name);
+                        }
                     }
                 }
+                searcher2.Dispose();
+
             }
-            searcher2.Dispose();
+
             // remove duplicates, sort alphabetically and convert to array
             string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
             return usbDevices;

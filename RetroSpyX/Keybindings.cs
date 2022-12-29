@@ -1,4 +1,5 @@
 using Avalonia.Input;
+using Avalonia.Platform;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
@@ -42,26 +43,31 @@ namespace RetroSpy
 
             XDocument doc = XDocument.Load(xmlPath);
 
-            foreach (XElement binding in doc.Root.Elements("binding"))
+            if (doc.Root != null)
             {
-                ushort outputKey = ReadKeybinding(binding.Attribute("output-key").Value);
-                if (outputKey == 0)
+                foreach (XElement binding in doc.Root.Elements("binding"))
                 {
-                    continue;
-                }
+                    ushort outputKey = ReadKeybinding(binding.Attribute("output-key")?.Value ?? string.Empty);
+                    if (outputKey == 0)
+                    {
+                        continue;
+                    }
 
-                List<string> requiredButtons = new List<string>();
-                foreach (XElement input in binding.Elements("input"))
-                {
-                    requiredButtons.Add(input.Attribute("button").Value);
-                }
+                    List<string> requiredButtons = new List<string>();
+                    foreach (XElement input in binding.Elements("input"))
+                    {
+                        string? buttonName = input?.Attribute("button")?.Value;
+                        if (buttonName != null)
+                            requiredButtons.Add(buttonName);
+                    }
 
-                if (requiredButtons.Count < 1)
-                {
-                    continue;
-                }
+                    if (requiredButtons.Count < 1)
+                    {
+                        continue;
+                    }
 
-                _bindings.Add(new Binding(outputKey, requiredButtons));
+                    _bindings.Add(new Binding(outputKey, requiredButtons));
+                }
             }
 
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
@@ -80,7 +86,7 @@ namespace RetroSpy
             _reader.ControllerStateChanged -= Reader_ControllerStateChanged;
         }
 
-        private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
+        private void Reader_ControllerStateChanged(object? reader, ControllerStateEventArgs e)
         {
             foreach (Binding binding in _bindings)
             {

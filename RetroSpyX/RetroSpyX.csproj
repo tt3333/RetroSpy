@@ -23,6 +23,8 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="keybindings.xml" />
+    <None Remove="Resources\ErrorImage.png" />
+    <None Remove="Resources\PrintImage.png" />
     <None Remove="skins\3do-controller\3dobackground.png" />
     <None Remove="skins\3do-controller\circle2.png" />
     <None Remove="skins\3do-controller\skin.xml" />
@@ -2684,6 +2686,7 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     <PackageReference Include="Zafiro.Avalonia" Version="2.5.10">
       <TreatAsUsed>true</TreatAsUsed>
@@ -2691,6 +2694,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="GameBoyPrinterEmulatorWindow.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -2706,10 +2718,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
@@ -2979,5 +2987,23 @@
     <Content Include="skins\classic-7800\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ErrorImage.png" />
+    <Resource Include="Resources\PrintImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="GameBoyPrinterEmulatorWindow.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

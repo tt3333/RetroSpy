@@ -15,13 +15,13 @@ namespace GBPemu
         public bool RequiresId { get; private set; }
         public bool RequiresHostname { get; private set; }
 
-        public Func<string, IControllerReader> BuildReader { get; private set; }
+        public Func<string?, IControllerReader> BuildReader { get; private set; }
 
-        public Func<string, string, IControllerReader> BuildReader2 { get; private set; }
+        public Func<string, string, IControllerReader>? BuildReader2 { get; private set; }
 
-        public IControllerReader BuildReader3 { get; private set; }
+        public IControllerReader? BuildReader3 { get; private set; }
 
-        private InputSource(string typeTag, string name, bool requiresComPort, bool requiresId, bool requiresHostname, bool requiresComPort2, Func<string, IControllerReader> buildReader)
+        private InputSource(string typeTag, string name, bool requiresComPort, bool requiresId, bool requiresHostname, bool requiresComPort2, Func<string?, IControllerReader> buildReader)
         {
             TypeTag = typeTag;
             Name = name;

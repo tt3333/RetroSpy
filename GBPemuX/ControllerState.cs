@@ -8,12 +8,12 @@ namespace GBPemu
         public static readonly ControllerStateEventArgs Zero = new ControllerStateEventArgs
             (new Dictionary<string, bool>(), new Dictionary<string, float>());
 
-        public string RawPrinterData { get; }
+        public string? RawPrinterData { get; }
 
         public IReadOnlyDictionary<string, bool> Buttons { get; private set; }
         public IReadOnlyDictionary<string, float> Analogs { get; private set; }
 
-        public ControllerStateEventArgs(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs, string rawPrinterData = null)
+        public ControllerStateEventArgs(IReadOnlyDictionary<string, bool> buttons, IReadOnlyDictionary<string, float> analogs, string? rawPrinterData = null)
         {
             RawPrinterData = rawPrinterData;
             Buttons = buttons;

@@ -8,7 +8,7 @@ namespace GBPemu
     {
         private readonly Dictionary<string, bool> _buttons = new Dictionary<string, bool>();
         private readonly Dictionary<string, float> _analogs = new Dictionary<string, float>();
-        private string _gameboyPrinterData;
+        private string? _gameboyPrinterData;
         public void SetButton(string name, bool value)
         {
             if (name == null)

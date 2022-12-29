@@ -12,6 +12,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -22,8 +23,8 @@ namespace GBPemu
 
     public class COMPortInfo
     {
-        public string PortName { get; set; }
-        public string FriendlyName { get; set; }
+        public string? PortName { get; set; }
+        public string? FriendlyName { get; set; }
     }
 
     public partial class SetupWindow : Window
@@ -33,7 +34,7 @@ namespace GBPemu
         private readonly ResourceManager _resources;
         private bool isClosing;
 
-        private List<string> arduinoPorts;
+        private List<string>? arduinoPorts;
         private void UpdatePortListThread()
         {
             Thread thread = new Thread(UpdatePortList);
@@ -66,7 +67,7 @@ namespace GBPemu
             DataContext = _vm;
             _resources = Properties.Resources.ResourceManager;
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string strWorkPath = Path.GetDirectoryName(strExeFilePath);
+            string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
@@ -77,7 +78,7 @@ namespace GBPemu
 
             COMMenu = menuItem;
 
-            if (_vm.FilterCOMPorts != null && _vm.FilterCOMPorts == true)
+            if (_vm.FilterCOMPorts == true)
             {
                 ((AvaloniaList<object>)OptionsMenu.Items).Add(COMMenu);
             }
@@ -135,12 +136,12 @@ namespace GBPemu
             }
         }
 
-        private async void COMPortClicked(object sender, RoutedEventArgs e)
+        private async void COMPortClicked(object? sender, RoutedEventArgs e)
         {
             try
             {
-                string port = ((MenuItem)sender).Header.ToString();
-                using (SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                string? port = ((MenuItem?)sender)?.Header.ToString();
+                using (SerialPort _serialPort = new SerialPort(port ?? "COMX", 115200, Parity.None, 8, StopBits.One)
                 {
                     Handshake = Handshake.None,
                     ReadTimeout = 500,
@@ -149,13 +150,13 @@ namespace GBPemu
                 {
                     _serialPort.Open();
                     _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                    string result = null;
+                    string? result = null;
                     do
                     {
                         result = _serialPort.ReadLine();
                     } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
 
-                    if (result == "parse_state:0\r" || result.Contains("d=debug"))
+                    if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                     {
                         _serialPort.Close();
                         Thread.Sleep(1000);
@@ -168,17 +169,17 @@ namespace GBPemu
                         {
                             if (Dispatcher.UIThread.CheckAccess())
                             {
-                                IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+                                IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
                                 var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                                g.ShowDialog(this);
+                                await g.ShowDialog(this);
                             }
                             else
                             {
                                 Dispatcher.UIThread.Post(async () =>
                                 {
-                                    IControllerReader reader = InputSource.PRINTER.BuildReader(port);
+                                    IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
                                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                                    g.ShowDialog(this);
+                                    await g.ShowDialog(this);
                                 });
                             }
 
@@ -210,7 +211,7 @@ namespace GBPemu
                 {
                     arduinoPorts = SetupCOMPortInformation();
 
-                    if (_vm.FilterCOMPorts != null && _vm.FilterCOMPorts == false)
+                    if (_vm.FilterCOMPorts == false)
                     {
                         foreach (string port in arduinoPorts)
                         {
@@ -243,13 +244,13 @@ namespace GBPemu
 
                                 try
                                 {
-                                    string result = null;
+                                    string? result = null;
                                     do
                                     {
                                         result = _serialPort.ReadLine();
                                     } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
 
-                                    if (result == "parse_state:0\r" || result.Contains("d=debug"))
+                                    if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                     {
                                         _serialPort.Close();
                                         Thread.Sleep(1000);
@@ -267,7 +268,7 @@ namespace GBPemu
                                                 {
                                                     IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                                                    g.ShowDialog(this);
+                                                    await g.ShowDialog(this);
                                                 }
                                             }
                                             else
@@ -278,7 +279,7 @@ namespace GBPemu
                                                     {
                                                         IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                         var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                                                        g.ShowDialog(this);
+                                                        await g.ShowDialog(this);
                                                     }
                                                 });
                                             }
@@ -341,20 +342,25 @@ namespace GBPemu
         {
             List<string> list = new List<string>();
 
-            ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
-            foreach (ManagementObject mo2 in searcher2.Get())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                if (mo2["Name"] != null)
+
+                ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+                foreach (ManagementObject mo2 in searcher2.Get())
                 {
-                    string name = mo2["Name"].ToString();
-                    // Name will have a substring like "(COM12)" in it.
-                    if (name.Contains("(COM"))
+                    if (mo2["Name"] != null)
                     {
-                        list.Add(name);
+                        string? name = mo2["Name"].ToString();
+                        // Name will have a substring like "(COM12)" in it.
+                        if (name?.Contains("(COM") == true)
+                        {
+                            list.Add(name);
+                        }
                     }
                 }
+                searcher2.Dispose();
             }
-            searcher2.Dispose();
+                
             // remove duplicates, sort alphabetically and convert to array
             string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
             return usbDevices;
@@ -402,13 +408,13 @@ namespace GBPemu
             List<string> ports = new List<string>();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (_vm.FilterCOMPorts != null && (_vm.FilterCOMPorts == true || port.FriendlyName.Contains("Arduino")))
+                if ((_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))
                 {
-                    ports.Add(port.PortName);
+                    ports.Add(port.PortName ?? "COMX");
                 }
-                else if (port.FriendlyName.Contains("CH340") || port.FriendlyName.Contains("CH341"))
+                else if (port.FriendlyName?.Contains("CH340") == true || port.FriendlyName?.Contains("CH341") == true)
                 {
-                    ports.Add(port.PortName);
+                    ports.Add(port.PortName ?? "COMX");
                 }
             }
 
@@ -454,7 +460,7 @@ namespace GBPemu
             Ports = new ListView<string>();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChanged(string prop)
         {

@@ -20,7 +20,7 @@ namespace RetroSpy
     {
         private readonly Skin _skin;
         private readonly IControllerReader _reader;
-        private readonly Keybindings _keybindings;
+        private readonly Keybindings? _keybindings;
         private readonly BlinkReductionFilter _blinkFilter = new BlinkReductionFilter();
         private readonly List<Tuple<Detail, Image>> _detailsWithImages = new List<Tuple<Detail, Image>>();
         private readonly List<Tuple<Button, Image>> _buttonsWithImages = new List<Tuple<Button, Image>>();
@@ -42,8 +42,15 @@ namespace RetroSpy
 
         private SetupWindow _sw;
 
-        public ViewWindow(SetupWindow sw, Skin skin, Background skinBackground, IControllerReader reader, bool staticViewerWindowName)
+        public ViewWindow(SetupWindow sw, Skin? skin, Background? skinBackground, IControllerReader? reader, bool staticViewerWindowName)
         {
+            if (skin == null)
+                throw new ArgumentNullException(nameof(skin));
+            if (skinBackground == null)
+                throw new ArgumentNullException(nameof(skinBackground));
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+            
             _sw = sw;
 
             InitializeComponent();
@@ -220,7 +227,7 @@ namespace RetroSpy
             Dispatcher.UIThread.MainLoop(source.Token);
         }
 
-        private void Reader_ControllerDisconnected(object sender, EventArgs e)
+        private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {
             if (Dispatcher.UIThread.CheckAccess())
             {
@@ -244,7 +251,7 @@ namespace RetroSpy
             return label;
         }
 
-        private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
+        private void Reader_ControllerStateChanged(object? reader, ControllerStateEventArgs e)
         {
             e = _blinkFilter.Process(e);
 
@@ -658,9 +665,9 @@ namespace RetroSpy
             return img;
         }
 
-        private static bool BgIsActive(string bgName, Collection<string> eligableBgs, Collection<string> ignoreBgs)
+        private static bool BgIsActive(string? bgName, Collection<string>? eligableBgs, Collection<string>? ignoreBgs)
         {
-            return !ignoreBgs.Contains(bgName) && (eligableBgs.Count == 0 || eligableBgs.Contains(bgName));
+            return ignoreBgs?.Contains(bgName ?? string.Empty) == false && (eligableBgs?.Count == 0 || eligableBgs?.Contains(bgName) == true);
         }
 
         /// Expose the enabled status of the low-pass filter for data binding.

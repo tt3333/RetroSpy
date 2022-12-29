@@ -1,122 +1,147 @@
 ﻿
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Formats.Tga;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.IO;
-
+using System.Runtime.InteropServices;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace RetroSpy
 {
+    public struct Pixel : IEquatable<Pixel>
+    {
+        public Pixel(byte? red, byte? green, byte? blue, byte? alpha)
+        {
+            Red = red ?? 0;
+            Green = green ?? 0;
+            Blue = blue ?? 0;
+            Alpha = alpha ?? 0;
+        }
+
+        public byte Red { get; set; }
+        public byte Green { get; set; }
+        public byte Blue { get; set; }
+        public byte Alpha { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            if ((obj == null) || !GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Pixel p = (Pixel)obj;
+                return (Red == p.Red) && (Green == p.Green) && (Blue == p.Blue) && (Alpha == p.Alpha);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return (Red.GetHashCode() * 17) + (Green.GetHashCode() * 17) + (Blue.GetHashCode() * 17) + (Alpha.GetHashCode() * 17);
+        }
+
+        public static bool operator ==(Pixel left, Pixel right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Pixel left, Pixel right)
+        {
+            return !(left == right);
+        }
+
+        public bool Equals(Pixel other)
+        {
+            return (Red == other.Red) && (Green == other.Green) && (Blue == other.Blue) && (Alpha == other.Alpha);
+        }
+    }
 
     public class BitmapPixelMaker
     {
-        // The bitmap's size.
-        private readonly int Width;
-        private readonly int Height;
-
-        // The pixel array.
-        private readonly byte[] Pixels;
-
-        // The number of bytes per row.
-        private readonly int Stride;
-
-        // Constructor. Width and height required.
+        // The raw pixels.
+        private Image<Bgra32> Pixels;
         public BitmapPixelMaker(int width, int height)
         {
-            // Save the width and height.
-            Width = width;
-            Height = height;
-
-            // Create the pixel array.
-            Pixels = new byte[width * height * 4];
-
-            // Calculate the stride.
-            Stride = width * 4;
+            Pixels = new Image<Bgra32>(width, height);
         }
 
         // Get a pixel's value.
-        public void GetPixel(int x, int y, out byte red, out byte green, out byte blue, out byte alpha)
+        public Pixel GetPixel(int x, int y)
         {
-            int index = (y * Stride) + (x * 4);
-            blue = Pixels[index++];
-            green = Pixels[index++];
-            red = Pixels[index++];
-            alpha = Pixels[index];
+            Bgra32 pixel = Pixels[x, y];
+
+            Pixel retVal = new Pixel();
+
+            retVal.Blue = pixel.B;
+            retVal.Green = pixel.G;
+            retVal.Red = pixel.R;
+            retVal.Alpha = pixel.A;
+
+            return retVal;
         }
 
         public byte GetBlue(int x, int y)
         {
-            return Pixels[(y * Stride) + (x * 4)];
+            return Pixels[x, y].B;
         }
         public byte GetGreen(int x, int y)
         {
-            return Pixels[(y * Stride) + (x * 4) + 1];
+            return Pixels[x, y].G;
         }
         public byte GetRed(int x, int y)
         {
-            return Pixels[(y * Stride) + (x * 4) + 2];
+            return Pixels[x, y].R;
         }
         public byte GetAlpha(int x, int y)
         {
-            return Pixels[(y * Stride) + (x * 4) + 3];
+            return Pixels[x, y].A;
         }
 
         // Set a pixel's value.
-        public void SetPixel(int x, int y, byte red, byte green, byte blue, byte alpha)
+        public void SetPixel(int x, int y, Pixel color)
         {
-            int index = (y * Stride) + (x * 4);
-            Pixels[index++] = blue;
-            Pixels[index++] = green;
-            Pixels[index++] = red;
-            Pixels[index++] = alpha;
+            Pixels[x, y] = new Bgra32(color.Red, color.Green, color.Blue, color.Alpha);
         }
+
         public void SetBlue(int x, int y, byte blue)
         {
-            Pixels[(y * Stride) + (x * 4)] = blue;
+            Bgra32 pixel = Pixels[x, y];
+            Pixels[x, y] = new Bgra32(pixel.R, pixel.G, blue, pixel.A);
         }
         public void SetGreen(int x, int y, byte green)
         {
-            Pixels[(y * Stride) + (x * 4) + 1] = green;
+            Bgra32 pixel = Pixels[x, y];
+            Pixels[x, y] = new Bgra32(pixel.R, green, pixel.B, pixel.A);
         }
         public void SetRed(int x, int y, byte red)
         {
-            Pixels[(y * Stride) + (x * 4) + 2] = red;
+            Bgra32 pixel = Pixels[x, y];
+            Pixels[x, y] = new Bgra32(red, pixel.G, pixel.B, pixel.A);
         }
         public void SetAlpha(int x, int y, byte alpha)
         {
-            Pixels[(y * Stride) + (x * 4) + 3] = alpha;
+            Bgra32 pixel = Pixels[x, y];
+            Pixels[x, y] = new Bgra32(pixel.R, pixel.G, pixel.B, alpha);
         }
 
-        public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
+        public void SetRect(int x1, int y1, int width, int height, byte? red, byte? green, byte? blue)
         {
             for (int i = x1; i < width + x1; ++i)
             {
                 for (int j = y1; j < height + y1; ++j)
                 {
                     SetAlpha(i, j, 255);
-                    SetRed(i, j, red);
-                    SetGreen(i, j, green);
-                    SetBlue(i, j, blue);
+                    SetRed(i, j, red ?? 0);
+                    SetGreen(i, j, green ?? 0);
+                    SetBlue(i, j, blue ?? 0);
 
-                }
-            }
-        }
-
-        public void ReplaceColor(byte oldRed, byte oldGreen, byte oldBlue, byte newRed, byte newGreen, byte newBlue)
-        {
-
-            for (int i = 0; i < Width; ++i)
-            {
-                for (int j = 0; j < Height; ++j)
-                {
-                    GetPixel(i, j, out byte red, out byte green, out byte blue, out byte alpha);
-                    if (red == oldRed && green == oldGreen && blue == oldBlue)
-                    {
-                        SetPixel(i, j, newRed, newGreen, newBlue, alpha);
-                    }
                 }
             }
         }
@@ -124,14 +149,13 @@ namespace RetroSpy
         // Set all pixels to a specific color.
         public void SetColor(byte red, byte green, byte blue, byte alpha)
         {
-            int num_bytes = Width * Height * 4;
-            int index = 0;
-            while (index < num_bytes)
+            for (int i = 0; i < Pixels.Width; ++i)
             {
-                Pixels[index++] = blue;
-                Pixels[index++] = green;
-                Pixels[index++] = red;
-                Pixels[index++] = alpha;
+                for (int j = 0; j < Pixels.Height; ++j)
+                {
+                    Pixels[i, j].FromAbgr32(new Abgr32(blue, green, red, alpha));
+
+                }
             }
         }
 
@@ -143,19 +167,45 @@ namespace RetroSpy
 
         public struct GBImage
         {
-            public SixLabors.ImageSharp.Image<Bgra32> _rawImage;
+            public Image _rawImage;
             public Bitmap _bitmap;
         }
 
+        public void ReplaceColor(Pixel oldColor, Pixel newColor)
+        {
+            for (int i = 0; i < Pixels.Width; ++i)
+            {
+                for (int j = 0; j < Pixels.Height; ++j)
+                {
+                    Pixel pixel = GetPixel(i, j);
+                    if (pixel == oldColor)
+                    {
+                        SetPixel(i, j, newColor);
+                    }
+                }
+            }
+        }
+
+        public void SetRawImage(System.Drawing.Bitmap bmp)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                using (var stream = new MemoryStream())
+                {
+                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    stream.Position = 0;
+                    Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
+                }
+            }
+        }
 
         // Use the pixel data to create a WriteableBitmap.
         public GBImage MakeBitmap(double dpiX, double dpiY)
         {
-            GBImage retVal = new GBImage
-            {
-                _rawImage = SixLabors.ImageSharp.Image.LoadPixelData<Bgra32>(Pixels, Width, Height)
-            };
+            GBImage retVal = new GBImage();
 
+            retVal._rawImage = Pixels;
+   
             using (MemoryStream ms = new MemoryStream())
             {
                 retVal._rawImage.Save(ms, BmpFormat.Instance);

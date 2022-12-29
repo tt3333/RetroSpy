@@ -8,12 +8,97 @@
 	<Grid x:Name="GameBoyPrinterEmulatorWindowGrid" Height="432" Width="480">
 		<Grid.ContextMenu>
 			<ContextMenu>
-				<MenuItem Header="Save As..." Click="SaveAs_Click" />
+				<MenuItem Header="Save As..."  />
 				<Separator/>
-				<MenuItem Header="Use DMG Color Palette" Click="DMGPaletteEnabled_Click" >
-					<MenuItem.Icon>
-						<CheckBox Name="DMGCheckbox" Width="20" BorderThickness="0" Click="DMGPaletteEnabled_Click"></CheckBox>
-					</MenuItem.Icon>
+				<MenuItem Header="Palette">
+					<MenuItem Name="Palette_Grayscale" Header="Grayscale" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GrayscaleCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_DMG" Header="DMG" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="DMGCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_GBPocket" Header="GameBoy Pocket" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GBPocketCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_GBCUS" Header="GameBoy Color EU/US" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GBCUSCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_GBCJP" Header="GameBoy Color JP" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GBCJPCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_BGB" Header="BGB" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="BGBCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_GKGray" Header="Graphix Kid Gray" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GKGrayCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_GKGreen" Header="Graphix Kid Green" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="GKGreenCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_BZ" Header="Black Zero" Click="Palette_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="BZCheckbox" Width="20" BorderThickness="0" Click="Palette_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Palette_Games" Header="Games" />
+				</MenuItem>
+				<MenuItem Header="Print Size">
+					<MenuItem Name="Size_1x" Header="1x" Click="Size_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="x1Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_2x" Header="2x" Click="Size_Click"  >
+						<MenuItem.Icon>
+							<CheckBox Name="x2Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_3x" Header="3x" Click="Size_Click"  >
+						<MenuItem.Icon>
+							<CheckBox Name="x3Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_4x" Header="4x" Click="Size_Click"  >
+						<MenuItem.Icon>
+							<CheckBox Name="x4Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_5x" Header="5x" Click="Size_Click"  >
+						<MenuItem.Icon>
+							<CheckBox Name="x5Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_6x" Header="6x" Click="Size_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="x6Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_7x" Header="7x" Click="Size_Click" >
+						<MenuItem.Icon>
+							<CheckBox Name="x7Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Name="Size_8x" Header="8x" Click="Size_Click"  >
+						<MenuItem.Icon>
+							<CheckBox Name="x8Checkbox" Width="20" BorderThickness="0" Click="Size_Click"></CheckBox>
+						</MenuItem.Icon>
+					</MenuItem>
 				</MenuItem>
 			</ContextMenu>
 		</Grid.ContextMenu>

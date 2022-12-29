@@ -9,18 +9,19 @@ using SixLabors.ImageSharp.Formats.Tga;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace GBPemu
 {
     public struct Pixel : IEquatable<Pixel>
     {
-        public Pixel(byte red, byte green, byte blue, byte alpha)
+        public Pixel(byte? red, byte? green, byte? blue, byte? alpha)
         {
-            Red = red;
-            Green = green;
-            Blue = blue;
-            Alpha = alpha;
+            Red = red ?? 0;
+            Green = green ?? 0;
+            Blue = blue ?? 0;
+            Alpha = alpha ?? 0;
         }
 
         public byte Red { get; set; }
@@ -28,7 +29,7 @@ namespace GBPemu
         public byte Blue { get; set; }
         public byte Alpha { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if ((obj == null) || !GetType().Equals(obj.GetType()))
             {
@@ -130,16 +131,16 @@ namespace GBPemu
             Pixels[x, y] = new Bgra32(pixel.R, pixel.G, pixel.B, alpha);
         }
 
-        public void SetRect(int x1, int y1, int width, int height, byte red, byte green, byte blue)
+        public void SetRect(int x1, int y1, int width, int height, byte? red, byte? green, byte? blue)
         {
             for (int i = x1; i < width + x1; ++i)
             {
                 for (int j = y1; j < height + y1; ++j)
                 {
                     SetAlpha(i, j, 255);
-                    SetRed(i, j, red);
-                    SetGreen(i, j, green);
-                    SetBlue(i, j, blue);
+                    SetRed(i, j, red ?? 0);
+                    SetGreen(i, j, green ?? 0);
+                    SetBlue(i, j, blue ?? 0);
 
                 }
             }
@@ -187,11 +188,14 @@ namespace GBPemu
 
         public void SetRawImage(System.Drawing.Bitmap bmp)
         {
-            using (var stream = new MemoryStream())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                stream.Position = 0;
-                Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
+                using (var stream = new MemoryStream())
+                {
+                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    stream.Position = 0;
+                    Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
+                }
             }
         }
 

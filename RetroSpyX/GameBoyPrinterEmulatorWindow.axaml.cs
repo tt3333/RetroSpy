@@ -1,15 +1,16 @@
-using Avalonia.Controls;
-using System;
-using RetroSpy.Readers;
-using System.ComponentModel;
-using Avalonia.Interactivity;
-using Avalonia.Media.Imaging;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using System.Globalization;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
+using System.Globalization;
+using System.IO;
+using System;
+using static RetroSpy.BitmapPixelMaker;
+using Avalonia.Interactivity;
+using Avalonia.Collections;
+using Avalonia.LogicalTree;
+using RetroSpy.Readers;
 
 namespace RetroSpy
 {
@@ -19,66 +20,472 @@ namespace RetroSpy
         private readonly int TILE_PIXEL_HEIGHT = 8;
         private readonly int TILES_PER_LINE = 20; // Gameboy Printer Tile Constant
 
-        private readonly byte[] colors_red = { 0xff, 0xaa, 0x55, 0x00 };
-        private readonly byte[] colors_green = { 0xff, 0xaa, 0x55, 0x00 };
-        private readonly byte[] colors_blue = { 0xff, 0xaa, 0x55, 0x00 };
-
-        private readonly byte[] DMG_colors_red = { 0x9b, 0x8b, 0x30, 0x0f };
-        private readonly byte[] DMG_colors_green = { 0xbc, 0xac, 0x62, 0x38 };
-        private readonly byte[] DMG_colors_blue = { 0x0f, 0x0f, 0x30, 0x0f };
+        private readonly byte[][][] palettes = {
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 },
+                                                    new byte[] { 0xff, 0xaa, 0x55, 0x00 },
+                                                    new byte[]  { 0xff, 0xaa, 0x55, 0x00 }
+                                                },   // Grayscale
+                                                new byte[][] {
+                                                    new byte[] { 0x9b, 0x77, 0x30, 0x0f },
+                                                    new byte[] { 0xbc, 0xa1, 0x62, 0x38 },
+                                                    new byte[] { 0x0f, 0x12, 0x30, 0x0f }
+                                                },   // DMG
+                                                new byte[][] {
+                                                    new byte[] { 0xc4, 0x8b, 0x4d, 0x1f },
+                                                    new byte[] { 0xcf, 0x95, 0x53, 0x1f },
+                                                    new byte[] { 0xa1, 0x6d, 0x3c, 0x1f }
+                                                },   // GameBoy Pocket
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0x7b, 0x01, 0x00 },
+                                                    new byte[] { 0xff, 0xff, 0x63, 0x00 },
+                                                    new byte[] { 0xff, 0x30, 0xc6, 0x00 }
+                                                },   // GameBoy Color EU/US
+                                                new byte[][] {
+                                                    new byte[] { 0xff, 0xff, 0x83, 0x00 },
+                                                    new byte[] { 0xff, 0xad, 0x31, 0x00 },
+                                                    new byte[] { 0xff, 0x63, 0x00, 0x00 }
+                                                },   // GameBoy Color JP
+                                                new byte[][] {
+                                                    new byte[] { 0xe0, 0x88, 0x34, 0x08 },
+                                                    new byte[] { 0xf8, 0xc0, 0x68, 0x18 },
+                                                    new byte[] { 0xd0, 0x70, 0x56, 0x20 }
+                                                },   // BGB
+                                                new byte[][] {
+                                                    new byte[] { 0xe0, 0xa8, 0x70, 0x2b },
+                                                    new byte[] { 0xdb, 0x9f, 0x6b, 0x2b },
+                                                    new byte[] { 0xcd, 0x94, 0x66, 0x26 }
+                                                },   // GraphixKid Gray
+                                                new byte[][] {
+                                                    new byte[] { 0x7e, 0xab, 0x7b, 0x4c },
+                                                    new byte[] { 0x84, 0xc3, 0x92, 0x62 },
+                                                    new byte[] { 0xb4, 0x96, 0x78, 0x5a }
+                                                },   // GraphixKid Green
+                                                new byte[][] {
+                                                    new byte[] { 0x7e, 0x57, 0x38, 0x2e },
+                                                    new byte[] { 0x84, 0x7b, 0x5d, 0x46 },
+                                                    new byte[] { 0x16, 0x46, 0x49, 0x3d }
+                                                }    // Black Zero
+        };
 
         private readonly Avalonia.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
+        private List<byte[]>? decompressedTiles;
+        int tile_height_count;
         private readonly IControllerReader _reader;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private int PrintSize;
 
-        BitmapPixelMaker.GBImage _wbitmap;
-
-        private void NotifyPropertyChanged(string propertyName)
+        private class GamePalette
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            public GamePalette(string name, byte[][] colors)
+            {
+                Name = name;
+                Colors = colors;
+            }
+
+            public string Name;
+            public byte[][] Colors;
+        };
+
+        private struct Game
+        {
+            public Game(string name)
+            {
+                Name = name;
+                Palettes = new List<GamePalette>();
+            }
+
+            public string Name;
+            public List<GamePalette> Palettes;
         }
 
-        private bool _DMGPaletteEnabled;
+        private List<Game>? games;
 
-        public bool DMGPaletteEnabled
+        private void ParseGamePalettes()
         {
-            get => _DMGPaletteEnabled;
-            set
+            bool getMaxRGBValue = false;
+            games = new List<Game>();
+            int currentGame = 0;
+            byte maxRGBValue = 255;
+            List<GamePalette> newPalettes = new List<GamePalette>();
+            bool lookingForGame = true;
+
+            foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
             {
-                _DMGPaletteEnabled = value;
-                NotifyPropertyChanged(nameof(DMGPaletteEnabled));
+                if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
+                {
+                    var gameName = line.Split(':')[1];
+                    Game g = new Game(gameName);
+                    games.Add(g);
+                    getMaxRGBValue = true;
+                    lookingForGame = false;
+                    continue;
+                }
+
+                if (lookingForGame)
+                    break;
+
+                if (lookingForGame == false && line.StartsWith("EndGame", System.StringComparison.Ordinal))
+                {
+                    currentGame++;
+                    lookingForGame = true;
+                    continue;
+                }
+
+                if (getMaxRGBValue)
+                {
+                    maxRGBValue = byte.Parse(line, CultureInfo.CurrentCulture);
+                    getMaxRGBValue = false;
+                    continue;
+                }
+
+                byte[][] colorValues = new byte[3][];
+                colorValues[0] = new byte[4];
+                colorValues[1] = new byte[4];
+                colorValues[2] = new byte[4];
+
+                var colors = line.Split(',');
+                var paletteName = colors[0];
+                for (int i = 1; i < 5; ++i)
+                {
+                    var comps = colors[i].Split(' ');
+                    colorValues[0][i - 1] = (byte)(((byte.Parse(comps[0], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                    colorValues[1][i - 1] = (byte)(((byte.Parse(comps[1], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                    colorValues[2][i - 1] = (byte)(((byte.Parse(comps[2], CultureInfo.CurrentCulture) - 0.0) / (maxRGBValue - 0.0)) * (255.0 - 0.0) + 0.0);
+                }
+
+                games[currentGame].Palettes.Add(new GamePalette(paletteName, colorValues));
+            }
+
+
+            for (int i = 0; i < currentGame; ++i)
+            {
+                var gameMenu = new MenuItem
+                {
+                    Header = games[i].Name
+                };
+
+                for (int j = 0; j < games[i].Palettes.Count; ++j)
+                {
+                    var paletteMenu = new MenuItem
+                    {
+                        Header = games[i].Palettes[j].Name
+                    };
+
+                    var paletteCheckbox = new CheckBox
+                    {
+                        Name = String.Format("{0}{1}", games[i].Palettes[j].Name, "CheckBox"),
+                        Width = 20,
+                        BorderThickness = new Thickness(20)
+                    };
+
+                    paletteMenu.Click += Game_Palette_Click;
+                    paletteCheckbox.Click += Game_Palette_Click;
+
+                    paletteMenu.Icon = paletteCheckbox;
+
+                    // This is freaking dangerous!
+                    ((AvaloniaList<object>)gameMenu.Items).Add(paletteMenu);
+    
+                }
+
+                // Still dangerous!
+                ((AvaloniaList<object>)Palette_Games.Items).Add(gameMenu);
+            }
+
+        }
+
+        void ClearGamePalette(MenuItem? menuItem)
+        {
+            foreach (MenuItem game in Palette_Games.Items)
+            {
+                foreach (MenuItem palette in game.Items)
+                {
+                    if (palette == menuItem)
+                        ((CheckBox)palette.Icon).IsChecked = true;
+                    else
+                        ((CheckBox)palette.Icon).IsChecked = false;
+                }
             }
         }
 
-        private void DMGPaletteEnabled_Click(object sender, RoutedEventArgs e)
+        private void Game_Palette_Click(object? sender, EventArgs e)
         {
-            if (sender is MenuItem)
-                DMGCheckbox.IsChecked = !DMGPaletteEnabled;
+            MenuItem? menuItem = null;
 
-            for (int i = 0; i < 4; ++i)
+            if (sender is CheckBox)
             {
-                if (DMGPaletteEnabled)
+                menuItem = (MenuItem)((CheckBox)sender).GetLogicalParent();
+            }
+            else
+                menuItem = (MenuItem?)sender;
+
+            //Clear Checks
+            CheckPalette(9);
+            ClearGamePalette(menuItem);
+
+            GamePalette? newPalette = null;
+
+            string? gameName = (string?)(((MenuItem?)menuItem?.Parent)?.Header);
+
+            if (games != null)
+            {
+                foreach (Game game in games)
                 {
-                    _imageBuffer.ReplaceColor(DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i],
-                                                colors_red[i], colors_green[i], colors_blue[i]);
+                    if (gameName == game.Name)
+                    {
+                        foreach (GamePalette palette in game.Palettes)
+                        {
+                            if (palette.Name == (string?)menuItem?.Header)
+                            {
+                                newPalette = palette;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (decompressedTiles == null)
+            {
+                if (SelectedPalette != -1)
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                                new Pixel(newPalette?.Colors[0][i], newPalette?.Colors[1][i], newPalette?.Colors[2][i], 255));
+                    }
                 }
                 else
                 {
-                    _imageBuffer.ReplaceColor(colors_red[i], colors_green[i], colors_blue[i],
-                                                DMG_colors_red[i], DMG_colors_green[i], DMG_colors_blue[i]);
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette?.Colors[0][i], SelectedGamePalette?.Colors[1][i], SelectedGamePalette?.Colors[2][i], 255),
+                                                new Pixel(newPalette?.Colors[0][i], newPalette?.Colors[1][i], newPalette?.Colors[2][i], 255));
+                    }
                 }
             }
-            _wbitmap = _imageBuffer.MakeBitmap(96, 96);
-            _image.Source = _wbitmap._bitmap;
 
-            DMGPaletteEnabled = !DMGPaletteEnabled;
+            SelectedPalette = -1;
+            SelectedGamePalette = newPalette;
+
+            DisplayImage(PrintSize, PrintSize);
+        }
+
+        private void Size_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == Size_1x || sender == x1Checkbox)
+            {
+                if (sender is MenuItem)
+                    x1Checkbox.IsChecked = true;
+
+                PrintSize = 1;
+            }
+            else if (sender == Size_2x || sender == x2Checkbox)
+            {
+                if (sender is MenuItem)
+                    x2Checkbox.IsChecked = true;
+
+                PrintSize = 2;
+            }
+            else if (sender == Size_3x || sender == x3Checkbox)
+            {
+                if (sender is MenuItem)
+                    x3Checkbox.IsChecked = true;
+
+                PrintSize = 3;
+            }
+            else if (sender == Size_4x || sender == x4Checkbox)
+            {
+                if (sender is MenuItem)
+                    x4Checkbox.IsChecked = true;
+
+                PrintSize = 4;
+            }
+            else if (sender == Size_5x || sender == x5Checkbox)
+            {
+                if (sender is MenuItem)
+                    x5Checkbox.IsChecked = true;
+
+                PrintSize = 5;
+            }
+            else if (sender == Size_6x || sender == x6Checkbox)
+            {
+                if (sender is MenuItem)
+                    x6Checkbox.IsChecked = true;
+
+                PrintSize = 6;
+            }
+            else if (sender == Size_7x || sender == x7Checkbox)
+            {
+                if (sender is MenuItem)
+                    x7Checkbox.IsChecked = true;
+
+                PrintSize = 7;
+            }
+            else if (sender == Size_8x || sender == x8Checkbox)
+            {
+                if (sender is MenuItem)
+                    x8Checkbox.IsChecked = true;
+
+                PrintSize = 8;
+            }
+            CheckSize(PrintSize);
+
+            Properties.Settings.Default.PrintSize = PrintSize;
+
+            _imageBuffer = new BitmapPixelMaker(PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE, PrintSize * TILE_PIXEL_HEIGHT * tile_height_count);
+
+            _image.Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count;
+            _image.Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            GameBoyPrinterEmulatorWindowGrid.Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count; ;
+            GameBoyPrinterEmulatorWindowGrid.Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+            Height = PrintSize * TILE_PIXEL_HEIGHT * tile_height_count;
+            Width = PrintSize * TILE_PIXEL_WIDTH * TILES_PER_LINE;
+
+            DisplayImage(PrintSize, PrintSize);
+        }
+
+        private void CheckSize(int sizeId)
+        {
+            x1Checkbox.IsChecked = sizeId == 1;
+            x2Checkbox.IsChecked = sizeId == 2;
+            x3Checkbox.IsChecked = sizeId == 3;
+            x4Checkbox.IsChecked = sizeId == 4;
+            x5Checkbox.IsChecked = sizeId == 5;
+            x6Checkbox.IsChecked = sizeId == 6;
+            x7Checkbox.IsChecked = sizeId == 7;
+            x8Checkbox.IsChecked = sizeId == 8;
+        }
+
+        private int SelectedPalette;
+        private GamePalette? SelectedGamePalette;
+
+        private void CheckPalette(int paletteId)
+        {
+            GrayscaleCheckbox.IsChecked = paletteId == 0;
+            DMGCheckbox.IsChecked = paletteId == 1;
+            GBPocketCheckbox.IsChecked = paletteId == 2;
+            GBCUSCheckbox.IsChecked = paletteId == 3;
+            GBCJPCheckbox.IsChecked = paletteId == 4;
+            BGBCheckbox.IsChecked = paletteId == 5;
+            GKGrayCheckbox.IsChecked = paletteId == 6;
+            GKGreenCheckbox.IsChecked = paletteId == 7;
+            BZCheckbox.IsChecked = paletteId == 8;
+        }
+
+        private void Palette_Click(object sender, RoutedEventArgs e)
+        {
+            int newPalette = 0;
+
+            if (sender == Palette_DMG || sender == DMGCheckbox)
+            {
+                if (sender is MenuItem)
+                    DMGCheckbox.IsChecked = true;
+
+                newPalette = 1;
+            }
+            else if (sender == Palette_GBPocket || sender == GBPocketCheckbox)
+            {
+                if (sender is MenuItem)
+                    GBPocketCheckbox.IsChecked = true;
+
+                newPalette = 2;
+            }
+            else if (sender == Palette_GBCUS || sender == GBCUSCheckbox)
+            {
+                if (sender is MenuItem)
+                    GBCUSCheckbox.IsChecked = true;
+
+                newPalette = 3;
+            }
+            else if (sender == Palette_GBCJP || sender == GBCJPCheckbox)
+            {
+                if (sender is MenuItem)
+                    GBCJPCheckbox.IsChecked = true;
+
+                newPalette = 4;
+            }
+            else if (sender == Palette_BGB || sender == BGBCheckbox)
+            {
+                if (sender is MenuItem)
+                    BGBCheckbox.IsChecked = true;
+
+                newPalette = 5;
+            }
+            else if (sender == Palette_GKGray || sender == GKGrayCheckbox)
+            {
+                if (sender is MenuItem)
+                    GKGrayCheckbox.IsChecked = true;
+
+                newPalette = 6;
+            }
+            else if (sender == Palette_GKGreen || sender == GKGreenCheckbox)
+            {
+                if (sender is MenuItem)
+                    GKGreenCheckbox.IsChecked = true;
+
+                newPalette = 7;
+            }
+            else if (sender == Palette_BZ || sender == BZCheckbox)
+            {
+                if (sender is MenuItem)
+                    BZCheckbox.IsChecked = true;
+
+                newPalette = 8;
+            }
+
+            CheckPalette(newPalette);
+            ClearGamePalette(null);
+
+            if (decompressedTiles == null)
+            {
+                if (SelectedPalette != -1)
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
+                                                  new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette?.Colors[0][i], SelectedGamePalette?.Colors[1][i], SelectedGamePalette?.Colors[2][i], 255),
+                              new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
+                    }
+                }
+            }
+
+            SelectedPalette = newPalette;
+            Properties.Settings.Default.SelectedPalette = SelectedPalette;
+
+            DisplayImage(PrintSize, PrintSize);
+        }
+
+        private void DisplayError()
+        {
+            SelectedPalette = Properties.Settings.Default.SelectedPalette;
+            PrintSize = Properties.Settings.Default.PrintSize;
+
+            _imageBuffer.SetRawImage(Properties.Resources.ErrorImage);
+
+            BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+            // Set the Image source.
+            _image.Source = wbitmap._bitmap;
+
+            GameBoyPrinterEmulatorWindowGrid.Height = 432;
+            GameBoyPrinterEmulatorWindowGrid.Width = 480;
+            Height = 432;
+            Width = 480;
         }
 
         private SetupWindow _sw;
+        private bool _firstOpenHasHappened = false;
 
-        bool _firstOpenHasHappened = false;
+
 
         private void Window_Open(object sender, EventArgs e)
         {
@@ -98,29 +505,38 @@ namespace RetroSpy
             throw new NotImplementedException();
         }
 
-        public GameBoyPrinterEmulatorWindow(SetupWindow sw, IControllerReader reader)
+        public GameBoyPrinterEmulatorWindow(IControllerReader? reader, SetupWindow sw)
         {
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
+
             _sw = sw;
+            if (Properties.Settings.Default.UpgradeRequired)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeRequired = false;
+                Properties.Settings.Default.Save();
+            }
 
             InitializeComponent();
             DataContext = this;
 
+            ParseGamePalettes();
+
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 
-            DMGPaletteEnabled = Properties.Settings.Default.DMGPaletteEnabled;
+            SelectedPalette = Properties.Settings.Default.SelectedPalette;
+            if (SelectedPalette == -1)  // This shouldn't happen, but it probably can in certain corner cases
+                SelectedPalette = 1;
 
+            PrintSize = Properties.Settings.Default.PrintSize;
             _imageBuffer = new BitmapPixelMaker(480, 432);
+            _imageBuffer.SetRawImage(Properties.Resources.PrintImage);
 
-            if (DMGPaletteEnabled)
-            {
-                _imageBuffer.SetColor(DMG_colors_red[3], DMG_colors_green[3], DMG_colors_blue[3], 255);
-            }
-            else
-            {
-                _imageBuffer.SetColor(colors_red[3], colors_green[3], colors_blue[3], 255);
-            }
+            _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
+            _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
 
-            _wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
 
             // Create an Image to display the bitmap.
             _image = new Avalonia.Controls.Image
@@ -130,67 +546,54 @@ namespace RetroSpy
             };
 
             GameBoyPrinterEmulatorWindowGrid.Children.Add(_image);
-            _image.Source = _wbitmap._bitmap;
+            _image.Source = wbitmap._bitmap;
 
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
+
+            CheckPalette(SelectedPalette);
+            CheckSize(PrintSize);
+
         }
 
-        private void Reader_ControllerDisconnected(object sender, EventArgs e)
+        private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {
             if (Dispatcher.UIThread.CheckAccess())
             {
-                Close();
+                Hide();
+                _sw.Show();
             }
             else
             {
                 Dispatcher.UIThread.Post(() =>
                 {
-                    Close();
+                    Hide();
+                    _sw.Show();
                 });
             }
         }
 
-        private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
+        private void Reader_ControllerStateChanged(object? reader, ControllerStateEventArgs e)
         {
+
             _imageBuffer.SetColor(0, 0, 0, 255);
 
-            int square_width = 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
+            int square_width = PrintSize;// 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
             int square_height = square_width;
 
-            string[] tiles_rawBytes_array = e.RawPrinterData.Split('\n');
+            string[]? tiles_rawBytes_array = e?.RawPrinterData?.Split('\n');
 
-            int total_tile_count = 0;
+            decompressedTiles = new List<byte[]>();
 
-            for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
+            int total_tile_count = Decompress(tiles_rawBytes_array, decompressedTiles);
+
+            tile_height_count = total_tile_count / TILES_PER_LINE;
+
+            if (tile_height_count == 0)
             {
-                string tile_element = tiles_rawBytes_array[tile_i];
-
-                // Check for invalid raw lines
-                if (tile_element.Length == 0)
-                {   // Skip lines with no bytes (can happen with .split() )
-                    continue;
-                }
-                else if (tile_element.StartsWith("!", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("#", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("//", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                else if (tile_element.StartsWith("{", StringComparison.Ordinal))
-                {   // Skip lines used for comments
-                    continue;
-                }
-                total_tile_count++;
+                DisplayError();
+                return;
             }
-
-            int tile_height_count = total_tile_count / TILES_PER_LINE;
 
             _imageBuffer = new BitmapPixelMaker(square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE, square_height * TILE_PIXEL_HEIGHT * tile_height_count);
 
@@ -201,7 +604,73 @@ namespace RetroSpy
             Height = square_height * TILE_PIXEL_HEIGHT * tile_height_count;
             Width = square_width * TILE_PIXEL_WIDTH * TILES_PER_LINE;
 
-            int tile_count = 0;
+            DisplayImage(square_width, square_height);
+
+        }
+
+        private void DisplayImage(int square_width, int square_height)
+        {
+            if (decompressedTiles != null)
+            {
+                for (int i = 0; i < decompressedTiles.Count; i++)
+                {
+                    int tile_x_offset = i % TILES_PER_LINE;
+                    int tile_y_offset = i / TILES_PER_LINE;
+
+                    byte[] pixels = Decode(decompressedTiles[i]);
+
+                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
+                }
+            }
+
+            //imageBuffer.SetColor(0, 0, 0);
+            // Convert the pixel data into a WriteableBitmap.
+            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+
+            // Set the Image source.
+            _image.Source = wbitmap._bitmap;
+        }
+
+        private class Tile
+        {
+            public byte[] tile_bytes = new byte[16];
+            private int tile_bytes_idx;
+
+            public bool Add(byte b)
+            {
+                tile_bytes[tile_bytes_idx++] = b;
+                return tile_bytes_idx == 16;
+            }
+        }
+
+        private class DecompressState
+        {
+            public DecompressState(bool _isCompressed)
+            {
+
+                loopRunLength = 0;
+                compressedRun = false;
+                repeatByteGet = false;
+                buffIndex = 0;
+                isCompressed = _isCompressed;
+            }
+
+            public int loopRunLength;
+            public bool compressedRun;
+            public bool repeatByteGet;
+            public int buffIndex;
+            public byte repeatByte;
+            public bool isCompressed;
+        }
+
+        private static int Decompress(string[]? tiles_rawBytes_array, List<byte[]> decompressedTiles)
+        {
+            if (tiles_rawBytes_array == null)
+                return 0;
+
+            List<byte[]> compressedBytes = new List<byte[]>();
+            bool isCompressed = false;
+
 
             for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
@@ -226,36 +695,112 @@ namespace RetroSpy
                 }
                 else if (tile_element.StartsWith("{", StringComparison.Ordinal))
                 {   // Skip lines used for comments
+                    if (tile_element.Contains("\"compressed\":1"))
+                    {
+                        isCompressed = true;
+                    }
                     continue;
                 }
 
-                // Gameboy Tile Offset
-                int tile_x_offset = tile_count % TILES_PER_LINE;
-                int tile_y_offset = tile_count / TILES_PER_LINE;
+                string bytes = tile_element.Replace(" ", "").Replace("\r", "");
 
-                byte[] pixels = Decode(tile_element);
-
-                if (pixels != null)
+                byte[] byteArray = new byte[bytes.Length / 2];
+                for (int i = 0; i < byteArray.Length; i++)
                 {
-                    Paint(_imageBuffer, pixels, square_width, square_height, tile_x_offset, tile_y_offset);
-                }
-                else
-                {
-                    //status = false;
+                    byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
                 }
 
+                compressedBytes.Add(byteArray);
+            }
 
-                // Increment Tile Count Tracker
-                tile_count++;
+            int tile_count = 0;
+
+            DecompressState state = new DecompressState(isCompressed);
+            Tile t = new Tile();
+            for (int i = 0; i < compressedBytes.Count; i++)
+            {
+                bool done;
+                do
+                {
+                    done = !ProcessBuffer(state, compressedBytes[i], t);
+                    if (!done) // Filled a tile, so need a new one
+                    {
+                        decompressedTiles.Add(t.tile_bytes);
+                        tile_count++;
+                        t = new Tile();
+                    }
+
+                } while (!done);
 
             }
 
-            //imageBuffer.SetColor(0, 0, 0);
-            // Convert the pixel data into a WriteableBitmap.
-            _wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            return tile_count;
+        }
 
-            // Set the Image source.
-            _image.Source = _wbitmap._bitmap;
+        private static bool ProcessBuffer(DecompressState state, byte[] buffer, Tile tile)
+        {
+            if (!state.isCompressed)
+            {
+                while (true)
+                {
+                    if (state.buffIndex < buffer.Length)
+                    {
+                        if (tile.Add(buffer[state.buffIndex++]))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        state.buffIndex = 0;
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                while (true)
+                {
+                    if ((state.buffIndex < buffer.Length) || (state.compressedRun && !state.repeatByteGet && (state.loopRunLength != 0)))
+                    {
+                        if (state.loopRunLength == 0)
+                        {
+                            byte b = buffer[state.buffIndex++];
+                            if (b < 128)
+                            {
+                                state.loopRunLength = b + 1;
+                                state.compressedRun = false;
+                            }
+                            else if (b >= 128)
+                            {
+                                state.loopRunLength = b - 128 + 2;
+                                state.compressedRun = true;
+                                state.repeatByteGet = true;
+                            }
+                        }
+                        else if (state.repeatByteGet)
+                        {
+                            state.repeatByte = buffer[state.buffIndex++];
+                            state.repeatByteGet = false;
+                        }
+                        else
+                        {
+                            byte b = (state.compressedRun) ? state.repeatByte : buffer[state.buffIndex++];
+                            state.loopRunLength--;
+
+                            if (tile.Add(b))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        state.buffIndex = 0;
+                        return false;
+                    }
+                }
+            }
         }
 
         private void Paint(BitmapPixelMaker canvas, byte[] pixels, int pixel_width, int pixel_height, int tile_x_offset, int tile_y_offset)
@@ -270,31 +815,32 @@ namespace RetroSpy
                 for (int j = 0; j < TILE_PIXEL_HEIGHT; j++)
                 {   // pixels along the tile's y axis
 
-                    canvas.SetRect(pixel_x_offset + (i * pixel_width),
-                            pixel_y_offset + (j * pixel_height),
-                            pixel_width,
-                            pixel_height,
-                            DMGPaletteEnabled ? DMG_colors_red[pixels[(j * TILE_PIXEL_WIDTH) + i]] : colors_red[pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                            DMGPaletteEnabled ? DMG_colors_green[pixels[(j * TILE_PIXEL_WIDTH) + i]] : colors_green[pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                            DMGPaletteEnabled ? DMG_colors_blue[pixels[(j * TILE_PIXEL_WIDTH) + i]] : colors_blue[pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    if (SelectedPalette != -1)
+                    {
+                        canvas.SetRect(pixel_x_offset + (i * pixel_width),
+                                pixel_y_offset + (j * pixel_height),
+                                pixel_width,
+                                pixel_height,
+                                palettes[SelectedPalette][0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                palettes[SelectedPalette][1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                palettes[SelectedPalette][2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    }
+                    else
+                    {
+                        canvas.SetRect(pixel_x_offset + (i * pixel_width),
+                                pixel_y_offset + (j * pixel_height),
+                                pixel_width,
+                                pixel_height,
+                                SelectedGamePalette?.Colors[0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette?.Colors[1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette?.Colors[2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                    }
                 }
             }
         }
 
-        private byte[] Decode(string rawBytes)
+        private byte[] Decode(byte[] byteArray)
         {
-            string bytes = rawBytes.Replace(" ", "").Replace("\r", "");
-            if (bytes.Length != 32)
-            {
-                return null;
-            }
-
-            byte[] byteArray = new byte[16];
-            for (int i = 0; i < byteArray.Length; i++)
-            {
-                byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
-            }
-
             byte[] pixels = new byte[TILE_PIXEL_WIDTH * TILE_PIXEL_HEIGHT];
             for (int j = 0; j < TILE_PIXEL_HEIGHT; j++)
             {
@@ -305,39 +851,44 @@ namespace RetroSpy
                     pixels[(j * TILE_PIXEL_WIDTH) + i] = (byte)((hiBit << 1) | loBit);
                 }
             }
+
             return pixels;
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
             _reader.Finish();
+            Environment.Exit(0);
         }
 
-        private async void SaveAs_Click(object sender, RoutedEventArgs e)
-        {
+        //private void SaveAs_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SaveFileDialog saveFileDialog = new SaveFileDialog
+        //    {
+        //        AddExtension = true,
+        //        Filter = Properties.Resources.ResourceManager.GetString("PNGFilter", CultureInfo.CurrentUICulture)
+        //    };
+        //    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //    {
+        //        PngBitmapEncoder encoder = new PngBitmapEncoder();
+        //        SaveUsingEncoder(_image, saveFileDialog.FileName, encoder);
+        //    }
+        //    saveFileDialog.Dispose();
+        //}
 
-            SaveFileDialog SaveFileBox = new SaveFileDialog();
-            SaveFileBox.Title = "Save Picture As...";
-            List<FileDialogFilter> Filters = new List<FileDialogFilter>();
-            FileDialogFilter filter = new FileDialogFilter();
-            List<string> extension = new List<string>();
-            extension.Add("png");
-            filter.Extensions = extension;
-            filter.Name = "PNG";
-            Filters.Add(filter);
-            SaveFileBox.Filters = Filters;
+        //private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        //{
+        //    RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+        //    bitmap.Render(visual);
+        //    BitmapFrame frame = BitmapFrame.Create(bitmap);
+        //    encoder.Frames.Add(frame);
 
-            SaveFileBox.DefaultExtension = "png";
-
-            var SettingsFileName = await SaveFileBox.ShowAsync(this);
-
-            if(SettingsFileName != null)
-            {
-                _wbitmap._rawImage.SaveAsPng(SettingsFileName);
-            }
-
-        }
+        //    using (FileStream stream = File.Create(fileName))
+        //    {
+        //        encoder.Save(stream);
+        //    }
+        //}
 
     }
 }

@@ -69,7 +69,7 @@ namespace GBPemu
 
         private readonly Avalonia.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;
-        private List<byte[]> decompressedTiles;
+        private List<byte[]>? decompressedTiles;
         int tile_height_count;
         private readonly IControllerReader _reader;
 
@@ -99,7 +99,7 @@ namespace GBPemu
             public List<GamePalette> Palettes;
         }
 
-        private List<Game> games;
+        private List<Game>? games;
 
         private void ParseGamePalettes()
         {
@@ -195,7 +195,7 @@ namespace GBPemu
 
         }
 
-        void ClearGamePalette(MenuItem menuItem)
+        void ClearGamePalette(MenuItem? menuItem)
         {
             foreach (MenuItem game in Palette_Games.Items)
             {
@@ -209,34 +209,37 @@ namespace GBPemu
             }
         }
 
-        private void Game_Palette_Click(object sender, EventArgs e)
+        private void Game_Palette_Click(object? sender, EventArgs e)
         {
-            MenuItem menuItem = null;
+            MenuItem? menuItem = null;
 
             if (sender is CheckBox)
             {
                 menuItem = (MenuItem)((CheckBox)sender).GetLogicalParent();
             }
             else
-                menuItem = (MenuItem)sender;
+                menuItem = (MenuItem?)sender;
 
             //Clear Checks
             CheckPalette(9);
             ClearGamePalette(menuItem);
 
-            GamePalette newPalette = null;
+            GamePalette? newPalette = null;
 
-            string gameName = (string)(((MenuItem)menuItem.Parent).Header);
+            string? gameName = (string?)(((MenuItem?)menuItem?.Parent)?.Header);
 
-            foreach (Game game in games)
+            if (games != null)
             {
-                if (gameName == game.Name)
+                foreach (Game game in games)
                 {
-                    foreach (GamePalette palette in game.Palettes)
+                    if (gameName == game.Name)
                     {
-                        if (palette.Name == (string)menuItem.Header)
+                        foreach (GamePalette palette in game.Palettes)
                         {
-                            newPalette = palette;
+                            if (palette.Name == (string?)menuItem?.Header)
+                            {
+                                newPalette = palette;
+                            }
                         }
                     }
                 }
@@ -249,15 +252,15 @@ namespace GBPemu
                     for (int i = 0; i < 4; ++i)
                     {
                         _imageBuffer.ReplaceColor(new Pixel(palettes[SelectedPalette][0][i], palettes[SelectedPalette][1][i], palettes[SelectedPalette][2][i], 255),
-                                                new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                                                new Pixel(newPalette?.Colors[0][i], newPalette?.Colors[1][i], newPalette?.Colors[2][i], 255));
                     }
                 }
                 else
                 {
                     for (int i = 0; i < 4; ++i)
                     {
-                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
-                                                new Pixel(newPalette.Colors[0][i], newPalette.Colors[1][i], newPalette.Colors[2][i], 255));
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette?.Colors[0][i], SelectedGamePalette?.Colors[1][i], SelectedGamePalette?.Colors[2][i], 255),
+                                                new Pixel(newPalette?.Colors[0][i], newPalette?.Colors[1][i], newPalette?.Colors[2][i], 255));
                     }
                 }
             }
@@ -355,7 +358,7 @@ namespace GBPemu
         }
 
         private int SelectedPalette;
-        private GamePalette SelectedGamePalette;
+        private GamePalette? SelectedGamePalette;
 
         private void CheckPalette(int paletteId)
         {
@@ -448,7 +451,7 @@ namespace GBPemu
                 {
                     for (int i = 0; i < 4; ++i)
                     {
-                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette.Colors[0][i], SelectedGamePalette.Colors[1][i], SelectedGamePalette.Colors[2][i], 255),
+                        _imageBuffer.ReplaceColor(new Pixel(SelectedGamePalette?.Colors[0][i], SelectedGamePalette?.Colors[1][i], SelectedGamePalette?.Colors[2][i], 255),
                               new Pixel(palettes[newPalette][0][i], palettes[newPalette][1][i], palettes[newPalette][2][i], 255));
                     }
                 }
@@ -549,7 +552,7 @@ namespace GBPemu
 
         }
 
-        private void Reader_ControllerDisconnected(object sender, EventArgs e)
+        private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {
             if (Dispatcher.UIThread.CheckAccess())
             {
@@ -566,7 +569,7 @@ namespace GBPemu
             }
         }
 
-        private void Reader_ControllerStateChanged(object reader, ControllerStateEventArgs e)
+        private void Reader_ControllerStateChanged(object? reader, ControllerStateEventArgs e)
         {
 
             _imageBuffer.SetColor(0, 0, 0, 255);
@@ -574,7 +577,7 @@ namespace GBPemu
             int square_width = PrintSize;// 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
             int square_height = square_width;
 
-            string[] tiles_rawBytes_array = e.RawPrinterData.Split('\n');
+            string[]? tiles_rawBytes_array = e?.RawPrinterData?.Split('\n');
 
             decompressedTiles = new List<byte[]>();
 
@@ -656,10 +659,14 @@ namespace GBPemu
             public bool isCompressed;
         }
 
-        private static int Decompress(string[] tiles_rawBytes_array, List<byte[]> decompressedTiles)
+        private static int Decompress(string[]? tiles_rawBytes_array, List<byte[]> decompressedTiles)
         {
+            if (tiles_rawBytes_array == null)
+                return 0;
+
             List<byte[]> compressedBytes = new List<byte[]>();
             bool isCompressed = false;
+
 
             for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
@@ -820,9 +827,9 @@ namespace GBPemu
                                 pixel_y_offset + (j * pixel_height),
                                 pixel_width,
                                 pixel_height,
-                                SelectedGamePalette.Colors[0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                                SelectedGamePalette.Colors[1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
-                                SelectedGamePalette.Colors[2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
+                                SelectedGamePalette?.Colors[0][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette?.Colors[1][pixels[(j * TILE_PIXEL_WIDTH) + i]],
+                                SelectedGamePalette?.Colors[2][pixels[(j * TILE_PIXEL_WIDTH) + i]]);
                     }
                 }
             }

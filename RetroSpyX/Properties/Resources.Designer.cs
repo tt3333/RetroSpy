@@ -22,7 +22,7 @@ namespace RetroSpy.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace RetroSpy.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RetroSpy.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace RetroSpy.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string About {
+        public static string About {
             get {
                 return ResourceManager.GetString("About", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Element &apos;analog&apos; needs attribute &apos;direction&apos;..
         /// </summary>
-        internal static string AnalogNeedsDirection {
+        public static string AnalogNeedsDirection {
             get {
                 return ResourceManager.GetString("AnalogNeedsDirection", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Element &apos;analogtext&apos; needs attribute &apos;color&apos;..
         /// </summary>
-        internal static string AnalogTextNeedsColor {
+        public static string AnalogTextNeedsColor {
             get {
                 return ResourceManager.GetString("AnalogTextNeedsColor", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Element &apos;analogtext&apos; needs attribute &apos;font&apos;..
         /// </summary>
-        internal static string AnalogTextNeedsFont {
+        public static string AnalogTextNeedsFont {
             get {
                 return ResourceManager.GetString("AnalogTextNeedsFont", resourceCulture);
             }
@@ -99,17 +99,17 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Element &apos;background&apos; should either define &apos;image&apos; with optionally &apos;width&apos; and &apos;height&apos; or both &apos;width&apos; and &apos;height&apos;..
         /// </summary>
-        internal static string BothWidthAndHeight {
+        public static string BothWidthAndHeight {
             get {
                 return ResourceManager.GetString("BothWidthAndHeight", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thu 12/23/2021 18:44:10.92 
+        ///   Looks up a localized string similar to Thu 12/29/2022 12:14:39.30 
         ///.
         /// </summary>
-        internal static string BuildDate {
+        public static string BuildDate {
             get {
                 return ResourceManager.GetString("BuildDate", resourceCulture);
             }
@@ -118,16 +118,26 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to GamepadReader could not find a connected gamepad with the given id..
         /// </summary>
-        internal static string CouldNotConnectToGamePad {
+        public static string CouldNotConnectToGamePad {
             get {
                 return ResourceManager.GetString("CouldNotConnectToGamePad", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ErrorImage {
+            get {
+                object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rangebutton &apos;from&apos; field cannot be greater than &apos;to&apos; field..
         /// </summary>
-        internal static string FromCannotBeGreaterThanTo {
+        public static string FromCannotBeGreaterThanTo {
             get {
                 return ResourceManager.GetString("FromCannotBeGreaterThanTo", resourceCulture);
             }
@@ -136,7 +146,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Connected gamepad could not be acquired..
         /// </summary>
-        internal static string GamepadCouldNotBeAcquired {
+        public static string GamepadCouldNotBeAcquired {
             get {
                 return ResourceManager.GetString("GamepadCouldNotBeAcquired", resourceCulture);
             }
@@ -145,7 +155,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Element &apos;analog&apos; attribute &apos;direction&apos; has illegal value. Valid values are &apos;up&apos;, &apos;down&apos;, &apos;left&apos;, &apos;right&apos;, &apos;fade&apos;..
         /// </summary>
-        internal static string IllegalDirection {
+        public static string IllegalDirection {
             get {
                 return ResourceManager.GetString("IllegalDirection", resourceCulture);
             }
@@ -154,7 +164,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Illegal value specified for skin attribute &apos;type&apos;..
         /// </summary>
-        internal static string IllegalSkinType {
+        public static string IllegalSkinType {
             get {
                 return ResourceManager.GetString("IllegalSkinType", resourceCulture);
             }
@@ -163,7 +173,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Connected keyboard could not be acquired..
         /// </summary>
-        internal static string KeyboardCouldNotBeAcquired {
+        public static string KeyboardCouldNotBeAcquired {
             get {
                 return ResourceManager.GetString("KeyboardCouldNotBeAcquired", resourceCulture);
             }
@@ -172,7 +182,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Connected mouse could not be acquired..
         /// </summary>
-        internal static string MouseCouldNotBeAcquired {
+        public static string MouseCouldNotBeAcquired {
             get {
                 return ResourceManager.GetString("MouseCouldNotBeAcquired", resourceCulture);
             }
@@ -181,7 +191,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Skin must contain at least one background..
         /// </summary>
-        internal static string OneBackground {
+        public static string OneBackground {
             get {
                 return ResourceManager.GetString("OneBackground", resourceCulture);
             }
@@ -190,7 +200,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Please select a folder..
         /// </summary>
-        internal static string PleaseSelectAFolder {
+        public static string PleaseSelectAFolder {
             get {
                 return ResourceManager.GetString("PleaseSelectAFolder", resourceCulture);
             }
@@ -199,7 +209,7 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to PNG file (*.png)|*.png.
         /// </summary>
-        internal static string PNGFilter {
+        public static string PNGFilter {
             get {
                 return ResourceManager.GetString("PNGFilter", resourceCulture);
             }
@@ -208,16 +218,26 @@ namespace RetroSpy.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Port 1 and Port 2 cannot be the same!.
         /// </summary>
-        internal static string Port1And2CannotBeTheSame {
+        public static string Port1And2CannotBeTheSame {
             get {
                 return ResourceManager.GetString("Port1And2CannotBeTheSame", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap PrintImage {
+            get {
+                object obj = ResourceManager.GetObject("PrintImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RetroSpy.
         /// </summary>
-        internal static string RetroSpy {
+        public static string RetroSpy {
             get {
                 return ResourceManager.GetString("RetroSpy", resourceCulture);
             }

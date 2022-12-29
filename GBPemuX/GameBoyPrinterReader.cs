@@ -5,14 +5,14 @@ namespace GBPemu
     public sealed class GameBoyPrinterReader : IControllerReader, IDisposable
     {
         //public event StateEventHandler ControllerStateChanged;
-        public event EventHandler<ControllerStateEventArgs> ControllerStateChanged;
+        public event EventHandler<ControllerStateEventArgs>? ControllerStateChanged;
 
-        public event EventHandler ControllerDisconnected;
+        public event EventHandler? ControllerDisconnected;
 
         private readonly Func<byte[], ControllerStateEventArgs> _packetParser;
-        private SerialMonitor _serialMonitor;
+        private SerialMonitor? _serialMonitor;
 
-        public GameBoyPrinterReader(string portName, Func<byte[], ControllerStateEventArgs> packetParser)
+        public GameBoyPrinterReader(string? portName, Func<byte[], ControllerStateEventArgs> packetParser)
         {
             _packetParser = packetParser;
 
@@ -22,7 +22,7 @@ namespace GBPemu
             _serialMonitor.Start();
         }
 
-        private void SerialMonitor_Disconnected(object sender, EventArgs e)
+        private void SerialMonitor_Disconnected(object? sender, EventArgs e)
         {
             Finish();
             ControllerDisconnected?.Invoke(this, EventArgs.Empty);
@@ -51,7 +51,7 @@ namespace GBPemu
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        private void SerialMonitor_PacketReceived(object sender, PacketDataEventArgs packet)
+        private void SerialMonitor_PacketReceived(object? sender, PacketDataEventArgs packet)
         {
             if (ControllerStateChanged != null)
             {

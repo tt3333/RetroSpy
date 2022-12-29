@@ -25,17 +25,17 @@ namespace GBPemu
         private const int BAUD_RATE = 115200;
         private const int TIMER_MS = 1;
 
-        public event EventHandler<PacketDataEventArgs> PacketReceived;
+        public event EventHandler<PacketDataEventArgs>? PacketReceived;
 
-        public event EventHandler Disconnected;
+        public event EventHandler? Disconnected;
 
-        private SerialPort _datPort;
+        private SerialPort? _datPort;
         private readonly List<byte> _localBuffer;
-        private DispatcherTimer _timer;
+        private DispatcherTimer? _timer;
         private readonly bool _printerMode;
         private bool _beenConnected;
 
-        public SerialMonitor(string portName, bool printerMode = false)
+        public SerialMonitor(string? portName, bool printerMode = false)
         {
             _printerMode = printerMode;
             _localBuffer = new List<byte>();
@@ -44,7 +44,7 @@ namespace GBPemu
 
         public void Start()
         {
-            if (_timer != null)
+            if (_timer != null || _datPort == null)
             {
                 return;
             }
@@ -84,9 +84,9 @@ namespace GBPemu
             }
         }
 
-        private void Tick(object sender, EventArgs e)
+        private void Tick(object? sender, EventArgs e)
         {
-            if (_datPort != null || _datPort.IsOpen)
+            if (_datPort != null || _datPort?.IsOpen == true)
             {
                 _beenConnected = true;
             }
