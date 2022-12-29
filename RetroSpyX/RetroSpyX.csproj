@@ -3006,4 +3006,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if exist $(OUTDIR)\firmware (&#xD;&#xA;rmdir /S /Q $(OUTDIR)\firmware\&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if  exist ..\firmware\ (&#xD;&#xA;xcopy /y /e /s /Q  ..\firmware\sketches\*.* $(OUTDIR)firmware\ &#xD;&#xA;EXIT  /B 0&#xD;&#xA;)&#xD;&#xA;" />
+  </Target>
 </Project>
