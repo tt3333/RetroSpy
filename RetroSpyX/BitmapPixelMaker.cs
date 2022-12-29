@@ -77,12 +77,13 @@ namespace RetroSpy
         {
             Bgra32 pixel = Pixels[x, y];
 
-            Pixel retVal = new Pixel();
-
-            retVal.Blue = pixel.B;
-            retVal.Green = pixel.G;
-            retVal.Red = pixel.R;
-            retVal.Alpha = pixel.A;
+            Pixel retVal = new()
+            {
+                Blue = pixel.B,
+                Green = pixel.G,
+                Red = pixel.R,
+                Alpha = pixel.A
+            };
 
             return retVal;
         }
@@ -190,23 +191,22 @@ namespace RetroSpy
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                using (var stream = new MemoryStream())
-                {
-                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    stream.Position = 0;
-                    Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
-                }
+                using var stream = new MemoryStream();
+                bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                stream.Position = 0;
+                Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
             }
         }
 
         // Use the pixel data to create a WriteableBitmap.
-        public GBImage MakeBitmap(double dpiX, double dpiY)
+        public GBImage MakeBitmap()
         {
-            GBImage retVal = new GBImage();
+            GBImage retVal = new()
+            {
+                _rawImage = Pixels
+            };
 
-            retVal._rawImage = Pixels;
-   
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
                 retVal._rawImage.Save(ms, BmpFormat.Instance);
                 ms.Position = 0;

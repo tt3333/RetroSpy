@@ -7,7 +7,7 @@ namespace GBPemu
 
         public static ControllerStateEventArgs ReadFromPacket(byte[] packet)
         {
-            ControllerStateBuilder state = new ControllerStateBuilder();
+            ControllerStateBuilder state = new();
 
             state.SetPrinterData(Encoding.UTF8.GetString(packet, 0, packet.Length));
 

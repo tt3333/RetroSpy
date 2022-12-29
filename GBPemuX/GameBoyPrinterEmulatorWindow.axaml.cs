@@ -106,7 +106,7 @@ namespace GBPemu
             games = new List<Game>();
             int currentGame = 0;
             byte maxRGBValue = 255;
-            List<GamePalette> newPalettes = new List<GamePalette>();
+            List<GamePalette> newPalettes = new();
             bool lookingForGame = true;
 
             foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
@@ -114,7 +114,7 @@ namespace GBPemu
                 if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
                 {
                     var gameName = line.Split(':')[1];
-                    Game g = new Game(gameName);
+                    Game g = new(gameName);
                     games.Add(g);
                     getMaxRGBValue = true;
                     lookingForGame = false;
@@ -210,11 +210,11 @@ namespace GBPemu
 
         private void Game_Palette_Click(object? sender, EventArgs e)
         {
-            MenuItem? menuItem = null;
+            MenuItem? menuItem;
 
-            if (sender is CheckBox)
+            if (sender is CheckBox box)
             {
-                menuItem = (MenuItem)((CheckBox)sender).GetLogicalParent();
+                menuItem = (MenuItem)box.GetLogicalParent();
             }
             else
                 menuItem = (MenuItem?)sender;
@@ -469,7 +469,7 @@ namespace GBPemu
 
             _imageBuffer.SetRawImage(Properties.Resources.ErrorImage);
 
-            BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Set the Image source.
             _image.Source = wbitmap._bitmap;
@@ -480,7 +480,7 @@ namespace GBPemu
             Width = 480;
         }
 
-        private SetupWindow _sw;
+        private readonly SetupWindow _sw;
         private bool _firstOpenHasHappened = false;
 
 
@@ -531,7 +531,7 @@ namespace GBPemu
             _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
             _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
 
-            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Create an Image to display the bitmap.
             _image = new Avalonia.Controls.Image
@@ -620,7 +620,7 @@ namespace GBPemu
 
             //imageBuffer.SetColor(0, 0, 0);
             // Convert the pixel data into a WriteableBitmap.
-            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Set the Image source.
             _image.Source = wbitmap._bitmap;
@@ -663,7 +663,7 @@ namespace GBPemu
             if (tiles_rawBytes_array == null)
                 return 0;
 
-            List<byte[]> compressedBytes = new List<byte[]>();
+            List<byte[]> compressedBytes = new();
             bool isCompressed = false;
 
 
@@ -702,7 +702,7 @@ namespace GBPemu
                 byte[] byteArray = new byte[bytes.Length / 2];
                 for (int i = 0; i < byteArray.Length; i++)
                 {
-                    byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
+                    byteArray[i] = byte.Parse(bytes.AsSpan(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
                 }
 
                 compressedBytes.Add(byteArray);
@@ -710,8 +710,8 @@ namespace GBPemu
 
             int tile_count = 0;
 
-            DecompressState state = new DecompressState(isCompressed);
-            Tile t = new Tile();
+            DecompressState state = new(isCompressed);
+            Tile t = new();
             for (int i = 0; i < compressedBytes.Count; i++)
             {
                 bool done;

@@ -12,37 +12,37 @@ namespace Xilium.CefGlue.Demo.Avalonia
             public int Value;
         }
 
-        public DateTime GetDate()
+        public static DateTime GetDate()
         {
             return DateTime.Now;
         }
 
-        public string GetString()
+        public static string GetString()
         {
             return "Hello World!";
         }
 
-        public int GetInt()
+        public static int GetInt()
         {
             return 10;
         }
 
-        public double GetDouble()
+        public static double GetDouble()
         {
             return 10.45;
         }
 
-        public bool GetBool()
+        public static bool GetBool()
         {
             return true;
         }
 
-        public string[] GetList()
+        public static string[] GetList()
         {
             return new[] { "item 1", "item 2", "item 3" };
         }
 
-        public IDictionary<string, object> GetDictionary()
+        public static IDictionary<string, object> GetDictionary()
         {
             return new Dictionary<string, object>
             {
@@ -51,12 +51,12 @@ namespace Xilium.CefGlue.Demo.Avalonia
             };
         }
 
-        public object GetObject()
+        public static object GetObject()
         {
             return new InnerObject { Name = "This is an object", Value = 5 };
         }
 
-        public object GetObjectWithParams(int anIntParam, string aStringParam, InnerObject anObjectParam, int[] intArrayParam)
+        public static object GetObjectWithParams()
         {
             return new InnerObject { Name = "This is an object", Value = 5 };
         }
@@ -69,7 +69,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
             return true;
         }
 
-        public string[] GetObjectWithParamArray(int anIntParam, params string[] paramWithParamArray)
+        public static string[] GetObjectWithParamArray(params string[] paramWithParamArray)
         {
             return paramWithParamArray;
         }

@@ -4,7 +4,7 @@ namespace GBPemu
 {
     public class InputSource
     {
-        public static readonly InputSource PRINTER = new InputSource("printer", "Nintendo GameBoy Printer", true, false, false, false, port => new GameBoyPrinterReader(port, GameBoyPrinter.ReadFromPacket));
+        public static readonly InputSource PRINTER = new("printer", "Nintendo GameBoy Printer", true, false, false, false, port => new GameBoyPrinterReader(port, GameBoyPrinter.ReadFromPacket));
 
         public static readonly InputSource DEFAULT = PRINTER;
 

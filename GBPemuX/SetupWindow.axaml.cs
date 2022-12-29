@@ -36,7 +36,7 @@ namespace GBPemu
         private List<string>? arduinoPorts;
         private void UpdatePortListThread()
         {
-            Thread thread = new Thread(UpdatePortList);
+            Thread thread = new(UpdatePortList);
             thread.Start();
         }
 
@@ -70,7 +70,7 @@ namespace GBPemu
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
 
-            MenuItem menuItem = new MenuItem
+            MenuItem menuItem = new()
             {
                 Header = "COM Ports"
             };
@@ -117,7 +117,7 @@ namespace GBPemu
                 _vm.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
                 Properties.Settings.Default.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
 
-                MenuItem menuItem = new MenuItem
+                MenuItem menuItem = new()
                 {
                     Header = "COM Ports"
                 };
@@ -140,7 +140,7 @@ namespace GBPemu
             try
             {
                 string? port = ((MenuItem?)sender)?.Header.ToString();
-                using (SerialPort _serialPort = new SerialPort(port ?? "COMX", 115200, Parity.None, 8, StopBits.One)
+                using (SerialPort _serialPort = new(port ?? "COMX", 115200, Parity.None, 8, StopBits.One)
                 {
                     Handshake = Handshake.None,
                     ReadTimeout = 500,
@@ -199,7 +199,7 @@ namespace GBPemu
 
         }
 
-        private readonly object updatePortLock = new object();
+        private readonly object updatePortLock = new();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "I am fishing for the printer, so I expect failures.")]
         private async void UpdatePortList()
@@ -214,7 +214,7 @@ namespace GBPemu
                     {
                         foreach (string port in arduinoPorts)
                         {
-                            using (SerialPort _serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                            using (SerialPort _serialPort = new(port, 115200, Parity.None, 8, StopBits.One)
                             {
                                 Handshake = Handshake.None,
                                 ReadTimeout = 500,
@@ -339,13 +339,13 @@ namespace GBPemu
 
         private static string[] GetUSBCOMDevices()
         {
-            List<string> list = new List<string>();
+            List<string> list = new();
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
 
                 ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
-                foreach (ManagementObject mo2 in searcher2.Get())
+                foreach (ManagementObject mo2 in searcher2.Get().Cast<ManagementObject>())
                 {
                     if (mo2["Name"] != null)
                     {
@@ -373,7 +373,7 @@ namespace GBPemu
             foreach (string s in portNames)
             {
                 // s is like "COM14"
-                COMPortInfo ci = new COMPortInfo
+                COMPortInfo ci = new()
                 {
                     PortName = s,
                     FriendlyName = s
@@ -404,7 +404,7 @@ namespace GBPemu
                 }
             }
 
-            List<string> ports = new List<string>();
+            List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
                 if ((_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))

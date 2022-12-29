@@ -95,7 +95,7 @@ namespace RetroSpy
 
             foreach (Detail detail in _skin.Details)
             {
-                if (BgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, detail.Config?.TargetBackgrounds, detail.Config?.IgnoreBackgrounds))
                 {
                     detail.Config.X = detail.Config.OriginalX;
                     detail.Config.Y = detail.Config.OriginalY;
@@ -107,7 +107,7 @@ namespace RetroSpy
 
             foreach (AnalogTrigger trigger in _skin.AnalogTriggers)
             {
-                if (BgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, trigger.Config?.TargetBackgrounds, trigger.Config?.IgnoreBackgrounds))
                 {
                     trigger.Config.X = trigger.Config.OriginalX;
                     trigger.Config.Y = trigger.Config.OriginalY;
@@ -119,7 +119,7 @@ namespace RetroSpy
 
             foreach (Button button in _skin.Buttons)
             {
-                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, button.Config?.TargetBackgrounds, button.Config?.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
@@ -145,7 +145,7 @@ namespace RetroSpy
 
             foreach (RangeButton button in _skin.RangeButtons)
             {
-                if (BgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, button?.Config?.TargetBackgrounds, button?.Config?.IgnoreBackgrounds))
                 {
                     button.Config.X = button.Config.OriginalX;
                     button.Config.Y = button.Config.OriginalY;
@@ -158,7 +158,7 @@ namespace RetroSpy
 
             foreach (AnalogStick stick in _skin.AnalogSticks)
             {
-                if (BgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, stick.Config?.TargetBackgrounds, stick.Config?.IgnoreBackgrounds))
                 {
                     stick.Config.X = stick.Config.OriginalX;
                     stick.Config.Y = stick.Config.OriginalY;
@@ -177,7 +177,7 @@ namespace RetroSpy
 
             foreach (TouchPad touchpad in _skin.TouchPads)
             {
-                if (BgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
+                if (BgIsActive(skinBackground.Name, touchpad.Config?.TargetBackgrounds, touchpad.Config?.IgnoreBackgrounds))
                 {
                     touchpad.Config.X = touchpad.Config.OriginalX;
                     touchpad.Config.Y = touchpad.Config.OriginalY;

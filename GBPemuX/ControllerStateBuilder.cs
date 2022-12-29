@@ -6,8 +6,8 @@ namespace GBPemu
 {
     public sealed class ControllerStateBuilder
     {
-        private readonly Dictionary<string, bool> _buttons = new Dictionary<string, bool>();
-        private readonly Dictionary<string, float> _analogs = new Dictionary<string, float>();
+        private readonly Dictionary<string, bool> _buttons = new();
+        private readonly Dictionary<string, float> _analogs = new();
         private string? _gameboyPrinterData;
         public void SetButton(string name, bool value)
         {

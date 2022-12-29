@@ -53,8 +53,10 @@ namespace RetroSpy
                                                 },   // BGB
                                                 new byte[][] {
                                                     new byte[] { 0xe0, 0xa8, 0x70, 0x2b },
+#pragma warning disable IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0xdb, 0x9f, 0x6b, 0x2b },
                                                     new byte[] { 0xcd, 0x94, 0x66, 0x26 }
+#pragma warning restore IDE0230 // Use UTF-8 string literal
                                                 },   // GraphixKid Gray
                                                 new byte[][] {
                                                     new byte[] { 0x7e, 0xab, 0x7b, 0x4c },
@@ -62,7 +64,9 @@ namespace RetroSpy
                                                     new byte[] { 0xb4, 0x96, 0x78, 0x5a }
                                                 },   // GraphixKid Green
                                                 new byte[][] {
+#pragma warning disable IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0x7e, 0x57, 0x38, 0x2e },
+#pragma warning restore IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0x84, 0x7b, 0x5d, 0x46 },
                                                     new byte[] { 0x16, 0x46, 0x49, 0x3d }
                                                 }    // Black Zero
@@ -108,7 +112,7 @@ namespace RetroSpy
             games = new List<Game>();
             int currentGame = 0;
             byte maxRGBValue = 255;
-            List<GamePalette> newPalettes = new List<GamePalette>();
+            List<GamePalette> newPalettes = new();
             bool lookingForGame = true;
 
             foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
@@ -116,7 +120,7 @@ namespace RetroSpy
                 if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
                 {
                     var gameName = line.Split(':')[1];
-                    Game g = new Game(gameName);
+                    Game g = new(gameName);
                     games.Add(g);
                     getMaxRGBValue = true;
                     lookingForGame = false;
@@ -212,11 +216,11 @@ namespace RetroSpy
 
         private void Game_Palette_Click(object? sender, EventArgs e)
         {
-            MenuItem? menuItem = null;
+            MenuItem? menuItem;
 
-            if (sender is CheckBox)
+            if (sender is CheckBox box)
             {
-                menuItem = (MenuItem)((CheckBox)sender).GetLogicalParent();
+                menuItem = (MenuItem)box.GetLogicalParent();
             }
             else
                 menuItem = (MenuItem?)sender;
@@ -471,7 +475,7 @@ namespace RetroSpy
 
             _imageBuffer.SetRawImage(Properties.Resources.ErrorImage);
 
-            BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Set the Image source.
             _image.Source = wbitmap._bitmap;
@@ -482,7 +486,7 @@ namespace RetroSpy
             Width = 480;
         }
 
-        private SetupWindow _sw;
+        private readonly SetupWindow _sw;
         private bool _firstOpenHasHappened = false;
 
 
@@ -536,7 +540,7 @@ namespace RetroSpy
             _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
             _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
 
-            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Create an Image to display the bitmap.
             _image = new Avalonia.Controls.Image
@@ -625,7 +629,7 @@ namespace RetroSpy
 
             //imageBuffer.SetColor(0, 0, 0);
             // Convert the pixel data into a WriteableBitmap.
-            GBImage wbitmap = _imageBuffer.MakeBitmap(96, 96);
+            GBImage wbitmap = _imageBuffer.MakeBitmap();
 
             // Set the Image source.
             _image.Source = wbitmap._bitmap;
@@ -668,7 +672,7 @@ namespace RetroSpy
             if (tiles_rawBytes_array == null)
                 return 0;
 
-            List<byte[]> compressedBytes = new List<byte[]>();
+            List<byte[]> compressedBytes = new();
             bool isCompressed = false;
 
 
@@ -707,7 +711,7 @@ namespace RetroSpy
                 byte[] byteArray = new byte[bytes.Length / 2];
                 for (int i = 0; i < byteArray.Length; i++)
                 {
-                    byteArray[i] = byte.Parse(bytes.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
+                    byteArray[i] = byte.Parse(bytes.AsSpan(i * 2, 2), NumberStyles.HexNumber, CultureInfo.CurrentCulture);
                 }
 
                 compressedBytes.Add(byteArray);
@@ -715,8 +719,8 @@ namespace RetroSpy
 
             int tile_count = 0;
 
-            DecompressState state = new DecompressState(isCompressed);
-            Tile t = new Tile();
+            DecompressState state = new(isCompressed);
+            Tile t = new();
             for (int i = 0; i < compressedBytes.Count; i++)
             {
                 bool done;
