@@ -10,7 +10,7 @@ namespace RetroSpy.Readers
         private static readonly string?[] BUTTONS = {
             null, null, null, "start", "y", "x", "b", "a", null, "l", "r", "z", "up", "down", "right", "left"
         };
-				
+
         // Button order for the Nicohood Nintendo API
         // https://github.com/NicoHood/Nintendo
         // Each byte is reverse from the buttons above
@@ -142,12 +142,12 @@ namespace RetroSpy.Readers
                     stateNico.SetButton(NICOHOOD_BUTTONS[i], bitPacket != 0x00);
                 }
 
-                stateNico.SetAnalog("lstick_x", ReadStick(packet[2]),packet[2]);
-                stateNico.SetAnalog("lstick_y", ReadStick(packet[3]),packet[3]);
-                stateNico.SetAnalog("cstick_x", ReadStick(packet[4]),packet[4]);
-                stateNico.SetAnalog("cstick_y", ReadStick(packet[5]),packet[5]);
-                stateNico.SetAnalog("trig_l", ReadTrigger(packet[6]),packet[6]);
-                stateNico.SetAnalog("trig_r", ReadTrigger(packet[7]),packet[7]);
+                stateNico.SetAnalog("lstick_x", ReadStick(packet[2]), packet[2]);
+                stateNico.SetAnalog("lstick_y", ReadStick(packet[3]), packet[3]);
+                stateNico.SetAnalog("cstick_x", ReadStick(packet[4]), packet[4]);
+                stateNico.SetAnalog("cstick_y", ReadStick(packet[5]), packet[5]);
+                stateNico.SetAnalog("trig_l", ReadTrigger(packet[6]), packet[6]);
+                stateNico.SetAnalog("trig_r", ReadTrigger(packet[7]), packet[7]);
 
                 return stateNico.Build();
             }

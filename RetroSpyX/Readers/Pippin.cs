@@ -14,7 +14,7 @@
             null, "1", "2", "blue", "yellow", "d_up", "d_left", "d_right", "d_down", "red", "green", "square", "circle", "diamond"
         };
 
-        private static readonly string ?[] JOYSTICK_BUTTONS = {
+        private static readonly string?[] JOYSTICK_BUTTONS = {
             "2", "3", "1", "4", "5", null, null, null
         };
 

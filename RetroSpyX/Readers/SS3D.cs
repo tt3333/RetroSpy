@@ -125,9 +125,9 @@ namespace RetroSpy.Readers
                         state.SetButton(BUTTONS[i], polishedPacket[i] != 0x00);
                     }
 
-                    SignalTool.GenerateFakeStick(state, "l_twinstick_x", "l_twinstick_y", 
+                    SignalTool.GenerateFakeStick(state, "l_twinstick_x", "l_twinstick_y",
                         polishedPacket[4] != 0x00, polishedPacket[3] != 0x00, polishedPacket[2] != 0x00, polishedPacket[1] != 0x00);
-                    SignalTool.GenerateFakeStick(state, "r_twinstick_x", "r_twinstick_y", 
+                    SignalTool.GenerateFakeStick(state, "r_twinstick_x", "r_twinstick_y",
                         polishedPacket[11] != 0x00, polishedPacket[8] != 0x00, polishedPacket[10] != 0x00, polishedPacket[12] != 0x00);
 
 

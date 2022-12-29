@@ -1,10 +1,10 @@
-﻿using Renci.SshNet;
+﻿using Avalonia.Threading;
+using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
-using Avalonia.Threading;
 
 namespace RetroSpy
 {
@@ -61,7 +61,7 @@ namespace RetroSpy
             };
             _timer.Tick += Tick;
             _timer.Start();
-            
+
         }
 
         public void Stop()

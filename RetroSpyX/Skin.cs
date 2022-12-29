@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Resources;
 using System.Xml.Linq;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 
 namespace RetroSpy
 {
@@ -70,7 +69,7 @@ namespace RetroSpy
         public ElementConfig? Config { get; set; }
     }
 
-    
+
     public class Button
     {
         public ElementConfig? Config { get; set; }
@@ -86,7 +85,7 @@ namespace RetroSpy
         public float To { get; set; }
     }
 
-    
+
     public class AnalogStick
     {
         public ElementConfig? Config { get; set; }
@@ -103,7 +102,7 @@ namespace RetroSpy
         public float YPrecision { get; set; }
     }
 
-    
+
     public class AnalogTrigger
     {
         public enum DirectionValue { Up, Down, Left, Right, Fade }
@@ -115,7 +114,7 @@ namespace RetroSpy
         public bool UseNegative { get; set; }
     }
 
-    
+
     public class TouchPad
     {
         public ElementConfig? Config { get; set; }
@@ -127,7 +126,7 @@ namespace RetroSpy
         public uint OriginalYRange { get; set; }
     }
 
-    
+
     public class AnalogText
     {
 
@@ -175,11 +174,11 @@ namespace RetroSpy
 
     public class LoadResults
     {
-        
+
         public Collection<Skin>? SkinsLoaded { get; private set; }
         public Collection<string>? ParseErrors { get; private set; }
 
-        
+
         public void SetSkinsLoaded(Collection<Skin> list)
         {
             if (list == null)
@@ -211,7 +210,7 @@ namespace RetroSpy
         }
     }
 
-    
+
     public class Skin
     {
         private readonly ResourceManager? _resources;
@@ -307,7 +306,7 @@ namespace RetroSpy
                 TempSkin.LoadSkin(Name ?? "Unknown Name", Author ?? "Unknown Author", inputSource.Item1, doc, skinPath, inputSource.Item2);
                 generatedSkins.Add(TempSkin);
             }
-            
+
         }
 
         public void LoadSkin(string? name, string author, InputSource type, XDocument doc, string skinPath, string orgType)
@@ -621,7 +620,7 @@ namespace RetroSpy
             }
 
             if (!float.TryParse(ReadStringAttr(elem, attrName), NumberStyles.Any, CultureInfo.InvariantCulture, out float ret))
-            { 
+            {
                 throw new ConfigParseException("Failed to parse number for property '" + attrName + "' in element '" + elem.Name + "'.");
             }
             return ret;

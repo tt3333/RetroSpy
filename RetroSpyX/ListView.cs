@@ -73,7 +73,8 @@ public class ListView<T> : IList, IList<T>, INotifyCollectionChanged, INotifyPro
             }
             else
             {
-                Dispatcher.UIThread.Post(() => {
+                Dispatcher.UIThread.Post(() =>
+                {
                     SelectingItemsControl c = _window.FindControl<SelectingItemsControl>(_controlName);
                     if (c != null)
                     {
@@ -100,7 +101,8 @@ public class ListView<T> : IList, IList<T>, INotifyCollectionChanged, INotifyPro
             }
             else
             {
-                Dispatcher.UIThread.Post(() => {
+                Dispatcher.UIThread.Post(() =>
+                {
                     SelectingItemsControl c = _window.FindControl<SelectingItemsControl>(_controlName);
                     if (c != null)
                     {

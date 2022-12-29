@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using Avalonia.Threading;
 
 namespace RetroSpy.Readers
 {
@@ -35,7 +35,7 @@ namespace RetroSpy.Readers
             public static extern uint XInputGetState(uint userIndex, ref XInputState inputState);
         }
 
-        
+
         public static Collection<uint> GetDevices()
         {
             Collection<uint> result = new();
@@ -56,7 +56,7 @@ namespace RetroSpy.Readers
         private DispatcherTimer? _timer;
         private readonly uint _id;
 
-        
+
         public XInputReader(uint id = 0)
         {
             _id = id;

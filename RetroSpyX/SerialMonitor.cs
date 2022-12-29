@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
-using Avalonia.Threading;
 
 namespace RetroSpy
 {

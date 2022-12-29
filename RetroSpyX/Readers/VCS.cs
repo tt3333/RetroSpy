@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
     public static class VCS
     {
         private const int PACKET_SIZE_CLASSIC = 11;
-        
+
         private const int PACKET_SIZE_MODERN = 31;
-        
+
         private static readonly string[] BUTTONS_1 = {
             "a", "b", "x", "y", "l", "r", "l3", "r3",
         };
@@ -157,7 +153,7 @@ namespace RetroSpy.Readers
             byte directions = (byte)(binaryPacket[2] >> 4);
             bool up = false;
             bool left = false;
-            bool right = false; 
+            bool right = false;
             bool down = false;
             switch (directions)
             {

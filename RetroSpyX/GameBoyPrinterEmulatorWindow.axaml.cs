@@ -1,16 +1,15 @@
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Threading;
+using RetroSpy.Readers;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System;
 using static RetroSpy.BitmapPixelMaker;
-using Avalonia.Interactivity;
-using Avalonia.Collections;
-using Avalonia.LogicalTree;
-using RetroSpy.Readers;
 
 namespace RetroSpy
 {
@@ -191,7 +190,7 @@ namespace RetroSpy
 
                     // This is freaking dangerous!
                     ((AvaloniaList<object>)gameMenu.Items).Add(paletteMenu);
-    
+
                 }
 
                 // Still dangerous!

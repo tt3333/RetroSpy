@@ -1,10 +1,10 @@
-﻿using SharpDX;
+﻿using Avalonia.Threading;
+using SharpDX;
 using SharpDX.DirectInput;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Resources;
-using Avalonia.Threading;
 
 namespace RetroSpy.Readers
 {

@@ -5,7 +5,7 @@ namespace RetroSpy.Readers
 {
     public class ControllerStateEventArgs : EventArgs
     {
-        public static readonly ControllerStateEventArgs Zero = new 
+        public static readonly ControllerStateEventArgs Zero = new
             (new Dictionary<string, bool>(), new Dictionary<string, float>(), new Dictionary<string, int>());
 
         public string? RawPrinterData { get; }

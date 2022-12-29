@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetroSpy.Readers
 {
@@ -31,9 +27,9 @@ namespace RetroSpy.Readers
                 return null;
             }
 
-            string str = System.Text.Encoding.Default.GetString(packet, 0, packet.Length-1);
+            string str = System.Text.Encoding.Default.GetString(packet, 0, packet.Length - 1);
 
-            byte[] binaryPacket = new byte[(packet.Length-1)/2];
+            byte[] binaryPacket = new byte[(packet.Length - 1) / 2];
 
             try
             {

@@ -1,16 +1,8 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using System;
 using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Threading.Tasks;
 using Xilium.CefGlue.Avalonia;
 
 namespace Xilium.CefGlue.Demo.Avalonia
@@ -33,7 +25,7 @@ namespace Xilium.CefGlue.Demo.Avalonia
 
             browser.Address = aboutPath;
             browser.LoadStart += OnBrowserLoadStart;
-            browserWrapper.Child = browser;    
+            browserWrapper.Child = browser;
         }
 
         private void OnBrowserLoadStart(object sender, Common.Events.LoadStartEventArgs e)

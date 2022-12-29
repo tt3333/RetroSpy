@@ -1,17 +1,12 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Threading;
-using Avalonia.Utilities;
 using MessageBox.Avalonia.Enums;
 using Renci.SshNet;
 using RetroSpy.Readers;
-using SharpDX.Multimedia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -23,9 +18,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-
-using Zafiro.Core.ProgressReporting;
 using ComboBox = Avalonia.Controls.ComboBox;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 using SelectionChangedEventArgs = Avalonia.Controls.SelectionChangedEventArgs;
@@ -99,7 +91,7 @@ namespace RetroSpy
         public async Task<string?> GetPath()
         {
             OpenFolderDialog dialog = new();
-           
+
             string? result = await dialog.ShowAsync(this);
 
             return result;
@@ -153,7 +145,7 @@ namespace RetroSpy
         public SetupWindow() : this(false)
         {
 
-        }    
+        }
 
         public SetupWindow(bool skipSetup = false)
         {
@@ -293,7 +285,7 @@ namespace RetroSpy
             }
             catch (Exception ex)
             {
-                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);    
+                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
         }
@@ -387,7 +379,7 @@ namespace RetroSpy
                 //}
                 else
                 {
-                    reader = _vm.Sources.SelectedItem == null || _vm.Sources.SelectedItem.BuildReader == null 
+                    reader = _vm.Sources.SelectedItem == null || _vm.Sources.SelectedItem.BuildReader == null
                         ? null : _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem, _vm.UseLagFix);
                 }
                 if (_vm.DelayInMilliseconds > 0)
@@ -628,7 +620,7 @@ namespace RetroSpy
                         ports[0] = "No Arduino/Teensy Found";
                         _vm.Ports.UpdateContents(ports);
                         _vm.Ports2.UpdateContents(ports);
-                        
+
                     }
                     else
                     {
@@ -727,7 +719,7 @@ namespace RetroSpy
             List<string> list = new();
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            { 
+            {
                 ManagementObjectSearcher searcher2 = new("SELECT * FROM Win32_PnPEntity");
                 foreach (ManagementObject mo2 in searcher2.Get().Cast<ManagementObject>())
                 {

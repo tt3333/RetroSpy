@@ -26,6 +26,6 @@ namespace RetroSpy
             base.OnFrameworkInitializationCompleted();
         }
 
-     
+
     }
 }

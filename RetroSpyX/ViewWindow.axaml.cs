@@ -1,18 +1,16 @@
-using Avalonia.Controls;
-using System.Collections.Generic;
-using System;
-using RetroSpy.Readers;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using Avalonia.Media;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
-using System.Threading.Tasks;
+using RetroSpy.Readers;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
-using RetroSpy.Properties;
-using System.Globalization;
-using Avalonia.Interactivity;
+using System.Threading.Tasks;
 
 namespace RetroSpy
 {
@@ -25,7 +23,7 @@ namespace RetroSpy
         private readonly List<Tuple<Detail, Image>> _detailsWithImages = new();
         private readonly List<Tuple<Button, Image>> _buttonsWithImages = new();
         private readonly List<Tuple<TouchPad, Image>> _touchPadWithImages = new();
-        private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new ();
+        private readonly List<Tuple<RangeButton, Image>> _rangeButtonsWithImages = new();
         private readonly List<Tuple<AnalogStick, Image>> _sticksWithImages = new();
         private readonly List<Tuple<AnalogText, Label>> _analogTextBoxes = new();
 
@@ -50,7 +48,7 @@ namespace RetroSpy
                 throw new ArgumentNullException(nameof(skinBackground));
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
-            
+
             _sw = sw;
 
             InitializeComponent();
@@ -758,7 +756,7 @@ namespace RetroSpy
         {
             if (sender is not CheckBox)
                 AllBlinkReductionEnabled = !ButtonBlinkReductionEnabled || !AnalogBlinkReductionEnabled || !MassBlinkReductionEnabled;
-    
+
             AllBlinkCheckbox.IsChecked = AllBlinkReductionEnabled;
             Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
             ButtonBlinkCheckbox.IsChecked = ButtonBlinkReductionEnabled;

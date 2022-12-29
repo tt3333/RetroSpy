@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace RetroSpy
 {
@@ -12,7 +11,7 @@ namespace RetroSpy
         private readonly List<string>? _excludedList;
         readonly IReadOnlyList<InputSource>? _allSources;
         readonly Collection<string>? _originalExcludedList;
-        
+
         public AddRemoveWindow(IReadOnlyList<InputSource> allSources, Collection<string> excludedList)
         {
             _vm = new AddRemoveWindowViewModel(this);
@@ -31,7 +30,7 @@ namespace RetroSpy
         {
             _vm.IncludedSources.Clear();
             _vm.ExcludedSources.Clear();
-            
+
             if (_allSources == null)
                 return;
 
@@ -117,7 +116,7 @@ namespace RetroSpy
     {
         public ListView<string> IncludedSources { get; set; }
         public ListView<string> ExcludedSources { get; set; }
-       
+
         public AddRemoveWindowViewModel(AddRemoveWindow addRemoveWindow)
         {
             IncludedSources = new ListView<string>();

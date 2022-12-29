@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using Avalonia.Threading;
+using SharpDX;
 using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
@@ -6,8 +7,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Resources;
-using Avalonia.Threading;
-using Avalonia.Remote.Protocol.Designer;
 
 namespace RetroSpy.Readers
 {
@@ -94,7 +93,7 @@ namespace RetroSpy.Readers
             }
 
             if (_joystick != null)
-            { 
+            {
                 JoystickState state = _joystick.GetCurrentState();
 
                 ControllerStateBuilder outState = new();

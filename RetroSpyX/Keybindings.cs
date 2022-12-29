@@ -1,5 +1,4 @@
 using Avalonia.Input;
-using Avalonia.Platform;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
