@@ -11,11 +11,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Image = Avalonia.Controls.Image;
 
 namespace RetroSpy
 {
     public partial class ViewWindow : Avalonia.Controls.Window
     {
+        private readonly double _originalHeight;
+        private readonly double _originalWidth;
         private readonly Skin _skin;
         private readonly IControllerReader _reader;
         private readonly Keybindings? _keybindings;
@@ -49,6 +52,8 @@ namespace RetroSpy
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
+
+
             _sw = sw;
 
             InitializeComponent();
@@ -67,10 +72,15 @@ namespace RetroSpy
                 throw new ArgumentNullException(nameof(skinBackground));
             }
 
+
+
             _skin = skin;
             _reader = reader;
 
             Title = staticViewerWindowName ? "RetroSpy Viewer" : skin.Name;
+
+            ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
+            ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
 
             SolidColorBrush brush = new(skinBackground.Color);
             ControllerGrid.Background = brush;
@@ -233,6 +243,8 @@ namespace RetroSpy
             AnalogBlinkReductionEnabled = Properties.Settings.Default.AnalogFilter;
             ButtonBlinkReductionEnabled = Properties.Settings.Default.ButtonFilter;
             Topmost = Properties.Settings.Default.TopMost;
+
+            WindowAspectRatio.Register(this);
         }
 
         private static void AvaloniaMessageBox(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
@@ -791,5 +803,155 @@ namespace RetroSpy
             Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
             MassBlinkCheckbox.IsChecked = MassBlinkReductionEnabled;
         }
+
+        public void CalculateMagic()
+        {
+            MagicHeight = Height - _originalHeight;
+            MagicWidth = Width - _originalWidth;
+        }
+
+        public double MagicHeight { get; private set; }
+
+        public double MagicWidth { get; private set; }
+
+        public double AdjustedHeight => Height - MagicHeight;
+
+        public double AdjustedWidth => Width - MagicWidth;
+
+        public double Ratio => _originalWidth / _originalHeight;
+
+        private static void AdjustImage(ElementConfig config, Image image, double xRatio, double yRatio)
+        {
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
+
+            int newWidth = (int)Math.Round(config.Width * xRatio);
+            int newHeight = (int)Math.Round(config.Height * yRatio);
+
+            image.Margin = new Thickness(newX, newY, 0, 0);
+            image.Width = newWidth;
+            image.Height = newHeight;
+        }
+
+        private static void AdjustGrid(ElementConfig config, Grid grid, double xRatio, double yRatio)
+        {
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
+
+            uint newWidth = config.Width = (uint)Math.Round(config.OriginalWidth * xRatio);
+            uint newHeight = config.Height = (uint)Math.Round(config.OriginalHeight * yRatio);
+
+            ((Image)grid.Children[0]).Width = newWidth;
+            ((Image)grid.Children[0]).Height = newHeight;
+
+            grid.Margin = new Thickness(newX, newY, 0, 0);
+            grid.Width = newWidth;
+            grid.Height = newHeight;
+        }
+
+        public void AdjustControllerElements()
+        {
+            ControllerGrid.Width = ((Image)ControllerGrid.Children[0]).Width = AdjustedWidth;
+            ControllerGrid.Height = ((Image)ControllerGrid.Children[0]).Height = AdjustedHeight;
+            double xRatio = AdjustedWidth / _originalWidth;
+            double yRatio = AdjustedHeight / _originalHeight;
+
+            foreach (Tuple<Detail, Image> detail in _detailsWithImages)
+            {
+                if (detail.Item1.Config != null)
+                    AdjustImage(detail.Item1.Config, detail.Item2, xRatio, yRatio);
+            }
+
+            foreach (Tuple<AnalogTrigger, Grid> trigger in _triggersWithGridImages)
+            {
+                if (trigger.Item1.Config != null)
+                    AdjustGrid(trigger.Item1.Config, trigger.Item2, xRatio, yRatio);
+            }
+
+            foreach (Tuple<Button, Image> button in _buttonsWithImages)
+            {
+                if (button.Item1.Config != null)
+                    AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
+            }
+
+            foreach (Tuple<RangeButton, Image> button in _rangeButtonsWithImages)
+            {
+                if (button.Item1.Config != null)
+                    AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
+            }
+
+            foreach (Tuple<AnalogStick, Image> stick in _sticksWithImages)
+            {
+                if (stick.Item1.Config != null)
+                {
+                    AdjustImage(stick.Item1.Config, stick.Item2, xRatio, yRatio);
+                    stick.Item1.XRange = (uint)(stick.Item1.OriginalXRange * xRatio);
+                    stick.Item1.YRange = (uint)(stick.Item1.OriginalYRange * yRatio);
+                }
+            }
+
+            foreach (Tuple<TouchPad, Image> touchpad in _touchPadWithImages)
+            {
+                if (touchpad.Item1.Config != null)
+                {
+                    AdjustImage(touchpad.Item1.Config, touchpad.Item2, xRatio, yRatio);
+                    touchpad.Item1.XRange = (uint)(touchpad.Item1.OriginalXRange * xRatio);
+                    touchpad.Item1.YRange = (uint)(touchpad.Item1.OriginalYRange * yRatio);
+                }
+            }
+
+            foreach (Tuple<AnalogText, Label> analogText in _analogTextBoxes)
+            {
+                //uint newX = analogText.Item1.X = (uint)Math.Round(analogText.Item1.OriginalX * xRatio);
+                //uint newY = analogText.Item1.Y = (uint)Math.Round(analogText.Item1.OriginalY * yRatio);
+                //analogText.Item2.Margin = new Thickness(newX, newY, 0, 0);
+                //analogText.Item2.LayoutTransform = new ScaleTransform(xRatio, yRatio);
+            }
+        }
+
+    }
+
+    internal class WindowAspectRatio
+    {
+        private readonly double _ratio;
+        private readonly ViewWindow _window;
+        private bool _calculatedMagic;
+
+        private WindowAspectRatio(ViewWindow window)
+        {
+            _calculatedMagic = false;
+            _window = window;
+            _ratio = window.Ratio;
+
+            var text = window.GetObservable(TopLevel.ClientSizeProperty);
+            text.Subscribe(value =>
+            {
+                DragHook();
+            });
+        }
+
+        public static void Register(ViewWindow window)
+        {
+            _ = new WindowAspectRatio(window);
+        }
+
+
+        private void DragHook()
+        {
+            if (!_calculatedMagic)
+            {
+                _window.CalculateMagic();
+                _calculatedMagic = true;
+            }
+            
+            double magicWidth = _window.MagicWidth;
+            double magicHeight = _window.MagicHeight;
+
+            _window.Width = (int)(magicWidth + ((_window.Height - magicHeight) * _ratio));
+
+            _window.AdjustControllerElements();
+        }
+
     }
 }
+
