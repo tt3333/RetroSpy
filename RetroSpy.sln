@@ -14,6 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPUpdaterX", "GBPUpdaterX\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPemuX", "GBPemuX\GBPemuX.csproj", "{8ABC5880-452D-40DB-AF55-6B6FF76987A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB809359-CA9A-4BAC-B728-B0FA12985304}"
+	ProjectSection(SolutionItems) = preProject
+		release.bat = release.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
