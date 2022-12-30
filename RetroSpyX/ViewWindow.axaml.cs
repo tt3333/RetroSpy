@@ -665,7 +665,8 @@ namespace RetroSpy
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top,
                 Margin = new Thickness(trigger.Config?.X ?? 0, trigger.Config?.Y ?? 0, 0, 0),
                 Width = trigger.Config?.Width ?? 0,
-                Height = trigger.Config?.Height ?? 0
+                Height = trigger.Config?.Height ?? 0,
+                ClipToBounds = true
             };
 
             grid.Children.Add(img);
