@@ -434,7 +434,7 @@ namespace RetroSpy
         private void PopulateSources()
         {
             List<InputSource> prunedSources = new();
-            foreach (InputSource source in InputSource.ALL)
+            foreach (InputSource source in InputSource.GetAllSources())
             {
                 if (!_excludedSources.Contains(source.Name))
                 {
@@ -467,7 +467,7 @@ namespace RetroSpy
 
         private async void AddRemove_Click(object sender, RoutedEventArgs e)
         {
-            Window w = new AddRemoveWindow(InputSource.ALL, _excludedSources);
+            Window w = new AddRemoveWindow(InputSource.GetAllSources(), _excludedSources);
             await w.ShowDialog(this);
 
             PopulateSources();

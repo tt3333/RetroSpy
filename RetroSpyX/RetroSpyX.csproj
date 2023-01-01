@@ -2723,9 +2723,13 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="echo $(CurrentDate) &gt; &quot;$(ProjectDir)\Resources\BuildDate.txt&quot;" />
+  <Target Name="TimestampWindows" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+    <Exec Command="echo $(CurrentDate) &gt; &quot;Resources\BuildDate.txt&quot;" />
   </Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources/BuildDate.txt&quot;" />
+	</Target>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="About.axaml" />

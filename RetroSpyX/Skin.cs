@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 namespace RetroSpy
@@ -280,7 +281,7 @@ namespace RetroSpy
                     type1 = type;
                 }
 
-                foreach (var src in InputSource.ALL)
+                foreach (var src in InputSource.GetAllSources())
                 {
                     if (src.TypeTag == orgType)
                     {
