@@ -22,6 +22,6 @@
   <button name="down" image="circle2.png" x="108" y="94" width="25" height="25" />
   <button name="right" image="circle2.png" x="143" y="62" width="25" height="25" />
 
-  <stick xname="stick_x" yname="stick_y" image="stick.png"
+  <stick xname="stick_x" yname="stick_y" image="stick.PNG"
 	   x="161" y="129" width="76" height="76" xrange="15" yrange="15" />
 </skin>
