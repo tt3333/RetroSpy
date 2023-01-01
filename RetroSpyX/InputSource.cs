@@ -53,9 +53,11 @@ namespace RetroSpy
 
         public static readonly InputSource THREEDO = new("3do", "Panasonic 3DO", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, ThreeDO.ReadFromPacket));
 
-        public static readonly InputSource? PC360 = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ("pc360", "PC 360 Controller", false, true, false, false, false, (controllerId, useLagFix) => new XInputReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
-        public static readonly InputSource? PAD = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("generic", "PC Generic Gamepad", false, true, false, false, false, (controllerId, useLagFix) => new GamepadReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
-        public static readonly InputSource? PCKEYBOARD = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("pckeyboard", "PC Keyboard & Mouse", false, false, false, false, false, new PCKeyboardReader()) : null;
+#pragma warning disable CS8601 // Possible null reference assignment.
+        public static readonly InputSource PC360 = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new ("pc360", "PC 360 Controller", false, true, false, false, false, (controllerId, useLagFix) => new XInputReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
+        public static readonly InputSource PAD = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("generic", "PC Generic Gamepad", false, true, false, false, false, (controllerId, useLagFix) => new GamepadReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
+        public static readonly InputSource PCKEYBOARD = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("pckeyboard", "PC Keyboard & Mouse", false, false, false, false, false, new PCKeyboardReader()) : null;
+#pragma warning restore CS8601 // Possible null reference assignment.
 
         public static readonly InputSource CDI = new("cdi", "Phillips CD-i", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, CDi.ReadFromPacket));
 
@@ -87,7 +89,9 @@ namespace RetroSpy
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
 
         public static readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
+#pragma warning disable CS8604 // Possible null reference argument.
             MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PCKEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, GENMINI2, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
+#pragma warning restore CS8604 // Possible null reference argument.
         };
 
         public static readonly IReadOnlyList<InputSource> ALL_LINUX = new List<InputSource> {
