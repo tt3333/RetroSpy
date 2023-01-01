@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Dual Atari Paddles" author="chmaller" type="paddles">
 
-    <background name="Paddle" image="Paddle2.png" />
+    <background name="Paddle" image="paddle2.png" />
 
     <button name="fire" image="circle2.png" x="11" y="23" width="10" height="30" />
 

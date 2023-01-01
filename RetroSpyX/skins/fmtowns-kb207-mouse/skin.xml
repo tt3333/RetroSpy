@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="FM Towns FMT-KB207 Keyboard w/ Mouse" author="chmaller" type="fmtowns">
 
-  <background name="Default" image="FMT-KB207.png" />
+  <background name="Default" image="fmt-kb207.png" />
 
   <button name="ESC" image="circle2.png" x="97" y="129" width="25" height="25" />
   <button name="1" image="circle2.png" x="136" y="129" width="25" height="25" />

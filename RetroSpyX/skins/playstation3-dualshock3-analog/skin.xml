@@ -11,7 +11,7 @@
     <analog name="analog_l1" image="circle2.png" x="177" y="99" width="110" height="30" direction="fade" />
     <analog name="analog_r1" image="circle2.png" x="715" y="99" width="110" height="30" direction="fade" />
 
-	  <analog name="l_trig" image="l2.png" x="18" y="18"
+	  <analog name="l_trig" image="L2.png" x="18" y="18"
               direction="down" reverse="true" />
 	  <analog name="r_trig" image="r2.png" x="870" y="18"
               direction="down" reverse="true" />

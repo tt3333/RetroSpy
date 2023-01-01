@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Logitech Controller" author="zoggins" type="nuon">
 
-  <background name="Default" image="nuon-analog.png" />
+  <background name="Default" image="nuon-analog.PNG" />
 
   <button name="A" image="circle2.png" x="373" y="110" width="35" height="35" />
   <button name="CD" image="circle2.png" x="411" y="86" width="30" height="30" />

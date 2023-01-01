@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="3DO Mouse" author="zoggins" type="3do">
 
-  <background name="Default" image="3DO.png" />
+  <background name="Default" image="3do.png" />
 
   <button name="left" image="circle.png" x="34" y="43" width="50" height="50" />
   <button name="middle" image="circle.png" x="144" y="43" width="50" height="50" />

@@ -11,7 +11,7 @@
   <button name="l1" image="circle2.png" x="128" y="125" width="110" height="30" />
   <button name="r1" image="circle2.png" x="750" y="125" width="110" height="30" />
 
-  <analog name="l_trig" image="l2.png" x="27" y="30"
+  <analog name="l_trig" image="L2.png" x="27" y="30"
           direction="down" reverse="true" />
   <analog name="r_trig" image="r2.png" x="854" y="30"
           direction="down" reverse="true" />
