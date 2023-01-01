@@ -233,11 +233,13 @@ namespace RetroSpy
                 {
                     if (_vm.Sources.SelectedItem == InputSource.PAD)
                     {
-                        UpdateGamepadList();
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                            UpdateGamepadList();
                     }
                     else if (_vm.Sources.SelectedItem == InputSource.PC360)
                     {
-                        UpdateXIList();
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                            UpdateXIList();
                     }
                     //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                     //{
