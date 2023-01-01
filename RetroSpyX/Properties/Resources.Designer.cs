@@ -106,7 +106,7 @@ namespace RetroSpy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thu 12/29/2022 12:14:39.30 
+        ///   Looks up a localized string similar to Sun 01/01/2023 14:23:17.45 
         ///.
         /// </summary>
         public static string BuildDate {
@@ -121,16 +121,6 @@ namespace RetroSpy.Properties {
         public static string CouldNotConnectToGamePad {
             get {
                 return ResourceManager.GetString("CouldNotConnectToGamePad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ErrorImage {
-            get {
-                object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -221,16 +211,6 @@ namespace RetroSpy.Properties {
         public static string Port1And2CannotBeTheSame {
             get {
                 return ResourceManager.GetString("Port1And2CannotBeTheSame", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap PrintImage {
-            get {
-                object obj = ResourceManager.GetObject("PrintImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

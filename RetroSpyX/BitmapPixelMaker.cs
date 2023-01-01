@@ -182,15 +182,9 @@ namespace RetroSpy
             }
         }
 
-        public void SetRawImage(System.Drawing.Bitmap bmp)
+        public void SetRawImage(string path)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var stream = new MemoryStream();
-                bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                stream.Position = 0;
-                Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(stream);
-            }
+            Pixels = SixLabors.ImageSharp.Image.Load<Bgra32>(path);
         }
 
         // Use the pixel data to create a WriteableBitmap.

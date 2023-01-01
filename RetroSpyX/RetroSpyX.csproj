@@ -20,6 +20,9 @@
 		<UseWindowsForms>False</UseWindowsForms>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+	<PropertyGroup>
+		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
+	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="keybindings.xml" />
@@ -2685,7 +2688,6 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="Vortice.DirectInput" Version="2.2.0" />
     <PackageReference Include="Vortice.XInput" Version="2.2.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
@@ -2722,7 +2724,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="echo %25date%25 %25time%25 &gt; &quot;$(ProjectDir)\Resources\BuildDate.txt&quot;" />
+    <Exec Command="echo $(CurrentDate) &gt; &quot;$(ProjectDir)\Resources\BuildDate.txt&quot;" />
   </Target>
 
   <ItemGroup>
@@ -2991,8 +2993,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\ErrorImage.png" />
-    <Resource Include="Resources\PrintImage.png" />
+    <Resource Include="Assets\ErrorImage.png" />
+    <Resource Include="Assets\PrintImage.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -3001,6 +3003,10 @@
     </AvaloniaXaml>
   </ItemGroup>
 
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+	
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -3008,7 +3014,18 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&#xD;&#xA;if exist $(OUTDIR)\firmware (&#xD;&#xA;rmdir /S /Q $(OUTDIR)\firmware\&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if  exist ..\firmware\ (&#xD;&#xA;xcopy /y /e /s /Q  ..\firmware\sketches\*.* $(OUTDIR)firmware\ &#xD;&#xA;EXIT  /B 0&#xD;&#xA;)&#xD;&#xA; &#xD;&#xA;if  exist firmware\ (&#xD;&#xA;xcopy /y /e /s /Q  ..\firmware\sketches\*.* $(OUTDIR)firmware\ &#xD;&#xA;EXIT  /B 0&#xD;&#xA;)&#xD;&#xA;" />
-  </Target>
+	<ItemGroup>
+		<FirmwareFiles Include="..\firmware\sketches\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssetFiles Include="Assets\**\*.*" />
+	</ItemGroup>
+	
+	<Target Name="CopyAssetFiles" AfterTargets="Build">
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+	</Target>
+	<Target Name="CopyFirmwareFiles" AfterTargets="Build">
+		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles->'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
+	</Target>
 </Project>

@@ -469,7 +469,7 @@ namespace GBPemu
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
             PrintSize = Properties.Settings.Default.PrintSize;
 
-            _imageBuffer.SetRawImage(Properties.Resources.ErrorImage);
+            _imageBuffer.SetRawImage("Assets/ErrorImage.png");
 
             BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap();
 
@@ -528,7 +528,7 @@ namespace GBPemu
 
             PrintSize = Properties.Settings.Default.PrintSize;
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            _imageBuffer.SetRawImage(Properties.Resources.PrintImage);
+            _imageBuffer.SetRawImage("Assets/PrintImage.png");
 
             _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
             _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
