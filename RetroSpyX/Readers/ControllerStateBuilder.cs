@@ -17,6 +17,7 @@ namespace RetroSpy.Readers
                 throw new ArgumentNullException(nameof(name));
             }
 
+            _buttons[name] = value;
             _buttons[name.ToLower(CultureInfo.CurrentUICulture)] = value;
             _buttons[name.ToUpper(CultureInfo.CurrentUICulture)] = value;
         }

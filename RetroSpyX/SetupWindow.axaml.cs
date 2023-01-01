@@ -872,7 +872,7 @@ namespace RetroSpy
     {
         public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
-        public ListView<uint> XIAndGamepad { get; set; }
+        public ListView<int> XIAndGamepad { get; set; }
         public ListView<uint> MisterGamepad { get; set; }
         public ListView<Skin> Skins { get; set; }
         public ListView<Background> Backgrounds { get; set; }
@@ -964,7 +964,7 @@ namespace RetroSpy
             Ports.StoreControl(setupWindow, "ComPortCombo");
             Ports2 = new ListView<string>();
             Ports2.StoreControl(setupWindow, "ComPort2Combo");
-            XIAndGamepad = new ListView<uint>();
+            XIAndGamepad = new ListView<int>();
             XIAndGamepad.StoreControl(setupWindow, "ControllerIdCombo");
             MisterGamepad = new ListView<uint>();
             MisterGamepad.StoreControl(setupWindow, "MisterControllerIdCombo");

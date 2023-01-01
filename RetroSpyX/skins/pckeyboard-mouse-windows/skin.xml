@@ -56,7 +56,7 @@
 	<button name="LeftBracket" image="circle2.png" x="618" y="127" width="40" height="40" />
 	<button name="RightBracket" image="circle2.png" x="670" y="127" width="40" height="40" />
 
-	<button name="Capital" image="circle2.png" x="14" y="177" width="40" height="40" />
+	<button name="CapsLock" image="circle2.png" x="14" y="177" width="40" height="40" />
 	<button name="A" image="circle2.png" x="109" y="177" width="40" height="40" />
 	<button name="S" image="circle2.png" x="161" y="177" width="40" height="40" />
 	<button name="D" image="circle2.png" x="213" y="177" width="40" height="40" />

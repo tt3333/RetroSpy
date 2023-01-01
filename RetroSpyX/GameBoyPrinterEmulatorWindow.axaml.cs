@@ -19,6 +19,7 @@ namespace RetroSpy
         private readonly int TILE_PIXEL_HEIGHT = 8;
         private readonly int TILES_PER_LINE = 20; // Gameboy Printer Tile Constant
 
+#pragma warning disable IDE0230 // Use UTF-8 string literal
         private readonly byte[][][] palettes = {
                                                 new byte[][] {
                                                     new byte[] { 0xff, 0xaa, 0x55, 0x00 },
@@ -52,10 +53,8 @@ namespace RetroSpy
                                                 },   // BGB
                                                 new byte[][] {
                                                     new byte[] { 0xe0, 0xa8, 0x70, 0x2b },
-#pragma warning disable IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0xdb, 0x9f, 0x6b, 0x2b },
                                                     new byte[] { 0xcd, 0x94, 0x66, 0x26 }
-#pragma warning restore IDE0230 // Use UTF-8 string literal
                                                 },   // GraphixKid Gray
                                                 new byte[][] {
                                                     new byte[] { 0x7e, 0xab, 0x7b, 0x4c },
@@ -63,13 +62,12 @@ namespace RetroSpy
                                                     new byte[] { 0xb4, 0x96, 0x78, 0x5a }
                                                 },   // GraphixKid Green
                                                 new byte[][] {
-#pragma warning disable IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0x7e, 0x57, 0x38, 0x2e },
-#pragma warning restore IDE0230 // Use UTF-8 string literal
                                                     new byte[] { 0x84, 0x7b, 0x5d, 0x46 },
                                                     new byte[] { 0x16, 0x46, 0x49, 0x3d }
                                                 }    // Black Zero
         };
+#pragma warning restore IDE0230 // Use UTF-8 string literal
 
         private readonly Avalonia.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;

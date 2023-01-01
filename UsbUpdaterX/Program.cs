@@ -22,7 +22,7 @@ namespace UsbUpdater
                 Console.Write("");
                 Console.WriteLine("\nLogging into " + (string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname) + "...");
 
-                using (SshClient _client = new SshClient(string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname,
+                using (SshClient _client = new(string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname,
                                             string.IsNullOrEmpty(username) ? "retrospy" : username,
                                             string.IsNullOrEmpty(password) ? "retrospy" : password))
                 {

@@ -1,48 +1,24 @@
 ﻿using Avalonia.Threading;
 using System;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
+using Vortice.XInput;
+
 
 namespace RetroSpy.Readers
 {
     public sealed class XInputReader : IControllerReader
     {
-        // ----- Interface implementations with backing state -------------------------------------------------------------
 
         public event EventHandler<ControllerStateEventArgs>? ControllerStateChanged;
 
         public event EventHandler? ControllerDisconnected;
 
-        // ----- Interop with XInput DLL ----------------------------------------------------------------------------------
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct XInputState
+        public static Collection<int> GetDevices()
         {
-            public uint dwPacketNumber;
-            public ushort wButtons;
-            public byte bLeftTrigger;
-            public byte bRightTrigger;
-            public short sThumbLX;
-            public short sThumbLY;
-            public short sThumbRX;
-            public short sThumbRY;
-        }
-
-        private static class NativeMethods
-        {
-            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-            [DllImport("xinput9_1_0.dll")]
-            public static extern uint XInputGetState(uint userIndex, ref XInputState inputState);
-        }
-
-
-        public static Collection<uint> GetDevices()
-        {
-            Collection<uint> result = new();
-            XInputState dummy = new();
-            for (uint i = 0; i < 4; i++) //Poll all 4 possible controllers to see which are connected, thats how it works :/
+            Collection<int> result = new();
+            for (int i = 0; i < 4; i++) //Poll all 4 possible controllers to see which are connected, thats how it works :/
             {
-                if (NativeMethods.XInputGetState(i, ref dummy) == 0)
+                if (XInput.GetState(i, out _))
                 {
                     result.Add(i);
                 }
@@ -50,14 +26,12 @@ namespace RetroSpy.Readers
             return result;
         }
 
-        // ----------------------------------------------------------------------------------------------------------------
-
         private const double TIMER_MS = 30;
         private DispatcherTimer? _timer;
-        private readonly uint _id;
+        private readonly int _id;
 
 
-        public XInputReader(uint id = 0)
+        public XInputReader(int id = 0)
         {
             _id = id;
             _timer = new DispatcherTimer
@@ -70,8 +44,7 @@ namespace RetroSpy.Readers
 
         private void Tick(object? sender, EventArgs e)
         {
-            XInputState state = new();
-            if (NativeMethods.XInputGetState(_id, ref state) > 0)
+            if (!XInput.GetState(_id, out State state))
             {
                 ControllerDisconnected?.Invoke(this, EventArgs.Empty);
                 Finish();
@@ -80,29 +53,29 @@ namespace RetroSpy.Readers
 
             ControllerStateBuilder outState = new();
 
-            outState.SetButton("a", (state.wButtons & 0x1000) != 0);
-            outState.SetButton("b", (state.wButtons & 0x2000) != 0);
-            outState.SetButton("x", (state.wButtons & 0x4000) != 0);
-            outState.SetButton("y", (state.wButtons & 0x8000) != 0);
-            outState.SetButton("up", (state.wButtons & 0x0001) != 0);
-            outState.SetButton("down", (state.wButtons & 0x0002) != 0);
-            outState.SetButton("left", (state.wButtons & 0x0004) != 0);
-            outState.SetButton("right", (state.wButtons & 0x0008) != 0);
-            outState.SetButton("start", (state.wButtons & 0x0010) != 0);
-            outState.SetButton("back", (state.wButtons & 0x0020) != 0);
-            outState.SetButton("l3", (state.wButtons & 0x0040) != 0);
-            outState.SetButton("r3", (state.wButtons & 0x0080) != 0);
-            outState.SetButton("l", (state.wButtons & 0x0100) != 0);
-            outState.SetButton("r", (state.wButtons & 0x0200) != 0);
+            outState.SetButton("a", ((int)state.Gamepad.Buttons & 0x1000) != 0);
+            outState.SetButton("b", ((int)state.Gamepad.Buttons & 0x2000) != 0);
+            outState.SetButton("x", ((int)state.Gamepad.Buttons & 0x4000) != 0);
+            outState.SetButton("y", ((int)state.Gamepad.Buttons & 0x8000) != 0);
+            outState.SetButton("up", ((int)state.Gamepad.Buttons & 0x0001) != 0);
+            outState.SetButton("down", ((int)state.Gamepad.Buttons & 0x0002) != 0);
+            outState.SetButton("left", ((int)state.Gamepad.Buttons & 0x0004) != 0);
+            outState.SetButton("right", ((int)state.Gamepad.Buttons & 0x0008) != 0);
+            outState.SetButton("start", ((int)state.Gamepad.Buttons & 0x0010) != 0);
+            outState.SetButton("back", ((int)state.Gamepad.Buttons & 0x0020) != 0);
+            outState.SetButton("l3", ((int)state.Gamepad.Buttons & 0x0040) != 0);
+            outState.SetButton("r3", ((int)state.Gamepad.Buttons & 0x0080) != 0);
+            outState.SetButton("l", ((int)state.Gamepad.Buttons & 0x0100) != 0);
+            outState.SetButton("r", ((int)state.Gamepad.Buttons & 0x0200) != 0);
 
-            outState.SetAnalog("lstick_x", (float)state.sThumbLX / 32768, state.sThumbLX);
-            outState.SetAnalog("lstick_y", (float)state.sThumbLY / 32768, state.sThumbLY);
-            outState.SetAnalog("rstick_x", (float)state.sThumbRX / 32768, state.sThumbRX);
-            outState.SetAnalog("rstick_y", (float)state.sThumbRY / 32768, state.sThumbRY);
-            outState.SetAnalog("trig_l", (float)state.bLeftTrigger / 255, state.bLeftTrigger);
-            outState.SetButton("trig_l_d", ((float)state.bLeftTrigger / 255) > 0);
-            outState.SetAnalog("trig_r", (float)state.bRightTrigger / 255, state.bRightTrigger);
-            outState.SetButton("trig_r_d", ((float)state.bRightTrigger / 255) > 0);
+            outState.SetAnalog("lstick_x", (float)state.Gamepad.LeftThumbX / 32768, state.Gamepad.LeftThumbX);
+            outState.SetAnalog("lstick_y", (float)state.Gamepad.LeftThumbY / 32768, state.Gamepad.LeftThumbY);
+            outState.SetAnalog("rstick_x", (float)state.Gamepad.RightThumbX / 32768, state.Gamepad.RightThumbX);
+            outState.SetAnalog("rstick_y", (float)state.Gamepad.RightThumbY / 32768, state.Gamepad.RightThumbY);
+            outState.SetAnalog("trig_l", (float)state.Gamepad.LeftTrigger / 255, state.Gamepad.LeftTrigger);
+            outState.SetButton("trig_l_d", ((float)state.Gamepad.LeftTrigger / 255) > 0);
+            outState.SetAnalog("trig_r", (float)state.Gamepad.RightTrigger / 255, state.Gamepad.RightTrigger);
+            outState.SetButton("trig_r_d", ((float)state.Gamepad.RightTrigger / 255) > 0);
 
             ControllerStateChanged?.Invoke(this, outState.Build());
         }

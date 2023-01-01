@@ -271,9 +271,9 @@ namespace RetroSpy
             {
                 string orgType = type;
                 string type1;
-                if (type.Contains("."))
+                if (type.Contains('.'))
                 {
-                    type1 = type.Substring(0, type.IndexOf('.'));
+                    type1 = type[..type.IndexOf('.')];
                 }
                 else
                 {
@@ -483,18 +483,15 @@ namespace RetroSpy
                     throw new ConfigParseException(_resources == null ? "Invalid Resource Handle" : _resources.GetString("AnalogNeedsDirection", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: AnalogNeedsDirection");
                 }
 
-                AnalogTrigger.DirectionValue dir;
-
-                switch (directionAttrs.First().Value)
+                var dir = directionAttrs.First().Value switch
                 {
-                    case "up": dir = AnalogTrigger.DirectionValue.Up; break;
-                    case "down": dir = AnalogTrigger.DirectionValue.Down; break;
-                    case "left": dir = AnalogTrigger.DirectionValue.Left; break;
-                    case "right": dir = AnalogTrigger.DirectionValue.Right; break;
-                    case "fade": dir = AnalogTrigger.DirectionValue.Fade; break;
-                    default: throw new ConfigParseException(_resources == null ? "Invalid Resource Handle" : _resources.GetString("IllegalDirection", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: IllegalDirection");
-                }
-
+                    "up" => AnalogTrigger.DirectionValue.Up,
+                    "down" => AnalogTrigger.DirectionValue.Down,
+                    "left" => AnalogTrigger.DirectionValue.Left,
+                    "right" => AnalogTrigger.DirectionValue.Right,
+                    "fade" => AnalogTrigger.DirectionValue.Fade,
+                    _ => throw new ConfigParseException(_resources == null ? "Invalid Resource Handle" : _resources.GetString("IllegalDirection", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: IllegalDirection"),
+                };
                 _analogTriggers.Add(new AnalogTrigger
                 {
                     Config = ParseStandardConfig(skinPath, elem),

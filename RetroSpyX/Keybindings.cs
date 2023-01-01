@@ -1,4 +1,3 @@
-using Avalonia.Input;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
@@ -6,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-
+using Desktop.Robot;
 
 namespace RetroSpy
 {
@@ -14,12 +13,12 @@ namespace RetroSpy
     {
         private class Binding
         {
-            public readonly ushort OutputKey;
+            public readonly Key OutputKey;
             public readonly IReadOnlyList<string> RequiredButtons;
 
             public bool CurrentlyDepressed;
 
-            public Binding(ushort outputKey, IReadOnlyList<string> requiredButtons)
+            public Binding(Key outputKey, IReadOnlyList<string> requiredButtons)
             {
                 OutputKey = outputKey;
                 RequiredButtons = requiredButtons;
@@ -46,8 +45,8 @@ namespace RetroSpy
             {
                 foreach (XElement binding in doc.Root.Elements("binding"))
                 {
-                    ushort outputKey = ReadKeybinding(binding.Attribute("output-key")?.Value ?? string.Empty);
-                    if (outputKey == 0)
+                    Key outputKey = ReadKeybinding(binding.Attribute("output-key")?.Value ?? string.Empty);
+                    if (outputKey == Key.Shift)
                     {
                         continue;
                     }
@@ -109,81 +108,112 @@ namespace RetroSpy
             }
         }
 
-        private static ushort ReadKeybinding(string name)
+        
+
+        private static Key ReadKeybinding(string name)
         {
             string upperName = name.ToUpperInvariant();
 
-            return MyRegex().Match(upperName).Success
-                ? upperName.ToCharArray()[0]
-                : VK_KEYWORDS.ContainsKey(upperName) ? VK_KEYWORDS[upperName] : (ushort)0;
+            return StringToKey.ContainsKey(upperName) ? StringToKey[upperName] : Key.Shift;
         }
 
-        private static ushort VkConvert(Key key)
-        {
-            return (ushort)KeyInterop.VirtualKeyFromKey(key);
-        }
-
-        private static readonly IReadOnlyDictionary<string, ushort> VK_KEYWORDS = new Dictionary<string, ushort> {
-            { "ENTER", VkConvert (Key.Enter) },
-            { "TAB", VkConvert (Key.Tab) },
-            { "ESC", VkConvert (Key.Escape) },
-            { "ESCAPE", VkConvert (Key.Escape) },
-            { "HOME", VkConvert (Key.Home) },
-            { "END", VkConvert (Key.End) },
-            { "LEFT", VkConvert (Key.Left) },
-            { "RIGHT", VkConvert (Key.Right) },
-            { "UP", VkConvert (Key.Up) },
-            { "DOWN", VkConvert (Key.Down) },
-            { "PGUP", VkConvert (Key.Prior) },
-            { "PGDN", VkConvert (Key.Next) },
-            { "NUMLOCK", VkConvert (Key.NumLock) },
-            { "SCROLLLOCK", VkConvert (Key.Scroll) },
-            { "PRTSC", VkConvert (Key.PrintScreen) },
-            { "BREAK", VkConvert (Key.Cancel) },
-            { "BACKSPACE", VkConvert (Key.Back) },
-            { "BKSP", VkConvert (Key.Back) },
-            { "BS", VkConvert (Key.Back) },
-            { "CLEAR", VkConvert (Key.Clear) },
-            { "CAPSLOCK", VkConvert (Key.Capital) },
-            { "INS", VkConvert (Key.Insert) },
-            { "INSERT", VkConvert (Key.Insert) },
-            { "DEL", VkConvert (Key.Delete) },
-            { "DELETE", VkConvert (Key.Delete) },
-            { "HELP", VkConvert (Key.Help) },
-            { "F1", VkConvert (Key.F1) },
-            { "F2", VkConvert (Key.F2) },
-            { "F3", VkConvert (Key.F3) },
-            { "F4", VkConvert (Key.F4) },
-            { "F5", VkConvert (Key.F5) },
-            { "F6", VkConvert (Key.F6) },
-            { "F7", VkConvert (Key.F7) },
-            { "F8", VkConvert (Key.F8) },
-            { "F9", VkConvert (Key.F9) },
-            { "F10", VkConvert (Key.F10) },
-            { "F11", VkConvert (Key.F11) },
-            { "F12", VkConvert (Key.F12) },
-            { "F13", VkConvert (Key.F13) },
-            { "F14", VkConvert (Key.F14) },
-            { "F15", VkConvert (Key.F15) },
-            { "F16", VkConvert (Key.F16) },
-            { "NUMPAD0", VkConvert (Key.NumPad0) },
-            { "NUMPAD1", VkConvert (Key.NumPad1) },
-            { "NUMPAD2", VkConvert (Key.NumPad2) },
-            { "NUMPAD3", VkConvert (Key.NumPad3) },
-            { "NUMPAD4", VkConvert (Key.NumPad4) },
-            { "NUMPAD5", VkConvert (Key.NumPad5) },
-            { "NUMPAD6", VkConvert (Key.NumPad6) },
-            { "NUMPAD7", VkConvert (Key.NumPad7) },
-            { "NUMPAD8", VkConvert (Key.NumPad8) },
-            { "NUMPAD9", VkConvert (Key.NumPad9) },
-            { "MULTIPLY", VkConvert (Key.Multiply) },
-            { "*", VkConvert (Key.Multiply) },
-            { "ADD", VkConvert (Key.Add) },
-            { "+", VkConvert (Key.Add) },
-            { "SUBTRACT", VkConvert (Key.Subtract) },
-            { "-", VkConvert (Key.Subtract) },
-            { "DIVIDE", VkConvert (Key.Divide) },
-            { "/", VkConvert (Key.Divide) }
+        private static readonly IReadOnlyDictionary<string, Key> StringToKey = new Dictionary<string, Key> {
+            { "A", Key.A},
+            { "B", Key.B},
+            { "C", Key.C},
+            { "D", Key.D},
+            { "E", Key.E},
+            { "F", Key.F},
+            { "G", Key.G},
+            { "H", Key.H},
+            { "I", Key.I},
+            { "J", Key.J},
+            { "K", Key.K},
+            { "L", Key.L},
+            { "M", Key.M},
+            { "N", Key.N},
+            { "O", Key.O},
+            { "P", Key.P},
+            { "Q", Key.Q},
+            { "R", Key.R},
+            { "S", Key.S},
+            { "T", Key.T},
+            { "U", Key.U},
+            { "V", Key.V},
+            { "W", Key.W},
+            { "X", Key.X},
+            { "Y", Key.Y},
+            { "Z", Key.Z},
+            { "1", Key.One},
+            { "2", Key.Two},
+            { "3", Key.Three},
+            { "4", Key.Four},
+            { "5", Key.Five},
+            { "6", Key.Six},
+            { "7", Key.Seven},
+            { "8", Key.Eight},
+            { "9", Key.Nine},
+            { "0", Key.Zero},
+            { "ENTER", Key.Enter},
+            { "TAB", Key.Tab},
+            { "ESC", Key.Esc},
+            { "ESCAPE", Key.Esc},
+            { "HOME", Key.Home},
+            { "END", Key.End},
+            { "LEFT", Key.Left},
+            { "RIGHT", Key.Right},
+            { "UP", Key.Up},
+            { "DOWN", Key.Down},
+            { "PGUP", Key.PageUp},
+            { "PGDN", Key.PageDown},
+            { "NUMLOCK", Key.NumLock},
+            { "SCROLLLOCK", Key.ScrollLock},
+            { "PRTSC", Key.PrintScreen},
+            { "BREAK", Key.Pause},
+            { "BACKSPACE", Key.Backspace},
+            { "BKSP", Key.Backspace},
+            { "BS", Key.Backspace},
+            //{ "CLEAR", Key.Clear},
+            { "CAPSLOCK", Key.CapsLock},
+            { "INS", Key.Insert},
+            { "INSERT", Key.Insert},
+            { "DEL", Key.Delete},
+            { "DELETE", Key.Delete},
+            //{ "HELP", Key.Help},
+            { "F1", Key.F1},
+            { "F2", Key.F2},
+            { "F3", Key.F3},
+            { "F4", Key.F4},
+            { "F5", Key.F5},
+            { "F6", Key.F6},
+            { "F7", Key.F7},
+            { "F8", Key.F8},
+            { "F9", Key.F9},
+            { "F10", Key.F10},
+            { "F11", Key.F11},
+            { "F12", Key.F12},
+            //{ "F13", Key.F13},
+            //{ "F14", Key.F14},
+            //{ "F15", Key.F15},
+            //{ "F16", Key.F16},
+            //{ "NUMPAD0", Key.NumPad0},
+            //{ "NUMPAD1", Key.NumPad1},
+            //{ "NUMPAD2", Key.NumPad2},
+            //{ "NUMPAD3", Key.NumPad3},
+            //{ "NUMPAD4", Key.NumPad4},
+            //{ "NUMPAD5", Key.NumPad5},
+            //{ "NUMPAD6", Key.NumPad6},
+            //{ "NUMPAD7", Key.NumPad7},
+            //{ "NUMPAD8", Key.NumPad8},
+            //{ "NUMPAD9", Key.NumPad9},
+            //{ "MULTIPLY", Key.Multiply},
+            //{ "*", Key.Multiply},
+            { "ADD", Key.Plus},
+            { "+", Key.Plus},
+            { "SUBTRACT", Key.Minus},
+            { "-", Key.Minus},
+            { "DIVIDE", Key.Slash},
+            { "/", Key.Slash }
         };
 
         [GeneratedRegex("^[A-Z0-9]$")]

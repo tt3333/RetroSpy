@@ -221,9 +221,11 @@ namespace RetroSpy
             {
                 if (BgIsActive(skinBackground.Name, analogtext.TargetBackgrounds, analogtext.IgnoreBackgrounds))
                 {
+                    LayoutTransformControl l = new();
                     Label label = GetLabelForElement(analogtext);
+                    l.Child = label;
                     _analogTextBoxes.Add(new Tuple<AnalogText, Label>(analogtext, label));
-                    ControllerGrid.Children.Add(label);
+                    ControllerGrid.Children.Add(l);
                 }
             }
 
@@ -902,10 +904,11 @@ namespace RetroSpy
 
             foreach (Tuple<AnalogText, Label> analogText in _analogTextBoxes)
             {
-                //uint newX = analogText.Item1.X = (uint)Math.Round(analogText.Item1.OriginalX * xRatio);
-                //uint newY = analogText.Item1.Y = (uint)Math.Round(analogText.Item1.OriginalY * yRatio);
-                //analogText.Item2.Margin = new Thickness(newX, newY, 0, 0);
-                //analogText.Item2.LayoutTransform = new ScaleTransform(xRatio, yRatio);
+                uint newX = analogText.Item1.X = (uint)Math.Round(analogText.Item1.OriginalX * xRatio);
+                uint newY = analogText.Item1.Y = (uint)Math.Round(analogText.Item1.OriginalY * yRatio);
+                analogText.Item2.Margin = new Thickness(newX, newY, 0, 0);
+                if (analogText.Item2.Parent != null)
+                    ((LayoutTransformControl)analogText.Item2.Parent).LayoutTransform = new ScaleTransform(xRatio, yRatio);
             }
         }
 

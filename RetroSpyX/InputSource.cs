@@ -52,7 +52,7 @@ namespace RetroSpy
 
         public static readonly InputSource THREEDO = new("3do", "Panasonic 3DO", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, ThreeDO.ReadFromPacket));
 
-        public static readonly InputSource PC360 = new("pc360", "PC 360 Controller", false, true, false, false, false, (controllerId, useLagFix) => new XInputReader(uint.Parse(controllerId ?? "0", CultureInfo.CurrentCulture)));
+        public static readonly InputSource PC360 = new("pc360", "PC 360 Controller", false, true, false, false, false, (controllerId, useLagFix) => new XInputReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture)));
         public static readonly InputSource PAD = new("generic", "PC Generic Gamepad", false, true, false, false, false, (controllerId, useLagFix) => new GamepadReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture)));
         public static readonly InputSource PCKEYBOARD = new("pckeyboard", "PC Keyboard & Mouse", false, false, false, false, false, new PCKeyboardReader());
 

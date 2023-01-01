@@ -18,6 +18,7 @@ namespace GBPemu
         private readonly int TILE_PIXEL_HEIGHT = 8;
         private readonly int TILES_PER_LINE = 20; // Gameboy Printer Tile Constant
 
+#pragma warning disable IDE0230 // Use UTF-8 string literal
         private readonly byte[][][] palettes = {
                                                 new byte[][] {
                                                     new byte[] { 0xff, 0xaa, 0x55, 0x00 },
@@ -65,6 +66,7 @@ namespace GBPemu
                                                     new byte[] { 0x16, 0x46, 0x49, 0x3d }
                                                 }    // Black Zero
         };
+#pragma warning restore IDE0230 // Use UTF-8 string literal
 
         private readonly Avalonia.Controls.Image _image;
         private BitmapPixelMaker _imageBuffer;

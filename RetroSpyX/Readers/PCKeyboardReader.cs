@@ -1,10 +1,11 @@
 ﻿using Avalonia.Threading;
-using SharpDX;
-using SharpDX.DirectInput;
+using ReactiveUI;
+using SharpGen.Runtime;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Resources;
+using Vortice.DirectInput;
 
 namespace RetroSpy.Readers
 {
@@ -15,10 +16,10 @@ namespace RetroSpy.Readers
         public event EventHandler? ControllerDisconnected;
 
         private const double TIMER_MS = 1;
-        private DirectInput? _dinput;
+        private IDirectInput8? _dinput;
         private DispatcherTimer? _timer;
-        private Keyboard? _keyboard;
-        private Mouse? _mouse;
+        private IDirectInputDevice8? _keyboard;
+        private IDirectInputDevice8? _mouse;
 
         private static readonly string[] MOUSE_BUTTONS = {
             "MouseLeft", "MouseRight", "MouseMiddle", "MouseXButton1", "MouseXButton2"
@@ -26,30 +27,39 @@ namespace RetroSpy.Readers
 
         public PCKeyboardReader()
         {
-            _dinput = new DirectInput();
+            _dinput = DInput.DirectInput8Create();
 
-            _keyboard = new Keyboard(_dinput);
-            _mouse = new Mouse(_dinput);
+            var keyboards = _dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly);
+
+            if (keyboards.Count > 0)
+            {
+                _keyboard = _dinput.CreateDevice(keyboards[0].InstanceGuid);
+
+                // Play the values back to see that buffersize is working correctly
+                _keyboard.Properties.BufferSize = 16;
+
+                if (_dinput.IsDeviceAttached(keyboards[0].InstanceGuid))
+                {
+                    _ = _keyboard.SetDataFormat<RawKeyboardState>();
+                }
+            }
+
+            var pointers = _dinput.GetDevices(DeviceClass.Pointer, DeviceEnumerationFlags.AttachedOnly);
+
+            if (pointers.Count > 0)
+            {
+                _mouse = _dinput.CreateDevice(pointers[0].InstanceGuid);
+
+                // Play the values back to see that buffersize is working correctly
+                _mouse.Properties.BufferSize = 16;
+
+                if (_dinput.IsDeviceAttached(pointers[0].InstanceGuid))
+                {
+                    _ = _mouse.SetDataFormat<RawMouseState>();
+                }
+            }
 
             ResourceManager stringManager = Properties.Resources.ResourceManager;
-
-            try
-            {
-                _keyboard.Acquire();
-            }
-            catch (SharpDXException)
-            {
-                throw new IOException(stringManager.GetString("KeyboardCouldNotBeAcquired", CultureInfo.CurrentUICulture));
-            }
-
-            try
-            {
-                _mouse.Acquire();
-            }
-            catch (SharpDXException)
-            {
-                throw new IOException(stringManager.GetString("MouseCouldNotBeAcquired", CultureInfo.CurrentUICulture));
-            }
 
             _timer = new DispatcherTimer
             {
@@ -60,25 +70,28 @@ namespace RetroSpy.Readers
         }
 
         private void Tick(object? sender, EventArgs e)
-        {
-            try
-            {
-                _keyboard?.Poll();
-                _mouse?.Poll();
-            }
-            catch (SharpDXException)
-            {
-                Finish();
-                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
-                return;
-            }
-
+        { 
             ControllerStateBuilder outState = new();
-            KeyboardState? state = _keyboard?.GetCurrentState();
-            MouseState? mouseState = _mouse?.GetCurrentState();
 
-            if (mouseState != null)
+            if (_mouse != null)
             {
+                Result result_ = _mouse.Poll();
+
+                if (result_.Failure)
+                {
+                    result_ = _mouse.Acquire();
+
+                    if (result_.Failure)
+                    {
+                        Finish();
+                        ControllerDisconnected?.Invoke(this, EventArgs.Empty);
+                        throw new UnhandledErrorException("Failed to Poll/Aquire DirectInput Mouse.");
+                    }
+                }
+
+                MouseState mouseState = new();
+                _mouse.GetCurrentMouseState(ref mouseState);
+
                 SignalTool.SetPCMouseProperties(mouseState.X / 255.0f, -mouseState.Y / 255.0f, mouseState.X, mouseState.Y, outState, 1.0f);
 
                 if (mouseState.Z > 0)
@@ -103,8 +116,25 @@ namespace RetroSpy.Readers
                 }
             }
 
-            if (state != null)
+            if (_keyboard != null)
             {
+                Result result_ = _keyboard.Poll();
+
+                if (result_.Failure)
+                {
+                    result_ = _keyboard.Acquire();
+
+                    if (result_.Failure)
+                    {
+                        Finish();
+                        ControllerDisconnected?.Invoke(this, EventArgs.Empty);
+                        throw new UnhandledErrorException("Failed to Poll/Aquire DirectInput Keyboard.");
+                    }
+                }
+
+                KeyboardState state = new KeyboardState();
+                _keyboard.GetCurrentKeyboardState(ref state);
+
                 foreach (string key in Enum.GetNames(typeof(Key)))
                 {
                     outState.SetButton(key, false);

@@ -1,12 +1,13 @@
 ﻿using Avalonia.Threading;
-using SharpDX;
-using SharpDX.DirectInput;
+using ReactiveUI;
+using SharpGen.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Resources;
+using Vortice.DirectInput;
 
 namespace RetroSpy.Readers
 {
@@ -18,18 +19,18 @@ namespace RetroSpy.Readers
 
         private const double TIMER_MS = 7;
         private const int RANGE = 1000;
-        private DirectInput? _dinput;
+        private IDirectInput8? _dinput;
         private DispatcherTimer? _timer;
-        private Joystick? _joystick;
+        private IDirectInputDevice8? _joystick;
 
-        public static Collection<uint> GetDevices()
+        public static Collection<int> GetDevices()
         {
-            DirectInput input = new();
+            IDirectInput8 input = DInput.DirectInput8Create();
             int amount = input.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly).Count;
             input.Dispose();
-            Collection<uint> result = new();
+            Collection<int> result = new();
 
-            for (uint i = 0; i < amount; i++)
+            for (int i = 0; i < amount; i++)
             {
                 result.Add(i);
             }
@@ -40,32 +41,30 @@ namespace RetroSpy.Readers
         {
             ResourceManager stringManager = Properties.Resources.ResourceManager;
 
-            _dinput = new DirectInput();
+            _dinput = DInput.DirectInput8Create();
 
             IList<DeviceInstance> devices = _dinput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
             if (devices.Count - 1 < id)
             {
                 throw new IOException(stringManager.GetString("CouldNotConnectToGamePad", CultureInfo.CurrentUICulture));
             }
-            _joystick = new Joystick(_dinput, devices[id].InstanceGuid);
+            _joystick = _dinput.CreateDevice(devices[id].InstanceGuid);
+            _joystick.SetCooperativeLevel(IntPtr.Zero, CooperativeLevel.NonExclusive | CooperativeLevel.Background | CooperativeLevel.Foreground);
+            _joystick.Properties.BufferSize = 16;
 
             foreach (DeviceObjectInstance obj in _joystick.GetObjects())
             {
                 if ((obj.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0)
                 {
-                    _joystick.GetObjectPropertiesById(obj.ObjectId).Range = new InputRange(-RANGE, RANGE);
+//                    _joystick.GetObjectPropertiesByName(obj.Name) = new InputRange(-RANGE, RANGE);
                 }
             }
 
-            try
+            if (_dinput.IsDeviceAttached(devices[id].InstanceGuid))
             {
-                _joystick.Acquire();
+                _ = _joystick.SetDataFormat<RawJoystickState>();
             }
-            catch (SharpDXException)
-            {
-                throw new IOException(stringManager.GetString("GamepadCouldNotBeAcquired", CultureInfo.CurrentUICulture));
-            }
-
+                
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
@@ -81,20 +80,24 @@ namespace RetroSpy.Readers
 
         private void Tick(object? sender, EventArgs e)
         {
-            try
-            {
-                _joystick?.Poll();
-            }
-            catch (SharpDXException)
-            {
-                Finish();
-                ControllerDisconnected?.Invoke(this, EventArgs.Empty);
-                return;
-            }
-
             if (_joystick != null)
             {
-                JoystickState state = _joystick.GetCurrentState();
+                Result result_ = _joystick.Poll();
+
+                if (result_.Failure)
+                {
+                    result_ = _joystick.Acquire();
+
+                    if (result_.Failure)
+                    {
+                        Finish();
+                        ControllerDisconnected?.Invoke(this, EventArgs.Empty);
+                        throw new UnhandledErrorException("Failed to Poll/Aquire DirectInput joystick.");
+                    }
+                }
+
+                JoystickState state = new JoystickState();
+                _joystick.GetCurrentJoystickState(ref state);
 
                 ControllerStateBuilder outState = new();
 
@@ -117,7 +120,7 @@ namespace RetroSpy.Readers
                     outState.SetButton("down", pov[0] > OctantAngle(2) && pov[0] < OctantAngle(5));
                     outState.SetButton("left", pov[0] > OctantAngle(4) && pov[0] < OctantAngle(7));
                 }
-                else if (_joystick.Information.ProductName == "8Bitdo SF30 Wireless Controller") // For SN30
+                else if (_joystick.DeviceInfo.ProductName == "8Bitdo SF30 Wireless Controller") // For SN30
                 {
                     outState.SetButton("up", (float)state.Y / RANGE == -1.0);
                     outState.SetButton("down", (float)state.Y / RANGE == 1.0);
