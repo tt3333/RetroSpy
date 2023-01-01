@@ -567,8 +567,11 @@ namespace RetroSpy
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId;
             _vm.MiSTerGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresMisterId;
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname;
-            UpdateGamepadList();
-            UpdateXIList();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                UpdateGamepadList();
+                UpdateXIList();
+            }
             UpdatePortListThread();
             UpdateBeagleList();
             UpdateBeagleI2CList();
