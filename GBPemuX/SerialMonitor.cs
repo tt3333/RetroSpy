@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
@@ -34,12 +35,14 @@ namespace GBPemu
         private DispatcherTimer? _timer;
         private readonly bool _printerMode;
         private bool _beenConnected;
+        private Stopwatch _stopWatch;
 
         public SerialMonitor(string? portName, bool printerMode = false)
         {
             _printerMode = printerMode;
             _localBuffer = new List<byte>();
             _datPort = new SerialPort(portName != null ? portName.Split(' ')[0] : "", BAUD_RATE);
+            _stopWatch = new Stopwatch();
         }
 
         public void Start()
@@ -63,6 +66,8 @@ namespace GBPemu
             };
             _timer.Tick += Tick;
             _timer.Start();
+
+
         }
 
         public void Stop()
@@ -108,9 +113,13 @@ namespace GBPemu
             try
             {
                 int readCount = _datPort.BytesToRead;
-                if (readCount < 1)
+                //if (readCount < 1)
+                //{
+                //    return;
+                //}
+                if (readCount > 0)
                 {
-                    return;
+                    _stopWatch.Restart();
                 }
 
                 byte[] readBuffer = new byte[readCount];
@@ -137,17 +146,17 @@ namespace GBPemu
             {
                 return;
             }
-
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
+
 
             if (_printerMode)
             {
                 byte[] array = _localBuffer.ToArray();
                 string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
-                if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("Memory Waterline:") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)") || lastCommand.Contains("// Timed Out (Memory Waterline: 6B out of 400B)"))
+                if (_stopWatch.ElapsedMilliseconds > 500 && (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("Memory Waterline:") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)") || lastCommand.Contains("// Timed Out (Memory Waterline: 6B out of 400B)")))
                 {
                     PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(0, lastSplitIndex).ToArray()));
 
