@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Reflection;
@@ -740,6 +741,10 @@ namespace RetroSpy
                 }
                 searcher2.Dispose();
 
+            }
+            else
+            {
+                list.InsertRange(0, SerialPort.GetPortNames());
             }
 
             // remove duplicates, sort alphabetically and convert to array
