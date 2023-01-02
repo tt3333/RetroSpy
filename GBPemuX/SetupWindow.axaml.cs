@@ -98,11 +98,6 @@ namespace GBPemu
 
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
         {
-            //if (!firstTime)
-            //{
-            //    firstTime = true;
-            //    return;
-            //}
 
             if (sender is MenuItem)
                 FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked;
