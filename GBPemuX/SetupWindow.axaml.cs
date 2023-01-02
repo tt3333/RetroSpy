@@ -378,22 +378,25 @@ namespace GBPemu
             }
 
             string[] usbDevs = GetUSBCOMDevices();
-            foreach (string s in usbDevs)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // Name will be like "USB Bridge (COM14)"
-                int start = s.IndexOf("(COM", StringComparison.Ordinal) + 1;
-                if (start >= 0)
+                foreach (string s in usbDevs)
                 {
-                    int end = s.IndexOf(")", start + 3, StringComparison.Ordinal);
-                    if (end >= 0)
+                    // Name will be like "USB Bridge (COM14)"
+                    int start = s.IndexOf("(COM", StringComparison.Ordinal) + 1;
+                    if (start >= 0)
                     {
-                        // cname is like "COM14"
-                        string cname = s[start..end];
-                        for (int i = 0; i < comPortInformation.Count; i++)
+                        int end = s.IndexOf(")", start + 3, StringComparison.Ordinal);
+                        if (end >= 0)
                         {
-                            if (comPortInformation[i].PortName == cname)
+                            // cname is like "COM14"
+                            string cname = s[start..end];
+                            for (int i = 0; i < comPortInformation.Count; i++)
                             {
-                                comPortInformation[i].FriendlyName = s.Remove(start - 1).TrimEnd();
+                                if (comPortInformation[i].PortName == cname)
+                                {
+                                    comPortInformation[i].FriendlyName = s.Remove(start - 1).TrimEnd();
+                                }
                             }
                         }
                     }
@@ -403,7 +406,7 @@ namespace GBPemu
             List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if ((_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||(_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))
                 {
                     ports.Add(port.PortName ?? "COMX");
                 }
