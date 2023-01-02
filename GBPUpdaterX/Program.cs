@@ -86,9 +86,9 @@ namespace GBPUpdater
             List<string> ports = new List<string>();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (port.PortName != null && port.FriendlyName != null && port.FriendlyName.Contains("Arduino"))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || (port.PortName != null && port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
                 {
-                    ports.Add(port.PortName);
+                    ports.Add(port.PortName ?? "COMX");
                 }
                 else if (port.PortName != null && port.FriendlyName != null && (port.FriendlyName.Contains("CH340") || port.FriendlyName.Contains("CH341")))
                 {
@@ -176,20 +176,13 @@ namespace GBPUpdater
                         string? result = null;
                         do
                         {
+                            _serialPort.ReadTimeout = 2500;
                             result = _serialPort.ReadLine();
-                        } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
+                        } while (result != null && !result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"));
 
-                        if (result == "parse_state:0\r" || (result != null && result.Contains("d=debug")))
-                        {
-                            foundPort = true;
-                            gbpemuPort = port;
-                            _serialPort.Close();
-                        }
-                        else
-                        {
-                            _serialPort.Close();
-                            continue;
-                        }
+                        foundPort = true;
+                        gbpemuPort = port;
+                        _serialPort.Close();
                     }
                 }
 
@@ -201,17 +194,38 @@ namespace GBPUpdater
                 {
                     Console.WriteLine("found on " + gbpemuPort + ".\n");
 
-
                     Console.WriteLine(Properties.Resources.ResourceManager.GetString("Updating", CultureInfo.CurrentUICulture));
-
-                    ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe", "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort + " -b115200 -D -Uflash:w:firmware.ino.hex:i")
+                    ProcessStartInfo processInfo;
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        RedirectStandardError = true,
-                        RedirectStandardOutput = true,
-                        WorkingDirectory = tempDirectory
-                    };
+                        processInfo = new ProcessStartInfo("cmd.exe",
+                            "/c avrdude.exe -Cavrdude.conf -v -patmega328p -carduino -P" + gbpemuPort +
+                            " -b115200 -D -Uflash:w:firmware.ino.hex:i")
+                        {
+                            CreateNoWindow = true,
+                            UseShellExecute = false,
+                            RedirectStandardError = true,
+                            RedirectStandardOutput = true,
+                            WorkingDirectory = tempDirectory
+                        };
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    {
+                        processInfo = new ProcessStartInfo("avrdude",
+                            "-v -patmega328p -carduino -P" + gbpemuPort +
+                            " -b115200 -D -Uflash:w:firmware.ino.hex:i")
+                        {
+                            CreateNoWindow = true,
+                            UseShellExecute = false,
+                            RedirectStandardError = true,
+                            RedirectStandardOutput = true,
+                            WorkingDirectory = tempDirectory
+                        };
+                    }
+                    else
+                    {
+                        throw new PlatformNotSupportedException();
+                    }
 
                     StringBuilder sb = new StringBuilder();
                     Process? p = Process.Start(processInfo);
