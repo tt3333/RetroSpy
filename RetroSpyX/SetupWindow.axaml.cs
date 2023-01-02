@@ -396,6 +396,7 @@ namespace RetroSpy
                     _portListUpdateTimer.Stop();
                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
                     await g.ShowDialog(this);
+                    _portListUpdateTimer.Start();
                 }
                 else
                 {
@@ -403,8 +404,8 @@ namespace RetroSpy
                     v = new ViewWindow(this, _vm.Skins.SelectedItem,
                                    _vm.Backgrounds.SelectedItem,
                                    reader, _vm.StaticViewerWindowName);
-
                     await v.ShowDialog(this);
+                    _portListUpdateTimer.Start();
 
                 }
             }
@@ -431,7 +432,6 @@ namespace RetroSpy
                 v?.Close();
             }
 
-            _portListUpdateTimer.Start();
             Show();
         }
 

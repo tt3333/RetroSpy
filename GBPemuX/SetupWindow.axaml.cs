@@ -69,6 +69,7 @@ namespace GBPemu
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
+            FilterCOMCheckbox.IsChecked = _vm.FilterCOMPorts;
 
             MenuItem menuItem = new()
             {
@@ -81,39 +82,33 @@ namespace GBPemu
             {
                 ((AvaloniaList<object>)OptionsMenu.Items).Add(COMMenu);
             }
-            else
-            {
-                firstTime = true;
-            }
 
             _portListUpdateTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
             _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
-            _portListUpdateTimer.Start();
 
+            _portListUpdateTimer.Start();
             UpdatePortList();
-            _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
+
         }
 
-        bool firstTime = false;
         MenuItem COMMenu;
 
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
         {
-            if (!firstTime)
-            {
-                firstTime = true;
-                return;
-            }
+            //if (!firstTime)
+            //{
+            //    firstTime = true;
+            //    return;
+            //}
 
             if (sender is MenuItem)
                 FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked;
 
             if (FilterCOMCheckbox.IsChecked == true)
             {
-
                 _vm.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
                 Properties.Settings.Default.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
 
@@ -137,59 +132,32 @@ namespace GBPemu
 
         private async void COMPortClicked(object? sender, RoutedEventArgs e)
         {
+            string? port = ((MenuItem?)sender)?.Header.ToString();
+
+            Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
+            Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
+            Properties.Settings.Default.Save();
+
             try
             {
-                string? port = ((MenuItem?)sender)?.Header.ToString();
-                using SerialPort _serialPort = new(port ?? "COMX", 115200, Parity.None, 8, StopBits.One)
+                if (Dispatcher.UIThread.CheckAccess())
                 {
-                    Handshake = Handshake.None,
-                    ReadTimeout = 500,
-                    WriteTimeout = 500
-                };
-                _serialPort.Open();
-                _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                string? result = null;
-                do
+                    _portListUpdateTimer.Stop();
+                    IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
+                    var g = new GameBoyPrinterEmulatorWindow(reader, this);
+                    await g.ShowDialog(this);
+                    _portListUpdateTimer.Start();
+                }
+                else
                 {
-                    result = _serialPort.ReadLine();
-                    if (result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
-                        break;
-
-                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
-
-                if (result?.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
-                {
-                    _serialPort.Close();
-                    Thread.Sleep(1000);
-
-                    Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
-                    Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
-                    Properties.Settings.Default.Save();
-
-                    try
+                    Dispatcher.UIThread.Post(async () =>
                     {
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
-                            var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                            await g.ShowDialog(this);
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.Post(async () =>
-                            {
-                                IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
-                                var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                                await g.ShowDialog(this);
-                            });
-                        }
-
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                        Show();
-                    }
+                        _portListUpdateTimer.Stop();
+                        IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
+                        var g = new GameBoyPrinterEmulatorWindow(reader, this);
+                        await g.ShowDialog(this);
+                        _portListUpdateTimer.Start();
+                    });
                 }
             }
             catch (Exception ex)
