@@ -118,6 +118,12 @@ namespace RetroSpy
                 Disconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
+            catch (OverflowException)  // Linux throws this when the printer emulator is unplugged ???
+            {
+                Stop();
+                Disconnected?.Invoke(this, EventArgs.Empty);
+                return;
+            }
 
             // Try and find 2 splitting characters in our buffer.
             int lastSplitIndex = _localBuffer.LastIndexOf(0x0A);
