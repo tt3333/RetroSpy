@@ -6,7 +6,7 @@
         x:Class="RetroSpy.AddRemoveWindow"
         Title="RetroSpy" CanResize="false" Height="515.015" Width="602" Foreground="White" Background="#FF252526">
 	<Grid>
-		<ListBox Margin="10,31,334,47" Name="IncludedListBox" Width="250" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16" Items="{Binding IncludedSources}" SelectedItem="{Binding IncludedSources.SelectedItem}"				 >
+		<ListBox Margin="10,31,334,47" Name="IncludedListBox" Width="250" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" Items="{Binding IncludedSources}" SelectedItem="{Binding IncludedSources.SelectedItem}"				 >
 			<ListBox.Styles>
 				<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
 					<Setter Property="Background" Value="#4a657b"/>
@@ -27,8 +27,8 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-		<Label Content="Included Sources" HorizontalAlignment="Left" Margin="12,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
-		<Button x:Name="SaveButton" HorizontalContentAlignment="Center" Content="Save" Margin="340,0,10,10"  Height="32" Width="254" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526"  Click="SaveButton_Click"
+		<Label Content="Included Sources" HorizontalAlignment="Left" Margin="12,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" />
+		<Button x:Name="SaveButton" HorizontalContentAlignment="Center" Content="Save" Margin="340,0,10,10"  Height="32" Width="254" VerticalAlignment="Bottom" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526"  Click="SaveButton_Click"
 				>
 			<Button.Styles>
 				<Style Selector="Button:pointerover /template/ ContentPresenter">
@@ -38,7 +38,7 @@
 				</Style>
 			</Button.Styles>
 		</Button>
-		<ListBox Name="ExcludedListBox" Margin="0,31,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"  HorizontalAlignment="Right" Width="250" Items="{Binding ExcludedSources}" SelectedItem="{Binding ExcludedSources.SelectedItem}"
+		<ListBox Name="ExcludedListBox" Margin="0,31,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16"  HorizontalAlignment="Right" Width="250" Items="{Binding ExcludedSources}" SelectedItem="{Binding ExcludedSources.SelectedItem}"
 				 >
 			<ListBox.Styles>
 				<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
@@ -60,8 +60,8 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-		<Label x:Name="DelayLabel" Content="" HorizontalAlignment="Left" Margin="54,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
-		<Button x:Name="CancelButton"  HorizontalContentAlignment="Center" Content="Cancel" Margin="12,0,334,10" Width="254" Height="32" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526"  Click="CancelButton_Click"				>
+		<Label x:Name="DelayLabel" Content="" HorizontalAlignment="Left" Margin="54,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" />
+		<Button x:Name="CancelButton"  HorizontalContentAlignment="Center" Content="Cancel" Margin="12,0,334,10" Width="254" Height="32" VerticalAlignment="Bottom" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526"  Click="CancelButton_Click"				>
 			<Button.Styles>
 				<Style Selector="Button:pointerover /template/ ContentPresenter">
 					<Setter Property="Background" Value="#4a657b"/>
@@ -71,7 +71,7 @@
 			</Button.Styles>
 		</Button>
 
-		<Button x:Name="Remove" Content="&gt;" Margin="290,117,276,319" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Remove_Click"				>
+		<Button x:Name="Remove" Content="&gt;" Margin="290,117,276,319" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Remove_Click"				>
 			<Button.Styles>
 				<Style Selector="Button:pointerover /template/ ContentPresenter">
 					<Setter Property="Background" Value="#4a657b"/>
@@ -81,7 +81,7 @@
 			</Button.Styles>
 		</Button>
 
-		<Button x:Name="Add" Content="&lt;" Margin="290,256,276,181" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Add_Click"	>
+		<Button x:Name="Add" Content="&lt;" Margin="290,256,276,181" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Add_Click"	>
 			<Button.Styles>
 				<Style Selector="Button:pointerover /template/ ContentPresenter">
 					<Setter Property="Background" Value="#4a657b"/>
@@ -91,6 +91,6 @@
 			</Button.Styles>
 		</Button>
 
-		<Label Content="Excluded Sources" HorizontalAlignment="Left" Margin="340,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
+		<Label Content="Excluded Sources" HorizontalAlignment="Left" Margin="340,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16"/>
 	</Grid>
 </Window>

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using System.Collections;
+using System.Runtime.InteropServices;
 using Xilium.CefGlue.Demo.Avalonia;
 
 namespace RetroSpy
@@ -10,14 +11,12 @@ namespace RetroSpy
         {
             InitializeComponent();
 
-            var tabItems = ((IList)this.FindControl<DockPanel>("dockPanel").Children);
-
-            var view = new BrowserView();
-
-
-
-
-            tabItems.Add(view);
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                var tabItems = ((IList)this.FindControl<DockPanel>("dockPanel").Children);
+                var view = new BrowserView();
+                tabItems.Add(view);
+            }
 
         }
     }
