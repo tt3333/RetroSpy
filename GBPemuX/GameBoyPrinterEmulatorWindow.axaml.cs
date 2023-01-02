@@ -677,7 +677,8 @@ namespace GBPemu
             List<byte[]> compressedBytes = new();
             bool isCompressed = false;
 
-
+            
+            
             for (int tile_i = 0; tile_i < tiles_rawBytes_array.Length; tile_i++)
             {
                 string tile_element = tiles_rawBytes_array[tile_i];

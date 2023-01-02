@@ -90,7 +90,7 @@ namespace GBPemu
             _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
 
             _portListUpdateTimer.Start();
-            UpdatePortList();
+            //UpdatePortList();
 
         }
 
@@ -206,15 +206,37 @@ namespace GBPemu
                             try
                             {
                                 string? result = null;
+                                bool seenTitle = false;
+                                _serialPort.ReadTimeout = 1000;
                                 do
                                 {
-                                    result = _serialPort.ReadLine();
-                                    if (result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
-                                        break;
+                                    if (!seenTitle)
+                                    {
+                                        result = _serialPort.ReadLine();
+                                        if (result.StartsWith(
+                                                "// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
+                                            seenTitle = true;
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            //Thread.Sleep(500);
+                                            result = _serialPort.ReadLine();
+                                        }
+                                        catch (TimeoutException)
+                                        {
+                                            if (result.StartsWith("// ---"))
+                                                break;
+                                            continue;
+                                        }
+                                    }
 
-                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
+                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) ||
+                                                            result.StartsWith("#", StringComparison.Ordinal) ||
+                                                            result.StartsWith("//", StringComparison.Ordinal)));
 
-                                if (result?.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
+                                if (result.StartsWith("// ---") || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                 {
                                     _serialPort.Close();
                                     Thread.Sleep(1000);
@@ -230,9 +252,11 @@ namespace GBPemu
                                         {
                                             if (this.IsVisible)
                                             {
+                                                _portListUpdateTimer.Stop();
                                                 IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                 var g = new GameBoyPrinterEmulatorWindow(reader, this);
                                                 await g.ShowDialog(this);
+                                                _portListUpdateTimer.Start();
                                             }
                                         }
                                         else
@@ -241,9 +265,11 @@ namespace GBPemu
                                             {
                                                 if (this.IsVisible)
                                                 {
+                                                    _portListUpdateTimer.Stop();
                                                     IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
                                                     await g.ShowDialog(this);
+                                                    _portListUpdateTimer.Start();
                                                 }
                                             });
                                         }
