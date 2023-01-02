@@ -789,7 +789,7 @@ namespace RetroSpy
             List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (_vm.FilterCOMPorts || (port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || _vm.FilterCOMPorts || (port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
                 {
                     ports.Add(string.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
                 }
