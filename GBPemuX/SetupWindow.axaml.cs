@@ -68,8 +68,9 @@ namespace GBPemu
             string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
+
             _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
-            FilterCOMCheckbox.IsChecked = _vm.FilterCOMPorts;
+            FilterCOMCheckbox.IsChecked =  RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || _vm.FilterCOMPorts;
 
             MenuItem menuItem = new()
             {
@@ -88,22 +89,24 @@ namespace GBPemu
                 Interval = TimeSpan.FromSeconds(1)
             };
             _portListUpdateTimer.Tick += (sender, e) => UpdatePortListThread();
-
             _portListUpdateTimer.Start();
-            //UpdatePortList();
 
+            UpdatePortList();
         }
+
 
         MenuItem COMMenu;
 
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
         {
+            FilterCOMCheckbox.IsChecked = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || FilterCOMCheckbox.IsChecked == true;
 
             if (sender is MenuItem)
-                FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked;
+                FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked == true || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
             if (FilterCOMCheckbox.IsChecked == true)
             {
+
                 _vm.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
                 Properties.Settings.Default.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
 
@@ -127,6 +130,7 @@ namespace GBPemu
 
         private async void COMPortClicked(object? sender, RoutedEventArgs e)
         {
+
             string? port = ((MenuItem?)sender)?.Header.ToString();
 
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
@@ -137,30 +141,26 @@ namespace GBPemu
             {
                 if (Dispatcher.UIThread.CheckAccess())
                 {
-                    _portListUpdateTimer.Stop();
                     IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
                     await g.ShowDialog(this);
-                    _portListUpdateTimer.Start();
                 }
                 else
                 {
                     Dispatcher.UIThread.Post(async () =>
                     {
-                        _portListUpdateTimer.Stop();
                         IControllerReader? reader = InputSource.PRINTER.BuildReader(port);
                         var g = new GameBoyPrinterEmulatorWindow(reader, this);
                         await g.ShowDialog(this);
-                        _portListUpdateTimer.Start();
                     });
                 }
+
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
                 AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 Show();
             }
-
         }
 
         private readonly object updatePortLock = new();
@@ -206,40 +206,12 @@ namespace GBPemu
                             try
                             {
                                 string? result = null;
-                                bool seenTitle = false;
-                                _serialPort.ReadTimeout = 1000;
-
                                 do
                                 {
-                                    if (!seenTitle)
-                                    {
-                                        result = _serialPort.ReadLine();
-                                        if (result.StartsWith(
-                                                "// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
-                                        {
-                                            seenTitle = true;
-                                            ConnectingLabel.IsVisible = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            result = _serialPort.ReadLine();
-                                        }
-                                        catch (TimeoutException)
-                                        {
-                                            if (result?.StartsWith("// ---") == true)
-                                                break;
-                                            continue;
-                                        }
-                                    }
+                                    result = _serialPort.ReadLine();
+                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
 
-                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) ||
-                                                            result.StartsWith("#", StringComparison.Ordinal) ||
-                                                            result.StartsWith("//", StringComparison.Ordinal)));
-
-                                if (result?.StartsWith("// ---") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
+                                if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                 {
                                     _serialPort.Close();
                                     Thread.Sleep(1000);
@@ -255,12 +227,9 @@ namespace GBPemu
                                         {
                                             if (this.IsVisible)
                                             {
-                                                ConnectingLabel.IsVisible = false;
-                                                _portListUpdateTimer.Stop();
                                                 IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                 var g = new GameBoyPrinterEmulatorWindow(reader, this);
                                                 await g.ShowDialog(this);
-                                                _portListUpdateTimer.Start();
                                             }
                                         }
                                         else
@@ -269,12 +238,9 @@ namespace GBPemu
                                             {
                                                 if (this.IsVisible)
                                                 {
-                                                    ConnectingLabel.IsVisible = false;
-                                                    //_portListUpdateTimer.Stop();
                                                     IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
                                                     await g.ShowDialog(this);
-                                                    _portListUpdateTimer.Start();
                                                 }
                                             });
                                         }
@@ -283,7 +249,6 @@ namespace GBPemu
                                     }
                                     catch (UnauthorizedAccessException ex)
                                     {
-                                        ConnectingLabel.IsVisible = false;
                                         AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                                         Show();
                                     }
@@ -291,34 +256,12 @@ namespace GBPemu
                                 }
                                 else
                                 {
-                                    if (Dispatcher.UIThread.CheckAccess())
-                                    {
-                                        ConnectingLabel.IsVisible = false;
-                                    }
-                                    else
-                                    {
-                                        Dispatcher.UIThread.Post(async () =>
-                                        {
-                                            ConnectingLabel.IsVisible = false;
-                                        });
-                                    }
                                     _serialPort.Close();
                                     continue;
                                 }
                             }
                             catch (Exception)
                             {
-                                if (Dispatcher.UIThread.CheckAccess())
-                                {
-                                    ConnectingLabel.IsVisible = false;
-                                }
-                                else
-                                {
-                                    Dispatcher.UIThread.Post(async () =>
-                                    {
-                                        ConnectingLabel.IsVisible = false;
-                                    });
-                                }
                                 _serialPort.Close();
                                 continue;
                             }
@@ -429,7 +372,7 @@ namespace GBPemu
             List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||(_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || (_vm.FilterCOMPorts == true || port.FriendlyName?.Contains("Arduino") == true))
                 {
                     ports.Add(port.PortName ?? "COMX");
                 }

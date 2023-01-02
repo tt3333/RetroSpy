@@ -22,7 +22,6 @@
 	</ItemGroup>
 	<ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Assets\Carlito-Regular.ttf" />
     <None Remove="Assets\SetupImage.png" />
     <None Remove="game_palettes.cfg" />
     <None Remove="Mattahan-Buuf-Magnifying-Glass.ico" />
@@ -97,10 +96,6 @@
 
 	<ItemGroup>
 		<AssetFiles Include="Assets\**\*.*" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AssetFiles Remove="Assets\Carlito-Regular.ttf" />
 	</ItemGroup>
 
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
