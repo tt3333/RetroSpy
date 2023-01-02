@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Threading;
+using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -859,33 +860,34 @@ namespace GBPemu
             Environment.Exit(0);
         }
 
-        //private void SaveAs_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SaveFileDialog saveFileDialog = new SaveFileDialog
-        //    {
-        //        AddExtension = true,
-        //        Filter = Properties.Resources.ResourceManager.GetString("PNGFilter", CultureInfo.CurrentUICulture)
-        //    };
-        //    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-        //    {
-        //        PngBitmapEncoder encoder = new PngBitmapEncoder();
-        //        SaveUsingEncoder(_image, saveFileDialog.FileName, encoder);
-        //    }
-        //    saveFileDialog.Dispose();
-        //}
+        private async void SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog SaveFileBox = new()
+            {
+                Title = "Save Picture As..."
+            };
 
-        //private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
-        //{
-        //    RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-        //    bitmap.Render(visual);
-        //    BitmapFrame frame = BitmapFrame.Create(bitmap);
-        //    encoder.Frames.Add(frame);
+            List<FileDialogFilter> Filters = new();
+            FileDialogFilter filter = new();
+            List<string> extension = new()
+            {
+                "png"
+            };
+            filter.Extensions = extension;
+            filter.Name = "Document Files";
+            Filters.Add(filter);
+            SaveFileBox.Filters = Filters;
 
-        //    using (FileStream stream = File.Create(fileName))
-        //    {
-        //        encoder.Save(stream);
-        //    }
-        //}
+            SaveFileBox.DefaultExtension = "png";
+
+            var saveFilename = await SaveFileBox.ShowAsync(this);
+
+            if (saveFilename != null) 
+            {
+                var image = _imageBuffer.MakeBitmap();
+                image._rawImage.SaveAsPng(saveFilename);
+            }
+        }
 
     }
 }

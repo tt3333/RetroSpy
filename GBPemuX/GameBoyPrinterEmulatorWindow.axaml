@@ -8,7 +8,7 @@
 	<Grid x:Name="GameBoyPrinterEmulatorWindowGrid" Height="432" Width="480">
 		<Grid.ContextMenu>
 			<ContextMenu>
-				<MenuItem Header="Save As..."  />
+				<MenuItem Header="Save As..."  Click="SaveAs_Click"/>
 				<Separator/>
 				<MenuItem Header="Palette">
 					<MenuItem Name="Palette_Grayscale" Header="Grayscale" Click="Palette_Click" >
