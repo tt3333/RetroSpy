@@ -113,10 +113,6 @@ namespace GBPemu
             try
             {
                 int readCount = _datPort.BytesToRead;
-                //if (readCount < 1)
-                //{
-                //    return;
-                //}
                 if (readCount > 0)
                 {
                     _stopWatch.Restart();
@@ -146,10 +142,10 @@ namespace GBPemu
             {
                 return;
             }
+
             // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize = lastSplitIndex - packetStart;
-
 
             if (_printerMode)
             {
