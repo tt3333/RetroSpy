@@ -152,9 +152,12 @@ namespace GBPemu
                 do
                 {
                     result = _serialPort.ReadLine();
+                    if (result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
+                        break;
+
                 } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
 
-                if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
+                if (result?.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                 {
                     _serialPort.Close();
                     Thread.Sleep(1000);
@@ -243,9 +246,12 @@ namespace GBPemu
                                 do
                                 {
                                     result = _serialPort.ReadLine();
+                                    if (result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
+                                        break;
+
                                 } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
 
-                                if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
+                                if (result?.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                 {
                                     _serialPort.Close();
                                     Thread.Sleep(1000);
