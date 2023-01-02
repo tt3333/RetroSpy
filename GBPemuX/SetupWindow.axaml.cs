@@ -69,9 +69,9 @@ namespace GBPemu
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
 
-            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts;
-            FilterCOMCheckbox.IsChecked =  RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || _vm.FilterCOMPorts;
-
+            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            FilterCOMCheckbox.IsChecked = _vm.FilterCOMPorts;
+            
             MenuItem menuItem = new()
             {
                 Header = "COM Ports"
@@ -81,6 +81,7 @@ namespace GBPemu
 
             if (_vm.FilterCOMPorts == true)
             {
+                COMMenuActive = true;
                 ((AvaloniaList<object>)OptionsMenu.Items).Add(COMMenu);
             }
 
@@ -96,7 +97,7 @@ namespace GBPemu
 
 
         MenuItem COMMenu;
-
+        private bool COMMenuActive = false;
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
         {
             FilterCOMCheckbox.IsChecked = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || FilterCOMCheckbox.IsChecked == true;
@@ -104,9 +105,9 @@ namespace GBPemu
             if (sender is MenuItem)
                 FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked == true || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-            if (FilterCOMCheckbox.IsChecked == true)
+            if (!COMMenuActive && FilterCOMCheckbox.IsChecked == true)
             {
-
+                COMMenuActive = true;
                 _vm.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
                 Properties.Settings.Default.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
 
@@ -119,8 +120,9 @@ namespace GBPemu
 
                 ((AvaloniaList<object>)OptionsMenu.Items).Add(COMMenu);
             }
-            else
+            else if(FilterCOMCheckbox.IsChecked == false)
             {
+                COMMenuActive = false;
                 _vm.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
                 Properties.Settings.Default.FilterCOMPorts = FilterCOMCheckbox.IsChecked ?? false;
 
