@@ -18,5 +18,6 @@
 				</MenuItem>
 			</ContextMenu>
 		</Grid.ContextMenu>
+		<Label Name="ConnectingLabel" IsVisible="false" Content="Connecting..." HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Foreground="#FF0000" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="36" />
 	</Grid>
 </Window>

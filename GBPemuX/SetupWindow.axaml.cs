@@ -208,6 +208,7 @@ namespace GBPemu
                                 string? result = null;
                                 bool seenTitle = false;
                                 _serialPort.ReadTimeout = 1000;
+
                                 do
                                 {
                                     if (!seenTitle)
@@ -215,18 +216,20 @@ namespace GBPemu
                                         result = _serialPort.ReadLine();
                                         if (result.StartsWith(
                                                 "// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"))
+                                        {
                                             seenTitle = true;
+                                            ConnectingLabel.IsVisible = true;
+                                        }
                                     }
                                     else
                                     {
                                         try
                                         {
-                                            //Thread.Sleep(500);
                                             result = _serialPort.ReadLine();
                                         }
                                         catch (TimeoutException)
                                         {
-                                            if (result.StartsWith("// ---"))
+                                            if (result?.StartsWith("// ---") == true)
                                                 break;
                                             continue;
                                         }
@@ -236,7 +239,7 @@ namespace GBPemu
                                                             result.StartsWith("#", StringComparison.Ordinal) ||
                                                             result.StartsWith("//", StringComparison.Ordinal)));
 
-                                if (result.StartsWith("// ---") || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
+                                if (result?.StartsWith("// ---") == true || result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                 {
                                     _serialPort.Close();
                                     Thread.Sleep(1000);
@@ -252,6 +255,7 @@ namespace GBPemu
                                         {
                                             if (this.IsVisible)
                                             {
+                                                ConnectingLabel.IsVisible = false;
                                                 _portListUpdateTimer.Stop();
                                                 IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                 var g = new GameBoyPrinterEmulatorWindow(reader, this);
@@ -265,7 +269,8 @@ namespace GBPemu
                                             {
                                                 if (this.IsVisible)
                                                 {
-                                                    _portListUpdateTimer.Stop();
+                                                    ConnectingLabel.IsVisible = false;
+                                                    //_portListUpdateTimer.Stop();
                                                     IControllerReader reader = InputSource.PRINTER.BuildReader(port);
                                                     var g = new GameBoyPrinterEmulatorWindow(reader, this);
                                                     await g.ShowDialog(this);
@@ -278,6 +283,7 @@ namespace GBPemu
                                     }
                                     catch (UnauthorizedAccessException ex)
                                     {
+                                        ConnectingLabel.IsVisible = false;
                                         AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                                         Show();
                                     }
@@ -285,12 +291,34 @@ namespace GBPemu
                                 }
                                 else
                                 {
+                                    if (Dispatcher.UIThread.CheckAccess())
+                                    {
+                                        ConnectingLabel.IsVisible = false;
+                                    }
+                                    else
+                                    {
+                                        Dispatcher.UIThread.Post(async () =>
+                                        {
+                                            ConnectingLabel.IsVisible = false;
+                                        });
+                                    }
                                     _serialPort.Close();
                                     continue;
                                 }
                             }
                             catch (Exception)
                             {
+                                if (Dispatcher.UIThread.CheckAccess())
+                                {
+                                    ConnectingLabel.IsVisible = false;
+                                }
+                                else
+                                {
+                                    Dispatcher.UIThread.Post(async () =>
+                                    {
+                                        ConnectingLabel.IsVisible = false;
+                                    });
+                                }
                                 _serialPort.Close();
                                 continue;
                             }
