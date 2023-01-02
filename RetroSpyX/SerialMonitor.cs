@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
@@ -33,6 +34,7 @@ namespace RetroSpy
         private readonly List<byte> _localBuffer;
         private DispatcherTimer? _timer;
         private readonly bool _printerMode;
+        private Stopwatch _stopWatch;
 
         public SerialMonitor(string? portName, bool useLagFix, bool printerMode = false)
         {
@@ -43,6 +45,7 @@ namespace RetroSpy
                 Handshake = Handshake.RequestToSend, // Improves support for devices expecting RTS & DTR signals.
                 DtrEnable = true
             };
+            _stopWatch = new Stopwatch();
         }
 
         public void Start()
@@ -99,9 +102,9 @@ namespace RetroSpy
             try
             {
                 int readCount = _datPort.BytesToRead;
-                if (readCount < 1)
+                if (readCount > 0)
                 {
-                    return;
+                    _stopWatch.Restart();
                 }
 
                 byte[] readBuffer = new byte[readCount];
@@ -138,7 +141,7 @@ namespace RetroSpy
                 byte[] array = _localBuffer.ToArray();
                 string lastCommand = Encoding.UTF8.GetString(array, 0, lastSplitIndex);
 
-                if (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)"))
+                if (_stopWatch.ElapsedMilliseconds > 500 && (lastCommand.Contains("# Finished Pretending To Print for fun!") || lastCommand.Contains("Memory Waterline:") || lastCommand.Contains("// Timed Out (Memory Waterline: 4B out of 400B)") || lastCommand.Contains("// Timed Out (Memory Waterline: 6B out of 400B)")))
                 {
                     PacketReceived(this, new PacketDataEventArgs(_localBuffer.GetRange(0, lastSplitIndex).ToArray()));
 
