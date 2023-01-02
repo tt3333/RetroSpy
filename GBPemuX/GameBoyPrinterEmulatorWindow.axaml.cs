@@ -481,6 +481,10 @@ namespace GBPemu
             GameBoyPrinterEmulatorWindowGrid.Width = 480;
             Height = 432;
             Width = 480;
+            MinHeight = 432;
+            MaxHeight = 432;
+            MinWidth = 480;
+            MinHeight = 432;
         }
 
         private readonly SetupWindow _sw;
@@ -545,6 +549,8 @@ namespace GBPemu
 
             GameBoyPrinterEmulatorWindowGrid.Children.Add(_image);
             _image.Source = wbitmap._bitmap;
+            Height = MinHeight = MaxHeight = _image.Height;
+            Width = MinWidth = MaxWidth = _image.Width;
 
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
@@ -627,6 +633,8 @@ namespace GBPemu
 
             // Set the Image source.
             _image.Source = wbitmap._bitmap;
+            Height = MinHeight = MaxHeight = _image.Height;
+            Width = MinWidth = MaxWidth = _image.Width;
         }
 
         private class Tile

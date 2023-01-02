@@ -141,6 +141,7 @@ namespace RetroSpy
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             isClosing = true;
+            Environment.Exit(0);
         }
 
         public SetupWindow() : this(false)
