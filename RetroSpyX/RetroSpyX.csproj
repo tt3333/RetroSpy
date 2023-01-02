@@ -25,6 +25,7 @@
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="Carlito-Regular.ttf" />
     <None Remove="keybindings.xml" />
     <None Remove="Resources\ErrorImage.png" />
     <None Remove="Resources\PrintImage.png" />
@@ -752,6 +753,7 @@
     <None Remove="skins\xbox360-controller\trig-r.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Carlito-Regular.ttf" />
     <Content Include="keybindings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

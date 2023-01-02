@@ -52,9 +52,9 @@
                 </MenuItem>
 		    </Menu>
         </StackPanel>
-        <Label Name="MisterControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="340,140,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding MiSTerGamepadOptionVisibility}"/>
+        <Label Name="MisterControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="340,140,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding MiSTerGamepadOptionVisibility}"/>
         <ComboBox Name="MisterControllerIdCombo" Width="86.8" Height="29.9" Margin="425,140,90.2,0" VerticalAlignment="Top" BorderBrush="#FF252525" FontFamily="Segoe UI" FontSize="12" Background="#efefef" IsVisible="{Binding MiSTerGamepadOptionVisibility}"/>
-        <Button Name="MiSTerPopulate" Content="Detect" Margin="522,0,0,340" Height="35" VerticalContentAlignment="Center" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="MiSTerPopulate_Click" IsVisible="{Binding MiSTerGamepadOptionVisibility}">
+        <Button Name="MiSTerPopulate" Content="Detect" Margin="522,0,0,340" Height="35" VerticalContentAlignment="Center" VerticalAlignment="Bottom" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="MiSTerPopulate_Click" IsVisible="{Binding MiSTerGamepadOptionVisibility}">
             <Button.Styles>
                 <Style Selector="Button:pointerover /template/ ContentPresenter">
                     <Setter Property="Background" Value="#4a657b"/>
@@ -70,10 +70,10 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Label Content="Controller Source:" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
-        <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding ComPortOptionVisibility}"/>
-        <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding XIAndGamepadOptionVisibility}"/>
-        <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
+        <Label Content="Controller Source:" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16"/>
+        <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding ComPortOptionVisibility}"/>
+        <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding XIAndGamepadOptionVisibility}"/>
+        <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,70,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
         <ComboBox Name="ComPortCombo" Margin="145,70,10,0" Width="447" Height="29.9" VerticalAlignment="Top" BorderBrush="#FF252525" FontFamily="Segoe UI" FontSize="12" Background="#efefef" IsVisible="{Binding ComPortOptionVisibility}" Items="{Binding Ports}" SelectedItem="{Binding Ports.SelectedItem}" SelectionChanged="ComPortCombo_SelectionChanged">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -88,7 +88,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBox Name="txtHostname" Margin="145,70,10.333,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Width="446.667" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <TextBox Name="txtHostname" Margin="145,70,10.333,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Width="446.667" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <TextBox.Styles>
                 <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="#FF3E3E42"/>
@@ -99,8 +99,8 @@
                 </Style>
             </TextBox.Styles>
         </TextBox>
-        <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" Height="29.53"/>
-        <ListBox Name="SkinListBox" Margin="10,198,265.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16" SelectedIndex="0" Width="326.667" Height="254.055" Items="{Binding Skins}" SelectedItem="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged">
+        <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" Height="29.53"/>
+        <ListBox Name="SkinListBox" Margin="10,198,265.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" SelectedIndex="0" Width="326.667" Height="254.055" Items="{Binding Skins}" SelectedItem="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
                     <Setter Property="Background" Value="#4a657b"/>
@@ -121,7 +121,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox Name="txtDelay" Margin="145,138,265.2,0" VerticalAlignment="Top" Height="24" Width="191.8" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" Text="0" Classes="NumberOnly" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <TextBox Name="txtDelay" Margin="145,138,265.2,0" VerticalAlignment="Top" Height="24" Width="191.8" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" Text="0" Classes="NumberOnly" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <TextBox.Styles>
                 <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="#FF3E3E42"/>
@@ -132,7 +132,7 @@
                 </Style>
             </TextBox.Styles>
         </TextBox>
-        <Button Name="goButton" Width="582" Height="30" Content="Go!" HorizontalContentAlignment="Center" Margin="10,0,10,10" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="GoButton_Click">
+        <Button Name="goButton" Width="582" Height="30" Content="Go!" HorizontalContentAlignment="Center" Margin="10,0,10,10" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="GoButton_Click">
             <Button.Styles>
                 <Style Selector="Button:pointerover /template/ ContentPresenter">
                     <Setter Property="Background" Value="#4a657b"/>
@@ -141,7 +141,7 @@
                 </Style>
             </Button.Styles>
         </Button>
-        <ListBox Name="BackgroundListBox" Margin="0,198,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16" SelectedIndex="0" HorizontalAlignment="Right" Width="250" Height="254.055" Items="{Binding Backgrounds}" SelectedItem="{Binding Backgrounds.SelectedItem}">
+        <ListBox Name="BackgroundListBox" Margin="0,198,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" SelectedIndex="0" HorizontalAlignment="Right" Width="250" Height="254.055" Items="{Binding Backgrounds}" SelectedItem="{Binding Backgrounds.SelectedItem}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
                     <Setter Property="Background" Value="#4a657b"/>
@@ -160,8 +160,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label x:Name="DelayLabel" Content="Delay (ms):" HorizontalAlignment="Left" Margin="54,138,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
-        <CheckBox x:Name="staticViewerNameCheckbox" Content="Static View Window Name" HorizontalAlignment="Left" Margin="382,175,0,0" VerticalAlignment="Top" Width="202" Foreground="White" FontSize="16" FontFamily="Calibri" Height="24" IsChecked="{Binding StaticViewerWindowName}">
+        <Label x:Name="DelayLabel" Content="Delay (ms):" HorizontalAlignment="Left" Margin="54,138,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16"/>
+        <CheckBox x:Name="staticViewerNameCheckbox" Content="Static View Window Name" HorizontalAlignment="Left" Margin="382,175,0,0" VerticalAlignment="Top" Width="202" Foreground="White" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Height="24" IsChecked="{Binding StaticViewerWindowName}">
             <CheckBox.Styles>
                 <Style Selector="CheckBox:pointerover /template/ ContentPresenter">
                     <Setter Property="TextBlock.Foreground" Value="#4a657b"/>
@@ -169,10 +169,10 @@
                 </Style>
             </CheckBox.Styles>
         </CheckBox>
-        <Label x:Name="ComPort2Label_Copy" Content="COM Port 2:" HorizontalAlignment="Left" Margin="49,104,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding ComPort2OptionVisibility}"/>
+        <Label x:Name="ComPort2Label_Copy" Content="COM Port 2:" HorizontalAlignment="Left" Margin="49,104,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding ComPort2OptionVisibility}"/>
         <ComboBox Name="ComPort2Combo" Margin="145,104,10.333,0" VerticalAlignment="Top" BorderBrush="#FF252525" Height="29.9" Width="446.667" Background="#efefef" IsVisible="{Binding ComPort2OptionVisibility}" FontFamily="Segoe UI" FontSize="12" Items="{Binding Ports2}" SelectedItem="{Binding Ports2.SelectedItem}" SelectionChanged="ComPortCombo_SelectionChanged"></ComboBox>
-        <Label x:Name="UsernameLabel" Content="Username:" HorizontalAlignment="Left" Margin="49,104,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
-        <TextBox x:Name="txtUsername" Margin="145,104,266,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <Label x:Name="UsernameLabel" Content="Username:" HorizontalAlignment="Left" Margin="49,104,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
+        <TextBox x:Name="txtUsername" Margin="145,104,266,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <TextBox.Styles>
                 <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="#FF3E3E42"/>
@@ -183,8 +183,8 @@
                 </Style>
             </TextBox.Styles>
         </TextBox>
-        <Label x:Name="PasswordLabel" Content="Password:" HorizontalAlignment="Left" Margin="339,106,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
-        <TextBox RevealPassword="false" PasswordChar="*" x:Name="txtPassword" Margin="411,104,10,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <Label x:Name="PasswordLabel" Content="Password:" HorizontalAlignment="Left" Margin="339,106,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding SSHOptionVisibility}"/>
+        <TextBox RevealPassword="false" PasswordChar="*" x:Name="txtPassword" Margin="411,104,10,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <TextBox.Styles>
                 <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="#FF3E3E42"/>
