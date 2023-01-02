@@ -152,7 +152,7 @@ namespace GBPemu
                 do
                 {
                     result = _serialPort.ReadLine();
-                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
+                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
 
                 if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                 {
@@ -243,7 +243,7 @@ namespace GBPemu
                                 do
                                 {
                                     result = _serialPort.ReadLine();
-                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal)));
+                                } while (result != null && (result.StartsWith("!", StringComparison.Ordinal) || result.StartsWith("#", StringComparison.Ordinal) || result.StartsWith("//", StringComparison.Ordinal)));
 
                                 if (result == "parse_state:0\r" || result?.Contains("d=debug") == true)
                                 {
