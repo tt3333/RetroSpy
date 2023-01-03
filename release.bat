@@ -84,8 +84,8 @@ if "%sub%" == "1" ( CALL BatchSubstitute.bat "RELEASE_TAG" "%~1" MiSTer\update-r
 ;cd RetroSpy-Setup
 ;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-release.zip MiSTer\update-retrospy.sh
 ;cd ..
-;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
-;copy keybindings.xml RetroSpy-Setup
+REM ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
+REM ;copy keybindings.xml RetroSpy-Setup
 
 REM Copy Drivers
 ;mkdir RetroSpy-Setup\drivers\
