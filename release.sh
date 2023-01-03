@@ -29,8 +29,13 @@ else
        else
          cd bin/Release/
          cp -r net7.0 RetroSpy-Linux
-	 tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
-	fi
+	     tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
+         if [ -d "/mnt/src/upload" ]
+         then
+           cp ../../RetroSpy-Linux.tar.gz /mnt/src/upload  
+         fi
+         cd ../..
+	   fi
      fi
    fi
 fi

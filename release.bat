@@ -43,8 +43,8 @@ echo Aborting release. Error during MiSTer build.
 goto end
 
 :buildOK
-;del RetroSpy-release.zip
-;del RetroSpy-release.zip.*
+;del RetroSpy-Windows.zip
+;del RetroSpy-Windows.zip.*
 ;rmdir /S /Q RetroSpy-Setup
 ;del RetroSpy-Setup.exe
 ;rmdir /S /Q RetroSpy-Upload
@@ -76,15 +76,15 @@ xcopy /y /e /s * ..\..\..\RetroSpy-Setup
 cd ..\..\..
 
 cd RetroSpy-Setup
-;"C:\Program Files\7-Zip\7z.exe" -r a ..\RetroSpy-release.zip *.*
+;"C:\Program Files\7-Zip\7z.exe" -r a ..\RetroSpy-Windows.zip *.*
 cd ..
 
 mkdir RetroSpy-Setup\MiSTer
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly.sh > RetroSpy-Setup\MiSTer\update-retrospy.sh) else (copy MiSTer\update-retrospy.sh RetroSpy-Setup\MiSTer)
 ;cd RetroSpy-Setup
-;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-release.zip MiSTer\update-retrospy.sh
+;"C:\Program Files\7-Zip\7z.exe" a ..\RetroSpy-Windows.zip MiSTer\update-retrospy.sh
 ;cd ..
-REM ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
+REM ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-Windows.zip keybindings.xml
 REM ;copy keybindings.xml RetroSpy-Setup
 
 REM Copy Drivers
@@ -102,7 +102,7 @@ REM )
 
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
-copy RetroSpy-release.zip RetroSpy-Upload
+copy RetroSpy-Windows.zip RetroSpy-Upload
 copy UsbUpdaterX\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
