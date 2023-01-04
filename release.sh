@@ -32,6 +32,7 @@ else
 	     tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
          if [ -d "/mnt/src/upload" ]
          then
+           rm -rf /mnt/src/upload/RetroSpy-Linux.tar.gz
            cp ../../RetroSpy-Linux.tar.gz /mnt/src/upload  
          fi
          cd ../..
