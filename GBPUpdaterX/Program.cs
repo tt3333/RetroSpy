@@ -209,7 +209,7 @@ namespace GBPUpdater
                             WorkingDirectory = tempDirectory
                         };
                     }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    else
                     {
                         processInfo = new ProcessStartInfo("avrdude",
                             "-v -patmega328p -carduino -P" + gbpemuPort +
