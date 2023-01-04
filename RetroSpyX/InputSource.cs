@@ -100,7 +100,7 @@ namespace RetroSpy
 
         public static IReadOnlyList<InputSource> GetAllSources()
         {
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? ALL_LINUX : ALL;
+            return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ALL_LINUX : ALL;
         }
 
         public static readonly InputSource DEFAULT = NES;

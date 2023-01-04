@@ -69,7 +69,7 @@ namespace GBPemu
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
 
-            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            _vm.FilterCOMPorts = Properties.Settings.Default.FilterCOMPorts || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             FilterCOMCheckbox.IsChecked = _vm.FilterCOMPorts;
             
             MenuItem menuItem = new()
@@ -100,10 +100,10 @@ namespace GBPemu
         private bool COMMenuActive = false;
         private void FilterCOM_Checked(object sender, RoutedEventArgs e)
         {
-            FilterCOMCheckbox.IsChecked = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || FilterCOMCheckbox.IsChecked == true;
+            FilterCOMCheckbox.IsChecked = !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || FilterCOMCheckbox.IsChecked == true;
 
             if (sender is MenuItem)
-                FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked == true || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+                FilterCOMCheckbox.IsChecked = !FilterCOMCheckbox.IsChecked == true || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
             if (!COMMenuActive && FilterCOMCheckbox.IsChecked == true)
             {

@@ -86,7 +86,7 @@ namespace GBPUpdater
             List<string> ports = new List<string>();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || (port.PortName != null && port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || (port.PortName != null && port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
                 {
                     ports.Add(port.PortName ?? "COMX");
                 }
