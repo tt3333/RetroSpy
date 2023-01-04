@@ -407,9 +407,8 @@ namespace GBPemu
         private void About_Click(object sender, RoutedEventArgs e)
         {
             string url = String.Format("https://retro-spy.com/about-retrospy/?version={0}&buildtime={1}",
-                Assembly.GetEntryAssembly()?.GetName().Version, Properties.Resources.BuildDate);
+                System.Web.HttpUtility.UrlEncode(Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString()), System.Web.HttpUtility.UrlEncode(Properties.Resources.BuildDate));
 
-            // hack because of this: https://github.com/dotnet/corefx/issues/10361
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
