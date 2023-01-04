@@ -145,45 +145,48 @@ namespace GBPUpdater
 
                 foreach (string port in arduinoPorts)
                 {
-                    using (_serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                    try
                     {
-                        Handshake = Handshake.None,
+                        using (_serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One)
+                        {
+                            Handshake = Handshake.None,
 
-                        ReadTimeout = 500,
-                        WriteTimeout = 500
-                    })
-                    {
+                            ReadTimeout = 500,
+                            WriteTimeout = 500
+                        })
+                        {
 
-                        try
-                        {
-                            _serialPort.Open();
-                        }
-                        catch (Exception)
-                        {
-                            continue;
-                        }
+                            try
+                            {
+                                _serialPort.Open();
+                            }
+                            catch (Exception)
+                            {
+                                continue;
+                            }
 
-                        try
-                        {
-                            _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
-                        }
-                        catch (Exception)
-                        {
+                            try
+                            {
+                                _serialPort.Write("\x88\x33\x0F\x00\x00\x00\x0F\x00\x00");
+                            }
+                            catch (Exception)
+                            {
+                                _serialPort.Close();
+                                continue;
+                            }
+
+                            string? result = null;
+                            do
+                            {
+                                _serialPort.ReadTimeout = 2500;
+                                result = _serialPort.ReadLine();
+                            } while (result != null && !result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"));
+
+                            foundPort = true;
+                            gbpemuPort = port;
                             _serialPort.Close();
-                            continue;
                         }
-
-                        string? result = null;
-                        do
-                        {
-                            _serialPort.ReadTimeout = 2500;
-                            result = _serialPort.ReadLine();
-                        } while (result != null && !result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"));
-
-                        foundPort = true;
-                        gbpemuPort = port;
-                        _serialPort.Close();
-                    }
+                    } catch(Exception){ }
                 }
 
                 if (!foundPort)
