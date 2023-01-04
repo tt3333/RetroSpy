@@ -6,6 +6,8 @@ rm -rf bin/Release/net7.0
 rm -rf bin/Release/RetroSpy-Linux
 rm -rf RetroSpy-Linux.tar.gz
 
+git pull
+
 dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0
 
 if [ $? -ne 0 ] 
@@ -32,8 +34,6 @@ else
 	     tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
          if [ -d "/mnt/src/upload" ]
          then
-           echo HI
-           rm -rf /mnt/src/upload/RetroSpy-Linux.tar.gz
            cp ../../RetroSpy-Linux.tar.gz /mnt/src/upload  
          fi
          cd ../..
