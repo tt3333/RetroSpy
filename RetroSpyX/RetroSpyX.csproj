@@ -2730,11 +2730,11 @@
   </Target>
 
 	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources/BuildDate.txt&quot;" />
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
 	</Target>
 
 	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))'">
-		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources/BuildDate.txt&quot;" />
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
 	</Target>
 
   <ItemGroup>
