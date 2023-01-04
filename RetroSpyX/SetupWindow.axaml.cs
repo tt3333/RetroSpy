@@ -787,7 +787,11 @@ namespace RetroSpy
             List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || _vm.FilterCOMPorts || (port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
+                if ((RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && port.PortName?.Contains("tty") == true))
+                {
+                    ports.Add(string.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || _vm.FilterCOMPorts || (port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
                 {
                     ports.Add(string.Format(CultureInfo.CurrentCulture, "{0} ({1})", port.PortName, port.FriendlyName));
                 }
