@@ -6,11 +6,13 @@ using MessageBox.Avalonia.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Management;
+using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -401,6 +403,30 @@ namespace GBPemu
         {
             UpdatePortList();
         }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            string url = String.Format("https://retro-spy.com/about-retrospy/?version={0}&buildtime={1}",
+                Assembly.GetEntryAssembly()?.GetName().Version, Properties.Resources.BuildDate);
+
+            // hack because of this: https://github.com/dotnet/corefx/issues/10361
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+            else
+            {
+                throw new PlatformNotSupportedException();
+            }
+        }
     }
 
     public class SetupWindowViewModel : INotifyPropertyChanged
@@ -437,6 +463,8 @@ namespace GBPemu
 
             PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
+     
 
     }
 }

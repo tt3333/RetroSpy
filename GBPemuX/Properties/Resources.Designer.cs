@@ -61,6 +61,16 @@ namespace GBPemu.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wed 01/04/2023 11:33:20.23 
+        ///.
+        /// </summary>
+        internal static string BuildDate {
+            get {
+                return ResourceManager.GetString("BuildDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PNG file (*.png)|*.png.
         /// </summary>
         internal static string PNGFilter {

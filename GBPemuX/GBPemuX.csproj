@@ -17,6 +17,9 @@
 		<Copyright>Copyright © 2022</Copyright>
 		<NeutralLanguage>en-US</NeutralLanguage>
 	</PropertyGroup>
+	<PropertyGroup>
+		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
+	</PropertyGroup>
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
 	</ItemGroup>
@@ -98,6 +101,18 @@
 		<AssetFiles Include="Assets\**\*.*" />
 	</ItemGroup>
 
+	<Target Name="TimestampWindows" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources\BuildDate.txt&quot;" />
+	</Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
 		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>

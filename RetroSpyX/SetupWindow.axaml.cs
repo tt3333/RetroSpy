@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
@@ -19,6 +20,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 using ComboBox = Avalonia.Controls.ComboBox;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 using SelectionChangedEventArgs = Avalonia.Controls.SelectionChangedEventArgs;
@@ -489,39 +491,26 @@ namespace RetroSpy
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string? strWorkPath = Path.GetDirectoryName(strExeFilePath) ?? ".";
-            strWorkPath = Path.Join(strWorkPath, "About.html");
+            string url = String.Format("https://retro-spy.com/about-retrospy/?version={0}&buildtime={1}", 
+                Assembly.GetEntryAssembly()?.GetName().Version, Properties.Resources.BuildDate);
 
-            using (StreamWriter writer = new(strWorkPath))
+            // hack because of this: https://github.com/dotnet/corefx/issues/10361
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                writer.WriteLine(string.Format(CultureInfo.CurrentCulture, @"
-<HTML>
-    <BODY ALINK=""#CBCBCB"" VLINK=""#CBCBCB"" LINK=""#CBCBCB"" style='color: #CBCBCB; background-color: #252526; font-family: ""Segoe UI""'>
-<CENTER>Version: {0}</CENTER>
-<CENTER>Build Timestamp: {1}</CENTER>
-<BR>
-            <!--<TABLE WIDTH='100%' BORDER='0' PADDING='0' >
-            <TR><TD ALIGN='CENTER' ><H1>Supported By</H1></TD></TR>            
-            <TR><td ALIGN='CENTER'>40wattrange</TD></TR>            
-            <TR><td ALIGN='CENTER'>sk84uhlivin</TD></TR>
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/watsonpunk"">watsonpunk</A></TD></TR>            
-            <TR><td ALIGN='CENTER'>Coltaho</TD></TR>            
-            <TR><td ALIGN='CENTER'><A HREF=""http://evangrill.com"">Evan Grill</A></TD></TR>  
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitter.com/VikeMK"">Vike</A></TD></TR>       
-            <TR><td ALIGN='CENTER'><A HREF=""https://twitch.tv/mrgamy"">MrGamy</A></TD></TR>
-            <TR><td ALIGN='CENTER'><A HREF=""https://discord.gg/tyvzPbu5fv"">peco_de_guile</A></TD></TR>
-            <TR><td ALIGN='CENTER'>Mellified</TD></TR> 
-            <TR><td ALIGN='CENTER'>Karl W. Reinsch</TD></TR>
-            <TR><td ALIGN='CENTER'><A HREF=""https://github.com/Avasam"">Avasam</A></TD></TR>
-        </TABLE>-->
-    </BODY>
-</HTML>", Assembly.GetEntryAssembly()?.GetName().Version, Properties.Resources.BuildDate));
-
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             }
-
-            Window w = new About();
-            w.ShowDialog(this);
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+            else
+            {
+                throw new PlatformNotSupportedException();
+            }
         }
 
         private void DelayTextBox_KeyUp(object sender, KeyEventArgs e)

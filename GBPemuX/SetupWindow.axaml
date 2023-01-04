@@ -13,8 +13,11 @@
 					<MenuItem x:Name="FilterCOM" Header="Don't Detect COM Port"  Click="FilterCOM_Checked" HorizontalAlignment="Left" >
 						<MenuItem.Icon>
 							<CheckBox Name="FilterCOMCheckbox" Width="20" BorderThickness="0" Click="FilterCOM_Checked"></CheckBox>
-						</MenuItem.Icon>		
+						</MenuItem.Icon>
 					</MenuItem>
+				</MenuItem>
+				<MenuItem Header="_Help">
+					<MenuItem  x:Name="About" Header="About" HorizontalAlignment="Left" Click="About_Click"/>
 				</MenuItem>
 			</ContextMenu>
 		</Grid.ContextMenu>
