@@ -1,7 +1,5 @@
 #!/bin/bash
 
-VERSION=6.0
-
 rm -rf bin/Release/net7.0
 rm -rf bin/Release/RetroSpy-Linux
 rm -rf RetroSpy-Linux.tar.gz
