@@ -245,6 +245,11 @@ namespace RetroSpy
                         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                             UpdateXIList();
                     }
+                    else if (_vm.Sources.SelectedItem == InputSource.LINUX)
+                    {
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                            UpdateJoystickList();
+                    }
                     //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                     //{
                     //    updateBeagleList();
@@ -563,6 +568,10 @@ namespace RetroSpy
                 UpdateGamepadList();
                 UpdateXIList();
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                UpdateJoystickList();
+            }
             UpdatePortListThread();
             UpdateBeagleList();
             UpdateBeagleI2CList();
@@ -809,6 +818,11 @@ namespace RetroSpy
             _vm.XIAndGamepad.UpdateContents(GamepadReader.GetDevices());
         }
 
+        private void UpdateJoystickList()
+        {
+            _vm.LinuxJoystick.UpdateContents(LinuxJoystickReader.GetDevices());
+        }
+
         private void UpdateXIList()
         {
             _vm.XIAndGamepad.UpdateContents(XInputReader.GetDevices());
@@ -880,6 +894,7 @@ namespace RetroSpy
         public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
         public ListView<int> XIAndGamepad { get; set; }
+        public ListView<int> LinuxJoystick { get; set; }
         public ListView<uint> MisterGamepad { get; set; }
         public ListView<Skin> Skins { get; set; }
         public ListView<Background> Backgrounds { get; set; }
@@ -981,6 +996,9 @@ namespace RetroSpy
             Sources.StoreControl(setupWindow, "SourcesComboBox");
             Backgrounds = new ListView<Background>();
             Backgrounds.StoreControl(setupWindow, "BackgroundListBox");
+            LinuxJoystick = new ListView<int>();
+            Backgrounds.StoreControl(setupWindow, "ControllerIdCombo");
+
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -35,6 +35,10 @@ namespace RetroSpy
 
         public static readonly InputSource INTELLIVISION = new("intellivision", "Mattel Intellivision", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, SuperNESandNES.ReadFromPacketIntellivision));
 
+#pragma warning disable CS8601 // Possible null reference assignment.
+        public static readonly InputSource LINUX = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxjoystick", "Linux Joystick", false, true, false, false, false, (controllerId, useLagFix) => new LinuxJoystickReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
+#pragma warning restore CS8601 // Possible null reference assignment.
+
         public static readonly InputSource XBOX = new("xbox", "Microsoft Xbox", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket, username, password, null, 0));
         public static readonly InputSource XBOX360 = new("xbox360", "Microsoft Xbox 360", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket, username, password, null, 5000));
 
@@ -95,7 +99,9 @@ namespace RetroSpy
         };
 
         public static readonly IReadOnlyList<InputSource> ALL_LINUX = new List<InputSource> {
-            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, GENMINI2, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
+#pragma warning disable CS8604 // Possible null reference argument.
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, LINUX, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, GENMINI2, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
+#pragma warning restore CS8604 // Possible null reference argument.
         };
 
         public static IReadOnlyList<InputSource> GetAllSources()
