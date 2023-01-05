@@ -351,6 +351,11 @@ namespace RetroSpy
                     if (_vm.Sources.SelectedItem.BuildReader != null)
                         reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
                 }
+                else if (_vm.Sources.SelectedItem == InputSource.LINUX)
+                {
+                    if (_vm.Sources.SelectedItem.BuildReader != null)
+                        reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
+                }
                 else if (_vm.Sources.SelectedItem == InputSource.PCKEYBOARD)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader3;
@@ -820,7 +825,7 @@ namespace RetroSpy
 
         private void UpdateJoystickList()
         {
-            _vm.LinuxJoystick.UpdateContents(LinuxJoystickReader.GetDevices());
+            _vm.XIAndGamepad.UpdateContents(LinuxJoystickReader.GetDevices());
         }
 
         private void UpdateXIList()
@@ -894,7 +899,6 @@ namespace RetroSpy
         public ListView<string> Ports { get; set; }
         public ListView<string> Ports2 { get; set; }
         public ListView<int> XIAndGamepad { get; set; }
-        public ListView<int> LinuxJoystick { get; set; }
         public ListView<uint> MisterGamepad { get; set; }
         public ListView<Skin> Skins { get; set; }
         public ListView<Background> Backgrounds { get; set; }
@@ -996,8 +1000,6 @@ namespace RetroSpy
             Sources.StoreControl(setupWindow, "SourcesComboBox");
             Backgrounds = new ListView<Background>();
             Backgrounds.StoreControl(setupWindow, "BackgroundListBox");
-            LinuxJoystick = new ListView<int>();
-            Backgrounds.StoreControl(setupWindow, "ControllerIdCombo");
 
         }
 
