@@ -105,9 +105,18 @@ namespace RetroSpy
 #pragma warning restore CS8604 // Possible null reference argument.
         };
 
+        public static readonly IReadOnlyList<InputSource> ALL_MACOS = new List<InputSource> {
+            MISTER, CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, ATARIVCS, PIPPIN, EVERCADE, COLECOVISION, CDTV, CD32, C64MINI, A500MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, TG16MINI, NES, SNES, VIRTUALBOY, N64, PRINTER, GAMECUBE, WII, SWITCH, THREEDO, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, GENMINI2, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PS4CRONUS, PSCLASSIC, NUON, VSMILE, VFLASH
+        };
+
         public static IReadOnlyList<InputSource> GetAllSources()
         {
-            return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ALL_LINUX : ALL;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return ALL_LINUX;
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return ALL_MACOS;
+            else
+                return ALL;
         }
 
         public static readonly InputSource DEFAULT = NES;

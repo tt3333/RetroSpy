@@ -108,6 +108,12 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
     private class InputReader : IDisposable
     {
+        public delegate void RaiseKeyPress(KeyPressEvent e);
+
+        public delegate void RaiseMouseMove(MouseMoveEvent e);
+
+        public event RaiseKeyPress OnKeyPress;
+        public event RaiseMouseMove OnMouseMove;
 
         private const int BufferLength = 24;
 
@@ -124,6 +130,22 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
             _mouseState = mouseState;
 
             _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            OnKeyPress += (e) => {
+                if ((int)e.Code >= 272 && (int)e.Code <= 276)
+                    _mouseState.Buttons[(int)e.Code] = e.State != KeyState.KeyUp;
+                else
+                    _keys[(int)e.Code] = e.State != KeyState.KeyUp;  
+            };
+
+            OnMouseMove += (e) => {
+                if (e.Axis == MouseAxis.X)
+                    _mouseState.X = e.Amount;
+                else if (e.Axis == MouseAxis.Y)
+                    _mouseState.Y = e.Amount;
+                else if (e.Axis == MouseAxis.Z)
+                    _mouseState.Z = e.Amount;
+            };
 
             Task.Run(Run);
         }
@@ -146,28 +168,70 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
                 switch (eventType)
                 {
                     case EventType.EV_KEY:
-                        if (code >= 272 && code <= 276)
-                            _mouseState.Buttons[code-272] = value > 0 ? true : false;
-                        _keys[code] =  value > 0 ? true : false;
+                        HandleKeyPressEvent(code, value);
                         break;
                     case EventType.EV_REL:
-                        if (code == 0)
-                            _mouseState.X = value;
-                        else if (code == 1)
-                            _mouseState.Y = value;
-                        else if (code == 11)
-                            _mouseState.Z = value;
+                        var axis = (MouseAxis)code;
+                        var e = new MouseMoveEvent(axis, value);
+                        OnMouseMove?.Invoke(e);
                         break;
                 }
             }
         }
 
+        private void HandleKeyPressEvent(short code, int value)
+        {
+            var c = (EventCode)code;
+            var s = (KeyState)value;
+            var e = new KeyPressEvent(c, s);
+            OnKeyPress?.Invoke(e);
+        }
+
         public void Dispose()
         {
             _disposing = true;
-            _stream?.Dispose();
+            _stream.Dispose();
             _stream = null;
         }
+    }
+
+    public enum MouseAxis
+    {
+        X = 0,
+        Y = 1,
+        Z = 11
+    }
+
+    public enum KeyState
+    {
+        KeyUp,
+        KeyDown,
+        KeyHold
+    }
+
+    public class MouseMoveEvent : EventArgs
+    {
+        public MouseMoveEvent(MouseAxis axis, int amount)
+        {
+            Axis = axis;
+            Amount = amount;
+        }
+
+        public MouseAxis Axis { get; }
+
+        public int Amount { get; set; }
+    }
+    public class KeyPressEvent : EventArgs
+    {
+        public KeyPressEvent(EventCode code, KeyState state)
+        {
+            Code = code;
+            State = state;
+        }
+
+        public EventCode Code { get; }
+
+        public KeyState State { get; }
     }
 
     public enum EventType
