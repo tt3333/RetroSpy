@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace RetroSpy.Readers;
 
-public class LinuxJoystickReader : IControllerReader
+public partial class LinuxJoystickReader : IControllerReader
 {
     private const double TIMER_MS = 30;
 
@@ -31,8 +31,6 @@ public class LinuxJoystickReader : IControllerReader
 
     private static uint jsiocgbtnmap;
 
-    private static uint jsiocsbtnmap;
-
     private readonly int _id;
     private readonly byte[] axes = { 2 };
 
@@ -44,18 +42,18 @@ public class LinuxJoystickReader : IControllerReader
         "?", "?", "?", "?", "?", "?", "?"
     };
 
-    private readonly string[] button_names =
-    {
-        "Btn0", "Btn1", "Btn2", "Btn3", "Btn4", "Btn5", "Btn6", "Btn7", "Btn8", "Btn9",
-        "?", "?", "?", "?", "?", "?", "LeftBtn", "RightBtn", "MiddleBtn", "SideBtn",
-        "ExtraBtn", "ForwardBtn", "BackBtn", "TaskBtn", "?", "?", "?", "?", "?", "?",
-        "?", "?", "Trigger", "ThumbBtn", "ThumbBtn2", "TopBtn", "TopBtn2", "PinkieBtn",
-        "BaseBtn", "BaseBtn2", "BaseBtn3", "BaseBtn4", "BaseBtn5", "BaseBtn6",
-        "BtnDead", "BtnA", "BtnB", "BtnC", "BtnX", "BtnY", "BtnZ", "BtnTL", "BtnTR",
-        "BtnTL2", "BtnTR2", "BtnSelect", "BtnStart", "BtnMode", "BtnThumbL",
-        "BtnThumbR", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
-        "?", "?", "?", "?", "WheelBtn", "Gear up"
-    };
+    //private readonly string[] button_names =
+    //{
+    //    "Btn0", "Btn1", "Btn2", "Btn3", "Btn4", "Btn5", "Btn6", "Btn7", "Btn8", "Btn9",
+    //    "?", "?", "?", "?", "?", "?", "LeftBtn", "RightBtn", "MiddleBtn", "SideBtn",
+    //    "ExtraBtn", "ForwardBtn", "BackBtn", "TaskBtn", "?", "?", "?", "?", "?", "?",
+    //    "?", "?", "Trigger", "ThumbBtn", "ThumbBtn2", "TopBtn", "TopBtn2", "PinkieBtn",
+    //    "BaseBtn", "BaseBtn2", "BaseBtn3", "BaseBtn4", "BaseBtn5", "BaseBtn6",
+    //    "BtnDead", "BtnA", "BtnB", "BtnC", "BtnX", "BtnY", "BtnZ", "BtnTL", "BtnTR",
+    //    "BtnTL2", "BtnTR2", "BtnSelect", "BtnStart", "BtnMode", "BtnThumbL",
+    //    "BtnThumbR", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?",
+    //    "?", "?", "?", "?", "WheelBtn", "Gear up"
+    //};
 
     private readonly byte[] buttons = { 2 };
     private Thread? _readerThread;
@@ -83,13 +81,13 @@ public class LinuxJoystickReader : IControllerReader
         using (var fileHandle = File.OpenHandle(string.Format("/dev/input/js{0}", _id), FileMode.Open, FileAccess.Read,
                    FileShare.ReadWrite))
         {
-            ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGVERSION, version);
-            ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGAXES, axes);
-            ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGBUTTONS, buttons);
-            ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGNAME, name);
+            _ = ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGVERSION, version);
+            _ = ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGAXES, axes);
+            _ = ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGBUTTONS, buttons);
+            _ = ioctl(fileHandle.DangerousGetHandle().ToInt32(), JSIOCGNAME, name);
 
-            getaxmap(fileHandle.DangerousGetHandle().ToInt32(), axmap);
-            getbtnmap(fileHandle.DangerousGetHandle().ToInt32(), btnmap);
+            Getaxmap(fileHandle.DangerousGetHandle().ToInt32(), axmap);
+            Getbtnmap(fileHandle.DangerousGetHandle().ToInt32(), btnmap);
 
             /* Determine whether the button map is usable. */
             for (i = 0; btnmapok > 0 && i < buttons[0]; i++)
@@ -187,12 +185,12 @@ public class LinuxJoystickReader : IControllerReader
 
         if (axis?.Length >= 2)
         {
-            if (axis[axis.Length - 2] < 0)
+            if (axis[^2] < 0)
             {
                 outState.SetButton("left", true);
                 outState.SetButton("right", false);
             }
-            else if (axis[axis.Length - 2] > 0)
+            else if (axis[^2] > 0)
             {
                 outState.SetButton("right", true);
                 outState.SetButton("left", false);
@@ -203,12 +201,12 @@ public class LinuxJoystickReader : IControllerReader
                 outState.SetButton("right", false);
             }
 
-            if (axis[axis.Length - 1] < 0)
+            if (axis[^1] < 0)
             {
                 outState.SetButton("up", true);
                 outState.SetButton("down", false);
             }
-            else if (axis[axis.Length - 1] > 0)
+            else if (axis[^1] > 0)
             {
                 outState.SetButton("down", true);
                 outState.SetButton("up", false);
@@ -230,37 +228,16 @@ public class LinuxJoystickReader : IControllerReader
         ControllerStateChanged?.Invoke(this, outState.Build());
     }
 
-    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
-    private static extern int ioctl(int handle, uint request, byte[] output);
+    [LibraryImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    private static partial int ioctl(int handle, uint request, byte[] output);
 
-    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
-    private static extern int ioctl_s(int handle, uint request, short[] output);
+    [LibraryImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    private static partial int ioctl_s(int handle, uint request, short[] output);
 
-    [DllImport("libc", EntryPoint = "read", SetLastError = true)]
-    private static extern int read(int fd, byte[] buf, int count);
+    [LibraryImport("libc", EntryPoint = "read", SetLastError = true)]
+    private static partial int read(int fd, byte[] buf, int count);
 
-    private int determine_ioctl(int fd, uint[] ioctls, ref uint ioctl_used, byte[] argp)
-    {
-        int i, retval = 0;
-
-        /* Try each ioctl in turn. */
-        for (i = 0; ioctls[i] != 0; i++)
-            if ((retval = ioctl(fd, ioctls[i], argp)) >= 0)
-            {
-                /* The ioctl did something. */
-                ioctl_used = ioctls[i];
-                return retval;
-            }
-            else if (Marshal.GetLastPInvokeError() != -22)
-            {
-                /* Some other error occurred. */
-                return retval;
-            }
-
-        return retval;
-    }
-
-    private int determine_ioctl_s(int fd, uint[] ioctls, ref uint ioctl_used, short[] argp)
+    private static int Determine_ioctl_s(int fd, uint[] ioctls, ref uint ioctl_used, short[] argp)
     {
         int i, retval = 0;
 
@@ -281,34 +258,19 @@ public class LinuxJoystickReader : IControllerReader
         return retval;
     }
 
-    private int getbtnmap(int fd, short[] btnmap)
+    private static int Getbtnmap(int fd, short[] btnmap)
     {
         uint[] ioctls = { JSIOCGBTNMAP, JSIOCGBTNMAP_LARGE, JSIOCGBTNMAP_SMALL, 0 };
 
         if (jsiocgbtnmap != 0)
             /* We already know which ioctl to use. */
             return ioctl_s(fd, jsiocgbtnmap, btnmap);
-        return determine_ioctl_s(fd, ioctls, ref jsiocgbtnmap, btnmap);
+        return Determine_ioctl_s(fd, ioctls, ref jsiocgbtnmap, btnmap);
     }
 
-    private int setbtnmap(int fd, short[] btnmap)
-    {
-        uint[] ioctls = { JSIOCSBTNMAP, JSIOCSBTNMAP_LARGE, JSIOCSBTNMAP_SMALL, 0 };
-
-        if (jsiocsbtnmap != 0)
-            /* We already know which ioctl to use. */
-            return ioctl_s(fd, jsiocsbtnmap, btnmap);
-        return determine_ioctl_s(fd, ioctls, ref jsiocsbtnmap, btnmap);
-    }
-
-    private int getaxmap(int fd, byte[] axmap)
+    private static int Getaxmap(int fd, byte[] axmap)
     {
         return ioctl(fd, JSIOCGAXMAP, axmap);
-    }
-
-    private int setaxmap(int fd, byte[] axmap)
-    {
-        return ioctl(fd, JSIOCSAXMAP, axmap);
     }
 
     public static IEnumerable<int>? GetDevices()
