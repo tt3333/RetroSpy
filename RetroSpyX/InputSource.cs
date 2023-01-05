@@ -37,7 +37,7 @@ namespace RetroSpy
 
 #pragma warning disable CS8601 // Possible null reference assignment.
         public static readonly InputSource LINUX = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxjoystick", "Linux Joystick", false, true, false, false, false, (controllerId, useLagFix) => new LinuxJoystickReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
-        public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse", false, true, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
+        public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse", false, false, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
 #pragma warning restore CS8601 // Possible null reference assignment.
 
         public static readonly InputSource XBOX = new("xbox", "Microsoft Xbox", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket, username, password, null, 0));

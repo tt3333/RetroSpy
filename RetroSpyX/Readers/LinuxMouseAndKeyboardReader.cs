@@ -133,7 +133,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
             OnKeyPress += (e) => {
                 if ((int)e.Code >= 272 && (int)e.Code <= 276)
-                    _mouseState.Buttons[(int)e.Code] = e.State != KeyState.KeyUp;
+                    _mouseState.Buttons[(int)e.Code-272] = e.State != KeyState.KeyUp;
                 else
                     _keys[(int)e.Code] = e.State != KeyState.KeyUp;  
             };
