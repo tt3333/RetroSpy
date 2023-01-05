@@ -356,7 +356,7 @@ namespace RetroSpy
                     if (_vm.Sources.SelectedItem.BuildReader != null)
                         reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PCKEYBOARD)
+                else if (_vm.Sources.SelectedItem == InputSource.PCKEYBOARD || _vm.Sources.SelectedItem == InputSource.LINUXKEY)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader3;
                 }
