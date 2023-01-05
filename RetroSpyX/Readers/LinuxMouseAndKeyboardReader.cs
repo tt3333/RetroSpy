@@ -19,9 +19,6 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 {
     private const double TIMER_MS = 30;
 
-    private static bool _shutdown;
-
-    private Thread? _readerThread;
     private DispatcherTimer? _timer;
 
     private static readonly string[] MOUSE_BUTTONS = {
@@ -38,9 +35,6 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
             var reader = new InputReader(file, keys, mouseState);
             _readers.Add(reader);
         }
-
-        _readerThread = new Thread(ReadController);
-        _readerThread.Start();
 
         _timer = new DispatcherTimer
         {
@@ -61,17 +55,8 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
             reader.Dispose();
         }
 
-        _shutdown = true;
-        _readerThread?.Join();
-        _readerThread = null;
-
         _timer?.Stop();
         _timer = null;
-    }
-
-    public void ReadController()
-    {
-        while (!_shutdown) { }
     }
 
     private class MouseState
@@ -115,7 +100,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
         for (int i = 0; i < keys.Length; i++)
         {
-        outState.SetButton(((EventCode)i).ToString(), true);
+        outState.SetButton(((EventCode)i).ToString(), keys[i]);
         }       
 
         ControllerStateChanged?.Invoke(this, outState.Build());
