@@ -37,7 +37,7 @@ else
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPemu
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPUpdater
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/USBUpdater
-	    ditto -c --sequesterRsrc -k -V RetroSpy-macOS-x64/ ../../RetroSpy-macOS-x64.zip
+	        ditto -c --sequesterRsrc -k -V RetroSpy-macOS-x64/ ../../RetroSpy-macOS-x64.zip
             xcrun notarytool submit ../../RetroSpy-macOS-x64.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
             if [ -d "/Volumes/src/upload" ]
             then
