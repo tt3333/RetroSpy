@@ -6,23 +6,23 @@ rm -rf RetroSpy-Linux.tar.gz
 
 git pull
 
-dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0
+dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64
 
 if [ $? -ne 0 ] 
 then 
    echo "Aborting release. Error during RetroSpyX build."
 else
-   dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0
+   dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64
    if [ $? -ne 0 ] 
    then 
      echo "Aborting release. Error during GBPemuX build."
    else
-     dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0
+     dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64
      if [ $? -ne 0 ] 
      then 
        echo "Aborting release. Error during GBPUpdater build."
      else
-       dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0
+       dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64
        if [ $? -ne 0 ] 
        then 
          echo "Aborting release. Error during GBPUpdater build."
