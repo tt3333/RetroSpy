@@ -30,13 +30,13 @@ else
         else
             cd bin/Release/
             cp -r net7.0 RetroSpy-macOS-x64
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/*.dylib
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/osx.os
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/createdump
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/RetroSpy
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPemu
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPUpdater
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/USBUpdater
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/*.dylib
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/osx.os
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/createdump
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/RetroSpy
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPemu
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPUpdater
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/USBUpdater
 	    ditto -c --sequesterRsrc -k -V RetroSpy-macOS-x64/ ../../RetroSpy-macOS-x64.zip
             xcrun notarytool submit ../../RetroSpy-macOS-x64.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
             if [ -d "/Volumes/src/upload" ]
@@ -73,13 +73,13 @@ else
         else
             cd bin/Release/
             cp -r net7.0 RetroSpy-macOS-arm64
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/*.dylib
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/osx.os
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/createdump
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/RetroSpy
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPemu
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPUpdater
-            codesign --force --verbose --timestamp --sign "USGM6XTVY2" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/USBUpdater
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/*.dylib
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/osx.os
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/createdump
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/RetroSpy
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPemu
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPUpdater
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/USBUpdater
 	        ditto -c --sequesterRsrc -k -V RetroSpy-macOS-arm64/ ../../RetroSpy-macOS-arm64.zip
             xcrun notarytool submit ../../RetroSpy-macOS-arm64.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
             if [ -d "/Volumes/src/upload" ]
