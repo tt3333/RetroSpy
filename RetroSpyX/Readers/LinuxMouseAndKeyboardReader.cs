@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -75,7 +76,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
     {
         ControllerStateBuilder outState = new();
 
-        SignalTool.SetPCMouseProperties(mouseState.X / 255.0f, -mouseState.Y / 255.0f, mouseState.X, mouseState.Y, outState, 1.0f);
+        SignalTool.SetPCMouseProperties(mouseState.X / 32.0f, -mouseState.Y / 32.0f, mouseState.X, mouseState.Y, outState, 1.0f);
 
         if (mouseState.Z > 0)
         {
@@ -100,7 +101,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
         for (int i = 0; i < keys.Length; i++)
         {
-        outState.SetButton(((EventCode)i).ToString(), keys[i]);
+            outState.SetButton(((EventCode)i).ToString(), keys[i]);
         }       
 
         ControllerStateChanged?.Invoke(this, outState.Build());
@@ -300,23 +301,23 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
     /// <summary>
     /// Mapping for this can be found here: https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
     /// </summary>
-    public enum EventCode
+  public enum EventCode
     {
         Reserved = 0,
-        Esc = 1,
-        Num1 = 2,
-        Num2 = 3,
-        Num3 = 4,
-        Num4 = 5,
-        Num5 = 6,
-        Num6 = 7,
-        Num7 = 8,
-        Num8 = 9,
-        Num9 = 10,
-        Num0 = 11,
+        Escape = 1,
+        D1 = 2,
+        D2 = 3,
+        D3 = 4,
+        D4 = 5,
+        D5 = 6,
+        D6 = 7,
+        D7 = 8,
+        D8 = 9,
+        D9 = 10,
+        D0 = 11,
         Minus = 12,
         Equal = 13,
-        Backspace = 14,
+        Back = 14,
         Tab = 15,
         Q = 16,
         W = 17,
@@ -328,10 +329,10 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         I = 23,
         O = 24,
         P = 25,
-        LeftBrace = 26,
-        RightBrace = 27,
-        Enter = 28,
-        LeftCtrl = 29,
+        LeftBracket = 26,
+        RightBracket = 27,
+        Return = 28,
+        LeftControl = 29,
         A = 30,
         S = 31,
         D = 32,
@@ -354,38 +355,38 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         N = 49,
         M = 50,
         Comma = 51,
-        Dot = 52,
+        Period = 52,
         Slash = 53,
         RightShift = 54,
-        KpAsterisk = 55,
+        Multiply = 55,
         LeftAlt = 56,
         Space = 57,
-        Capslock = 58,
+        CapsLock = 58,
         F1 = 59,
-        Pf2 = 60,
+        F2 = 60,
         F3 = 61,
         F4 = 62,
         F5 = 63,
         F6 = 64,
         F7 = 65,
         F8 = 66,
-        Pf9 = 67,
+        F9 = 67,
         F10 = 68,
-        Numlock = 69,
+        NumberLock = 69,
         ScrollLock = 70,
-        Kp7 = 71,
-        Kp8 = 72,
-        Kp9 = 73,
-        PkpMinus = 74,
-        Kp4 = 75,
-        Kp5 = 76,
-        Kp6 = 77,
-        KpPlus = 78,
-        Kp1 = 79,
-        Kp2 = 80,
-        Kp3 = 81,
-        Kp0 = 82,
-        KpDot = 83,
+        NumberPad7 = 71,
+        NumberPad8 = 72,
+        NumberPad9 = 73,
+        Subtract = 74,
+        NumberPad4 = 75,
+        NumberPad5 = 76,
+        NumberPad6 = 77,
+        Add = 78,
+        NumberPad1 = 79,
+        NumberPad2 = 80,
+        NumberPad3 = 81,
+        NumberPad0 = 82,
+        Decimal = 83,
 
         Zenkakuhankaku = 85,
         //102ND = 86,
@@ -398,20 +399,20 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         Katakanahiragana = 93,
         Muhenkan = 94,
         KpJpComma = 95,
-        KpEnter = 96,
-        RightCtrl = 97,
-        KpSlash = 98,
-        SysRq = 99,
+        NumberPadEnter = 96,
+        RightControl = 97,
+        Divide = 98,
+        PrintScreen = 99,
         RightAlt = 100,
         LineFeed = 101,
         Home = 102,
         Up = 103,
-        Pageup = 104,
+        PageUp = 104,
         Left = 105,
         Right = 106,
         End = 107,
         Down = 108,
-        Pagedown = 109,
+        PageDown = 109,
         Insert = 110,
         Delete = 111,
         Macro = 112,
@@ -419,7 +420,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         VolumeDown = 114,
         VolumeUp = 115,
         Power = 116, // SC System Power Down
-        KpEqual = 117,
+        kpEqual = 117,
         KpPlusMinus = 118,
         Pause = 119,
         Scale = 120, // AL Compiz Scale (Expose)
@@ -428,9 +429,9 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         Hangeul = 122,
         Hanja = 123,
         Yen = 124,
-        LeftMeta = 125,
-        RightMeta = 126,
-        Compose = 127,
+        LeftWindowsKey = 125,
+        RightWindowsKey = 126,
+        Applications = 127,
 
         Stop = 128, // AC Stop
         Again = 129,
@@ -462,7 +463,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         Mail = 155,
         Bookmarks = 156, // AC Bookmarks
         Computer = 157,
-        Back = 158, // AC Back
+        Back1 = 158, // AC Back
         Forward = 159, // AC Forward
         CloseCd = 160,
         EjectCd = 161,
