@@ -1,7 +1,7 @@
 /*************************************************************************
  *
- * GAMEBOY PRINTER EMULATION PROJECT V3 (Arduino)
- * Copyright (C) 2020 Brian Khuu
+ * GAMEBOY PRINTER EMULATION PROJECT V3.2.1 (Arduino)
+ * Copyright (C) 2022 Brian Khuu
  *
  * PURPOSE: To capture gameboy printer images without a gameboy printer
  *          via the arduino platform. (Tested on the arduino nano)
@@ -36,7 +36,7 @@ WebUSB WebUSBSerial(1, "herrzatacke.github.io/gb-printer-web/#/webusb");
 #define Serial WebUSBSerial
 #endif
 
-#define GBP_OUTPUT_RAW_PACKETS false // by default, packets are parsed. if enabled, output will change to raw data packets for parsing and decompressing later
+#define GBP_OUTPUT_RAW_PACKETS true // by default, packets are parsed. if enabled, output will change to raw data packets for parsing and decompressing later
 #define GBP_USE_PARSE_DECOMPRESSOR false // embedded decompressor can be enabled for use with parse mode but it requires fast hardware (SAMD21, SAMD51, ESP8266, ESP32)
 
 #include <stdint.h> // uint8_t
@@ -200,16 +200,17 @@ void GameBoyPrinterEmulator::setup(void)
 	gbp_pkt_init(&gbp_pktState);
 #endif
 
+#define VERSION_STRING "V3.2.1 (Copyright (C) 2022 Brian Khuu)"
 
 	/* Welcome Message */
 #ifdef GBP_FEATURE_PACKET_CAPTURE_MODE
-	Serial.println("// GAMEBOY PRINTER Packet Capture V3 (Brian Khuu 2020)");
+	Serial.println("// GAMEBOY PRINTER Packet Capture " VERSION_STRING);
 	Serial.println("// Note: Each byte is from each GBP packet is from the gameboy");
 	Serial.println("//       except for the last two bytes which is from the printer");
 	Serial.println("// JS Raw Packet Decoder: https://mofosyne.github.io/arduino-gameboy-printer-emulator/GameBoyPrinterDecoderJS/gameboy_printer_js_raw_decoder.html");
 #endif
 #ifdef GBP_FEATURE_PARSE_PACKET_MODE
-	Serial.println("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu");
+	Serial.println("// GAMEBOY PRINTER Emulator " VERSION_STRING);
 	Serial.println("// Note: Each hex encoded line is a gameboy tile");
 	Serial.println("// JS Decoder: https://mofosyne.github.io/arduino-gameboy-printer-emulator/GameBoyPrinterDecoderJS/gameboy_printer_js_decoder.html");
 #endif
@@ -242,7 +243,7 @@ void GameBoyPrinterEmulator::loop()
 		if (gbp_serial_io_timeout_handler(elapsed_ms))
 		{
 			Serial.println("");
-			Serial.print("// Timed Out ");
+			Serial.print("// Completed ");
 			Serial.print("(Memory Waterline: ");
 			Serial.print(gbp_serial_io_dataBuff_waterline(false));
 			Serial.print("B out of ");

@@ -26,7 +26,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
             "MouseLeft", "MouseRight", "MouseMiddle", "MouseXButton1", "MouseXButton2"
         };
 
-    private List<InputReader> _readers = new();
+    private readonly List<InputReader> _readers = new();
 
     public LinuxMouseAndKeyboardReader()
     {
@@ -70,7 +70,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
     public bool[] keys = new bool[(int)EventCode.Size];
 
-    private MouseState mouseState = new MouseState();
+    private readonly MouseState mouseState = new();
 
     private void Tick(object? sender, EventArgs e)
     {
@@ -122,8 +122,8 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
         private FileStream? _stream;
         private bool _disposing;
-        private bool[] _keys;
-        private MouseState _mouseState;
+        private readonly bool[] _keys;
+        private readonly MouseState _mouseState;
 
         public InputReader(string path, bool[] keys, MouseState mouseState)
         {
@@ -191,7 +191,7 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         public void Dispose()
         {
             _disposing = true;
-            _stream.Dispose();
+            _stream?.Dispose();
             _stream = null;
         }
     }

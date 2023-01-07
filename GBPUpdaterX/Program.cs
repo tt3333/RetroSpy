@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.CodeDom.Compiler;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
 using System.IO.Ports;
@@ -180,7 +181,10 @@ namespace GBPUpdater
                             {
                                 _serialPort.ReadTimeout = 2500;
                                 result = _serialPort.ReadLine();
-                            } while (result != null && !result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu"));
+                            } while (result != null && !(result.StartsWith("// GAMEBOY PRINTER Emulator V3 : Copyright (C) 2020 Brian Khuu")
+                                || result.StartsWith("// GAMEBOY PRINTER Emulator V3.2.1 (Copyright (C) 2022 Brian Khuu") 
+                                || result.StartsWith("// GAMEBOY PRINTER Packet Capture V3.2.1 (Copyright (C) 2022 Brian Khuu")
+                                || result.StartsWith("d=debug, ?=help")));
 
                             foundPort = true;
                             gbpemuPort = port;

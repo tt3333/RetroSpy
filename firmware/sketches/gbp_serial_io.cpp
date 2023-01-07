@@ -36,7 +36,7 @@
 
 /******************************************************************************/
 
-#define GBP_PKT10_TIMEOUT_MS 400
+#define GBP_PKT10_TIMEOUT_MS 500
 
 // Testing
 //#define TEST_CHECKSUM_FORCE_FAIL
@@ -61,12 +61,12 @@ typedef enum
 // SIO Serial Input Output Psudo SPI
 static struct
 {
-	bool     SINOutputPinState;  /// GPIO state of output
+	bool     SINOutputPinState; /// GPIO state of output
 	// Preamble Sync
-	bool     syncronised;  ///< True When Preamble Found
-	uint16_t preamble;  ///< Scanning for Preamble
+	bool     syncronised; ///< True When Preamble Found
+	uint16_t preamble; ///< Scanning for Preamble
 	// Byte Tx/Rx
-	uint16_t  bitMaskMap;  // gpb_sio_bitmaskmaps_t
+	uint16_t  bitMaskMap; // gpb_sio_bitmaskmaps_t
 	gpb_sio_mode_t  mode;
 	uint16_t rx_buff;
 	uint16_t tx_buff;
@@ -98,11 +98,11 @@ static struct
 	gpb_cbuff_t dataBuffer;
 
 	// What packets was received for internal processing
-	bool printInstructionReceived;  ///< Print Instruction Command
-	bool dataPacketReceived;        ///< Data Packet Command
-	bool dataEndPacketReceived;     ///< Data End Packet Command (Data size of 0)
-	bool breakPacketReceived;       ///< Break Packet Command
-	bool nulPacketReceived;         ///< Inquiry Packet Command
+	bool printInstructionReceived; ///< Print Instruction Command
+	bool dataPacketReceived; ///< Data Packet Command
+	bool dataEndPacketReceived; ///< Data End Packet Command (Data size of 0)
+	bool breakPacketReceived; ///< Break Packet Command
+	bool nulPacketReceived; ///< Inquiry Packet Command
 
 	// Packet Parsing
 	gbp_pktIO_parse_state_t packetState;
@@ -110,9 +110,9 @@ static struct
 	uint8_t compression;
 	uint16_t data_length;
 	uint16_t data_i;
-	uint16_t checksum;  ///< For data integrity check
-	uint16_t checksumCalc;  ///< For data integrity check
-	uint16_t statusBuffer;  ///< This is send on every packet in the dummy data region
+	uint16_t checksum; ///< For data integrity check
+	uint16_t checksumCalc; ///< For data integrity check
+	uint16_t statusBuffer; ///< This is send on every packet in the dummy data region
 
 	// Status Packet Sequencing (For faking the printer for more advance games)
 	int busyPacketCountdown;
@@ -321,11 +321,11 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 	// * GBP_SOUT : Master Output Slave Input (This device is slave)
 
 	// Scan for preamble
-	if(!gpb_sio.syncronised)
+	if (!gpb_sio.syncronised)
 	{
 #ifndef GBP_FEATURE_USING_RISING_CLOCK_ONLY_ISR
 		// Expecting rising edge
-		if(!GBP_SCLK)
+		if (!GBP_SCLK)
 			return false;
 #endif
 
@@ -333,7 +333,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 		gpb_sio.preamble |= GBP_SOUT ? 1 : 0;
 
 		// Sync Not Found? Keep scanning
-		if((gpb_sio.preamble & 0xFFFF) != GBP_SYNC_WORD)
+		if ((gpb_sio.preamble & 0xFFFF) != GBP_SYNC_WORD)
 		{
 			gpb_sio.preamble <<= 1;
 			return false;
@@ -350,13 +350,13 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 
 	/* Psudo SPI Engine */
 	// Basically I have one bit acting as a mask moving across a word sized buffer
-	if(gpb_sio.bitMaskMap > 0)
+	if (gpb_sio.bitMaskMap > 0)
 	{
 		// Serial Transaction Is Active
 #ifdef GBP_FEATURE_USING_RISING_CLOCK_ONLY_ISR
 		    // Rising Edge Clock (Rx Bit)
-		gpb_sio.rx_buff |= GBP_SOUT ? (gpb_sio.bitMaskMap & 0xFFFF) : 0;  ///< Clocking bits on rising edge
-		gpb_sio.bitMaskMap >>= 1;  ///< One tx/rx bit cycle complete, next bit now
+		gpb_sio.rx_buff |= GBP_SOUT ? (gpb_sio.bitMaskMap & 0xFFFF) : 0; ///< Clocking bits on rising edge
+		gpb_sio.bitMaskMap >>= 1; ///< One tx/rx bit cycle complete, next bit now
 		// Falling Edge Clock (Tx Bit) (Prep now for next rising edge)
 		gpb_sio.SINOutputPinState = (gpb_sio.bitMaskMap & gpb_sio.tx_buff) > 0;
 		if (gpb_sio.bitMaskMap > 0)
@@ -365,10 +365,10 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 		if (GBP_SCLK)
 		{
 			// Rising Edge Clock (Rx Bit)
-			gpb_sio.rx_buff |= GBP_SOUT ? (gpb_sio.bitMaskMap & 0xFFFF) : 0;  ///< Clocking bits on rising edge
-			gpb_sio.bitMaskMap >>= 1;  ///< One tx/rx bit cycle complete, next bit now
+			gpb_sio.rx_buff |= GBP_SOUT ? (gpb_sio.bitMaskMap & 0xFFFF) : 0; ///< Clocking bits on rising edge
+			gpb_sio.bitMaskMap >>= 1; ///< One tx/rx bit cycle complete, next bit now
 
-			if(gpb_sio.bitMaskMap > 0)
+			if (gpb_sio.bitMaskMap > 0)
 				return gpb_sio.SINOutputPinState;
 		}
 		else
@@ -498,7 +498,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 			gpb_pktIO.data_i++;
 
 			// Escape and move to next stage
-			if(gpb_pktIO.data_i >= gpb_pktIO.data_length)
+			if (gpb_pktIO.data_i >= gpb_pktIO.data_length)
 			{
 				gpb_pktIO.packetState = GBP_PKT10_PARSE_CHECKSUM;
 				gpb_sio_next(GBP_SIO_MODE_16BITS_LITTLE_ENDIAN, 0);
@@ -523,7 +523,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 #ifdef FEATURE_CHECKSUM_SUPPORTED
 			// Dev Note: Was used to confirm that packetizer was working
 			// This will cause the printer to retry sending this packet
-			if(gpb_pktIO.checksum != gpb_pktIO.checksumCalc)
+			if (gpb_pktIO.checksum != gpb_pktIO.checksumCalc)
 			{
 				gpb_status_bit_update_checksum_error(gpb_pktIO.statusBuffer, true);
 			}
@@ -557,7 +557,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 #endif // TEST_PRETEND_BUFFER_FULL
 
 			// Update status data : Device Status
-			switch(gpb_pktIO.command)
+			switch (gpb_pktIO.command)
 			{
 				// INIT --> DATA --> ENDDATA --> PRINT
 			case GBP_COMMAND_INIT:
@@ -616,7 +616,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 	case GBP_PKT10_PARSE_DUMMY    :
 		{
 			// Update status data : Device Status
-			switch(gpb_pktIO.command)
+			switch (gpb_pktIO.command)
 			{
 				// INIT --> DATA --> ENDDATA --> PRINT
 			case GBP_COMMAND_INIT:
@@ -679,7 +679,7 @@ bool gpb_serial_io_OnChange_ISR(const bool GBP_SCLK, const bool GBP_SOUT)
 
 #ifdef FEATURE_CHECKSUM_SUPPORTED
 			// temp buff handling
-			if(gpb_status_bit_getbit_checksum_error(gpb_pktIO.statusBuffer))
+			if (gpb_status_bit_getbit_checksum_error(gpb_pktIO.statusBuffer))
 			{
 				// On checksum error, throw away old data. GBP will resend
 				gpb_cbuff_ResetTemp(&gpb_pktIO.dataBuffer);
