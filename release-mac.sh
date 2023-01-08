@@ -4,22 +4,22 @@ rm -rf bin/Release/net7.0
 rm -rf bin/Release/RetroSpy-macOS
 rm -rf RetroSpy-macOS.zip
 
-dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
+dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
 if [ $? -ne 0 ] 
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
+    dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
+        dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
+        dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
@@ -33,22 +33,22 @@ else
     fi
 fi
 
-dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
+dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
 if [ $? -ne 0 ] 
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
+    dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
+        dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
+        dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
