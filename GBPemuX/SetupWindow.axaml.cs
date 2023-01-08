@@ -67,7 +67,8 @@ namespace GBPemu
             _vm = new SetupWindowViewModel();
             DataContext = _vm;
             _resources = Properties.Resources.ResourceManager;
-            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strExeFilePath = AppContext.BaseDirectory;
+            
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
 

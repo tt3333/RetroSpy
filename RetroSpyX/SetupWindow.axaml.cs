@@ -107,7 +107,7 @@ namespace RetroSpy
             Properties.Settings.Default.CustomSkinPath = _path ?? String.Empty;
             Properties.Settings.Default.Save();
 
-            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strExeFilePath = AppContext.BaseDirectory;
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath) ?? ".";
 
             string skinsDirectory = Path.Combine(strWorkPath, "skins");
@@ -121,7 +121,7 @@ namespace RetroSpy
 
         private void ReloadSkins_Click(object sender, RoutedEventArgs e)
         {
-            string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string strExeFilePath = AppContext.BaseDirectory;
             string? strWorkPath = Path.GetDirectoryName(strExeFilePath ?? Directory.GetCurrentDirectory());
 
             string skinsDirectory = Path.Combine(strWorkPath ?? ".", "skins");
@@ -171,7 +171,7 @@ namespace RetroSpy
                 DataContext = _vm;
                 _excludedSources = new Collection<string>();
                 _resources = Properties.Resources.ResourceManager;
-                string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string strExeFilePath = AppContext.BaseDirectory;
                 string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
                 string skinsDirectory = Path.Combine(strWorkPath ?? ".", "skins");
