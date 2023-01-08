@@ -29,6 +29,7 @@
     <None Remove="keybindings.xml" />
     <None Remove="Resources\ErrorImage.png" />
     <None Remove="Resources\PrintImage.png" />
+    <None Remove="RetroSpy.icns" />
     <None Remove="skins\3do-controller\3dobackground.png" />
     <None Remove="skins\3do-controller\circle2.png" />
     <None Remove="skins\3do-controller\skin.xml" />
@@ -758,6 +759,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+    <Content Include="RetroSpy.icns">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="skins\classic-c64gs\cheetah-stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2717,13 +2721,6 @@
       <DependentUpon>SetupWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\RetroSpy.icns">
-      <Link>RetroSpy.icns</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -3035,9 +3032,9 @@
 	</ItemGroup>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles-&gt;'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 	<Target Name="CopyFirmwareFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles-&gt;'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles->'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 </Project>

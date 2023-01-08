@@ -27,6 +27,7 @@
     <None Remove=".gitignore" />
     <None Remove="Assets\SetupImage.png" />
     <None Remove="game_palettes.cfg" />
+    <None Remove="GBPemu.icns" />
     <None Remove="Mattahan-Buuf-Magnifying-Glass.ico" />
   </ItemGroup>
 	<ItemGroup>
@@ -36,12 +37,16 @@
 	  <Content Include="game_palettes.cfg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+	  <Content Include="GBPemu.icns">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
   <ItemGroup>
     <TrimmerRootDescriptor Include="Roots.xml" />
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="Dotnet.Bundle" Version="*" />
     <PackageReference Include="Avalonia" Version="0.10.18" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
