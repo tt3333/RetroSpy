@@ -27,7 +27,7 @@ else
             mv bin/Release/net7.0publish/RetroSpy bin/Release/net7.0publish/RetroSpy-x64
             mv bin/Release/net7.0publish/GBPemu bin/Release/net7.0publish/GBPemu-x64
             mv bin/Release/net7.0publish/GBPUpdater bin/Release/net7.0publish/GBPUpdater-x64
-            mv bin/Release/net7.0publish/USBUpdater bin/Release/net7.0publish/USBUpdater-x64
+            mv bin/Release/net7.0publish/UsbUpdater bin/Release/net7.0publish/UsbUpdater-x64
 	    fi
         fi
     fi
