@@ -1,90 +1,84 @@
 #!/bin/bash
 
 rm -rf bin/Release/net7.0
-rm -rf bin/Release/RetroSpy-macOS-x64
-rm -rf bin/Release/RetroSpy-macOS-arm64
-rm -rf RetroSpy-macOS-x64.zip
-rm -rf RetroSpy-macOS-arm64.zip
+rm -rf bin/Release/RetroSpy-macOS
+rm -rf RetroSpy-macOS.zip
 
-git pull
-
-dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained
+dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
 if [ $? -ne 0 ] 
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained
+    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained
+        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained
+        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-x64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
         else
-            cd bin/Release/
-            cp -r net7.0 RetroSpy-macOS-x64
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/*.dylib
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/osx.os
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/createdump
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/RetroSpy
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPemu
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/GBPUpdater
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-x64/USBUpdater
-	        ditto -c --sequesterRsrc -k -V RetroSpy-macOS-x64/ ../../RetroSpy-macOS-x64.zip
-            xcrun notarytool submit ../../RetroSpy-macOS-x64.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
-            if [ -d "/Volumes/src/upload" ]
-            then
-            cp ../../RetroSpy-macOS-x64.zip /Volumes/src/upload  
-            fi
-            cd ../..
+            mv bin/Release/net7.0publish/RetroSpy bin/Release/net7.0publish/RetroSpy-x64
+            mv bin/Release/net7.0publish/GBPemu bin/Release/net7.0publish/GBPemu-x64
+            mv bin/Release/net7.0publish/GBPUpdater bin/Release/net7.0publish/GBPUpdater-x64
+            mv bin/Release/net7.0publish/USBUpdater bin/Release/net7.0publish/USBUpdater-x64
 	    fi
         fi
     fi
 fi
 
-rm -rf bin/Release/net7.0
-
-dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained
+dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
 if [ $? -ne 0 ] 
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained
+    dotnet build GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained
+        dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained
+        dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r osx-arm64 --self-contained -p:PublishSingleFile=true
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
         else
+            mv bin/Release/net7.0publish/RetroSpy bin/Release/net7.0publish/RetroSpy-arm64
+            mv bin/Release/net7.0publish/GBPemu bin/Release/net7.0publish/GBPemu-arm64
+            mv bin/Release/net7.0publish/GBPUpdater bin/Release/net7.0publish/GBPUpdater-arm64
+            mv bin/Release/net7.0publish/USBUpdater bin/Release/net7.0publish/USBUpdater-arm64
+
+            lipo -create -output bin/Release/net7.0publish/RetroSpy bin/Release/net7.0publish/RetroSpy-x64 bin/Release/net7.0publish/RetroSpy-arm64
+            lipo -create -output bin/Release/net7.0publish/GBPemu bin/Release/net7.0publish/GBPemu-x64 bin/Release/net7.0publish/GBPemu-arm64
+            lipo -create -output bin/Release/net7.0publish/GBPUpdater bin/Release/net7.0publish/GBPUpdater-x64 bin/Release/net7.0publish/GBPUpdater-arm64
+            lipo -create -output bin/Release/net7.0publish/USBUpdater bin/Release/net7.0publish/USBUpdater-x64 bin/Release/net7.0publish/USBUpdater-arm64
+
+            rm bin/Release/net7.0publish/*-arm64
+            rm bin/Release/net7.0publish/*-x64
+
             cd bin/Release/
-            cp -r net7.0 RetroSpy-macOS-arm64
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/*.dylib
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/osx.os
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/createdump
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/RetroSpy
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPemu
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/GBPUpdater
-            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS-arm64/USBUpdater
-	        ditto -c --sequesterRsrc -k -V RetroSpy-macOS-arm64/ ../../RetroSpy-macOS-arm64.zip
-            xcrun notarytool submit ../../RetroSpy-macOS-arm64.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
+            cp -r net7.0 RetroSpy-macOS
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/*.dylib
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/osx.os
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/RetroSpy
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/GBPemu
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/GBPUpdater
+            codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/USBUpdater
+	        ditto -c --sequesterRsrc -k RetroSpy-macOS/ ../../RetroSpy-macOS.zip
+            xcrun notarytool submit ../../RetroSpy-macOS.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
             if [ -d "/Volumes/src/upload" ]
             then
-            cp ../../RetroSpy-macOS-arm64.zip /Volumes/src/upload  
+            cp ../../RetroSpy-macOS.zip /Volumes/src/upload  
             fi
             cd ../..
 	    fi
