@@ -9,17 +9,17 @@ if [ $? -ne 0 ]
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+    dotnet msbuild GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+        dotnet msbuild GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+        dotnet msbuild UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
@@ -33,22 +33,22 @@ else
     fi
 fi
 
-dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+dotnet msbuild RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
 if [ $? -ne 0 ] 
 then 
     echo "Aborting release. Error during RetroSpyX build."
 else
-    dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+    dotnet msbuild GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
     if [ $? -ne 0 ] 
     then 
         echo "Aborting release. Error during GBPemuX build."
     else
-        dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+        dotnet msbuild GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
         if [ $? -ne 0 ] 
         then 
         echo "Aborting release. Error during GBPUpdater build."
         else
-        dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
+        dotnet msbuild UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -t:BundleApp /p:CFBundleShortVersionString=6.0
         if [ $? -ne 0 ] 
         then 
             echo "Aborting release. Error during GBPUpdater build."
