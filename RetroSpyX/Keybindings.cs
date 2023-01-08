@@ -32,7 +32,7 @@ namespace RetroSpy
 
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
-            string xmlPath = Path.Combine(Environment.CurrentDirectory, xmlFilePath);
+            string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilePath);
 
             if (!File.Exists(xmlPath))
             {
