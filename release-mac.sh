@@ -61,7 +61,7 @@ else
             lipo -create -output bin/Release/net7.0publish/RetroSpy bin/Release/net7.0publish/RetroSpy-x64 bin/Release/net7.0publish/RetroSpy-arm64
             lipo -create -output bin/Release/net7.0publish/GBPemu bin/Release/net7.0publish/GBPemu-x64 bin/Release/net7.0publish/GBPemu-arm64
             lipo -create -output bin/Release/net7.0publish/GBPUpdater bin/Release/net7.0publish/GBPUpdater-x64 bin/Release/net7.0publish/GBPUpdater-arm64
-            lipo -create -output bin/Release/net7.0publish/UsbUpdater bin/Release/net7.0publish/USBUpdater-x64 bin/Release/net7.0publish/UsbUpdater-arm64
+            lipo -create -output bin/Release/net7.0publish/UsbUpdater bin/Release/net7.0publish/UsbUpdater-x64 bin/Release/net7.0publish/UsbUpdater-arm64
 
             rm bin/Release/net7.0publish/*-arm64
             rm bin/Release/net7.0publish/*-x64
