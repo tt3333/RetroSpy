@@ -4,8 +4,6 @@ rm -rf bin/Release/net7.0
 rm -rf bin/Release/RetroSpy-Linux
 rm -rf RetroSpy-Linux.tar.gz
 
-git pull
-
 dotnet build RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64 --self-contained
 
 if [ $? -ne 0 ] 
