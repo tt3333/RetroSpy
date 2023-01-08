@@ -2673,6 +2673,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dotnet.Bundle" Version="*" />
     <PackageReference Include="Avalonia" Version="0.10.18">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
@@ -2717,6 +2718,12 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\RetroSpy.icns">
+      <Link>RetroSpy.icns</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -3028,9 +3035,9 @@
 	</ItemGroup>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles-&gt;'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 	<Target Name="CopyFirmwareFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles->'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles-&gt;'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 </Project>
