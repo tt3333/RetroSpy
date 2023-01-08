@@ -67,7 +67,7 @@ else
             rm bin/Release/net7.0publish/*-x64
 
             cd bin/Release/
-            cp -r net7.0 RetroSpy-macOS
+            cp -r net7.0publish RetroSpy-macOS
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/*.dylib
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/osx.os
             codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../entitlements.plist RetroSpy-macOS/RetroSpy
