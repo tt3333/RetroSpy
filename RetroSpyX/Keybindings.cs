@@ -34,8 +34,8 @@ namespace RetroSpy
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
             string keybindings_location;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && File.Exists(Path.Join("..", "Info.plist")))
-                keybindings_location = Path.Join("../../../", xmlFilePath);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
+                keybindings_location = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", xmlFilePath));
             else
                 keybindings_location = Path.Join(AppContext.BaseDirectory, xmlFilePath);
 

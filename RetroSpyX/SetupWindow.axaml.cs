@@ -107,10 +107,12 @@ namespace RetroSpy
             Properties.Settings.Default.CustomSkinPath = _path ?? String.Empty;
             Properties.Settings.Default.Save();
 
-            string strExeFilePath = AppContext.BaseDirectory;
-            string? strWorkPath = Path.GetDirectoryName(strExeFilePath) ?? ".";
+            string skinsDirectory;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
+            else
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
-            string skinsDirectory = Path.Combine(strWorkPath, "skins");
             LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
             _skins = results.SkinsLoaded;
 
@@ -121,10 +123,11 @@ namespace RetroSpy
 
         private void ReloadSkins_Click(object sender, RoutedEventArgs e)
         {
-            string strExeFilePath = AppContext.BaseDirectory;
-            string? strWorkPath = Path.GetDirectoryName(strExeFilePath ?? Directory.GetCurrentDirectory());
-
-            string skinsDirectory = Path.Combine(strWorkPath ?? ".", "skins");
+            string skinsDirectory;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
+            else
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
             if (!Directory.Exists(skinsDirectory))
             {
@@ -172,13 +175,11 @@ namespace RetroSpy
                 _excludedSources = new Collection<string>();
                 _resources = Properties.Resources.ResourceManager;
 
-                string skins_location;
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && System.IO.File.Exists(Path.Join("..", "Info.plist")))
-                    skins_location = Path.Join("../../../", "skins");
+                string skinsDirectory;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
+                    skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
                 else
-                    skins_location = Path.Join(AppContext.BaseDirectory, "skins");
-
-                string skinsDirectory = Path.Combine(AppContext.BaseDirectory, "skins");
+                    skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
                 if (!Directory.Exists(skinsDirectory))
                 {

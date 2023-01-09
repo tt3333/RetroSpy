@@ -26,7 +26,8 @@ cp RetroSpyX/RetroSpy.icns bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/Reso
 cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS
 mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/skins bin/Release/RetroSpy-macOS/
 mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/keybindings.xml bin/Release/RetroSpy-macOS/
-
+cp -aR bin/Release/net7.0/firmware bin/Release/RetroSpy-macOS/
+ 
 rm -rf bin/Release/net7.0
 dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-x64
@@ -46,7 +47,7 @@ mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources
 cp GBPemuX/Info.plist bin/Release/RetroSpy-macOS/GBPemu.app/Contents/
 cp GBPemuX/GBPemu.icns bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources/
 cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS
-mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/game_palettes.cfg bin/Release/RetroSpy-macOS/
+mv bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS/game_palettes.cfg bin/Release/RetroSpy-macOS/
 
 rm -rf bin/Release/net7.0
 dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
@@ -139,11 +140,26 @@ xcrun stapler staple RetroSpy-macOS/GBPUpdater.app
 xcrun stapler staple RetroSpy-macOS/UsbUpdater.app
 
 rm ../../RetroSpy-macOS.zip
-ditto -c --sequesterRsrc -k RetroSpy-macOS/ ../../RetroSpy-macOS.zip
+#ditto -c --sequesterRsrc -k RetroSpy-macOS/ ../../RetroSpy-macOS.zip
+
+rm -rf RetroSpyInstall
+rm -rf ../../RetroSpyInstall.dmg
+mkdir RetroSpyInstall
+mkdir RetroSpyInstall/RetroSpy
+cp -aR RetroSpy-macOS/* RetroSpyInstall/RetroSpy/
+
+hdiutil create /tmp/tmp.dmg -ov -volname "RetroSpyInstall" -fs HFS+ -srcfolder "RetroSpyInstall"
+hdiutil convert /tmp/tmp.dmg -format UDZO -o ../../RetroSpyInstall.dmg 
+
+rm -rf RetroSpyInstall
+
+xcrun notarytool submit ../../RetroSpyInstall.dmg --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
+xcrun stapler staple ../../RetroSpyInstall.dmg
+
 
 if [ -d "/Volumes/src/upload" ]
 then
-  cp ../../RetroSpy-macOS.zip /Volumes/src/upload  
+  cp ../../RetroSpyInstall.dmg /Volumes/src/upload  
 fi
 cd ../..
 
