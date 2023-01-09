@@ -9,6 +9,7 @@ using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Xml;
 using static GBPemu.BitmapPixelMaker;
 
@@ -113,7 +114,7 @@ namespace GBPemu
             List<GamePalette> newPalettes = new();
             bool lookingForGame = true;
 
-            foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
+            foreach (string line in System.IO.File.ReadLines(Path.Join(AppContext.BaseDirectory, @"game_palettes.cfg")))
             {
                 if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
                 {
@@ -471,7 +472,7 @@ namespace GBPemu
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
             PrintSize = Properties.Settings.Default.PrintSize;
 
-            _imageBuffer.SetRawImage("Assets/ErrorImage.png");
+            _imageBuffer.SetRawImage(Path.Join(AppContext.BaseDirectory, "Assets/ErrorImage.png"));
 
             BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap();
 
@@ -534,7 +535,7 @@ namespace GBPemu
 
             PrintSize = Properties.Settings.Default.PrintSize;
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            _imageBuffer.SetRawImage("Assets/PrintImage.png");
+            _imageBuffer.SetRawImage(Path.Join(AppContext.BaseDirectory, "Assets/PrintImage.png"));
 
             _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
             _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
