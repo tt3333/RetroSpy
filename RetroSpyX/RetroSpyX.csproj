@@ -2677,7 +2677,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dotnet.Bundle" Version="*" />
     <PackageReference Include="Avalonia" Version="0.10.18">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
