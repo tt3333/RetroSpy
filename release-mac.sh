@@ -92,6 +92,8 @@ cp UsbUpdaterX/UsbUpdater bin/Release/RetroSpy-macOS/
 
 cd bin/Release/RetroSpy-macOS/
 
+security unlock-keychain -p "$keychain_password" /Users/zoggins/Library/Keychains/login.keychain
+
 find "RetroSpy.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
     echo "[INFO] Signing $fname"
