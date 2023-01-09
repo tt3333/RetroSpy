@@ -36,6 +36,12 @@
 	  <Content Include="game_palettes.cfg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+	  <Content Include="Assets\ErrorImage.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\PrintImage.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
   <ItemGroup>
     <TrimmerRootDescriptor Include="Roots.xml" />
@@ -104,6 +110,10 @@
 		<AssetFiles Include="Assets\**\*.*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <AssetFiles Remove="Assets\ErrorImage.png" />
+	  <AssetFiles Remove="Assets\PrintImage.png" />
+	</ItemGroup>
 	<Target Name="TimestampWindows" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
 		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources\BuildDate.txt&quot;" />
 	</Target>
@@ -117,6 +127,6 @@
 	</Target>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles-&gt;'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 </Project>
