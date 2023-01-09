@@ -24,6 +24,8 @@ mkdir bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/Resources
 cp RetroSpyX/Info.plist bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/
 cp RetroSpyX/RetroSpy.icns bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/Resources/
 cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS
+mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/skins bin/Release/RetroSpy-macOS/
+mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/keybindings.xml bin/Release/RetroSpy-macOS/
 
 rm -rf bin/Release/net7.0
 dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
@@ -44,6 +46,7 @@ mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources
 cp GBPemuX/Info.plist bin/Release/RetroSpy-macOS/GBPemu.app/Contents/
 cp GBPemuX/GBPemu.icns bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources/
 cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS
+mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/game_palettes.cfg bin/Release/RetroSpy-macOS/
 
 rm -rf bin/Release/net7.0
 dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true

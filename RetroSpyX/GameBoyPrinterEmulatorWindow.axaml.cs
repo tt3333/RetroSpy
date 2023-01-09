@@ -10,6 +10,8 @@ using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
 using static RetroSpy.BitmapPixelMaker;
 
 namespace RetroSpy
@@ -113,7 +115,13 @@ namespace RetroSpy
             List<GamePalette> newPalettes = new();
             bool lookingForGame = true;
 
-            foreach (string line in System.IO.File.ReadLines(@"game_palettes.cfg"))
+            string game_palettes_location;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && File.Exists(Path.Join("..", "Info.plist")))
+                game_palettes_location = Path.Join("../../../", @"game_palettes.cfg");
+            else
+                game_palettes_location = Path.Join(AppContext.BaseDirectory, @"game_palettes.cfg");
+
+            foreach (string line in System.IO.File.ReadLines(game_palettes_location))
             {
                 if (lookingForGame && line.StartsWith("Game:", System.StringComparison.Ordinal))
                 {

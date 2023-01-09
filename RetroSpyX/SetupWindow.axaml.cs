@@ -171,10 +171,14 @@ namespace RetroSpy
                 DataContext = _vm;
                 _excludedSources = new Collection<string>();
                 _resources = Properties.Resources.ResourceManager;
-                string strExeFilePath = AppContext.BaseDirectory;
-                string? strWorkPath = Path.GetDirectoryName(strExeFilePath);
 
-                string skinsDirectory = Path.Combine(strWorkPath ?? ".", "skins");
+                string skins_location;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && System.IO.File.Exists(Path.Join("..", "Info.plist")))
+                    skins_location = Path.Join("../../../", "skins");
+                else
+                    skins_location = Path.Join(AppContext.BaseDirectory, "skins");
+
+                string skinsDirectory = Path.Combine(AppContext.BaseDirectory, "skins");
 
                 if (!Directory.Exists(skinsDirectory))
                 {

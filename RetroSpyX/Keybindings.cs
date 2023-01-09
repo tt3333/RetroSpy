@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Desktop.Robot;
+using System.Runtime.InteropServices;
 
 namespace RetroSpy
 {
@@ -32,14 +33,18 @@ namespace RetroSpy
 
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
-            string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilePath);
+            string keybindings_location;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && File.Exists(Path.Join("..", "Info.plist")))
+                keybindings_location = Path.Join("../../../", xmlFilePath);
+            else
+                keybindings_location = Path.Join(AppContext.BaseDirectory, xmlFilePath);
 
-            if (!File.Exists(xmlPath))
+            if (!File.Exists(keybindings_location))
             {
                 throw new ConfigParseException(string.Format(CultureInfo.CurrentCulture, "Could not find {0}", XmlFilePath));
             }
 
-            XDocument doc = XDocument.Load(xmlPath);
+            XDocument doc = XDocument.Load(keybindings_location);
 
             if (doc.Root != null)
             {
