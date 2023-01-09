@@ -8,11 +8,23 @@ mkdir bin/Release/RetroSpy-macOS
 rm -rf bin/Release/net7.0
 dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-x64
+mv bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-x64
+mv bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-x64
+mv bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
 dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-arm64
-lipo -create -output bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-arm64 bin/Release/net7.0/publish/RetroSpy-x64
-rm bin/Release/net7.0/publish/RetroSpy-arm64
-rm bin/Release/net7.0/publish/RetroSpy-x64
+mv bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-arm64
+mv bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-arm64
+mv bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64
+mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
+lipo -create -output bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-arm64 bin/Release/net7.0/publish/libAvaloniaNative.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-arm64 bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64 bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64 bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64 bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
+rm bin/Release/net7.0/publish/*-arm64
+rm bin/Release/net7.0/publish/*-x64
 
 mkdir bin/Release/RetroSpy-macOS/RetroSpy.app
 mkdir bin/Release/RetroSpy-macOS/RetroSpy.app/Contents
@@ -25,11 +37,24 @@ cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/RetroSpy.app/Cont
 rm -rf bin/Release/net7.0
 dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-x64
+mv bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-x64
+mv bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-x64
+mv bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
 dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-arm64
+mv bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-arm64
+mv bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-arm64
+mv bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64
+mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
 lipo -create -output bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-arm64 bin/Release/net7.0/publish/GBPemu-x64
-rm bin/Release/net7.0/publish/GBPemu-arm64
-rm bin/Release/net7.0/publish/GBPemu-x64
+lipo -create -output bin/Release/net7.0/publish/libAvaloniaNative.dylib bin/Release/net7.0/publish/libAvaloniaNative.dylib-arm64 bin/Release/net7.0/publish/libAvaloniaNative.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libHarfBuzzSharp.dylib bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-arm64 bin/Release/net7.0/publish/libHarfBuzzSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64 bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSkiaSharp.dylib bin/Release/net7.0/publish/libSkiaSharp.dylib-arm64 bin/Release/net7.0/publish/libSkiaSharp.dylib-x64
+lipo -create -output bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64 bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
+rm bin/Release/net7.0/publish/*-arm64
+rm bin/Release/net7.0/publish/*-x64
 
 mkdir bin/Release/RetroSpy-macOS/GBPemu.app
 mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents
