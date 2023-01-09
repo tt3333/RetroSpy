@@ -29,7 +29,6 @@
     <None Remove="keybindings.xml" />
     <None Remove="Resources\ErrorImage.png" />
     <None Remove="Resources\PrintImage.png" />
-    <None Remove="RetroSpy.icns" />
     <None Remove="skins\3do-controller\3dobackground.png" />
     <None Remove="skins\3do-controller\circle2.png" />
     <None Remove="skins\3do-controller\skin.xml" />
@@ -759,9 +758,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
-    <Content Include="RetroSpy.icns">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="skins\classic-c64gs\cheetah-stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2724,6 +2720,9 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="RetroSpy.icns">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
