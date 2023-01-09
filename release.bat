@@ -120,11 +120,8 @@ copy ..\..\..\kernel\kernel.tar.gz RetroSpy-Upload
 if exist "..\..\..\upload\RetroSpy-Linux.tar.gz" (
 copy ..\..\..\upload\RetroSpy-Linux.tar.gz RetroSpy-Upload
 )
-if exist "..\..\..\upload\RetroSpy-macOS-x64.zip" (
-copy ..\..\..\upload\RetroSpy-macOS-x64.zip RetroSpy-Upload
-)
-if exist "..\..\..\upload\RetroSpy-macOS-arm64.zip" (
-copy ..\..\..\upload\RetroSpy-macOS-arm64.zip RetroSpy-Upload
+if exist "..\..\..\upload\RetroSpy-macOS.zip" (
+copy ..\..\..\upload\RetroSpy-macOS.zip RetroSpy-Upload
 )
 if exist "..\..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\..\beaglebone\%%I RetroSpy-Upload & goto end
