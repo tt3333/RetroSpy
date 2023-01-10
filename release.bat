@@ -112,6 +112,8 @@ del GBP_Firmware.zip
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\avrdude.conf
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\firmware.ino.hex
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libusb0.dll
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\avrdude-mac
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\firmware-old.ino.hex
 copy GBP_Firmware.zip RetroSpy-Upload
 )
 if exist "..\..\..\kernel\kernel.tar.gz" (
