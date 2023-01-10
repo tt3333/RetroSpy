@@ -1,20 +1,19 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System;
-using System.Threading;
 using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
-using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.IO.Ports;
+using System.Linq;
+using System.Management;
 using System.Net.Http;
 using System.Runtime.InteropServices;
-using System.IO.Ports;
-using System.Management;
-using System.Linq;
-using System.Diagnostics;
-using System.IO.Compression;
 using System.Text;
+using System.Threading;
 
 namespace GBPUpdaterX2
 {
@@ -136,7 +135,8 @@ namespace GBPUpdaterX2
             try
             {
                 int serialNumber = 0;
-                if (Dispatcher.UIThread.CheckAccess())
+
+                Dispatcher.UIThread.Post(() =>
                 {
                     try
                     {
@@ -147,97 +147,38 @@ namespace GBPUpdaterX2
                         serialNumber = 0;
                     }
 
-                    goButton.IsEnabled = false;
+                    this.goButton.IsEnabled = false;
                     txtboxData.Text = string.Empty;
                     txtboxData.CaretIndex = int.MaxValue;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        try
-                        {
-                            serialNumber = Int32.Parse(txtboxSerialNumber.Text);
-                        }
-                        catch (Exception)
-                        {
-                            serialNumber = 0;
-                        }
-
-                        this.goButton.IsEnabled = false;
-                        txtboxData.Text = string.Empty;
-                        txtboxData.CaretIndex = int.MaxValue;
-                    });
-                }
-
-
+                });
 
                 string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                 _ = Directory.CreateDirectory(tempDirectory);
-                if (Dispatcher.UIThread.CheckAccess())
+
+                Dispatcher.UIThread.Post(() =>
                 {
                     txtboxData.Text += "Downloading latest firmware...";
                     txtboxData.CaretIndex = int.MaxValue;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        txtboxData.Text += "Downloading latest firmware...";
-                        txtboxData.CaretIndex = int.MaxValue;
-                    });
-                }
+                });
+
 
                 DownloadFirmware(tempDirectory);
 
-                if (Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Post(() =>
                 {
                     txtboxData.Text += "done.\n\n";
-                    txtboxData.CaretIndex = int.MaxValue;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        txtboxData.Text += "done.\n\n";
-                        txtboxData.CaretIndex = int.MaxValue;
-                    });
-                }
-
-
-
-                if (Dispatcher.UIThread.CheckAccess())
-                {
                     txtboxData.Text += "Decompressing firmware package...";
                     txtboxData.CaretIndex = int.MaxValue;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        txtboxData.Text += "Decompressing firmware package...";
-                        txtboxData.CaretIndex = int.MaxValue;
-                    });
-                }
+                });
 
                 ZipFile.ExtractToDirectory(Path.Combine(tempDirectory, "GBP_Firmware.zip"), tempDirectory);
 
-                if (Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Post(() =>
                 {
                     txtboxData.Text += "done.\n\n";
                     txtboxData.Text += "Searching for GameBoy Printer Emulator...";
                     txtboxData.CaretIndex = int.MaxValue;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        txtboxData.Text += "done.\n\n";
-                        txtboxData.Text += "Searching for GameBoy Printer Emulator...";
-                        txtboxData.CaretIndex = int.MaxValue;
-                    });
-                }
-
+                });
 
                 SerialPort? _serialPort = null;
 
@@ -297,41 +238,27 @@ namespace GBPUpdaterX2
 
                 if (!foundPort)
                 {
-                    if (Dispatcher.UIThread.CheckAccess())
+
+                    Dispatcher.UIThread.Post(() =>
                     {
                         txtboxData.Text += "cannot find RetroSpy GameBoy Printer Emulator.\n\n";
-                        AvaloniaMessageBox("RetroSpy", "Couldn't find RetroSpy Pixel.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                        _ = MessageBox.Avalonia.MessageBoxManager
+                            .GetMessageBoxStandardWindow("RetroSpy", "Couldn't find RetroSpy Pixel.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
+                            .Show();
                         txtboxData.CaretIndex = int.MaxValue;
                         this.goButton.IsEnabled = true;
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            txtboxData.Text += "cannot find RetroSpy GameBoy Printer Emulator.\n\n";
-                            AvaloniaMessageBox("RetroSpy", "Couldn't find RetroSpy Pixel.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                            txtboxData.CaretIndex = int.MaxValue;
-                            this.goButton.IsEnabled = true;
-                        });
-                    }
+                    });
+
                 }
                 else
                 {
-                    if (Dispatcher.UIThread.CheckAccess())
+
+                    Dispatcher.UIThread.Post(() =>
                     {
                         txtboxData.Text += "found on " + gbpemuPort + ".\n\n";
                         txtboxData.Text += "Updating firmware...\n";
                         txtboxData.CaretIndex = int.MaxValue;
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            txtboxData.Text += "found on " + gbpemuPort + ".\n\n";
-                            txtboxData.Text += "Updating firmware...\n";
-                            txtboxData.CaretIndex = int.MaxValue;
-                        });
-                    }
+                    });
 
                     ProcessStartInfo processInfo;
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -356,7 +283,7 @@ namespace GBPUpdaterX2
                             CreateNoWindow = true,
                             UseShellExecute = false
                         };
-                        Process? p1 = Process.   Start(processInfo);
+                        Process? p1 = Process.Start(processInfo);
                         p1.WaitForExit();
 
                         processInfo = new ProcessStartInfo(Path.Join(tempDirectory, "avrdude-mac"),
@@ -401,7 +328,7 @@ namespace GBPUpdaterX2
                         p.WaitForExit();
                     }
 
-                    if (Dispatcher.UIThread.CheckAccess())
+                    Dispatcher.UIThread.Post(() =>
                     {
                         txtboxData.Text += sb.ToString() + "\n";
                         txtboxData.Text += "..." + "done.\n\n";
@@ -412,77 +339,36 @@ namespace GBPUpdaterX2
                             if (sb.ToString().Contains("attempt 10 of 10"))
                                 throw new Exception("Updating Failed.");
 
-
                             _ = MessageBox.Avalonia.MessageBoxManager
                                 .GetMessageBoxStandardWindow("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
-                                .Show();    
-                            this.goButton.IsEnabled = true;
+                                .Show();
+                            goButton.IsEnabled = true;
 
                         }
                         catch (Exception ex)
                         {
                             txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
                             _ = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
-                                .Show();
-                            this.goButton.IsEnabled = true;
+                                .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
+                                        .Show();
+                            goButton.IsEnabled = true;
                         }
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            txtboxData.Text += sb.ToString() + "\n";
-                            txtboxData.Text += "..." + "done.\n\n";
-                            txtboxData.CaretIndex = int.MaxValue;
-
-                            try
-                            {
-                                if (sb.ToString().Contains("attempt 10 of 10"))
-                                    throw new Exception("Updating Failed.");
-
-                                _ = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
-                                    .Show();
-                                this.goButton.IsEnabled = true;
-
-                            }
-                            catch(Exception ex)
-                            {
-                                txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                                _ = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
-                                    .Show();
-                                this.goButton.IsEnabled = true;
-                            }
-                        });
-                    }
-
+                    });
                 }
 
             }
             catch (Exception ex)
             {
-
-                if (Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Post(() =>
                 {
                     txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
                     _ = MessageBox.Avalonia.MessageBoxManager
                         .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
-                        .Show()
-                    this.goButton.IsEnabled = true;
-                }
-                else
-                {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                        _ = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
-                            .Show()
-                        this.goButton.IsEnabled = true;
-                    });
-                }
+                        .Show();
+
+                    goButton.IsEnabled = true;
+                });
+
             }
 
         }

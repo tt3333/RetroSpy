@@ -4,10 +4,6 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetroSpyX", "RetroSpyX\RetroSpyX.csproj", "{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsbUpdaterX", "UsbUpdaterX\UsbUpdaterX.csproj", "{4E9E04B3-C427-4EDB-906E-577F7989CB22}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPUpdaterX", "GBPUpdaterX\GBPUpdaterX.csproj", "{D6339E20-C097-4604-8E70-A302A9AB3381}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPemuX", "GBPemuX\GBPemuX.csproj", "{8ABC5880-452D-40DB-AF55-6B6FF76987A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB809359-CA9A-4BAC-B728-B0FA12985304}"
@@ -17,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		release.sh = release.sh
 		RetroSpy.aip = RetroSpy.aip
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GBPUpdaterX2", "GBPUpdaterX2\GBPUpdaterX2.csproj", "{2A0E6957-1189-424F-B92F-67FDBFA17BD2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsbUpdaterX2", "UsbUpdaterX2\UsbUpdaterX2.csproj", "{8C050212-322A-4C5C-9D68-E9146CB3A003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,18 +28,18 @@ Global
 		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7CC6315-6995-48B4-808A-ABDEFF62EEBE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E9E04B3-C427-4EDB-906E-577F7989CB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E9E04B3-C427-4EDB-906E-577F7989CB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E9E04B3-C427-4EDB-906E-577F7989CB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E9E04B3-C427-4EDB-906E-577F7989CB22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6339E20-C097-4604-8E70-A302A9AB3381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6339E20-C097-4604-8E70-A302A9AB3381}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6339E20-C097-4604-8E70-A302A9AB3381}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6339E20-C097-4604-8E70-A302A9AB3381}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8ABC5880-452D-40DB-AF55-6B6FF76987A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8ABC5880-452D-40DB-AF55-6B6FF76987A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ABC5880-452D-40DB-AF55-6B6FF76987A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ABC5880-452D-40DB-AF55-6B6FF76987A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A0E6957-1189-424F-B92F-67FDBFA17BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A0E6957-1189-424F-B92F-67FDBFA17BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A0E6957-1189-424F-B92F-67FDBFA17BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A0E6957-1189-424F-B92F-67FDBFA17BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C050212-322A-4C5C-9D68-E9146CB3A003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C050212-322A-4C5C-9D68-E9146CB3A003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C050212-322A-4C5C-9D68-E9146CB3A003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C050212-322A-4C5C-9D68-E9146CB3A003}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
