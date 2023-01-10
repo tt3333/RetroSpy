@@ -272,7 +272,8 @@ namespace RetroSpy
                 {
                     var m = MessageBox.Avalonia.MessageBoxManager
                         .GetMessageBoxStandardWindow("RetroSpy", "Error parsing keybindings.xml. Not binding any keys to gamepad inputs", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                await m.ShowDialog(this);
+                    this.Topmost = false;
+                    await m.ShowDialog(this);
                 });
             }
         }
