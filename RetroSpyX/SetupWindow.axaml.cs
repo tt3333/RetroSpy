@@ -85,11 +85,11 @@ namespace RetroSpy
             Properties.Settings.Default.UseLagFix = LagFixCheckbox.IsChecked ?? false;
         }
 
-        private void UpdatePortListThread()
-        {
-            Thread thread = new(UpdatePortList);
-            thread.Start();
-        }
+            private void UpdatePortListThread()
+            {
+                Thread thread = new(UpdatePortList);
+                thread.Start();
+            }
 
         public async Task<string?> GetPath()
         {
@@ -131,7 +131,7 @@ namespace RetroSpy
 
             if (!Directory.Exists(skinsDirectory))
             {
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
 
@@ -428,16 +428,16 @@ namespace RetroSpy
             }
             catch (ConfigParseException ex)
             {
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
 
             }
             catch (System.Net.Sockets.SocketException)
             {
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), string.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), string.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
             }
             catch (UnauthorizedAccessException ex)
             {
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
             }
             catch (SSHMonitorDisconnectException)
             {
@@ -445,7 +445,7 @@ namespace RetroSpy
             }
             catch (Exception ex)
             {
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 v?.Close();
             }
 
@@ -472,6 +472,14 @@ namespace RetroSpy
             .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType)
                         .Show().ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
             Dispatcher.UIThread.MainLoop(source.Token);
+        }
+
+
+        private void AvaloniaMessageBoxDialog(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
+        { 
+            var m = MessageBox.Avalonia.MessageBoxManager
+                    .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType);
+            m.ShowDialog(this);
         }
 
         private void ShowSkinParseErrors(Collection<string> errs)
@@ -889,7 +897,7 @@ namespace RetroSpy
             catch (Exception)
             {
 
-                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Couldn't connected to MiSTer to get connected controllers.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Couldn't connected to MiSTer to get connected controllers.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
 
             }
             finally

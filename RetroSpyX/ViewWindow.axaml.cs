@@ -3,7 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
+using DynamicData.Experimental;
 using MessageBox.Avalonia.Enums;
+using Renci.SshNet.Messages;
 using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
@@ -232,13 +234,16 @@ namespace RetroSpy
             _reader.ControllerStateChanged += Reader_ControllerStateChanged;
             _reader.ControllerDisconnected += Reader_ControllerDisconnected;
 
+            // This is terrible, but there is no way to show a dialog before the
+            // window is visible.
             try
             {
                 _keybindings = new Keybindings(Keybindings.XmlFilePath, _reader);
             }
             catch (ConfigParseException)
             {
-                AvaloniaMessageBox("RetroSpy", "Error parsing keybindings.xml. Not binding any keys to gamepad inputs", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                noKeyBindings = true;
+                StartNoKeybindingDialogThread();
             }
 
             MassBlinkReductionEnabled = Properties.Settings.Default.MassFilter;
@@ -249,14 +254,36 @@ namespace RetroSpy
             WindowAspectRatio.Register(this);
         }
 
-        private static void AvaloniaMessageBox(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
+        private void NoKeybindingDialogThread()
         {
-            using var source = new CancellationTokenSource();
-            _ = MessageBox.Avalonia.MessageBoxManager
-            .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType)
-                        .Show().ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-            Dispatcher.UIThread.MainLoop(source.Token);
+            bool loop = true;
+            while (loop)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    loop = !IsVisible;
+                });
+            }
+
+            if (noKeyBindings)
+            {
+
+                Dispatcher.UIThread.Post(async() =>
+                {
+                    var m = MessageBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandardWindow("RetroSpy", "Error parsing keybindings.xml. Not binding any keys to gamepad inputs", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                await m.ShowDialog(this);
+                });
+            }
         }
+
+        private void StartNoKeybindingDialogThread()
+        {
+            Thread thread = new(NoKeybindingDialogThread);
+            thread.Start();
+        }
+
+        bool noKeyBindings = false;
 
         private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {

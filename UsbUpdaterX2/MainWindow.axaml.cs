@@ -58,11 +58,11 @@ namespace UsbUpdaterX2
                         if (line.Contains("Installation complete!"))
                         {
 
-                            Dispatcher.UIThread.Post(() =>
+                            Dispatcher.UIThread.Post(async () =>
                             {
-                                _ = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("RetroSpy", "Installation complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
-                                    .Show();
+                                var m = MessageBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandardWindow("RetroSpy", "Installation complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info);
+                                await m.ShowDialog(this);
                                 goButton.IsEnabled = true;
                             });
 
@@ -75,12 +75,12 @@ namespace UsbUpdaterX2
             catch (Exception ex)
             {
 
-                Dispatcher.UIThread.Post(() =>
+                Dispatcher.UIThread.Post(async() =>
                 {
                     txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                    _ = MessageBox.Avalonia.MessageBoxManager
-                        .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
-                        .Show();
+                    var m = MessageBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                    await m.ShowDialog(this);
                     goButton.IsEnabled = true;
                 });
 
