@@ -121,7 +121,7 @@ if exist "..\..\..\upload\RetroSpy-Linux.tar.gz" (
 copy ..\..\..\upload\RetroSpy-Linux.tar.gz RetroSpy-Upload
 )
 if exist "..\..\..\upload\RetroSpyInstall.dmg" (
-copy ..\..\..\upload\RetroSpyInstall.zip RetroSpy-Upload
+copy ..\..\..\upload\RetroSpyInstall.dmg RetroSpy-Upload
 )
 if exist "..\..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\..\beaglebone\%%I RetroSpy-Upload & goto end
