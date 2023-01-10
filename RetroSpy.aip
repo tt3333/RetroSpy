@@ -1,5 +1,5 @@
 ﻿[Setup]
-AIVersion=9.2
+AIVersion=9.3
 AIEdition=0
 GUID={664FB1C2-C4B5-4970-B5C9-8D49236CB416}
 AppName=RetroSpy
@@ -28,7 +28,7 @@ SetupFileName=RetroSpy-Setup
 IconFile=Default
 SourceDir=RetroSpy-Setup
 InstallDir=<ProgramFiles>\<AppName>
-MainExe=<InstallDir>\RetroSpy.exe
+MainExe=
 ProgramGroup=<AppName>
 Uninstall=1
 ShowAddRemove=1
@@ -132,12 +132,15 @@ CustomActionCommand=<WebSite>
 CustomActionChecked=0
 CustomActionAdmin=0
 TotalFiles=1
-SourceDirFiles=1218
-SourceDirSize=439172176
+SourceDirFiles=1039
+SourceDirSize=194464943
 
 [GUI]
 FontName=Verdana
 LogoMode=1
+LogoOffset=0
+LogoIconSize=2
+Theme=0
 LogoAlignClient=0
 LogoAutoSize=0
 LogoStretch=0

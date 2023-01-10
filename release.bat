@@ -93,12 +93,12 @@ REM Copy Drivers
 ;xcopy /y /e /s CH341SER RetroSpy-Setup\CH341SER\
 ;copy serial_install.exe RetroSpy-Setup\
 
-REM if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
-REM "C:\Program Files (x86)\Actual Installer\actinst.exe" /S RetroSpy.aip
-REM if exist "..\..\..\certs\codesign.pfx" (
-REM "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\SignTool" sign /f "..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /a Retrospy-Setup.exe
-REM )
-REM )
+if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
+"C:\Program Files (x86)\Actual Installer\actinst.exe" /S ".\RetroSpy.aip"
+  if exist "..\..\..\certs\codesign.pfx" (
+    "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22000.0\x86\SignTool" sign /f "..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /fd sha256 /a Retrospy-Setup.exe
+  )
+)
 
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
