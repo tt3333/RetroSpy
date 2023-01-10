@@ -3,17 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIconFile</key>
-	<string>GBPemu.icns</string>
+	<string>UsbUpdater.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.retro-spy.gbpemu</string>
+	<string>com.retro-spy.usbupdater</string>
 	<key>CFBundleName</key>
-	<string>Pixel Viewer</string>
+	<string>USB Updater</string>
+	<key>CFBundleDisplayName</key>
+	<string>RetroSpy Vision USB Updater</string>
 	<key>CFBundleVersion</key>
 	<string>6.0.0</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.12</string>
 	<key>CFBundleExecutable</key>
-	<string>GBPemu</string>
+	<string>UsbUpdater</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -22,7 +24,5 @@
 	<string>6.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
-	<key>CFBundleDisplayName</key>
-	<string>RetroSpy Pixel Viewer</string>
 </dict>
 </plist>

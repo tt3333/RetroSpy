@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIconFile</key>
-	<string>GBPemu.icns</string>
+	<string>GBPUpdater.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.retro-spy.gbpemu</string>
-	<key>CFBundleName</key>
-	<string>Pixel Viewer</string>
+	<string>com.retro-spy.gbpupdater</string>
+	<key>CFBundleDisplayName</key>
+	<string>RetroSpy Pixel Updater</string>
 	<key>CFBundleVersion</key>
 	<string>6.0.0</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.12</string>
 	<key>CFBundleExecutable</key>
-	<string>GBPemu</string>
+	<string>GBPUpdater</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -22,7 +22,7 @@
 	<string>6.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
-	<key>CFBundleDisplayName</key>
-	<string>RetroSpy Pixel Viewer</string>
+	<key>CFBundleName</key>
+	<string>Pixel Updater</string>
 </dict>
 </plist>

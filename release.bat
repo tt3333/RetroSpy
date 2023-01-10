@@ -20,14 +20,14 @@ echo Aborting release. Error during AnyCPU build.
 goto end
 
 :AnyCPUBuilduu
-"C:\Program Files\dotnet\dotnet.exe" build UsbUpdaterX\UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release\net7.0
+"C:\Program Files\dotnet\dotnet.exe" build UsbUpdaterX2\UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release\net7.0
 
 if errorlevel 0 goto AnyCPUBuildgpbu
 echo Aborting release. Error during AnyCPU build.
 goto end
 
 :AnyCPUBuildgpbu
-"C:\Program Files\dotnet\dotnet.exe" build GBPUpdaterX\GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release\net7.0
+"C:\Program Files\dotnet\dotnet.exe" build GBPUpdaterX2\GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=..\bin\Release\net7.0
 
 if errorlevel 0 goto :MiSTer
 echo Aborting release. Error during AnyCPU build.
@@ -103,7 +103,7 @@ REM )
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload
 copy RetroSpy-Windows.zip RetroSpy-Upload
-copy UsbUpdaterX\update-usb-retrospy-installer.sh RetroSpy-Upload
+copy UsbUpdaterX2\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
 if exist "..\..\..\GBP_Firmware\" (

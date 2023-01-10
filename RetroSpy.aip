@@ -149,15 +149,15 @@ LogoTransparent=0
 
 [Shortcuts]
 0=<ProgramsMenu>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
-1=<ProgramGroup>*?RetroSpy USB Updater*?<InstallDir>\UsbUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
+1=<ProgramGroup>*?RetroSpy Vision USB Updater*?<InstallDir>\UsbUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
 2=<ProgramGroup>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal*?No
 3=<ProgramGroup>*?<AppName>*?<InstallDir>\RetroSpy.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
 4=<Desktop>*?RetroSpy Firmware*?<InstallDir>\firmware\firmware.ino*?*?*?<InstallDir>\firmware*?*?0*?Normal*?No
 5=<ProgramGroup>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal*?No
 6=<Desktop>*?RetroSpy MiSTer Install*?<InstallDir>\MiSTer*?*?*?<InstallDir>*?*?0*?Normal*?No
-7=<ProgramGroup>*?GameBoy Printer Emulator*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
-8=<Desktop>*?GameBoy Printer Emulator*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
-9=<ProgramGroup>*?GameBoy Printer Emulator Updater*?<InstallDir>\GBPUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
+7=<ProgramGroup>*?RetroSpy Pixel Viewer*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
+8=<Desktop>*?RetroSpy Pixel Viewer*?<InstallDir>\GBPemu.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
+9=<ProgramGroup>*?RetroSpy Pixel Updater*?<InstallDir>\GBPUpdater.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
 10=<ProgramGroup>*?Uninstall <AppName>*?<InstallDir>\Uninstall.exe*?*?*?<InstallDir>*?*?0*?Normal*?No
 
 [Commands]

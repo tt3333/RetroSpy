@@ -40,20 +40,20 @@ lipo -create -output bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib 
 rm bin/Release/net7.0/publish/*-arm64
 rm bin/Release/net7.0/publish/*-x64
 
-mkdir bin/Release/RetroSpy-macOS/GBPemu.app
-mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents
-mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS
-mkdir bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources
-cp GBPemuX/Info.plist bin/Release/RetroSpy-macOS/GBPemu.app/Contents/
-cp GBPemuX/GBPemu.icns bin/Release/RetroSpy-macOS/GBPemu.app/Contents/Resources/
-cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS
-mv bin/Release/RetroSpy-macOS/GBPemu.app/Contents/MacOS/game_palettes.cfg bin/Release/RetroSpy-macOS/
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/MacOS"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/Resources"
+cp GBPemuX/Info.plist "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/"
+cp GBPemuX/GBPemu.icns "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/Resources/"
+cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/MacOS"
+mv "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/MacOS/game_palettes.cfg" bin/Release/RetroSpy-macOS/
 
 rm -rf bin/Release/net7.0
-dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-x64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
-dotnet publish GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-arm64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
 lipo -create -output bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-arm64 bin/Release/net7.0/publish/GBPUpdater-x64
@@ -61,38 +61,34 @@ lipo -create -output bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib 
 rm bin/Release/net7.0/publish/*-arm64
 rm bin/Release/net7.0/publish/*-x64
 
-mkdir bin/Release/RetroSpy-macOS/GBPUpdater.app
-mkdir bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents
-mkdir bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents/MacOS
-mkdir bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents/Resources
-cp GBPUpdaterX/Info.plist bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents/
-#cp GBPUpdaterX/GBPUpdater.icns bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents/Resources/
-cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/GBPUpdater.app/Contents/MacOS
-#chflags hidden bin/Release/RetroSpy-macOS/GBPUpdater.app/
-cp GBPUpdaterX/GBPUpdater bin/Release/RetroSpy-macOS/
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/MacOS"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/Resources"
+cp GBPUpdaterX2/Info.plist "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/"
+cp GBPUpdaterX2/GBPUpdater.icns "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/Resources/"
+cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/MacOS"
 
 rm -rf bin/Release/net7.0
-dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-x64
-dotnet publish UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-arm64
 lipo -create -output bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-arm64 bin/Release/net7.0/publish/UsbUpdater-x64
 rm bin/Release/net7.0/publish/*-arm64
 rm bin/Release/net7.0/publish/*-x64
 
-mkdir bin/Release/RetroSpy-macOS/UsbUpdater.app
-mkdir bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents
-mkdir bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents/MacOS
-mkdir bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents/Resources
-cp UsbUpdaterX/Info.plist bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents/
-#cp UsbUpdaterX/UsbUpdater.icns bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents/Resources/
-cp -aR bin/Release/net7.0/publish/* bin/Release/RetroSpy-macOS/UsbUpdater.app/Contents/MacOS
-#chflags hidden bin/Release/RetroSpy-macOS/UsbUpdater.app/
-cp UsbUpdaterX/UsbUpdater bin/Release/RetroSpy-macOS/
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents/MacOS"
+mkdir "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents/Resources"
+cp UsbUpdaterX2/Info.plist "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents/"
+cp UsbUpdaterX2/UsbUpdater.icns "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents/Resources/"
+cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Vision USB Updater.app/Contents/MacOS"
 
 cd bin/Release/RetroSpy-macOS/
 
-security unlock-keychain -p "$keychain_password" /Users/zoggins/Library/Keychains/login.keychain
+security unlock-keychain -p "$keychain_p" /Users/zoggins/Library/Keychains/login.keychain
 
 find "RetroSpy.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
@@ -103,43 +99,41 @@ done
 echo "[INFO] Signing app file"
 codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist RetroSpy.app
 
-find "GBPemu.app/Contents/MacOS/"|while read fname; do
+find "RetroSpy Pixel Viewer.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
     echo "[INFO] Signing $fname"
     codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "$fname"
   fi
 done
 echo "[INFO] Signing app file"
-codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist GBPemu.app
+codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "RetroSpy Pixel Viewer.app"
 
-find "GBPUpdater.app/Contents/MacOS/"|while read fname; do
+find "RetroSpy Pixel Updater.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
     echo "[INFO] Signing $fname"
     codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "$fname"
   fi
 done
 echo "[INFO] Signing app file"
-codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist GBPUpdater.app
-codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist GBPUpdater
+codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "RetroSpy Pixel Updater.app"
 
-find "UsbUpdater.app/Contents/MacOS/"|while read fname; do
+find "RetroSpy Vision USB Updater.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
     echo "[INFO] Signing $fname"
     codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "$fname"
   fi
 done
 echo "[INFO] Signing app file"
-codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist UsbUpdater.app
-codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist UsbUpdater
+codesign --force --verbose --timestamp --sign "$apple_teamid" --options=runtime --entitlements ../../../entitlements.plist "RetroSpy Vision USB Updater.app"
 
 cd ..
 ditto -c --sequesterRsrc -k RetroSpy-macOS/ ../../RetroSpy-macOS.zip
 xcrun notarytool submit ../../RetroSpy-macOS.zip --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
 
-xcrun stapler staple RetroSpy-macOS/RetroSpy.app
-xcrun stapler staple RetroSpy-macOS/GBPemu.app
-xcrun stapler staple RetroSpy-macOS/GBPUpdater.app
-xcrun stapler staple RetroSpy-macOS/UsbUpdater.app
+xcrun stapler staple "RetroSpy-macOS/RetroSpy.app"
+xcrun stapler staple "RetroSpy-macOS/RetroSpy Pixel Viewer.app"
+xcrun stapler staple "RetroSpy-macOS/RetroSpy Pixel Updater.app"
+xcrun stapler staple "RetroSpy-macOS/RetroSpy Vision USB Updater.app"
 
 rm ../../RetroSpy-macOS.zip
 #ditto -c --sequesterRsrc -k RetroSpy-macOS/ ../../RetroSpy-macOS.zip

@@ -15,12 +15,12 @@ else
    then 
      echo "Aborting release. Error during GBPemuX build."
    else
-     dotnet build GBPUpdaterX/GBPUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64 --self-contained
+     dotnet build GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64 --self-contained
      if [ $? -ne 0 ] 
      then 
        echo "Aborting release. Error during GBPUpdater build."
      else
-       dotnet build UsbUpdaterX/UsbUpdaterX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64 --self-contained
+       dotnet build UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0 -r linux-x64 --self-contained
        if [ $? -ne 0 ] 
        then 
          echo "Aborting release. Error during GBPUpdater build."
