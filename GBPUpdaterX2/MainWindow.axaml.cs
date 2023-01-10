@@ -348,7 +348,30 @@ namespace GBPUpdaterX2
                             WorkingDirectory = tempDirectory
                         };
                     }
-                    else if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        processInfo = new ProcessStartInfo("chmod",
+                            "755 " + Path.Join(tempDirectory, "avrdude-mac"))
+                        {
+                            CreateNoWindow = true,
+                            UseShellExecute = false
+                        };
+                        Process? p1 = Process.   Start(processInfo);
+                        p1.WaitForExit();
+
+                        processInfo = new ProcessStartInfo(Path.Join(tempDirectory, "avrdude-mac"),
+                            "-v -patmega328p -carduino -P" + gbpemuPort +
+                            string.Format(" -b{0} -D -Uflash:w:firmware{1}.ino.hex:i",
+                                serialNumber < 100007 ? "115200" : "57600", serialNumber < 100007 ? "" : "-old"))
+                        {
+                            CreateNoWindow = true,
+                            UseShellExecute = false,
+                            RedirectStandardError = true,
+                            RedirectStandardOutput = true,
+                            WorkingDirectory = tempDirectory
+                        };
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     {
                         processInfo = new ProcessStartInfo("avrdude",
                             "-v -patmega328p -carduino -P" + gbpemuPort +
@@ -389,13 +412,19 @@ namespace GBPUpdaterX2
                             if (sb.ToString().Contains("attempt 10 of 10"))
                                 throw new Exception("Updating Failed.");
 
-                            AvaloniaMessageBox("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info);
+
+                            _ = MessageBox.Avalonia.MessageBoxManager
+                                .GetMessageBoxStandardWindow("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
+                                .Show();    
+                            this.goButton.IsEnabled = true;
 
                         }
                         catch (Exception ex)
                         {
                             txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                            AvaloniaMessageBox("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                            _ = MessageBox.Avalonia.MessageBoxManager
+                                .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
+                                .Show();
                             this.goButton.IsEnabled = true;
                         }
                     }
@@ -411,30 +440,21 @@ namespace GBPUpdaterX2
                             {
                                 if (sb.ToString().Contains("attempt 10 of 10"))
                                     throw new Exception("Updating Failed.");
-                                
-                                AvaloniaMessageBox("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info);
+
+                                _ = MessageBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandardWindow("RetroSpy", "Update complete! Please reboot your device.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
+                                    .Show();
+                                this.goButton.IsEnabled = true;
 
                             }
                             catch(Exception ex)
                             {
                                 txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                                AvaloniaMessageBox("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                                _ = MessageBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info)
+                                    .Show();
                                 this.goButton.IsEnabled = true;
                             }
-
-
-                        });
-                    }
-
-                    if (Dispatcher.UIThread.CheckAccess())
-                    {
-                        this.goButton.IsEnabled = true;
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            this.goButton.IsEnabled = true;
                         });
                     }
 
@@ -447,7 +467,9 @@ namespace GBPUpdaterX2
                 if (Dispatcher.UIThread.CheckAccess())
                 {
                     txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                    AvaloniaMessageBox("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                    _ = MessageBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
+                        .Show()
                     this.goButton.IsEnabled = true;
                 }
                 else
@@ -455,7 +477,9 @@ namespace GBPUpdaterX2
                     Dispatcher.UIThread.Post(() =>
                     {
                         txtboxData.Text += "\nUpdater encountered an error.  Message: " + ex.Message + "\n";
-                        AvaloniaMessageBox("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                        _ = MessageBox.Avalonia.MessageBoxManager
+                            .GetMessageBoxStandardWindow("RetroSpy", ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error)
+                            .Show()
                         this.goButton.IsEnabled = true;
                     });
                 }
@@ -467,15 +491,6 @@ namespace GBPUpdaterX2
         {
             Thread thread = new(UpdateThread);
             thread.Start();
-        }
-
-        private static void AvaloniaMessageBox(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
-        {
-            using var source = new CancellationTokenSource();
-            _ = MessageBox.Avalonia.MessageBoxManager
-            .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType)
-                        .Show().ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-            Dispatcher.UIThread.MainLoop(source.Token);
         }
     }
 }
