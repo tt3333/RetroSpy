@@ -36,6 +36,8 @@ namespace RetroSpy
             string keybindings_location;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
                 keybindings_location = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", xmlFilePath));
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && File.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", xmlFilePath))))
+                keybindings_location = Path.Join(AppContext.BaseDirectory, Path.Join("..", xmlFilePath));
             else
                 keybindings_location = Path.Join(AppContext.BaseDirectory, xmlFilePath);
 

@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 using ComboBox = Avalonia.Controls.ComboBox;
+using File = System.IO.File;
 using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 using SelectionChangedEventArgs = Avalonia.Controls.SelectionChangedEventArgs;
 using Window = Avalonia.Controls.Window;
@@ -110,6 +111,8 @@ namespace RetroSpy
             string skinsDirectory;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
                 skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
             else
                 skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
@@ -126,6 +129,8 @@ namespace RetroSpy
             string skinsDirectory;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
                 skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
+                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
             else
                 skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
@@ -176,19 +181,26 @@ namespace RetroSpy
                 _resources = Properties.Resources.ResourceManager;
 
                 string skinsDirectory;
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") &&
+                    System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
                     skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
+                         AppContext.BaseDirectory.Contains("bin") &&
+                         Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
+                    skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
                 else
                     skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
 
                 if (!Directory.Exists(skinsDirectory))
                 {
-                    AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                    AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture),
+                        "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                     Environment.Exit(-1);
 
                 }
 
-                LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
+                LoadResults results =
+                    Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
                 _skins = results.SkinsLoaded;
 
                 _vm.Skins.UpdateContents(_skins?.Where(x => x.Type == InputSource.DEFAULT));
@@ -204,11 +216,13 @@ namespace RetroSpy
 
                 PopulateSources();
 
-                _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterUsername
-                                                                              : Properties.Settings.Default.BeagleboneUsername;
+                _vm.Username = _vm.Sources.SelectedItem == InputSource.MISTER
+                    ? Properties.Settings.Default.MisterUsername
+                    : Properties.Settings.Default.BeagleboneUsername;
 
-                txtPassword.Text = _vm.Sources.SelectedItem == InputSource.MISTER ? Properties.Settings.Default.MisterPassword
-                                                      : Properties.Settings.Default.BeaglebonePassword;
+                txtPassword.Text = _vm.Sources.SelectedItem == InputSource.MISTER
+                    ? Properties.Settings.Default.MisterPassword
+                    : Properties.Settings.Default.BeaglebonePassword;
 
                 _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
                 txtDelay.Text = _vm.DelayInMilliseconds.ToString();
@@ -298,6 +312,10 @@ namespace RetroSpy
                 {
                     Show();
                 }
+            }
+            catch (TypeInitializationException ex)
+            {
+                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.InnerException.Message + "\n\n" + ex.InnerException.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
             }
             catch (Exception ex)
             {

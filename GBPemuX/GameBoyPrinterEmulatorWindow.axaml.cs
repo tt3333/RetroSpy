@@ -118,6 +118,8 @@ namespace GBPemu
             string game_palettes_location;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
                 game_palettes_location = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", @"game_palettes.cfg"));
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && File.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"))))
+                game_palettes_location = Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"));
             else
                 game_palettes_location = Path.Join(AppContext.BaseDirectory, @"game_palettes.cfg");
 

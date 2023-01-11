@@ -127,28 +127,37 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
         public InputReader(string path, bool[] keys, MouseState mouseState)
         {
-            _keys = keys;
-            _mouseState = mouseState;
+            try
+            {
+                _keys = keys;
+                _mouseState = mouseState;
 
-            _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-            OnKeyPress += (e) => {
-                if ((int)e.Code >= 272 && (int)e.Code <= 276)
-                    _mouseState.Buttons[(int)e.Code-272] = e.State != KeyState.KeyUp;
-                else
-                    _keys[(int)e.Code] = e.State != KeyState.KeyUp;  
-            };
+                OnKeyPress += (e) =>
+                {
+                    if ((int)e.Code >= 272 && (int)e.Code <= 276)
+                        _mouseState.Buttons[(int)e.Code - 272] = e.State != KeyState.KeyUp;
+                    else
+                        _keys[(int)e.Code] = e.State != KeyState.KeyUp;
+                };
 
-            OnMouseMove += (e) => {
-                if (e.Axis == MouseAxis.X)
-                    _mouseState.X = e.Amount;
-                else if (e.Axis == MouseAxis.Y)
-                    _mouseState.Y = e.Amount;
-                else if (e.Axis == MouseAxis.Z)
-                    _mouseState.Z = e.Amount;
-            };
+                OnMouseMove += (e) =>
+                {
+                    if (e.Axis == MouseAxis.X)
+                        _mouseState.X = e.Amount;
+                    else if (e.Axis == MouseAxis.Y)
+                        _mouseState.Y = e.Amount;
+                    else if (e.Axis == MouseAxis.Z)
+                        _mouseState.Z = e.Amount;
+                };
 
-            Task.Run(Run);
+                Task.Run(Run);
+            }
+            catch (Exception)
+            {
+                // Its expected that things are going to fail, so we need eat this.
+            }
         }
 
         private void Run()

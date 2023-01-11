@@ -30,9 +30,7 @@ namespace RetroSpy
                                                     new byte[]  { 0xff, 0xaa, 0x55, 0x00 }
                                                 },   // Grayscale
                                                 new byte[][] {
-                                                    new byte[] { 0x9b, 0x77, 0x30, 0x0f },
-                                                    new byte[] { 0xbc, 0xa1, 0x62, 0x38 },
-                                                    new byte[] { 0x0f, 0x12, 0x30, 0x0f }
+                                                            new byte[] { 0x0f, 0x12, 0x30, 0x0f }
                                                 },   // DMG
                                                 new byte[][] {
                                                     new byte[] { 0xc4, 0x8b, 0x4d, 0x1f },
@@ -118,6 +116,8 @@ namespace RetroSpy
             string game_palettes_location;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory == "MacOS" && File.Exists(Path.Join("..", "Info.plist")))
                 game_palettes_location = Path.Join("../../../", @"game_palettes.cfg");
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && File.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"))))
+                game_palettes_location = Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"));
             else
                 game_palettes_location = Path.Join(AppContext.BaseDirectory, @"game_palettes.cfg");
 
