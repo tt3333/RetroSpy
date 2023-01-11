@@ -6,10 +6,10 @@ rm -rf RetroSpy-macOS.zip
 mkdir bin/Release/RetroSpy-macOS
 
 rm -rf bin/Release/net7.0
-dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-x64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
-dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish RetroSpyX/RetroSpyX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-arm64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
 lipo -create -output bin/Release/net7.0/publish/RetroSpy bin/Release/net7.0/publish/RetroSpy-arm64 bin/Release/net7.0/publish/RetroSpy-x64
@@ -29,10 +29,10 @@ mv bin/Release/RetroSpy-macOS/RetroSpy.app/Contents/MacOS/keybindings.xml bin/Re
 cp -aR bin/Release/net7.0/firmware bin/Release/RetroSpy-macOS/
  
 rm -rf bin/Release/net7.0
-dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-x64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
-dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-arm64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
 lipo -create -output bin/Release/net7.0/publish/GBPemu bin/Release/net7.0/publish/GBPemu-arm64 bin/Release/net7.0/publish/GBPemu-x64
@@ -50,10 +50,10 @@ cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Pixel V
 mv "bin/Release/RetroSpy-macOS/RetroSpy Pixel Viewer.app/Contents/MacOS/game_palettes.cfg" bin/Release/RetroSpy-macOS/
 
 rm -rf bin/Release/net7.0
-dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-x64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-x64
-dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish GBPUpdaterX2/GBPUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-arm64
 mv bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib bin/Release/net7.0/publish/libSystem.IO.Ports.Native.dylib-arm64
 lipo -create -output bin/Release/net7.0/publish/GBPUpdater bin/Release/net7.0/publish/GBPUpdater-arm64 bin/Release/net7.0/publish/GBPUpdater-x64
@@ -70,9 +70,9 @@ cp GBPUpdaterX2/GBPUpdater.icns "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updat
 cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Pixel Updater.app/Contents/MacOS"
 
 rm -rf bin/Release/net7.0
-dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-x64
-dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
+/usr/local/share/dotnet/dotnet publish UsbUpdaterX2/UsbUpdaterX2.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-arm64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
 mv bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-arm64
 lipo -create -output bin/Release/net7.0/publish/UsbUpdater bin/Release/net7.0/publish/UsbUpdater-arm64 bin/Release/net7.0/publish/UsbUpdater-x64
 rm bin/Release/net7.0/publish/*-arm64
