@@ -14,14 +14,14 @@ IfInstalled=0
 RunAsAdmin=0
 Windows 10=1
 Windows 11=1
-SystemType=0
+SystemType=1
 Internet=0
 CloseApp=0
 CloseAppFile=File.exe
 CloseAppText=App Name
 dotNET=1
 dotNETVersion=21
-LinkDN=https://dotnet.microsoft.com/en-us/download/dotnet/7.0
+LinkDN=https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.2-windows-x64-installer
 PackageType=0
 SetupFolder=.
 SetupFileName=RetroSpy-Setup
@@ -133,7 +133,7 @@ CustomActionChecked=0
 CustomActionAdmin=0
 TotalFiles=1
 SourceDirFiles=1039
-SourceDirSize=194464943
+SourceDirSize=194464935
 
 [GUI]
 FontName=Verdana
