@@ -151,7 +151,7 @@ if [[ -z "${SSH_CLIENT}" ]]; then
     --window-pos 200 120 \
     --window-size 800 400 \
     --icon-size 100 \
-    --icon "RetroSpyInstall" 200 190 \
+    --icon "RetroSpy" 200 190 \
     --app-drop-link 600 185 \
     "../../RetroSpyInstall.dmg" \
     "RetroSpyInstall"
