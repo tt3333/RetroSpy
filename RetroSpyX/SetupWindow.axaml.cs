@@ -165,7 +165,20 @@ namespace RetroSpy
             {
                 InitializeComponent();
 
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    var localDir = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".local");
 
+                    if (!Directory.Exists(localDir))
+                    {
+                        Directory.CreateDirectory(localDir);
+                        var shareDir = Path.Join(localDir, "share");
+                        if (!Directory.Exists(shareDir))
+                        {
+                            Directory.CreateDirectory(shareDir);
+                        }
+                    }
+                }
 
                 if (Properties.Settings.Default.UpgradeRequired)
                 {
