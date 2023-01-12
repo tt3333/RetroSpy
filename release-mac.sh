@@ -144,8 +144,21 @@ mkdir RetroSpyInstall
 mkdir RetroSpyInstall/RetroSpy
 cp -aR RetroSpy-macOS/* RetroSpyInstall/RetroSpy/
 
-hdiutil create /tmp/tmp.dmg -ov -volname "RetroSpyInstall" -fs HFS+ -srcfolder "RetroSpyInstall"
-hdiutil convert /tmp/tmp.dmg -format UDZO -o ../../RetroSpyInstall.dmg 
+if [[ -z "${SSH_CLIENT}" ]]; then
+  create-dmg \
+    --volname "RetroSpy Installer" \
+    --background "../../installer_background.png" \
+    --window-pos 200 120 \
+    --window-size 800 400 \
+    --icon-size 100 \
+    --icon "RetroSpyInstall" 200 190 \
+    --app-drop-link 600 185 \
+    "../../RetroSpyInstall.dmg" \
+    "RetroSpyInstall"
+else
+  hdiutil create /tmp/tmp.dmg -ov -volname "RetroSpyInstall" -fs HFS+ -srcfolder "RetroSpyInstall"
+  hdiutil convert /tmp/tmp.dmg -format UDZO -o ../../RetroSpyInstall.dmg 
+fi
 
 rm -rf RetroSpyInstall
 
