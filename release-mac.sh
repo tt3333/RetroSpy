@@ -144,7 +144,7 @@ mkdir RetroSpyInstall
 mkdir RetroSpyInstall/RetroSpy
 cp -aR RetroSpy-macOS/* RetroSpyInstall/RetroSpy/
 
-if [[ -z "${SSH_CLIENT}" ]] && [[-z "${LAUNCHDRUN}" ]]; 
+if [[ -z "${SSH_CLIENT}" ]] && [[ -z "${LAUNCHDRUN}" ]]; 
 then
   create-dmg \
     --volname "RetroSpy Installer" \
