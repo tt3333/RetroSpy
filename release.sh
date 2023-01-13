@@ -26,7 +26,8 @@ else
          echo "Aborting release. Error during GBPUpdater build."
        else
          cd bin/Release
-	 mkdir RetroSpy-Linux
+	     mkdir RetroSpy-Linux
+         mkdir RetroSpy-Linux/bin
          cp -r net7.0/publish/* RetroSpy-Linux/bin
          mv RetroSpy-Linux/bin/skins RetroSpy-Linux
          mv RetroSpy-Linux/bin/keybindings.xml RetroSpy-Linux
@@ -34,11 +35,11 @@ else
          mkdir RetroSpy-Linux/MiSTer
          mkdir RetroSpy-Linux/bin
          cp ../../MiSTer/update-retrospy.sh RetroSpy-Linux/MiSTer
-	 mv RetroSpy-Linux/bin/RetroSpy RetroSpy-Linux/bin/retrospy
-	 mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
-	 mv RetroSpy-Linux/bin/GBPUpdater RetroSpy-Linux/bin/pixelupdate
-	 mv RetroSpy-Linux/bin/UsbUpdater RetroSpy-Linux/bin/visionusbupdate
-	 tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
+	     mv RetroSpy-Linux/bin/RetroSpy RetroSpy-Linux/bin/retrospy
+	     mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
+	     mv RetroSpy-Linux/bin/GBPUpdater RetroSpy-Linux/bin/pixelupdate
+	     mv RetroSpy-Linux/bin/UsbUpdater RetroSpy-Linux/bin/visionusbupdate
+	     tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
          if [ -d "/mnt/src/upload" ]
          then
            cp ../../RetroSpy-Linux.tar.gz /mnt/src/upload  
