@@ -222,8 +222,5 @@ namespace RetroSpy
             { "DIVIDE", Key.Slash},
             { "/", Key.Slash }
         };
-
-        [GeneratedRegex("^[A-Z0-9]$")]
-        private static partial Regex MyRegex();
     }
 }

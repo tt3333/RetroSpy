@@ -328,7 +328,8 @@ namespace RetroSpy
             }
             catch (TypeInitializationException ex)
             {
-                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.InnerException.Message + "\n\n" + ex.InnerException.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex?.InnerException?.Message + "\n\n" + ex?.InnerException?.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                Environment.Exit(-1);
             }
             catch (Exception ex)
             {

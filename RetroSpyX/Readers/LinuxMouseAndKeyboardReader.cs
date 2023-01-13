@@ -1,18 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Avalonia.Input;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Desktop.Robot.Clicks;
-using ReactiveUI;
-using Vortice.DirectInput;
-using Vortice.XInput;
-using ColorTextBlock.Avalonia;
 
 namespace RetroSpy.Readers;
 
@@ -33,8 +24,15 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
         var files = Directory.GetFiles("/dev/input/", "event*");
         foreach (var file in files)
         {
-            var reader = new InputReader(file, keys, mouseState);
-            _readers.Add(reader);
+            try
+            {
+                var reader = new InputReader(file, keys, mouseState);
+                _readers.Add(reader);
+            }
+            catch (Exception)
+            {
+                // Its expected that things are going to fail, so we need eat this.
+            }
         }
 
         _timer = new DispatcherTimer
@@ -127,37 +125,31 @@ public partial class LinuxMouseAndKeyboardReader : IControllerReader
 
         public InputReader(string path, bool[] keys, MouseState mouseState)
         {
-            try
+
+            _keys = keys;
+            _mouseState = mouseState;
+
+            _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            OnKeyPress += (e) =>
             {
-                _keys = keys;
-                _mouseState = mouseState;
+                if ((int)e.Code >= 272 && (int)e.Code <= 276)
+                    _mouseState.Buttons[(int)e.Code - 272] = e.State != KeyState.KeyUp;
+                else
+                    _keys[(int)e.Code] = e.State != KeyState.KeyUp;
+            };
 
-                _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-                OnKeyPress += (e) =>
-                {
-                    if ((int)e.Code >= 272 && (int)e.Code <= 276)
-                        _mouseState.Buttons[(int)e.Code - 272] = e.State != KeyState.KeyUp;
-                    else
-                        _keys[(int)e.Code] = e.State != KeyState.KeyUp;
-                };
-
-                OnMouseMove += (e) =>
-                {
-                    if (e.Axis == MouseAxis.X)
-                        _mouseState.X = e.Amount;
-                    else if (e.Axis == MouseAxis.Y)
-                        _mouseState.Y = e.Amount;
-                    else if (e.Axis == MouseAxis.Z)
-                        _mouseState.Z = e.Amount;
-                };
-
-                Task.Run(Run);
-            }
-            catch (Exception)
+            OnMouseMove += (e) =>
             {
-                // Its expected that things are going to fail, so we need eat this.
-            }
+                if (e.Axis == MouseAxis.X)
+                    _mouseState.X = e.Amount;
+                else if (e.Axis == MouseAxis.Y)
+                    _mouseState.Y = e.Amount;
+                else if (e.Axis == MouseAxis.Z)
+                    _mouseState.Z = e.Amount;
+            };
+
+            Task.Run(Run);
         }
 
         private void Run()
