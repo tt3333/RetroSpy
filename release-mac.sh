@@ -145,20 +145,42 @@ mkdir RetroSpyInstall/RetroSpy
 cp -aR RetroSpy-macOS/* RetroSpyInstall/RetroSpy/
 
 if [[ -z "${SSH_CLIENT}" ]]; then
+  if [[-z "${LAUNCHDRUN} ]]; then
+    create-dmg \
+      --volname "RetroSpy Installer" \
+      --background "../../installer_background.png" \
+      --window-pos 200 120 \
+      --window-size 800 400 \
+      --icon-size 100 \
+      --icon "RetroSpy" 200 190 \
+      --app-drop-link 600 185 \
+      "../../RetroSpyInstall.dmg" \
+      "RetroSpyInstall"
+  else
+    cp -a ../../dmgdstore RetroSpyInstall/.DS_Store
+    mkdir RetroSpyInstall/.background
+    cp -a ../../installer_background.png RetroSpyInstall/.background
+    create-dmg \
+      --volname "RetroSpy Installer" \
+      --app-drop-link 600 185 \
+      --skip-jenkins \
+      "../../RetroSpyInstall.dmg" \
+      "RetroSpyInstall"
+  fi
+else
+  cp -a ../../dmgdstore RetroSpyInstall/.DS_Store
+  mkdir RetroSpyInstall/.background
+  cp -a ../../installer_background.png RetroSpyInstall/.background
   create-dmg \
     --volname "RetroSpy Installer" \
-    --background "../../installer_background.png" \
-    --window-pos 200 120 \
-    --window-size 800 400 \
-    --icon-size 100 \
-    --icon "RetroSpy" 200 190 \
     --app-drop-link 600 185 \
+    --skip-jenkins \
     "../../RetroSpyInstall.dmg" \
     "RetroSpyInstall"
-else
-  hdiutil create /tmp/tmp.dmg -ov -volname "RetroSpyInstall" -fs HFS+ -srcfolder "RetroSpyInstall"
-  hdiutil convert /tmp/tmp.dmg -format UDZO -o ../../RetroSpyInstall.dmg 
 fi
+
+#  hdiutil create /tmp/tmp.dmg -ov -volname "RetroSpyInstall" -fs HFS+ -srcfolder "RetroSpyInstall"
+#  hdiutil convert /tmp/tmp.dmg -format UDZO -o ../../RetroSpyInstall.dmg 
 
 rm -rf RetroSpyInstall
 
