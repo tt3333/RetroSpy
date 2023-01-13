@@ -88,7 +88,7 @@ cp -aR bin/Release/net7.0/publish/* "bin/Release/RetroSpy-macOS/RetroSpy Vision 
 
 cd bin/Release/RetroSpy-macOS/
 
-security unlock-keychain -p "$keychain_p" /Users/zoggins/Library/Keychains/login.keychain
+security unlock-keychain -p "$keychain_password" /Users/zoggins/Library/Keychains/login.keychain
 
 find "RetroSpy.app/Contents/MacOS/"|while read fname; do
   if [[ -f $fname ]]; then
