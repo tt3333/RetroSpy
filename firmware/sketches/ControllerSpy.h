@@ -40,10 +40,10 @@ public:
 	virtual void printFirmwareInfo()
 	{
 		delay(1000);
-		Serial.print("Starting up in ");
+		Serial.print("// Starting up in ");
 		Serial.print(startupMsg());
 		Serial.println(" mode");
-		Serial.print("Version: ");
+		Serial.print("// Version: ");
 		Serial.println("6.0"); /*VERSIONINFO*/
 		delay(1000);		
 	}
