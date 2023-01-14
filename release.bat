@@ -94,15 +94,15 @@ REM Copy Drivers
 ;copy serial_install.exe RetroSpy-Setup\
 
 if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
-"C:\Program Files (x86)\Actual Installer\actinst.exe" /S ".\RetroSpy.aip"
+"C:\Program Files (x86)\Actual Installer\actinst.exe" /S ".\RetroSpy-x64.aip"
   if exist "..\..\..\certs\codesign.pfx" (
     "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22000.0\x86\SignTool" sign /f "..\..\..\certs\codesign.pfx" /p %codesignpasswd% /tr http://timestamp.comodoca.com  /td sha256 /fd sha256 /a Retrospy-Setup.exe
   )
 )
 
 ;mkdir RetroSpy-Upload
-copy RetroSpy-Setup.exe RetroSpy-Upload
-copy RetroSpy-Windows.zip RetroSpy-Upload
+copy RetroSpy-Setup.exe RetroSpy-Upload\RetroSpy-Setup-x64.exe
+copy RetroSpy-Windows.zip RetroSpy-Upload\RetroSpy-Windows-x64.zip
 copy UsbUpdaterX2\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
@@ -119,11 +119,17 @@ copy GBP_Firmware.zip RetroSpy-Upload
 if exist "..\..\..\kernel\kernel.tar.gz" (
 copy ..\..\..\kernel\kernel.tar.gz RetroSpy-Upload
 )
-if exist "..\..\..\upload\RetroSpy-Linux.tar.gz" (
-copy ..\..\..\upload\RetroSpy-Linux.tar.gz RetroSpy-Upload
+if exist "..\..\..\upload\RetroSpy-Linux-x64.tar.gz" (
+copy ..\..\..\upload\RetroSpy-Linux-x64.tar.gz RetroSpy-Upload
 )
 if exist "..\..\..\upload\RetroSpyInstall.dmg" (
 copy ..\..\..\upload\RetroSpyInstall.dmg RetroSpy-Upload
+)
+if exist "..\..\..\upload\RetroSpy-Setup-x86.exe" (
+copy ..\..\..\upload\RetroSpy-Setup-x86.exe RetroSpy-Upload
+)
+if exist "..\..\..\upload\RetroSpy-Windows-x86.zip" (
+copy ..\..\..\upload\RetroSpy-Windows-x86.zip RetroSpy-Upload
 )
 if exist "..\..\..\beaglebone\" (
 FOR /F %%I IN ('DIR ..\..\..\beaglebone\*.xz /B /O:-D') DO COPY ..\..\..\beaglebone\%%I RetroSpy-Upload & goto end

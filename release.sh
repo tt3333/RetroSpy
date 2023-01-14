@@ -39,10 +39,10 @@ else
 	     mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
 	     mv RetroSpy-Linux/bin/GBPUpdater RetroSpy-Linux/bin/pixelupdate
 	     mv RetroSpy-Linux/bin/UsbUpdater RetroSpy-Linux/bin/visionusbupdate
-	     tar -zcvf ../../RetroSpy-Linux.tar.gz RetroSpy-Linux
+	     tar -zcvf ../../RetroSpy-Linux-x64.tar.gz RetroSpy-Linux
          if [ -d "/mnt/src/upload" ]
          then
-           cp ../../RetroSpy-Linux.tar.gz /mnt/src/upload  
+           cp ../../RetroSpy-Linux-x64.tar.gz /mnt/src/upload  
          fi
          cd ../..
 	   fi
