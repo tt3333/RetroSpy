@@ -1,0 +1,132 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+	  <RootNamespace>GBPemu</RootNamespace>
+	  <AssemblyName>GBPemu</AssemblyName>
+	  <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+	  <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyVersion>6.0</AssemblyVersion>
+		<FileVersion>6.0</FileVersion>
+		<Version>6.0</Version>
+		<Copyright>Copyright © 2022</Copyright>
+		<NeutralLanguage>en-US</NeutralLanguage>
+	</PropertyGroup>
+	<PropertyGroup>
+		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
+	</PropertyGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+	<ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="Assets\SetupImage.png" />
+    <None Remove="game_palettes.cfg" />
+    <None Remove="Mattahan-Buuf-Magnifying-Glass.ico" />
+  </ItemGroup>
+	<ItemGroup>
+	  <Content Include="Assets\SetupImage.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="game_palettes.cfg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\ErrorImage.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Assets\PrintImage.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Roots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+    <Resource Include="Assets\ErrorImage.png" />
+    <Resource Include="Assets\PrintImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Update="Assets\SetupImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GameBoyPrinterEmulatorWindow.axaml.cs">
+      <DependentUpon>GameBoyPrinterEmulatorWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="GBPemu.icns">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+		<AssetFiles Include="Assets\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AssetFiles Remove="Assets\ErrorImage.png" />
+	  <AssetFiles Remove="Assets\PrintImage.png" />
+	</ItemGroup>
+	<Target Name="TimestampWindows" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+		<Exec Command="echo $(CurrentDate) &gt; &quot;Resources\BuildDate.txt&quot;" />
+	</Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+	
+	<Target Name="CopyAssetFiles" AfterTargets="Build">
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles-&gt;'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+	</Target>
+</Project>

@@ -44,7 +44,7 @@ public:
 		Serial.print(startupMsg());
 		Serial.println(" mode");
 		Serial.print("Version: ");
-		Serial.println("5.2.3"); /*VERSIONINFO*/
+		Serial.println("6.0"); /*VERSIONINFO*/
 		delay(1000);		
 	}
 	

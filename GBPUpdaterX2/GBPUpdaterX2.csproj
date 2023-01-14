@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+	  <RootNamespace>GBPUpdater</RootNamespace>
+	  <AssemblyName>GBPUpdater</AssemblyName>
+	  <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyVersion>6.0</AssemblyVersion>
+		<FileVersion>6.0</FileVersion>
+		<Version>6.0</Version>
+		<Copyright>Copyright © 2022</Copyright>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+	</PropertyGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Roots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+  </ItemGroup>
+
+	
+		<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+
+	
+		<ItemGroup>
+		  <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+		</ItemGroup>
+
+</Project>

@@ -136,3 +136,9 @@ Backup*/
 *.editorconfig
 /GBP_Firmware.zip
 /Resources/BuildDate.txt
+/GBPemuX/Resources/BuildDate.txt
+/RetroSpyX/Resources/BuildDate.txt
+.DS_Store
+RetroSpy-macOS.zip
+RetroSpyInstall.dmg
+/RetroSpy-Windows.zip

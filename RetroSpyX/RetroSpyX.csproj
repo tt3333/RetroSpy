@@ -1,0 +1,3038 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <RootNamespace>RetroSpy</RootNamespace>
+    <AssemblyName>RetroSpy</AssemblyName>
+    <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+    <BaseOutputPath>..\bin</BaseOutputPath>
+    <UseWPF>False</UseWPF>
+    <NeutralLanguage>en-US</NeutralLanguage> 
+  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyVersion>6.0</AssemblyVersion>
+		<FileVersion>6.0</FileVersion>
+		<Version>6.0</Version>
+		<Copyright>Copyright © 2022</Copyright>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<UseWindowsForms>False</UseWindowsForms>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup>
+		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
+	</PropertyGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="Carlito-Regular.ttf" />
+    <None Remove="keybindings.xml" />
+    <None Remove="Resources\ErrorImage.png" />
+    <None Remove="Resources\PrintImage.png" />
+    <None Remove="skins\3do-controller\3dobackground.png" />
+    <None Remove="skins\3do-controller\circle2.png" />
+    <None Remove="skins\3do-controller\skin.xml" />
+    <None Remove="skins\3do-mouse\3do.png" />
+    <None Remove="skins\3do-mouse\circle.png" />
+    <None Remove="skins\3do-mouse\circle2.png" />
+    <None Remove="skins\3do-mouse\skin.xml" />
+    <None Remove="skins\atari5200-default\5200.png" />
+    <None Remove="skins\atari5200-default\5200joystick.png" />
+    <None Remove="skins\atari5200-default\circle2.png" />
+    <None Remove="skins\atari5200-default\skin.xml" />
+    <None Remove="skins\atarikeyboard-default\circle2.png" />
+    <None Remove="skins\atarikeyboard-default\keyboardcontroller.png" />
+    <None Remove="skins\atarikeyboard-default\skin.xml" />
+    <None Remove="skins\atarikeyboard-kids\circle2.png" />
+    <None Remove="skins\atarikeyboard-kids\kidscontroller.png" />
+    <None Remove="skins\atarikeyboard-kids\skin.xml" />
+    <None Remove="skins\atarikeyboard-starraiders\button.png" />
+    <None Remove="skins\atarikeyboard-starraiders\skin.xml" />
+    <None Remove="skins\atarikeyboard-starraiders\starraiders.png" />
+    <None Remove="skins\c64mini-default\c64mini.png" />
+    <None Remove="skins\c64mini-default\circle.png" />
+    <None Remove="skins\c64mini-default\knob1.png" />
+    <None Remove="skins\c64mini-default\skin.xml" />
+    <None Remove="skins\cd32-competitionpro\circle2.png" />
+    <None Remove="skins\cd32-competitionpro\controller.png" />
+    <None Remove="skins\cd32-competitionpro\skin.xml" />
+    <None Remove="skins\cd32-gravis-analog\analog.png" />
+    <None Remove="skins\cd32-gravis-analog\circle.png" />
+    <None Remove="skins\cd32-gravis-analog\joystick.png" />
+    <None Remove="skins\cd32-gravis-analog\skin.xml" />
+    <None Remove="skins\cd32-gravis-pro-analog\circle2.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\gravis-pro.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\prostick.png" />
+    <None Remove="skins\cd32-gravis-pro-analog\skin.xml" />
+    <None Remove="skins\cd32-mouse\circle.png" />
+    <None Remove="skins\cd32-mouse\circle2.png" />
+    <None Remove="skins\cd32-mouse\commodore.png" />
+    <None Remove="skins\cd32-mouse\skin.xml" />
+    <None Remove="skins\cdi-controller-analog\cdicont2.png" />
+    <None Remove="skins\cdi-controller-analog\circle2.png" />
+    <None Remove="skins\cdi-controller-analog\skin.xml" />
+    <None Remove="skins\cdi-controller\cdicont2.png" />
+    <None Remove="skins\cdi-controller\circle2.png" />
+    <None Remove="skins\cdi-controller\skin.xml" />
+    <None Remove="skins\cdi-gamepad-analog\cdicont.png" />
+    <None Remove="skins\cdi-gamepad-analog\circle2.png" />
+    <None Remove="skins\cdi-gamepad-analog\skin.xml" />
+    <None Remove="skins\cdi-gamepad\cdicont.png" />
+    <None Remove="skins\cdi-gamepad\circle2.png" />
+    <None Remove="skins\cdi-gamepad\skin.xml" />
+    <None Remove="skins\cdi-ir-analog\cdiremote.png" />
+    <None Remove="skins\cdi-ir-analog\circle2.png" />
+    <None Remove="skins\cdi-ir-analog\skin.xml" />
+    <None Remove="skins\cdi-ir\cdiremote.png" />
+    <None Remove="skins\cdi-ir\circle2.png" />
+    <None Remove="skins\cdi-ir\skin.xml" />
+    <None Remove="skins\cdi-mouse\cdi-mouse.png" />
+    <None Remove="skins\cdi-mouse\circle.png" />
+    <None Remove="skins\cdi-mouse\circle2.png" />
+    <None Remove="skins\cdi-mouse\skin.xml" />
+    <None Remove="skins\cdi-roller\cdi-roller.png" />
+    <None Remove="skins\cdi-roller\circle.png" />
+    <None Remove="skins\cdi-roller\circle2.png" />
+    <None Remove="skins\cdi-roller\skin.xml" />
+    <None Remove="skins\cdi-thumbstick\cdi-thumbstick-stick.png" />
+    <None Remove="skins\cdi-thumbstick\cdi-thumbstick.png" />
+    <None Remove="skins\cdi-thumbstick\circle2.png" />
+    <None Remove="skins\cdi-thumbstick\skin.xml" />
+    <None Remove="skins\cdtv-keyboard-de\cdtv-keyboard-german.png" />
+    <None Remove="skins\cdtv-keyboard-de\circle2.png" />
+    <None Remove="skins\cdtv-keyboard-de\skin.xml" />
+    <None Remove="skins\cdtv-keyboard-us\cdtv-keyboard-us.png" />
+    <None Remove="skins\cdtv-keyboard-us\circle2.png" />
+    <None Remove="skins\cdtv-keyboard-us\skin.xml" />
+    <None Remove="skins\cdtv-remote\cdtv-remote.png" />
+    <None Remove="skins\cdtv-remote\circle.png" />
+    <None Remove="skins\cdtv-remote\skin.xml" />
+    <None Remove="skins\cdtv-trackball\cdtv-trackball.png" />
+    <None Remove="skins\cdtv-trackball\circle.png" />
+    <None Remove="skins\cdtv-trackball\circle1.png" />
+    <None Remove="skins\cdtv-trackball\circle2.png" />
+    <None Remove="skins\cdtv-trackball\skin.xml" />
+    <None Remove="skins\classic-7800\atari7800.png" />
+    <None Remove="skins\classic-7800\circle.png" />
+    <None Remove="skins\classic-7800\skin.xml" />
+    <None Remove="skins\classic-c64gs\cheetah-stick.png" />
+    <None Remove="skins\classic-c64gs\cheetah.png" />
+    <None Remove="skins\classic-c64gs\circle.png" />
+    <None Remove="skins\classic-c64gs\skin.xml" />
+    <None Remove="skins\classic-joystick\atari.png" />
+    <None Remove="skins\classic-joystick\circle.png" />
+    <None Remove="skins\classic-joystick\skin.xml" />
+    <None Remove="skins\classic-joystick\stick.png" />
+    <None Remove="skins\classic-omega\atari.png" />
+    <None Remove="skins\classic-omega\circle.png" />
+    <None Remove="skins\classic-omega\omega.png" />
+    <None Remove="skins\classic-omega\skin.xml" />
+    <None Remove="skins\classic-sms-paddle\circle2.png" />
+    <None Remove="skins\classic-sms-paddle\Paddlecontroller.jpg" />
+    <None Remove="skins\classic-sms-paddle\PaddleRing.png" />
+    <None Remove="skins\classic-sms-paddle\skin.xml" />
+    <None Remove="skins\classic-sms-sportspad\circle.png" />
+    <None Remove="skins\classic-sms-sportspad\circle2.png" />
+    <None Remove="skins\classic-sms-sportspad\skin.xml" />
+    <None Remove="skins\classic-sms-sportspad\sportspad.png" />
+    <None Remove="skins\classic-sms\circle.png" />
+    <None Remove="skins\classic-sms\skin.xml" />
+    <None Remove="skins\classic-sms\sms.png" />
+    <None Remove="skins\classic-sms\sms_for_stick.png" />
+    <None Remove="skins\classic-sms\stick.png" />
+    <None Remove="skins\colecovision-default\circle2.png" />
+    <None Remove="skins\colecovision-default\colecovision-background.png" />
+    <None Remove="skins\colecovision-default\colecovision-knob.png" />
+    <None Remove="skins\colecovision-default\skin.xml" />
+    <None Remove="skins\colecovision-roller\circle.png" />
+    <None Remove="skins\colecovision-roller\circle2.png" />
+    <None Remove="skins\colecovision-roller\coleco-roller-left.png" />
+    <None Remove="skins\colecovision-roller\coleco-roller-right.png" />
+    <None Remove="skins\colecovision-roller\coleco-roller.png" />
+    <None Remove="skins\colecovision-roller\skin.xml" />
+    <None Remove="skins\dreamcast-controller\circle.png" />
+    <None Remove="skins\dreamcast-controller\dreamcast.png" />
+    <None Remove="skins\dreamcast-controller\dreamcast1.png" />
+    <None Remove="skins\dreamcast-controller\dreamcast_stick.png" />
+    <None Remove="skins\dreamcast-controller\L-bar.png" />
+    <None Remove="skins\dreamcast-controller\R-bar.png" />
+    <None Remove="skins\dreamcast-controller\skin.xml" />
+    <None Remove="skins\dreamcast-keyboard-jp\circle2.png" />
+    <None Remove="skins\dreamcast-keyboard-jp\jpn-dreamcast-keyboard.png" />
+    <None Remove="skins\dreamcast-keyboard-jp\skin.xml" />
+    <None Remove="skins\dreamcast-mouse\circle.png" />
+    <None Remove="skins\dreamcast-mouse\circle2.png" />
+    <None Remove="skins\dreamcast-mouse\dreamcast.png" />
+    <None Remove="skins\dreamcast-mouse\skin.xml" />
+    <None Remove="skins\drivingcontroller-default\circle2.png" />
+    <None Remove="skins\drivingcontroller-default\circle3.png" />
+    <None Remove="skins\drivingcontroller-default\drivingcontroller.png" />
+    <None Remove="skins\drivingcontroller-default\skin.xml" />
+    <None Remove="skins\fmtowns-kb107-mouse\circle.png" />
+    <None Remove="skins\fmtowns-kb107-mouse\circle2.png" />
+    <None Remove="skins\fmtowns-kb107-mouse\FMT-KB107.png" />
+    <None Remove="skins\fmtowns-kb107-mouse\skin.xml" />
+    <None Remove="skins\fmtowns-kb107\circle2.png" />
+    <None Remove="skins\fmtowns-kb107\FMT-KB107.png" />
+    <None Remove="skins\fmtowns-kb107\skin.xml" />
+    <None Remove="skins\fmtowns-kb207-mouse\circle.png" />
+    <None Remove="skins\fmtowns-kb207-mouse\circle2.png" />
+    <None Remove="skins\fmtowns-kb207-mouse\fmt-kb207.png" />
+    <None Remove="skins\fmtowns-kb207-mouse\skin.xml" />
+    <None Remove="skins\fmtowns-kb207\circle2.png" />
+    <None Remove="skins\fmtowns-kb207\fmt-kb207.png" />
+    <None Remove="skins\fmtowns-kb207\skin.xml" />
+    <None Remove="skins\fmtowns-marty\circle2.png" />
+    <None Remove="skins\fmtowns-marty\marty.png" />
+    <None Remove="skins\fmtowns-marty\skin.xml" />
+    <None Remove="skins\GameCube-Custom\ColorKeyScreens\BlackScreen.png" />
+    <None Remove="skins\GameCube-Custom\ColorKeyScreens\BlueScreen.png" />
+    <None Remove="skins\GameCube-Custom\ColorKeyScreens\GreenScreen.png" />
+    <None Remove="skins\GameCube-Custom\ColorKeyScreens\MagentaScreen.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\A.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Analogue-Stick.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\B.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\C-Stick.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Dpad-Down.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Dpad-Left.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Dpad-Right.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Dpad-Up.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\L-bar.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\L.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\R-bar.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\R.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\RL-full.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Start.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\X.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Y.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Buttons\Z.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Black.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Blue.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Green.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Hot_Pink.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Ice_Blue.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Indigo.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Lime_Green.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Red.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Silver.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Spice_Orange.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Tropical_Pink.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_White.png" />
+    <None Remove="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Yellow.png" />
+    <None Remove="skins\GameCube-Custom\no-springs-text.png" />
+    <None Remove="skins\GameCube-Custom\skin.xml" />
+    <None Remove="skins\gamecube-default\A.png" />
+    <None Remove="skins\gamecube-default\B.png" />
+    <None Remove="skins\gamecube-default\C-stick.png" />
+    <None Remove="skins\gamecube-default\Dpad-Down.png" />
+    <None Remove="skins\gamecube-default\Dpad-Left.png" />
+    <None Remove="skins\gamecube-default\Dpad-Right.png" />
+    <None Remove="skins\gamecube-default\Dpad-Up.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Black.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Blue.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Green.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Orange.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Pink.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Purple.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_Red.png" />
+    <None Remove="skins\gamecube-default\GCN_Controller_White.png" />
+    <None Remove="skins\gamecube-default\L-all.png" />
+    <None Remove="skins\gamecube-default\L-bar.png" />
+    <None Remove="skins\gamecube-default\R-bar.png" />
+    <None Remove="skins\gamecube-default\RL-full.png" />
+    <None Remove="skins\gamecube-default\skin.xml" />
+    <None Remove="skins\gamecube-default\Start.png" />
+    <None Remove="skins\gamecube-default\Stick.png" />
+    <None Remove="skins\gamecube-default\X.png" />
+    <None Remove="skins\gamecube-default\Y.png" />
+    <None Remove="skins\gamecube-default\Z.png" />
+    <None Remove="skins\gamecube-gbasp-small\abbutton.png" />
+    <None Remove="skins\gamecube-gbasp-small\down.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_black.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_blue.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_darkgrey.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_green.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_pink.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_purple.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_red.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_white.png" />
+    <None Remove="skins\gamecube-gbasp-small\gbasp_zelda.png" />
+    <None Remove="skins\gamecube-gbasp-small\lbutton.png" />
+    <None Remove="skins\gamecube-gbasp-small\left.png" />
+    <None Remove="skins\gamecube-gbasp-small\rbutton.png" />
+    <None Remove="skins\gamecube-gbasp-small\right.png" />
+    <None Remove="skins\gamecube-gbasp-small\skin.xml" />
+    <None Remove="skins\gamecube-gbasp-small\startselect.png" />
+    <None Remove="skins\gamecube-gbasp-small\up.png" />
+    <None Remove="skins\gamecube-gbasp\abbutton.png" />
+    <None Remove="skins\gamecube-gbasp\down.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_black.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_blue.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_darkgrey.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_green.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_pink.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_purple.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_red.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_white.png" />
+    <None Remove="skins\gamecube-gbasp\gbasp_zelda.png" />
+    <None Remove="skins\gamecube-gbasp\lbutton.png" />
+    <None Remove="skins\gamecube-gbasp\left.png" />
+    <None Remove="skins\gamecube-gbasp\rbutton.png" />
+    <None Remove="skins\gamecube-gbasp\right.png" />
+    <None Remove="skins\gamecube-gbasp\skin.xml" />
+    <None Remove="skins\gamecube-gbasp\startselect.png" />
+    <None Remove="skins\gamecube-gbasp\up.png" />
+    <None Remove="skins\gamecube-keyboard\c-stick.png" />
+    <None Remove="skins\gamecube-keyboard\circle.png" />
+    <None Remove="skins\gamecube-keyboard\circle2.png" />
+    <None Remove="skins\gamecube-keyboard\keyboard.png" />
+    <None Remove="skins\gamecube-keyboard\L-bar.png" />
+    <None Remove="skins\gamecube-keyboard\R-bar.png" />
+    <None Remove="skins\gamecube-keyboard\RL-full.png" />
+    <None Remove="skins\gamecube-keyboard\skin.xml" />
+    <None Remove="skins\gamecube-keyboard\stick.png" />
+    <None Remove="skins\GameCube-Simple\ColorKeyScreens\BlackScreen.png" />
+    <None Remove="skins\GameCube-Simple\ColorKeyScreens\BlueScreen.png" />
+    <None Remove="skins\GameCube-Simple\ColorKeyScreens\GreenScreen.png" />
+    <None Remove="skins\GameCube-Simple\ColorKeyScreens\MagentaScreen.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\A.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Analogue-Stick.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\B.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\C-Stick.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Down.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Left.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Right.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Up.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\L-bar.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\L.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\R-bar.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\R.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Start.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\X.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Y.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Z.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\A.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Analogue-Stick.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\B - Copy.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\B.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\C-Stick.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Dpad-Down.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Dpad-Left.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Dpad-Right.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Dpad-Up.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\L-bar-depricated.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\L-bar.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\L-R-bar-alternative.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\L.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\R-bar-depricated.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\R-bar.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\R.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\RL-full.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Start.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\X.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Y.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Buttons\Z.png" />
+    <None Remove="skins\GameCube-Simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.png" />
+    <None Remove="skins\GameCube-Simple\skin.xml" />
+    <None Remove="skins\generic-default\circle.png" />
+    <None Remove="skins\generic-default\pad.png" />
+    <None Remove="skins\generic-default\skin.xml" />
+    <None Remove="skins\generic-default\stick.png" />
+    <None Remove="skins\generic-default\trig-l.png" />
+    <None Remove="skins\generic-default\trig-r.png" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.png" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.xcf" />
+    <None Remove="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\skin.xml" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\24-button.png" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\24-ubutton.png" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\30-button.png" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\bg.png" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\bg.xcf" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\readme.txt" />
+    <None Remove="skins\generic-hitbox-brooksc-ds4-md6\skin.xml" />
+    <None Remove="skins\generic-hitbox-ds4\24-button.png" />
+    <None Remove="skins\generic-hitbox-ds4\30-button.png" />
+    <None Remove="skins\generic-hitbox-ds4\bg.png" />
+    <None Remove="skins\generic-hitbox-ds4\bg.xcf" />
+    <None Remove="skins\generic-hitbox-ds4\readme.txt" />
+    <None Remove="skins\generic-hitbox-ds4\skin.xml" />
+    <None Remove="skins\generic-hitbox-xb360\24-button.png" />
+    <None Remove="skins\generic-hitbox-xb360\30-button.png" />
+    <None Remove="skins\generic-hitbox-xb360\bg.png" />
+    <None Remove="skins\generic-hitbox-xb360\bg.xcf" />
+    <None Remove="skins\generic-hitbox-xb360\readme.txt" />
+    <None Remove="skins\generic-hitbox-xb360\skin.xml" />
+    <None Remove="skins\generic-mayflashn64\skin.xml" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\24-button.png" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\30-button.png" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\bg.png" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\bg.xcf" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\readme.txt" />
+    <None Remove="skins\generic-pattonboxanalogue-ds4\skin.xml" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-UBUTTON.png" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.png" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.xcf" />
+    <None Remove="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\skin.xml" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\24-button.png" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\24-ubutton.png" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\bg.png" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\bg.xcf" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\readme.txt" />
+    <None Remove="skins\generic-pattonboxdigital-brooksc-ds4-md6\skin.xml" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\24-button.png" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\30-BUTTON.png" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\bg.png" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\bg.xcf" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\readme.txt" />
+    <None Remove="skins\generic-pattonboxdigital-ds4\skin.xml" />
+    <None Remove="skins\generic-skinhelper\bg.png" />
+    <None Remove="skins\generic-skinhelper\button.png" />
+    <None Remove="skins\generic-skinhelper\down.png" />
+    <None Remove="skins\generic-skinhelper\left.png" />
+    <None Remove="skins\generic-skinhelper\right.png" />
+    <None Remove="skins\generic-skinhelper\skin.xml" />
+    <None Remove="skins\generic-skinhelper\slider.png" />
+    <None Remove="skins\generic-skinhelper\source.fla" />
+    <None Remove="skins\generic-skinhelper\up.png" />
+    <None Remove="skins\genesis-6button\circle.png" />
+    <None Remove="skins\genesis-6button\genesis_stick.png" />
+    <None Remove="skins\genesis-6button\sega_genesis.png" />
+    <None Remove="skins\genesis-6button\sega_genesis_for_stick.png" />
+    <None Remove="skins\genesis-6button\skin.xml" />
+    <None Remove="skins\genesis-mouse\circle.png" />
+    <None Remove="skins\genesis-mouse\circle2.png" />
+    <None Remove="skins\genesis-mouse\genesis.png" />
+    <None Remove="skins\genesis-mouse\skin.xml" />
+    <None Remove="skins\intellivision-controller\circle2.png" />
+    <None Remove="skins\intellivision-controller\intellivision.png" />
+    <None Remove="skins\intellivision-controller\skin.xml" />
+    <None Remove="skins\jaguar-3button\circle.png" />
+    <None Remove="skins\jaguar-3button\jaguar.png" />
+    <None Remove="skins\jaguar-3button\skin.xml" />
+    <None Remove="skins\jaguar-6button\circle.png" />
+    <None Remove="skins\jaguar-6button\jaguar.png" />
+    <None Remove="skins\jaguar-6button\skin.xml" />
+    <None Remove="skins\MiSTer\mister-genesis_6button\circle.png" />
+    <None Remove="skins\MiSTer\mister-genesis_6button\sega_genesis.png" />
+    <None Remove="skins\MiSTer\mister-genesis_6button\skin.xml" />
+    <None Remove="skins\MiSTer\mister-saturn_digital\circle2.png" />
+    <None Remove="skins\MiSTer\mister-saturn_digital\saturn.png" />
+    <None Remove="skins\MiSTer\mister-saturn_digital\skin.xml" />
+    <None Remove="skins\MiSTer\mister-skinhelper\bg.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\button.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\down.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\left.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\right.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\skin.xml" />
+    <None Remove="skins\MiSTer\mister-skinhelper\slider.png" />
+    <None Remove="skins\MiSTer\mister-skinhelper\source.fla" />
+    <None Remove="skins\MiSTer\mister-skinhelper\up.png" />
+    <None Remove="skins\MiSTer\mister-xbox360\circle.png" />
+    <None Remove="skins\MiSTer\mister-xbox360\pad.png" />
+    <None Remove="skins\MiSTer\mister-xbox360\skin.xml" />
+    <None Remove="skins\MiSTer\mister-xbox360\stick.png" />
+    <None Remove="skins\MiSTer\mister-xbox360\trig-l.png" />
+    <None Remove="skins\MiSTer\mister-xbox360\trig-r.png" />
+    <None Remove="skins\n64-default\circle.png" />
+    <None Remove="skins\n64-default\pad.png" />
+    <None Remove="skins\n64-default\skin.xml" />
+    <None Remove="skins\n64-default\stick.png" />
+    <None Remove="skins\n64-highres\button-dpad.png" />
+    <None Remove="skins\n64-highres\button-face.png" />
+    <None Remove="skins\n64-highres\button-l.png" />
+    <None Remove="skins\n64-highres\button-r.png" />
+    <None Remove="skins\n64-highres\button-z.png" />
+    <None Remove="skins\n64-highres\pad-2000.png" />
+    <None Remove="skins\n64-highres\pad-aqua.png" />
+    <None Remove="skins\n64-highres\pad-banjo.png" />
+    <None Remove="skins\n64-highres\pad-black.png" />
+    <None Remove="skins\n64-highres\pad-blue.png" />
+    <None Remove="skins\n64-highres\pad-dk.png" />
+    <None Remove="skins\n64-highres\pad-gold.png" />
+    <None Remove="skins\n64-highres\pad-green.png" />
+    <None Remove="skins\n64-highres\pad-grey.png" />
+    <None Remove="skins\n64-highres\pad-lightblue.png" />
+    <None Remove="skins\n64-highres\pad-lime.png" />
+    <None Remove="skins\n64-highres\pad-orange.png" />
+    <None Remove="skins\n64-highres\pad-pink.png" />
+    <None Remove="skins\n64-highres\pad-pokemon.png" />
+    <None Remove="skins\n64-highres\pad-purple.png" />
+    <None Remove="skins\n64-highres\pad-red.png" />
+    <None Remove="skins\n64-highres\pad-twist.png" />
+    <None Remove="skins\n64-highres\pad-yellow.png" />
+    <None Remove="skins\n64-highres\pad-zelda.png" />
+    <None Remove="skins\n64-highres\skin.xml" />
+    <None Remove="skins\n64-highres\stick.png" />
+    <None Remove="skins\n64-mouse\circle.png" />
+    <None Remove="skins\n64-mouse\circle2.png" />
+    <None Remove="skins\n64-mouse\n64.png" />
+    <None Remove="skins\n64-mouse\skin.xml" />
+    <None Remove="skins\neogeo-arcadepro\circle_blue.png" />
+    <None Remove="skins\neogeo-arcadepro\knob.png" />
+    <None Remove="skins\neogeo-arcadepro\neogeo-arcade-stick-pro.jpg" />
+    <None Remove="skins\neogeo-arcadepro\skin.xml" />
+    <None Remove="skins\neogeo-gamepad\circle2.png" />
+    <None Remove="skins\neogeo-gamepad\neogeo.png" />
+    <None Remove="skins\neogeo-gamepad\skin.xml" />
+    <None Remove="skins\neogeo-gamepad\stick.png" />
+    <None Remove="skins\nes-dogbone\circle.png" />
+    <None Remove="skins\nes-dogbone\nes-dogbone.png" />
+    <None Remove="skins\nes-dogbone\skin.xml" />
+    <None Remove="skins\nes-pghelper\bg.png" />
+    <None Remove="skins\nes-pghelper\button.png" />
+    <None Remove="skins\nes-pghelper\down.png" />
+    <None Remove="skins\nes-pghelper\left.png" />
+    <None Remove="skins\nes-pghelper\right.png" />
+    <None Remove="skins\nes-pghelper\skin.xml" />
+    <None Remove="skins\nes-pghelper\slider.png" />
+    <None Remove="skins\nes-pghelper\source.fla" />
+    <None Remove="skins\nes-pghelper\up.png" />
+    <None Remove="skins\nes-powerpad-a\circle_blue.png" />
+    <None Remove="skins\nes-powerpad-a\circle_red.png" />
+    <None Remove="skins\nes-powerpad-a\powerpad-a.png" />
+    <None Remove="skins\nes-powerpad-a\skin.xml" />
+    <None Remove="skins\nes-powerpad-b\circle_blue.png" />
+    <None Remove="skins\nes-powerpad-b\circle_red.png" />
+    <None Remove="skins\nes-powerpad-b\powerpad-b.png" />
+    <None Remove="skins\nes-powerpad-b\skin.xml" />
+    <None Remove="skins\nuon-analog\circle2.png" />
+    <None Remove="skins\nuon-analog\nuon-analog.PNG" />
+    <None Remove="skins\nuon-analog\skin.xml" />
+    <None Remove="skins\nuon-analog\stick.PNG" />
+    <None Remove="skins\nuon-digital\circle.png" />
+    <None Remove="skins\nuon-digital\noun-background.png" />
+    <None Remove="skins\nuon-digital\skin.xml" />
+    <None Remove="skins\paddles-2paddles\circle2.png" />
+    <None Remove="skins\paddles-2paddles\paddle.png" />
+    <None Remove="skins\paddles-2paddles\paddle2.png" />
+    <None Remove="skins\paddles-2paddles\PaddleCircle.png" />
+    <None Remove="skins\paddles-2paddles\PaddleRing.png" />
+    <None Remove="skins\paddles-2paddles\skin.xml" />
+    <None Remove="skins\paddles-default\circle2.png" />
+    <None Remove="skins\paddles-default\paddle.png" />
+    <None Remove="skins\paddles-default\paddle2.png" />
+    <None Remove="skins\paddles-default\PaddleCircle.png" />
+    <None Remove="skins\paddles-default\PaddleRing.png" />
+    <None Remove="skins\paddles-default\skin.xml" />
+    <None Remove="skins\paddles-mouse\circle.png" />
+    <None Remove="skins\paddles-mouse\circle2.png" />
+    <None Remove="skins\paddles-mouse\commodore.png" />
+    <None Remove="skins\paddles-mouse\skin.xml" />
+    <None Remove="skins\pc360-default\circle.png" />
+    <None Remove="skins\pc360-default\pad.png" />
+    <None Remove="skins\pc360-default\skin.xml" />
+    <None Remove="skins\pc360-default\stick.png" />
+    <None Remove="skins\pc360-default\trig-l.png" />
+    <None Remove="skins\pc360-default\trig-r.png" />
+    <None Remove="skins\pcfx-default\circle.png" />
+    <None Remove="skins\pcfx-default\PC-FX_Controller.png" />
+    <None Remove="skins\pcfx-default\skin.xml" />
+    <None Remove="skins\pckeyboard-mouse-windows\circle.png" />
+    <None Remove="skins\pckeyboard-mouse-windows\circle2.png" />
+    <None Remove="skins\pckeyboard-mouse-windows\ps2keyboard.png" />
+    <None Remove="skins\pckeyboard-mouse-windows\skin.xml" />
+    <None Remove="skins\pckeyboard-windows\circle2.png" />
+    <None Remove="skins\pckeyboard-windows\ps2keyboard.png" />
+    <None Remove="skins\pckeyboard-windows\skin.xml" />
+    <None Remove="skins\pippin-default\circle.png" />
+    <None Remove="skins\pippin-default\circle2.png" />
+    <None Remove="skins\pippin-default\pippin.png" />
+    <None Remove="skins\pippin-default\skin.xml" />
+    <None Remove="skins\pippin-keyboard\circle2.png" />
+    <None Remove="skins\pippin-keyboard\pippin-keyboard.png" />
+    <None Remove="skins\pippin-keyboard\skin.xml" />
+    <None Remove="skins\playstation-ddr-noss\arrowD.png" />
+    <None Remove="skins\playstation-ddr-noss\arrowL.png" />
+    <None Remove="skins\playstation-ddr-noss\arrowR.png" />
+    <None Remove="skins\playstation-ddr-noss\arrowU.png" />
+    <None Remove="skins\playstation-ddr-noss\circle.png" />
+    <None Remove="skins\playstation-ddr-noss\cross.png" />
+    <None Remove="skins\playstation-ddr-noss\playstation-ddr-background.png" />
+    <None Remove="skins\playstation-ddr-noss\skin.xml" />
+    <None Remove="skins\playstation-ddr-noss\square.png" />
+    <None Remove="skins\playstation-ddr-noss\triangle.png" />
+    <None Remove="skins\playstation-ddr\arrowD.png" />
+    <None Remove="skins\playstation-ddr\arrowL.png" />
+    <None Remove="skins\playstation-ddr\arrowR.png" />
+    <None Remove="skins\playstation-ddr\arrowU.png" />
+    <None Remove="skins\playstation-ddr\circle.png" />
+    <None Remove="skins\playstation-ddr\cross.png" />
+    <None Remove="skins\playstation-ddr\playstation-ddr-background-v2.png" />
+    <None Remove="skins\playstation-ddr\select.png" />
+    <None Remove="skins\playstation-ddr\skin.xml" />
+    <None Remove="skins\playstation-ddr\square.png" />
+    <None Remove="skins\playstation-ddr\start.png" />
+    <None Remove="skins\playstation-ddr\triangle.png" />
+    <None Remove="skins\playstation-digital\circle.png" />
+    <None Remove="skins\playstation-digital\circle2.png" />
+    <None Remove="skins\playstation-digital\down.png" />
+    <None Remove="skins\playstation-digital\left.png" />
+    <None Remove="skins\playstation-digital\playstation-digital.png" />
+    <None Remove="skins\playstation-digital\right.png" />
+    <None Remove="skins\playstation-digital\select.png" />
+    <None Remove="skins\playstation-digital\shoulder2.png" />
+    <None Remove="skins\playstation-digital\skin.xml" />
+    <None Remove="skins\playstation-digital\start.png" />
+    <None Remove="skins\playstation-digital\up.png" />
+    <None Remove="skins\playstation-dualshock2-analog\circle.png" />
+    <None Remove="skins\playstation-dualshock2-analog\circle2.png" />
+    <None Remove="skins\playstation-dualshock2-analog\down.png" />
+    <None Remove="skins\playstation-dualshock2-analog\left.png" />
+    <None Remove="skins\playstation-dualshock2-analog\playstation-analog-stick.png" />
+    <None Remove="skins\playstation-dualshock2-analog\playstation2-analog.png" />
+    <None Remove="skins\playstation-dualshock2-analog\right.png" />
+    <None Remove="skins\playstation-dualshock2-analog\select.png" />
+    <None Remove="skins\playstation-dualshock2-analog\shoulder2.png" />
+    <None Remove="skins\playstation-dualshock2-analog\skin.xml" />
+    <None Remove="skins\playstation-dualshock2-analog\start.png" />
+    <None Remove="skins\playstation-dualshock2-analog\up.png" />
+    <None Remove="skins\playstation-dualshock2\circle.png" />
+    <None Remove="skins\playstation-dualshock2\circle2.png" />
+    <None Remove="skins\playstation-dualshock2\down.png" />
+    <None Remove="skins\playstation-dualshock2\left.png" />
+    <None Remove="skins\playstation-dualshock2\playstation-analog-stick.png" />
+    <None Remove="skins\playstation-dualshock2\playstation-analog.png" />
+    <None Remove="skins\playstation-dualshock2\right.png" />
+    <None Remove="skins\playstation-dualshock2\select.png" />
+    <None Remove="skins\playstation-dualshock2\shoulder2.png" />
+    <None Remove="skins\playstation-dualshock2\skin.xml" />
+    <None Remove="skins\playstation-dualshock2\start.png" />
+    <None Remove="skins\playstation-dualshock2\up.png" />
+    <None Remove="skins\playstation-mouse\circle.png" />
+    <None Remove="skins\playstation-mouse\circle2.png" />
+    <None Remove="skins\playstation-mouse\playstation.png" />
+    <None Remove="skins\playstation-mouse\skin.xml" />
+    <None Remove="skins\playstation-neqcon\circle.png" />
+    <None Remove="skins\playstation-neqcon\circle2.png" />
+    <None Remove="skins\playstation-neqcon\L-R-bar-alternative.png" />
+    <None Remove="skins\playstation-neqcon\neqcon.png" />
+    <None Remove="skins\playstation-neqcon\skin.xml" />
+    <None Remove="skins\playstation3-dualshock3-analog\circle2.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\dualshock3.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\L2.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\lstick.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\r2.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\rstick.png" />
+    <None Remove="skins\playstation3-dualshock3-analog\skin.xml" />
+    <None Remove="skins\playstation3-dualshock3\circle2.png" />
+    <None Remove="skins\playstation3-dualshock3\dualshock3.png" />
+    <None Remove="skins\playstation3-dualshock3\L2.png" />
+    <None Remove="skins\playstation3-dualshock3\lstick.png" />
+    <None Remove="skins\playstation3-dualshock3\r2.png" />
+    <None Remove="skins\playstation3-dualshock3\rstick.png" />
+    <None Remove="skins\playstation3-dualshock3\skin.xml" />
+    <None Remove="skins\playstation4-dualshock4\circle2.png" />
+    <None Remove="skins\playstation4-dualshock4\dualshock4.png" />
+    <None Remove="skins\playstation4-dualshock4\L2.png" />
+    <None Remove="skins\playstation4-dualshock4\ps4lstick.png" />
+    <None Remove="skins\playstation4-dualshock4\ps4rstick.png" />
+    <None Remove="skins\playstation4-dualshock4\r2.png" />
+    <None Remove="skins\playstation4-dualshock4\skin.xml" />
+    <None Remove="skins\printer-default\disconnect.png" />
+    <None Remove="skins\printer-default\skin.xml" />
+    <None Remove="skins\saturn-analog\circle2.png" />
+    <None Remove="skins\saturn-analog\L-bar.png" />
+    <None Remove="skins\saturn-analog\R-bar.png" />
+    <None Remove="skins\saturn-analog\skin.xml" />
+    <None Remove="skins\saturn-analog\ss3d-background.png" />
+    <None Remove="skins\saturn-analog\ss3dstick.png" />
+    <None Remove="skins\saturn-digital\circle2.png" />
+    <None Remove="skins\saturn-digital\saturn.png" />
+    <None Remove="skins\saturn-digital\skin.xml" />
+    <None Remove="skins\saturn-mouse\circle.png" />
+    <None Remove="skins\saturn-mouse\circle2.png" />
+    <None Remove="skins\saturn-mouse\saturn.png" />
+    <None Remove="skins\saturn-mouse\skin.xml" />
+    <None Remove="skins\snes-mouse\circle.png" />
+    <None Remove="skins\snes-mouse\circle2.png" />
+    <None Remove="skins\snes-mouse\skin.xml" />
+    <None Remove="skins\snes-mouse\snes.png" />
+    <None Remove="skins\snes-nttdata\circle2.png" />
+    <None Remove="skins\snes-nttdata\nttdata.png" />
+    <None Remove="skins\snes-nttdata\skin.xml" />
+    <None Remove="skins\snes-supergameboy\circle.png" />
+    <None Remove="skins\snes-supergameboy\gameboy.png" />
+    <None Remove="skins\snes-supergameboy\skin.xml" />
+    <None Remove="skins\switch-pro\circle2.png" />
+    <None Remove="skins\switch-pro\leftstick.png" />
+    <None Remove="skins\switch-pro\rightstick.png" />
+    <None Remove="skins\switch-pro\skin.xml" />
+    <None Remove="skins\switch-pro\switchpro-background.png" />
+    <None Remove="skins\tg16-2button\circle.png" />
+    <None Remove="skins\tg16-2button\skin.xml" />
+    <None Remove="skins\tg16-2button\tg16.png" />
+    <None Remove="skins\Tron-V2 Standard\A fill.png" />
+    <None Remove="skins\Tron-V2 Standard\B button.png" />
+    <None Remove="skins\Tron-V2 Standard\Background.png" />
+    <None Remove="skins\Tron-V2 Standard\C stick.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad bottom.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad left.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad top.png" />
+    <None Remove="skins\Tron-V2 Standard\Dpad-right.png" />
+    <None Remove="skins\Tron-V2 Standard\L stick.png" />
+    <None Remove="skins\Tron-V2 Standard\skin.xml" />
+    <None Remove="skins\Tron-V2 Standard\Start fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Trigger Fill.png" />
+    <None Remove="skins\Tron-V2 Standard\X fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Y fill.png" />
+    <None Remove="skins\Tron-V2 Standard\Z fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\A fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\B button.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Background.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\C stick.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad bottom.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad left.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad top.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Dpad-right.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\L stick.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\skin.xml" />
+    <None Remove="skins\Tron-V2 with D-Pad\Start fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Trigger Fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\X fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Y fill.png" />
+    <None Remove="skins\Tron-V2 with D-Pad\Z fill.png" />
+    <None Remove="skins\virtualboy-default\circle.png" />
+    <None Remove="skins\virtualboy-default\skin.xml" />
+    <None Remove="skins\virtualboy-default\VBcontroller.png" />
+    <None Remove="skins\wii-classic\circle.png" />
+    <None Remove="skins\wii-classic\classic.png" />
+    <None Remove="skins\wii-classic\disconnect.png" />
+    <None Remove="skins\wii-classic\left-stick.png" />
+    <None Remove="skins\wii-classic\lock500.png" />
+    <None Remove="skins\wii-classic\right-stick.png" />
+    <None Remove="skins\wii-classic\skin.xml" />
+    <None Remove="skins\wii-nes\circle.png" />
+    <None Remove="skins\wii-nes\disconnect.png" />
+    <None Remove="skins\wii-nes\lock100.png" />
+    <None Remove="skins\wii-nes\nes.png" />
+    <None Remove="skins\wii-nes\skin.xml" />
+    <None Remove="skins\wii-nunchuck\circle.png" />
+    <None Remove="skins\wii-nunchuck\disconnect.png" />
+    <None Remove="skins\wii-nunchuck\disconnect.xcf" />
+    <None Remove="skins\wii-nunchuck\lock500.png" />
+    <None Remove="skins\wii-nunchuck\nunchuck.png" />
+    <None Remove="skins\wii-nunchuck\skin.xml" />
+    <None Remove="skins\wii-nunchuck\stick.png" />
+    <None Remove="skins\wii-snes\circle.png" />
+    <None Remove="skins\wii-snes\disconnect.png" />
+    <None Remove="skins\wii-snes\lock100.png" />
+    <None Remove="skins\wii-snes\skin.xml" />
+    <None Remove="skins\wii-snes\snes.png" />
+    <None Remove="skins\xbox-duke-analog\circle.png" />
+    <None Remove="skins\xbox-duke-analog\lstick.png" />
+    <None Remove="skins\xbox-duke-analog\pad.png" />
+    <None Remove="skins\xbox-duke-analog\rstick.png" />
+    <None Remove="skins\xbox-duke-analog\skin.xml" />
+    <None Remove="skins\xbox-duke-analog\trig-l.png" />
+    <None Remove="skins\xbox-duke-analog\trig-r.png" />
+    <None Remove="skins\xbox-duke\circle.png" />
+    <None Remove="skins\xbox-duke\lstick.png" />
+    <None Remove="skins\xbox-duke\pad.png" />
+    <None Remove="skins\xbox-duke\rstick.png" />
+    <None Remove="skins\xbox-duke\skin.xml" />
+    <None Remove="skins\xbox-duke\trig-l.png" />
+    <None Remove="skins\xbox-duke\trig-r.png" />
+    <None Remove="skins\xbox-s\circle.png" />
+    <None Remove="skins\xbox-s\lstick.png" />
+    <None Remove="skins\xbox-s\rstick.png" />
+    <None Remove="skins\xbox-s\skin.xml" />
+    <None Remove="skins\xbox-s\trig-l.png" />
+    <None Remove="skins\xbox-s\trig-r.png" />
+    <None Remove="skins\xbox-s\xboxs.png" />
+    <None Remove="skins\xbox360-controller\circle.png" />
+    <None Remove="skins\xbox360-controller\pad.png" />
+    <None Remove="skins\xbox360-controller\skin.xml" />
+    <None Remove="skins\xbox360-controller\stick.png" />
+    <None Remove="skins\xbox360-controller\trig-l.png" />
+    <None Remove="skins\xbox360-controller\trig-r.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Carlito-Regular.ttf" />
+    <Content Include="keybindings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+    <Content Include="skins\classic-c64gs\cheetah-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-c64gs\cheetah.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-c64gs\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-c64gs\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-joystick\atari.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-joystick\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-joystick\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-joystick\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-omega\atari.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-omega\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-omega\omega.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-omega\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-paddle\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-paddle\Paddlecontroller.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-paddle\PaddleRing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-paddle\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-sportspad\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-sportspad\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-sportspad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms-sportspad\sportspad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms\sms.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms\sms_for_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-sms\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-default\colecovision-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-default\colecovision-knob.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\coleco-roller-left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\coleco-roller-right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\coleco-roller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\colecovision-roller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\dreamcast.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\dreamcast1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\dreamcast_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-keyboard-jp\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-keyboard-jp\jpn-dreamcast-keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-keyboard-jp\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-mouse\dreamcast.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\dreamcast-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\drivingcontroller-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\drivingcontroller-default\circle3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\drivingcontroller-default\drivingcontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\drivingcontroller-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107-mouse\FMT-KB107.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107\FMT-KB107.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb107\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207-mouse\fmt-kb207.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207\fmt-kb207.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-kb207\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-marty\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-marty\marty.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\fmtowns-marty\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\ColorKeyScreens\BlackScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\ColorKeyScreens\BlueScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\ColorKeyScreens\GreenScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\ColorKeyScreens\MagentaScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\A.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Analogue-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\B.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\C-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Dpad-Down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Dpad-Left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Dpad-Right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Dpad-Up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\L.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\R.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\RL-full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\X.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Y.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Buttons\Z.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Hot_Pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Ice_Blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Indigo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Lime_Green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Silver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Spice_Orange.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Tropical_Pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_White.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\GCN_Controllers\GCN_Controller_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\no-springs-text.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Custom\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\A.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\B.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\C-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Dpad-Down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Dpad-Left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Dpad-Right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Dpad-Up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Orange.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Purple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\GCN_Controller_White.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\L-all.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\RL-full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\X.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Y.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-default\Z.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\abbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_darkgrey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_purple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\gbasp_zelda.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\lbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\rbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\startselect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp-small\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\abbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_darkgrey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_purple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\gbasp_zelda.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\lbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\rbutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\startselect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-gbasp\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\c-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\RL-full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-keyboard\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\ColorKeyScreens\BlackScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\ColorKeyScreens\BlueScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\ColorKeyScreens\GreenScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\ColorKeyScreens\MagentaScreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\A.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Analogue-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\B.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\C-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Dpad-Up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\L.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\R.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\X.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Y.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons-Non-Colorized\Z.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\A.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Analogue-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\B - Copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\B.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\C-Stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Dpad-Down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Dpad-Left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Dpad-Right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Dpad-Up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\L-bar-depricated.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\L-R-bar-alternative.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\L.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\R-bar-depricated.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\R.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\RL-full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\X.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Y.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Buttons\Z.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\GameCube-Simple\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-default\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\24-ubutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\30-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-brooksc-ds4-md6\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\30-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-ds4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\30-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-hitbox-xb360\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-mayflashn64\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\30-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxanalogue-ds4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\24-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\30-UBUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\BG.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brookeps3ps4tomdsc-ds4-md6b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\24-ubutton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-brooksc-ds4-md6\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\24-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\30-BUTTON.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\bg.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-pattonboxdigital-ds4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\slider.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\source.fla">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-skinhelper\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-6button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-6button\genesis_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-6button\sega_genesis.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-6button\sega_genesis_for_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-mouse\genesis.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\genesis-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\intellivision-controller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\intellivision-controller\intellivision.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\intellivision-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-3button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-3button\jaguar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-3button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-6button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-6button\jaguar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-genesis_6button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-genesis_6button\sega_genesis.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-genesis_6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-saturn_digital\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-saturn_digital\saturn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-saturn_digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\slider.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\source.fla">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-skinhelper\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\MiSTer\mister-xbox360\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-default\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-default\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\button-dpad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\button-face.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\button-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\button-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\button-z.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-2000.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-aqua.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-banjo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-dk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-gold.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-grey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-lightblue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-lime.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-orange.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-pink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-pokemon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-purple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-twist.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\pad-zelda.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-highres\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-mouse\n64.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\n64-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-arcadepro\circle_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-arcadepro\knob.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-arcadepro\neogeo-arcade-stick-pro.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-arcadepro\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-gamepad\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-gamepad\neogeo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-gamepad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\neogeo-gamepad\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-dogbone\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-dogbone\nes-dogbone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-dogbone\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\slider.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\source.fla">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-pghelper\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\circle_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\circle_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\powerpad-a.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\circle_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\circle_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\powerpad-b.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\nuon-analog.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-analog\stick.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\noun-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nuon-digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\paddle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\paddle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\PaddleCircle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\PaddleRing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\paddle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\paddle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\PaddleCircle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\PaddleRing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-mouse\commodore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pc360-default\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pcfx-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pcfx-default\PC-FX_Controller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pcfx-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-mouse-windows\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-mouse-windows\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-mouse-windows\ps2keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-mouse-windows\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-windows\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-windows\ps2keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pckeyboard-windows\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-default\pippin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-keyboard\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-keyboard\pippin-keyboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\pippin-keyboard\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\arrowD.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\arrowL.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\arrowR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\arrowU.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\cross.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\playstation-ddr-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\square.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr-noss\triangle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\arrowD.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\arrowL.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\arrowR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\arrowU.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\cross.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\playstation-ddr-background-v2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\select.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\square.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-ddr\triangle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\playstation-digital.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\select.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\shoulder2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\playstation-analog-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\playstation2-analog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\select.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\shoulder2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2-analog\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\playstation-analog-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\playstation-analog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\select.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\shoulder2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-dualshock2\up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-mouse\playstation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-neqcon\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-neqcon\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-neqcon\L-R-bar-alternative.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-neqcon\neqcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-neqcon\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\dualshock3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\dualshock3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\dualshock4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\ps4lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\ps4rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\printer-default\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\printer-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\L-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\R-bar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\ss3d-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-analog\ss3dstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-digital\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-digital\saturn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-digital\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-mouse\saturn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\saturn-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-mouse\snes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-nttdata\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-nttdata\nttdata.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-nttdata\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\gameboy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\switch-pro\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\switch-pro\leftstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\switch-pro\rightstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\switch-pro\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\switch-pro\switchpro-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\tg16-2button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\tg16-2button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\tg16-2button\tg16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\A fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\B button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\C stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Dpad-right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\L stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Start fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Trigger Fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\X fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Y fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 Standard\Z fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\A fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\B button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\C stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Dpad-right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\L stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Start fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Trigger Fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\X fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Y fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\Tron-V2 with D-Pad\Z fill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\virtualboy-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\virtualboy-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\virtualboy-default\VBcontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\classic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\left-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\lock500.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\right-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-classic\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nes\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nes\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nes\lock100.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nes\nes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nes\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\disconnect.xcf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\lock500.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\nunchuck.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-nunchuck\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-snes\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-snes\disconnect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-snes\lock100.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-snes\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\wii-snes\snes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke-analog\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-duke\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox-s\xboxs.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\pad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\trig-l.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\xbox360-controller\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Roots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.18">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Desktop.Robot" Version="1.3.2" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="Vortice.DirectInput" Version="2.2.0" />
+    <PackageReference Include="Vortice.XInput" Version="2.2.0" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    <PackageReference Include="Zafiro.Avalonia" Version="2.5.10">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GameBoyPrinterEmulatorWindow.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="SetupWindow.axaml.cs">
+      <DependentUpon>SetupWindow.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="RetroSpy.icns">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="TimestampWindows" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+    <Exec Command="echo $(CurrentDate) &gt; &quot;Resources\BuildDate.txt&quot;" />
+  </Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+
+	<Target Name="TimestampLinux" BeforeTargets="PreBuildEvent" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))'">
+		<Exec Command="echo $(CurrentDate) &gt; Resources/BuildDate.txt" />
+	</Target>
+
+  <ItemGroup>
+    <Content Include="skins\3do-controller\3dobackground.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-controller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\3do.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\3do-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\5200.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\5200joystick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atari5200-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\keyboardcontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\kidscontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-kids\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\atarikeyboard-starraiders\starraiders.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\c64mini.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\knob1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\c64mini-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\controller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-competitionpro\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\analog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\joystick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\gravis-pro.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\prostick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-gravis-pro-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\commodore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cd32-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\cdicont2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\cdicont2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\cdicont.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\cdicont.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-gamepad\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\cdiremote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\cdiremote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-ir\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\cdi-mouse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\cdi-roller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-roller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\cdi-thumbstick-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\cdi-thumbstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdi-thumbstick\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\cdtv-keyboard-german.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\cdtv-keyboard-us.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\cdtv-remote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\cdtv-trackball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\atari7800.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\classic-7800\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\ErrorImage.png" />
+    <Resource Include="Assets\PrintImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="GameBoyPrinterEmulatorWindow.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+	<ItemGroup>
+		<FirmwareFiles Include="..\firmware\sketches\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssetFiles Include="Assets\**\*.*" />
+	</ItemGroup>
+	
+	<Target Name="CopyAssetFiles" AfterTargets="Build">
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+	</Target>
+	<Target Name="CopyFirmwareFiles" AfterTargets="Build">
+		<Copy SourceFiles="@(FirmwareFiles)" DestinationFiles="@(FirmwareFiles->'$(OUTDIR)\firmware\%(RecursiveFir)%(Filename)%(Extension)')" />
+	</Target>
+</Project>
