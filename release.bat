@@ -101,7 +101,7 @@ if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
 )
 
 ;mkdir RetroSpy-Upload
-copy RetroSpy-Setup.exe RetroSpy-Upload\RetroSpy-Setup-x64.exe
+copy RetroSpy-Setup.exe RetroSpy-Upload\RetroSpy-Setup-64.exe
 copy RetroSpy-Windows.zip RetroSpy-Upload\RetroSpy-Windows-x64.zip
 copy UsbUpdaterX2\update-usb-retrospy-installer.sh RetroSpy-Upload
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
