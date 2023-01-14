@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Xml;
 using static GBPemu.BitmapPixelMaker;
 
@@ -592,17 +593,30 @@ namespace GBPemu
 
         private void Reader_ControllerStateChanged(object? reader, ControllerStateEventArgs e)
         {
-            if (e?.RawPrinterData?.StartsWith("// GAMEBOY PRINTER Packet Capture V3.2.1 (Copyright (C) 2022 Brian Khuu)") == true
-                || e?.RawPrinterData?.StartsWith("88 33 ") == true)
+            string tempStr = e?.RawPrinterData ?? string.Empty;
+
+            // This is due to a bug in Catalina (10.15) and Big Sur (11)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) &&
+                (Environment.OSVersion.Version.Major == 10 || Environment.OSVersion.Version.Major == 11))
+            {
+                var tempChar = tempStr[0];
+                tempStr = tempStr.Replace("88 33", "\r\n88 33").Replace("\r\n\r\n", "\r\n");
+                var charArray = Encoding.Default.GetBytes(tempStr);
+                charArray[0] = (byte)tempChar;
+                tempStr = Encoding.Default.GetString(charArray);
+            }
+
+            if (tempStr.StartsWith("// GAMEBOY PRINTER Packet Capture V3.2.1 (Copyright (C) 2022 Brian Khuu)") == true
+                || tempStr.StartsWith("88 33 ") == true || tempStr.StartsWith("\n88 33 ") == true)
             {
                 rawPacketParse = true;
             }
 
             string processedString;
             if (rawPacketParse)
-                processedString = ProcessRawBuffer(e?.RawPrinterData);
+                processedString = ProcessRawBuffer(tempStr);
             else
-                processedString = e?.RawPrinterData ?? string.Empty;
+                processedString = tempStr;
 
             _imageBuffer.SetColor(0, 0, 0, 255);
 
@@ -635,7 +649,7 @@ namespace GBPemu
             DisplayImage(square_width, square_height);
 
         }
- 
+
 
         private static string ProcessRawBuffer(string? rawPrinterData)
         {
@@ -705,7 +719,7 @@ namespace GBPemu
             return retVal;
         }
 
- 
+
         private void DisplayImage(int square_width, int square_height)
         {
             if (decompressedTiles != null)
@@ -985,7 +999,7 @@ namespace GBPemu
 
             var saveFilename = await SaveFileBox.ShowAsync(this);
 
-            if (saveFilename != null) 
+            if (saveFilename != null)
             {
                 var image = _imageBuffer.MakeBitmap();
                 image._rawImage.SaveAsPng(saveFilename);
