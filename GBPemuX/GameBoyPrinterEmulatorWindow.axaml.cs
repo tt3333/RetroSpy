@@ -606,6 +606,11 @@ namespace GBPemu
                 tempStr = Encoding.Default.GetString(charArray);
             }
 
+            if (tempStr.Contains("// GAMEBOY PRINTER"))
+            {
+                tempStr = tempStr.Substring(tempStr.IndexOf("// GAMEBOY PRINTER"));
+            }
+
             if (tempStr.StartsWith("// GAMEBOY PRINTER Packet Capture V3.2.1 (Copyright (C) 2022 Brian Khuu)") == true
                 || tempStr.StartsWith("88 33 ") == true || tempStr.StartsWith("\n88 33 ") == true)
             {
