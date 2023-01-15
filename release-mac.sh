@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ 
 rm -rf bin/Release/RetroSpy-macOS
 rm -rf RetroSpy-macOS.zip
 
