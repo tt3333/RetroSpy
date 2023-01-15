@@ -152,6 +152,7 @@ if [[ -z "${SSH_CLIENT}" ]] && [[ -z "${LAUNCHDRUN}" ]];
 then
   create-dmg \
     --volname "RetroSpy Installer" \
+    --volicon dmgicon.icns \
     --background "../../installer_background.png" \
     --window-pos 200 120 \
     --window-size 800 400 \
@@ -166,6 +167,7 @@ else
   cp -a ../../installer_background.png RetroSpyInstall/.background
   create-dmg \
     --volname "RetroSpy Installer" \
+    --volicon dmgicon.icns \
     --app-drop-link 600 185 \
     --skip-jenkins \
     "../../RetroSpyInstall.dmg" \
