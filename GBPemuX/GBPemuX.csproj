@@ -7,7 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	  <RootNamespace>GBPemu</RootNamespace>
 	  <AssemblyName>GBPemu</AssemblyName>
-	  <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+	  <ApplicationIcon>GBPemu.ico</ApplicationIcon>
 	  <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 	<PropertyGroup>
@@ -42,6 +42,7 @@
 	  <Content Include="Assets\PrintImage.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+	  <Content Include="GBPemu.ico" />
 	</ItemGroup>
   <ItemGroup>
     <TrimmerRootDescriptor Include="Roots.xml" />
@@ -127,6 +128,6 @@
 	</Target>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
-		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles-&gt;'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFiles="@(AssetFiles->'$(OUTDIR)\Assets\%(RecursiveFir)%(Filename)%(Extension)')" />
 	</Target>
 </Project>

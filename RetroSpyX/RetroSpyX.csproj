@@ -6,7 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>RetroSpy</RootNamespace>
     <AssemblyName>RetroSpy</AssemblyName>
-    <ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+    <ApplicationIcon>RetroSpy.ico</ApplicationIcon>
     <BaseOutputPath>..\bin</BaseOutputPath>
     <UseWPF>False</UseWPF>
     <NeutralLanguage>en-US</NeutralLanguage> 
@@ -757,7 +757,7 @@
     <Content Include="keybindings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+    <Content Include="RetroSpy.ico" />
     <Content Include="skins\classic-c64gs\cheetah-stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

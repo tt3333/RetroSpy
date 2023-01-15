@@ -16,7 +16,7 @@
 		<Version>6.0</Version>
 		<Copyright>Copyright © 2022</Copyright>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<ApplicationIcon>Mattahan-Buuf-Magnifying-Glass.ico</ApplicationIcon>
+		<ApplicationIcon>UsbUpdater.ico</ApplicationIcon>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -43,7 +43,7 @@
 
 	
 		<ItemGroup>
-		  <Content Include="Mattahan-Buuf-Magnifying-Glass.ico" />
+		  <Content Include="UsbUpdater.ico" />
 		</ItemGroup>
 
 </Project>

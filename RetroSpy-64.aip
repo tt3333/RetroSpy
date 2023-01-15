@@ -1,4 +1,4 @@
-[Setup]
+﻿[Setup]
 AIVersion=9.3
 AIEdition=0
 GUID={664FB1C2-C4B5-4970-B5C9-8D49236CB416}
@@ -25,7 +25,7 @@ LinkDN=https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desk
 PackageType=0
 SetupFolder=.
 SetupFileName=RetroSpy-Setup
-IconFile=Default
+IconFile=RetroSpy.ico
 SourceDir=RetroSpy-Setup
 InstallDir=<ProgramFiles>\<AppName>
 MainExe=
@@ -132,8 +132,8 @@ CustomActionCommand=<WebSite>
 CustomActionChecked=0
 CustomActionAdmin=0
 TotalFiles=1
-SourceDirFiles=1039
-SourceDirSize=194464935
+SourceDirFiles=1189
+SourceDirSize=171849366
 
 [GUI]
 FontName=Verdana
