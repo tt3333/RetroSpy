@@ -145,7 +145,7 @@ rm -rf RetroSpyInstall
 rm -rf ../../RetroSpyInstall.dmg
 mkdir RetroSpyInstall
 mkdir RetroSpyInstall/RetroSpy
-fileicon RetroSpyInstall/RetroSpy ../../Folder.icns
+fileicon set RetroSpyInstall/RetroSpy ../../Folder.icns
 cp -aR RetroSpy-macOS/* RetroSpyInstall/RetroSpy/
 
 if [[ -z "${SSH_CLIENT}" ]] && [[ -z "${LAUNCHDRUN}" ]]; 
