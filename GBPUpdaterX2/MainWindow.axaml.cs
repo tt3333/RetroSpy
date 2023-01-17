@@ -278,7 +278,7 @@ namespace GBPUpdaterX2
                     else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     {
                         processInfo = new ProcessStartInfo("chmod",
-                            "755 " + Path.Join(tempDirectory, "avrdude-mac"))
+                            "755 " + Path.Join(tempDirectory, "avrdude"))
                         {
                             CreateNoWindow = true,
                             UseShellExecute = false
@@ -286,7 +286,7 @@ namespace GBPUpdaterX2
                         Process? p1 = Process.Start(processInfo);
                         p1?.WaitForExit();
 
-                        processInfo = new ProcessStartInfo(Path.Join(tempDirectory, "avrdude-mac"),
+                        processInfo = new ProcessStartInfo(Path.Join(tempDirectory, "avrdude"),
                             "-v -patmega328p -carduino -P" + gbpemuPort +
                             string.Format(" -b{0} -D -Uflash:w:firmware{1}.ino.hex:i",
                                 serialNumber < 100007 ? "115200" : "57600", serialNumber < 100007 ? "" : "-old"))

@@ -112,7 +112,11 @@ del GBP_Firmware.zip
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\avrdude.conf
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\firmware.ino.hex
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libusb0.dll
-"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\avrdude-mac
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\avrdude
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libusb-1.0.0.dylib
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libusb-0.1.4.dylib
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libftdi1.2.dylib
+"C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libhidapi.0.dylib
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\firmware-old.ino.hex
 copy GBP_Firmware.zip RetroSpy-Upload
 )
