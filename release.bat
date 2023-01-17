@@ -122,6 +122,9 @@ copy ..\..\..\kernel\kernel.tar.gz RetroSpy-Upload
 if exist "..\..\..\upload\RetroSpy-Linux-x64.tar.gz" (
 copy ..\..\..\upload\RetroSpy-Linux-x64.tar.gz RetroSpy-Upload
 )
+if exist "..\..\..\upload\RetroSpy-Linux-arm64.tar.gz" (
+copy ..\..\..\upload\RetroSpy-Linux-arm64.tar.gz RetroSpy-Upload
+)
 if exist "..\..\..\upload\RetroSpyInstall.dmg" (
 copy ..\..\..\upload\RetroSpyInstall.dmg RetroSpy-Upload
 )
