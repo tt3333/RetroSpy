@@ -33,7 +33,6 @@ else
          mv RetroSpy-Linux/bin/keybindings.xml RetroSpy-Linux
          mv RetroSpy-Linux/bin/game_palettes.cfg RetroSpy-Linux
          mkdir RetroSpy-Linux/MiSTer
-         mkdir RetroSpy-Linux/bin
          cp ../../MiSTer/update-retrospy.sh RetroSpy-Linux/MiSTer
 	     mv RetroSpy-Linux/bin/RetroSpy RetroSpy-Linux/bin/retrospy
 	     mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
