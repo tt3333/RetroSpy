@@ -623,6 +623,9 @@ namespace GBPemu
             else
                 processedString = tempStr;
 
+            if (processedString == String.Empty)
+                return;
+
             _imageBuffer.SetColor(0, 0, 0, 255);
 
             int square_width = PrintSize;// 480 / (TILE_PIXEL_WIDTH * TILES_PER_LINE);
@@ -656,7 +659,7 @@ namespace GBPemu
         }
 
 
-        private static string ProcessRawBuffer(string? rawPrinterData)
+        private string ProcessRawBuffer(string? rawPrinterData)
         {
             if (rawPrinterData == null)
                 return string.Empty;
@@ -686,7 +689,16 @@ namespace GBPemu
                     int length = Int32.Parse(packet_length_str, System.Globalization.NumberStyles.HexNumber);
                     if (length == 0)
                         continue;
-                    string packet = line.Substring(18, length * 3 - 1);
+                    string packet;
+                    try
+                    {
+                        packet = line.Substring(18, length * 3 - 1);
+                    }
+                    catch(ArgumentOutOfRangeException)
+                    {
+                        DisplayError();
+                        return "";
+                    }
                     string[] bytes = packet.Split(' ');
 
                     int current_position = 0;

@@ -98,7 +98,7 @@ WebUSB WebUSBSerial(1, "herrzatacke.github.io/gb-printer-web/#/webusb");
 #ifdef GBP_FEATURE_PARSE_PACKET_MODE
 #define GBP_BUFFER_SIZE 400
 #else
-#define GBP_BUFFER_SIZE 650
+#define GBP_BUFFER_SIZE 750
 #endif
 
 /* Serial IO */
