@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ 
 rm -rf bin/Release/net7.0
 rm -rf bin/Release/RetroSpy-Linux
 rm -rf RetroSpy-Linux-arm64.tar.gz
