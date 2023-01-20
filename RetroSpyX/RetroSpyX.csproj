@@ -2698,10 +2698,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="GameBoyPrinterEmulatorWindow.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -3002,12 +2998,6 @@
   <ItemGroup>
     <Resource Include="Assets\ErrorImage.png" />
     <Resource Include="Assets\PrintImage.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AvaloniaXaml Update="GameBoyPrinterEmulatorWindow.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
   </ItemGroup>
 
 	<ItemGroup>

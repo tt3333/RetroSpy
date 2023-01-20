@@ -440,23 +440,15 @@ namespace RetroSpy
                     reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds, _vm.LegacyKeybindingBehavior);
                 }
 
-                if (_vm.Sources.SelectedItem == InputSource.PRINTER)
-                {
-                    _portListUpdateTimer.Stop();
-                    var g = new GameBoyPrinterEmulatorWindow(reader, this);
-                    await g.ShowDialog(this);
-                    _portListUpdateTimer.Start();
-                }
-                else
-                {
-                    _portListUpdateTimer.Stop();
-                    v = new ViewWindow(this, _vm.Skins.SelectedItem,
-                                   _vm.Backgrounds.SelectedItem,
-                                   reader, _vm.StaticViewerWindowName);
-                    await v.ShowDialog(this);
-                    _portListUpdateTimer.Start();
 
-                }
+                _portListUpdateTimer.Stop();
+                v = new ViewWindow(this, _vm.Skins.SelectedItem,
+                               _vm.Backgrounds.SelectedItem,
+                               reader, _vm.StaticViewerWindowName);
+                await v.ShowDialog(this);
+                _portListUpdateTimer.Start();
+
+
             }
             catch (ConfigParseException ex)
             {
