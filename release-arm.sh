@@ -38,6 +38,7 @@ else
 	     mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
 	     mv RetroSpy-Linux/bin/GBPUpdater RetroSpy-Linux/bin/pixelupdate
 	     mv RetroSpy-Linux/bin/UsbUpdater RetroSpy-Linux/bin/visionusbupdate
+         cp -aR net7.0/firmware RetroSpy-Linux/firmware
 	     tar -zcvf ../../RetroSpy-Linux-arm64.tar.gz RetroSpy-Linux
          if [ -d "/mnt/src/upload" ]
          then
