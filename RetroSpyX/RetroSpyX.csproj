@@ -2689,8 +2689,8 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="Vortice.DirectInput" Version="2.2.0" />
-    <PackageReference Include="Vortice.XInput" Version="2.2.0" />
+    <PackageReference Include="Vortice.DirectInput" Version="2.3.0" />
+    <PackageReference Include="Vortice.XInput" Version="2.3.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     <PackageReference Include="Zafiro.Avalonia" Version="2.5.10">
       <TreatAsUsed>true</TreatAsUsed>

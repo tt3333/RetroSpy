@@ -8,7 +8,7 @@ namespace RetroSpy
 
     public static partial class SendKeys
     {
-        static Robot _robot = new Robot();
+        static readonly Robot _robot = new();
 
         public static void PressKey(Key key)
         {

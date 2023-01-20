@@ -52,25 +52,48 @@ namespace RetroSpy.Readers
             _joystick.SetCooperativeLevel(IntPtr.Zero, CooperativeLevel.NonExclusive | CooperativeLevel.Background | CooperativeLevel.Foreground);
             _joystick.Properties.BufferSize = 16;
 
-            foreach (DeviceObjectInstance obj in _joystick.GetObjects())
-            {
-                if ((obj.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0)
-                {
-//                    _joystick.GetObjectPropertiesByName(obj.Name) = new InputRange(-RANGE, RANGE);
-                }
-            }
-
             if (_dinput.IsDeviceAttached(devices[id].InstanceGuid))
             {
                 _ = _joystick.SetDataFormat<RawJoystickState>();
             }
-                
+
+            foreach (DeviceObjectInstance obj in _joystick.GetObjects())
+            {
+                if ((obj.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0)
+                {
+                    _joystick.GetObjectPropertiesByName(MapObjectName(obj.Name)).Range = new InputRange(-RANGE, RANGE);
+                }
+            }
+
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
             };
             _timer.Tick += Tick;
             _timer.Start();
+        }
+
+        private static string MapObjectName(string name)
+        {
+            switch (name)
+            {
+                case "Yx Axis":
+                    return "Y";
+                case "X Axis":
+                    return "X";
+                case "Y Rotation":
+                    return "RotationY";
+                case "X Rotation":
+                    return "RotationX";
+                case "Z Axis":
+                    return "Z";
+                case "Z Rotation":
+                    return "RotationZ";
+                default:
+                    break;
+            }
+
+            return name;
         }
 
         private static int OctantAngle(int octant)
@@ -96,7 +119,7 @@ namespace RetroSpy.Readers
                     }
                 }
 
-                JoystickState state = new JoystickState();
+                JoystickState state = new();
                 _joystick.GetCurrentJoystickState(ref state);
 
                 ControllerStateBuilder outState = new();
