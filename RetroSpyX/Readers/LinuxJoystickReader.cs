@@ -16,7 +16,7 @@ public partial class LinuxJoystickReader : IControllerReader
     private const uint JSIOCSBTNMAP_LARGE = 1140877875;
     private const uint JSIOCSBTNMAP_SMALL = 1107323443;
     private const uint JSIOCGBTNMAP_LARGE = 2214619700;
-    private const uint JSIOCGBTNMAP_SMALL = 2214619700;
+    private const uint JSIOCGBTNMAP_SMALL = 2181065268;
     private const uint JSIOCGBTNMAP = 2214619700;
     private const uint JSIOCSBTNMAP = 1140877875;
     private const uint JSIOCSAXMAP = 1077963313;
@@ -65,6 +65,7 @@ public partial class LinuxJoystickReader : IControllerReader
 
     public LinuxJoystickReader(int id)
     {
+        _id = id;
         int i;
         byte[] version = { 0x00, 0x00, 0x08, 0x00 };
         var name = new byte[128];
