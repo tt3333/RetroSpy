@@ -53,7 +53,13 @@
 		    </Menu>
         </StackPanel>
         <Label Name="MisterControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="340,140,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" FontSize="16" IsVisible="{Binding MiSTerGamepadOptionVisibility}"/>
-        <ComboBox Name="MisterControllerIdCombo" Width="86.8" Height="29.9" Margin="425,140,90.2,0" VerticalAlignment="Top" BorderBrush="#FF252525" FontFamily="Segoe UI" FontSize="12" Background="#efefef" IsVisible="{Binding MiSTerGamepadOptionVisibility}"/>
+		<ComboBox Name="MisterControllerIdCombo" Width="86.8" Height="29.9" Margin="425,140,90.2,0" VerticalAlignment="Top" BorderBrush="#FF252525" FontFamily="Segoe UI" FontSize="12" Background="#efefef" IsVisible="{Binding MiSTerGamepadOptionVisibility}" Items="{Binding MisterGamepad}" SelectedItem="{Binding MisterGamepad.SelectedItem}">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding}"/>
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
         <Button Name="MiSTerPopulate" Content="Detect" Margin="522,0,0,340" Height="35" VerticalContentAlignment="Center" VerticalAlignment="Bottom" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="MiSTerPopulate_Click" IsVisible="{Binding MiSTerGamepadOptionVisibility}">
             <Button.Styles>
                 <Style Selector="Button:pointerover /template/ ContentPresenter">
