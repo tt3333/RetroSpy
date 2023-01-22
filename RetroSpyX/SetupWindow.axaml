@@ -94,7 +94,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBox Name="txtHostname" Margin="145,70,10.333,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Width="446.667" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <TextBox Name="txtHostname" Margin="145,70,10.333,0" VerticalAlignment="Top" Height="24" FontSize="16" FontFamily="/Assets/Carlito-Regular.ttf#Carlito" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Width="446.667" IsVisible="{Binding SSHOptionVisibility}" ScrollViewer.VerticalScrollBarVisibility="Hidden" Text="{Binding Hostname}">
             <TextBox.Styles>
                 <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="#FF3E3E42"/>

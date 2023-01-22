@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Threading;
 
 namespace RetroSpy
@@ -28,8 +29,20 @@ namespace RetroSpy
 
         public SSHMonitor(string hostname, string command, string username, string password, string? commandSub, int delayInMilliseconds, bool useQuickDisconnect)
         {
+            string strIP = hostname;
+            var ips = Dns.GetHostEntry(hostname);
+            foreach(var ip in ips.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    strIP = ip.ToString();
+                    break;
+                }
+            }
+
             _localBuffer = new List<byte>();
-            _client = new SshClient(hostname, username, password);
+            _client = new SshClient(strIP, username, password);
+            
             _command = !string.IsNullOrEmpty(commandSub) ? string.Format(CultureInfo.CurrentCulture, command, commandSub) : command;
             _delayInMilliseconds = delayInMilliseconds;
             quickDisconnect = useQuickDisconnect;

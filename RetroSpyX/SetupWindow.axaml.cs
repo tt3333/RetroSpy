@@ -237,6 +237,7 @@ namespace RetroSpy
                     ? Properties.Settings.Default.MisterPassword
                     : Properties.Settings.Default.BeaglebonePassword;
 
+
                 _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
                 txtDelay.Text = _vm.DelayInMilliseconds.ToString();
 
@@ -300,7 +301,7 @@ namespace RetroSpy
                 _vm.Sources.SelectId(Properties.Settings.Default.Source);
                 _vm.Skins.SelectId(Properties.Settings.Default.Skin);
                 _vm.Hostname = Properties.Settings.Default.Hostname;
-
+                txtHostname.Text = _vm.Hostname;
 
                 List<uint> defaultMisterControllers = new();
                 for (uint i = 0; i < 10; ++i)
