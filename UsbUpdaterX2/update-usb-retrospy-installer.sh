@@ -3,6 +3,10 @@
 #Github URL
 RETROSPY_URL=https://github.com/retrospy/RetroSpy/releases/latest/download/retrospy
 
+#Update hostname
+sudo sed -i 's/beaglebone/retrospy/g' /etc/hostname
+sudo sed -i 's/beaglebone/retrospy/g' /etc/hosts
+
 #RetroSpy file downloading
 echo ""
 echo "Installing USBProxy..."
