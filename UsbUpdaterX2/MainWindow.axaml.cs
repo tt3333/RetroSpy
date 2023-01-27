@@ -54,8 +54,19 @@ namespace UsbUpdaterX2
                             txtboxData.CaretIndex = int.MaxValue;
                         });
 
+                        if (line.Contains("Device needs full image installed!"))
+                        {
+                            Dispatcher.UIThread.Post(async () =>
+                            {
+                                var m = MessageBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandardWindow("RetroSpy", "Unfortunately, this device requires a full reimage.\nIf you are unsure how to do this please reach out to support@retro-spy.com.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Info);
+                                await m.ShowDialog(this);
+                                goButton.IsEnabled = true;
+                            });
 
-                        if (line.Contains("Installation complete!"))
+                            break;
+                        }
+                        else if (line.Contains("Installation complete!"))
                         {
 
                             Dispatcher.UIThread.Post(async () =>

@@ -3,9 +3,10 @@
 #Github URL
 RETROSPY_URL=https://github.com/retrospy/RetroSpy/releases/latest/download/retrospy
 
-#Update hostname
-sudo sed -i 's/beaglebone/retrospy/g' /etc/hostname
-sudo sed -i 's/beaglebone/retrospy/g' /etc/hosts
+if grep -q "stretch" "/etc/apt/sources.list"; then
+  echo "Device needs full image installed!"
+  exit 0
+fi
 
 #RetroSpy file downloading
 echo ""
@@ -41,9 +42,9 @@ echo ""
 
 mkdir /tmp/kernel
 tar zxvf /tmp/kernel.tar.gz -C /tmp/kernel
-sudo mv /tmp/kernel/zImage /boot/vmlinuz-4.14.71-ti-r80
-sudo rm -rf /lib/modules/4.14.71+/
-sudo mv /tmp/kernel/rootfs/lib/modules/4.14.71+/ /lib/modules/
+sudo mv /tmp/kernel/zImage /boot/vmlinuz-5.10.145-ti-r55
+sudo rm -rf /lib/modules/5.10.145+/
+sudo mv /tmp/kernel/rootfs/lib/modules/5.10.145+/ /lib/modules/
 sudo depmod
 
 rm -rf /tmp/kernel
