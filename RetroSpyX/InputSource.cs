@@ -41,7 +41,7 @@ namespace RetroSpy
 #pragma warning restore CS8601 // Possible null reference assignment.
 
         public static readonly InputSource XBOX = new("xbox", "Microsoft Xbox", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket, username, password, null, 0));
-        public static readonly InputSource XBOX360 = new("xbox360", "Microsoft Xbox 360", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm -b -dddddddd 2> /dev/null", Xbox360Reader.ReadFromPacket, username, password, null, 0));
+        public static readonly InputSource XBOX360 = new("xbox360", "Microsoft Xbox 360", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b -dddddddd", Xbox360Reader.ReadFromPacket, username, password, null, 0));
 
         public static readonly InputSource TG16 = new("tg16", "NEC TurboGrafx-16", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, Tg16.ReadFromPacket));
         public static readonly InputSource PCFX = new("pcfx", "NEC PC-FX", true, false, false, false, false, (port, useLagFix) => new SerialControllerReader(port, useLagFix, SuperNESandNES.ReadFromPacketPCFX));
