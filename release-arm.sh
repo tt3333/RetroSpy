@@ -34,6 +34,7 @@ else
          mv RetroSpy-Linux/bin/game_palettes.cfg RetroSpy-Linux
          mkdir RetroSpy-Linux/MiSTer
          cp ../../MiSTer/update-retrospy.sh RetroSpy-Linux/MiSTer
+         cp ../../LICENSE RetroSpy-Linux
 	     mv RetroSpy-Linux/bin/RetroSpy RetroSpy-Linux/bin/retrospy
 	     mv RetroSpy-Linux/bin/GBPemu RetroSpy-Linux/bin/pixelview
 	     mv RetroSpy-Linux/bin/GBPUpdater RetroSpy-Linux/bin/pixelupdate

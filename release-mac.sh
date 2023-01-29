@@ -30,6 +30,8 @@ cp -aR bin/Release/net7.0/firmware bin/Release/RetroSpy-macOS/firmware
 
 mkdir bin/Release/RetroSpy-macOS/MiSTer
 cp MiSTer/update-retrospy.sh bin/Release/RetroSpy-macOS/MiSTer
+
+cp LICENSE bin/Release/RetroSpy-macOS
  
 rm -rf bin/Release/net7.0
 /usr/local/share/dotnet/dotnet publish GBPemuX/GBPemuX.csproj /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=../bin/Release/net7.0/ /p:RuntimeIdentifier=osx-x64 /p:SelfContained=true -p:PublishSingleFile=true -p:UseAppHost=true
