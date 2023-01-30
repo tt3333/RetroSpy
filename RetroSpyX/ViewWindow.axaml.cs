@@ -284,7 +284,7 @@ namespace RetroSpy
             thread.Start();
         }
 
-        bool noKeyBindings = false;
+        readonly bool noKeyBindings = false;
 
         private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {

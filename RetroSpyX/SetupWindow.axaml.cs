@@ -283,6 +283,10 @@ namespace RetroSpy
                         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                             UpdateJoystickList();
                     }
+                    else if (_vm.Sources.SelectedItem == InputSource.DOLPHIN)
+                    {
+                        UpdateMayflashList();
+                    }
                     //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                     //{
                     //    updateBeagleList();
@@ -384,7 +388,7 @@ namespace RetroSpy
                     if (_vm.Sources.SelectedItem.BuildReader != null)
                         reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PC360)
+                else if (_vm.Sources.SelectedItem == InputSource.PC360 || _vm.Sources.SelectedItem == InputSource.DOLPHIN)
                 {
                     if (_vm.Sources.SelectedItem.BuildReader != null)
                         reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture), false);
@@ -423,6 +427,7 @@ namespace RetroSpy
 
                     reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem, _vm.UseLagFix);
                 }
+
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 //{
                 //    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
@@ -608,11 +613,13 @@ namespace RetroSpy
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                UpdateMayflashList();
                 UpdateGamepadList();
                 UpdateXIList();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                UpdateMayflashList();
                 UpdateJoystickList();
             }
             UpdatePortListThread();
@@ -854,6 +861,12 @@ namespace RetroSpy
             }
 
             return ports;
+        }
+
+        private void UpdateMayflashList()
+        {
+            List<int> controllerList = new List<int> { 1, 2, 3, 4 };
+            _vm.XIAndGamepad.UpdateContents(controllerList);
         }
 
         private void UpdateGamepadList()

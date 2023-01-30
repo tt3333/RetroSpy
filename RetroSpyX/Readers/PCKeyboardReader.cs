@@ -132,7 +132,7 @@ namespace RetroSpy.Readers
                     }
                 }
 
-                KeyboardState state = new KeyboardState();
+                KeyboardState state = new ();
                 _keyboard.GetCurrentKeyboardState(ref state);
 
                 foreach (string key in Enum.GetNames(typeof(Key)))

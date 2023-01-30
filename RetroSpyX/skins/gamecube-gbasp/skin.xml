@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="GameBoy Advance SP" author ="sk84uhlivin" type="gamecube">
+<skin name="GameBoy Advance SP" author ="sk84uhlivin" type="gamecube;dolphin">
 
 	<background name="Black" image="gbasp_black.png" />
 	<background name="Blue" image="gbasp_blue.png" />
