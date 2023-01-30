@@ -41,7 +41,9 @@ namespace RetroSpy
         public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse", false, false, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-        public static readonly InputSource DOLPHIN = new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new LibUsbControllerReader(controllerId ?? "1", 0x057E, 0x0337, ReadEndpointID.Ep01, DolphinMayflashReader.ReadFromPacket));
+#pragma warning disable CS8601 // Possible null reference assignment.
+        public static readonly InputSource DOLPHIN = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?  new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new LibUsbControllerReader(controllerId ?? "1", 0x057E, 0x0337, ReadEndpointID.Ep01, DolphinMayflashReader.ReadFromPacket)) : null;
+#pragma warning restore CS8601 // Possible null reference assignment.
 
         public static readonly InputSource XBOX = new("xbox", "Microsoft Xbox", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket, username, password, null, 0));
         public static readonly InputSource XBOX360 = new("xbox360", "Microsoft Xbox 360", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b -dddddddd", Xbox360Reader.ReadFromPacket, username, password, null, 0));
