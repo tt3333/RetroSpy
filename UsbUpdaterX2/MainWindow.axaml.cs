@@ -36,6 +36,7 @@ namespace UsbUpdaterX2
 
 
                 string strIP = string.IsNullOrEmpty(hostname) ? "retrospy.local" : hostname;
+
                 var ips = Dns.GetHostEntry(hostname);
                 foreach (var ip in ips.AddressList)
                 {
