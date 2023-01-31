@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
 using Renci.SshNet;
 using System;
+using System.Net;
 using System.Threading;
 
 namespace UsbUpdaterX2
@@ -29,12 +30,23 @@ namespace UsbUpdaterX2
                     this.goButton.IsEnabled = false;
                     txtboxData.Text = string.Empty;
                     txtboxData.Text += "\n";
-                    txtboxData.Text += "\nLogging into " + (string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname) + "...\n";
+                    txtboxData.Text += "\nLogging into " + (string.IsNullOrEmpty(hostname) ? "retrospy.local" : hostname) + "...\n";
                     txtboxData.CaretIndex = int.MaxValue;
                 });
 
 
-                using (SshClient _client = new(string.IsNullOrEmpty(hostname) ? "beaglebone.local" : hostname,
+                string strIP = string.IsNullOrEmpty(hostname) ? "retrospy.local" : hostname;
+                var ips = Dns.GetHostEntry(hostname);
+                foreach (var ip in ips.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        strIP = ip.ToString();
+                        break;
+                    }
+                }
+
+                using (SshClient _client = new(strIP,
                                     string.IsNullOrEmpty(username) ? "retrospy" : username,
                                     string.IsNullOrEmpty(password) ? "retrospy" : password))
                 {
