@@ -39,7 +39,7 @@ namespace RetroSpy
 
 #pragma warning disable CS8601 // Possible null reference assignment.
         public static readonly InputSource LINUX = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxjoystick", "Linux Joystick", false, true, false, false, false, (controllerId, useLagFix) => new LinuxJoystickReader(int.Parse(controllerId ?? "0", CultureInfo.CurrentCulture))) : null;
-        public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse", false, false, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
+        public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse (may need su/sudo)", false, false, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
 #pragma warning restore CS8601 // Possible null reference assignment.
 
         public static readonly InputSource DOLPHIN = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new LibUsbControllerReader(controllerId ?? "1", 0x057E, 0x0337, ReadEndpointID.Ep01, 37, 9, 1, DolphinMayflashReader.ReadFromPacket))
