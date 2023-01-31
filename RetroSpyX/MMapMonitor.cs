@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using LibUsbDotNet.LibUsb;
-using LibUsbDotNet.Main;
-using System.IO.MemoryMappedFiles;
 
 namespace RetroSpy
 {
-    public class LibUSBMonitor : IDisposable
+    public class MMapMonitor : IDisposable
     {
         private const int TIMER_MS = 1;
 
@@ -16,30 +13,22 @@ namespace RetroSpy
 
         public event EventHandler? Disconnected;
 
-        private readonly ReadEndpointID _eid;
         private DispatcherTimer? _timer;
-        private readonly UsbContext _context;
-        private IUsbDevice? _device;
-        private UsbEndpointReader? _reader;
+        private FileStream _file;
         private readonly List<byte> _localBuffer;
         private int _frameNum;
         private int _readDataLength;
         private int _frameSize;
         private int _globalOffset;
 
-        public LibUSBMonitor(string frameNum, int vid, int pid, ReadEndpointID eid, int readDataLength, int frameSize, int globalOffset = 0)
+        public MMapMonitor(string frameNum, string filename, int readDataLength, int frameSize, int globalOffset)
         {
-            _globalOffset = globalOffset;
-            _frameSize = frameSize;
-            _readDataLength = readDataLength;
+            _readDataLength= readDataLength;
+            _frameSize= frameSize;
+            _globalOffset= globalOffset;
             _frameNum = int.Parse(frameNum) - 1;
-            _eid = eid;
-            _context = new UsbContext();
 
-            UsbDeviceFinder MyUsbFinder = new(vid, pid);
-            _device = (UsbDevice)_context.Find(MyUsbFinder);
-
-            if (_device == null) throw new Exception("LibUsb Device Not Found.");
+            _file = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             _localBuffer = new List<byte>();
         }
@@ -53,25 +42,6 @@ namespace RetroSpy
 
             _localBuffer.Clear();
 
-            _device?.Open();
-            if (_device != null)
-            {
-                IUsbDevice wholeUsbDevice = _device as IUsbDevice;
-                if (wholeUsbDevice is not null)
-                {
-                    // This is a "whole" USB device. Before it can be used, 
-                    // the desired configuration and interface must be selected.
-
-                    // Select config #1
-                    wholeUsbDevice.SetConfiguration(1);
-
-                    // Claim interface #0.
-                    wholeUsbDevice.ClaimInterface(0);
-                }
-            }
-
-            _reader = _device?.OpenEndpointReader(_eid);
-
             _timer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = TimeSpan.FromMilliseconds(TIMER_MS)
@@ -82,37 +52,19 @@ namespace RetroSpy
 
         public void Stop()
         {
-            if (_device != null)
+            _file?.Close();
+
+            if (_timer != null)
             {
-                if (_device.IsOpen)
-                {
-                    // If this is a "whole" usb device (libusb-win32, linux libusb-1.0)
-                    // it exposes an IUsbDevice interface. If not (WinUSB) the 
-                    // 'wholeUsbDevice' variable will be null indicating this is 
-                    // an interface of a device; it does not require or support 
-                    // configuration and interface selection.
-                    IUsbDevice wholeUsbDevice = _device as IUsbDevice;
-                    
-                    // Release interface #0.
-                    wholeUsbDevice?.ReleaseInterface(0);
-
-                    _device.Close();
-                }
-                _device = null;
-
-                _context.Dispose();
-
-                if (_timer != null)
-                {
-                    _timer.Stop();
-                    _timer = null;
-                }
+                _timer.Stop();
+                _timer = null;
             }
         }
+            
 
         private void Tick(object? sender, EventArgs e)
         {
-            if (_reader == null || _device?.IsOpen == false || PacketReceived == null)
+            if (_file == null || PacketReceived == null)
             {
                 return;
             }
@@ -121,25 +73,30 @@ namespace RetroSpy
             // If there's an IOException then the device has been disconnected.
             try
             { 
+
                 byte[] readBuffer = new byte[_readDataLength];
                 // If the device hasn't sent data in the last 5 seconds,
                 // a timeout error (ec = IoTimedOut) will occur. 
-                _ = _reader.Read(readBuffer, 5000, out int bytesRead);
-                byte[] newReadBuffer = new byte[(_frameSize*8) + 1];
+                _file.Position = 0;
+                _ = _file.Read(readBuffer, 0, _readDataLength);
+                _file.Flush();
+
+                byte[] newReadBuffer = new byte[(_frameSize * 8) + 1];
 
                 int i = _frameNum;
 
                 for (int j = 0; j < _frameSize; ++j)
                 {
-                    for(int k = 0; k < 8; ++k)
+                    for (int k = 0; k < 8; ++k)
                     {
-                        newReadBuffer[(j*8) + k] = (byte)((readBuffer[(i * _frameSize) + _globalOffset + j] & (1 << k)) != 0 ? '1' : '0');
+                        newReadBuffer[(j * 8) + k] = (byte)((readBuffer[(i * _frameSize) + _globalOffset + j] & (1 << k)) != 0 ? '1' : '0');
                     }
                 }
 
                 newReadBuffer[(_frameSize * 8)] = (byte)'\n';
 
                 _localBuffer.AddRange(newReadBuffer);
+
             }
             catch (IOException)
             {

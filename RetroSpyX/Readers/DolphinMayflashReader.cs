@@ -4,10 +4,10 @@ namespace RetroSpy.Readers
 {
     public static class DolphinMayflashReader
     {
-        private const int PACKET_SIZE = 60;
+        private const int PACKET_SIZE = 72;
 
         private static readonly string?[] BUTTONS = {
-            "a", "b", "x", "y", "left", "right", "down", "up", "start", "z", "r", "l"
+            "a", "b", "x", "y", "left", "right", "down", "up", "start", "z", "r", "l", null, null, null, null
         };
         private static float ReadStick(byte input)
         {
@@ -43,16 +43,16 @@ namespace RetroSpy.Readers
                     continue;
                 }
 
-                state.SetButton(BUTTONS[i], packet[(offset*60) + i] != (byte)'0');
+                state.SetButton(BUTTONS[i], packet[i+8] != (byte)'0');
             }
 
-            state.SetAnalog("lstick_x", ReadStick(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length));
-            state.SetAnalog("lstick_y", ReadStick(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 8)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 8));
-            state.SetAnalog("cstick_x", ReadStick(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 16)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 16));
-            state.SetAnalog("cstick_y", ReadStick(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 24)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 24));
+            state.SetAnalog("lstick_x", ReadStick(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length)), SignalTool.ReadByteBackwards(packet, 8+BUTTONS.Length));
+            state.SetAnalog("lstick_y", ReadStick(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 8)), SignalTool.ReadByteBackwards(packet, 8+BUTTONS.Length + 8));
+            state.SetAnalog("cstick_x", ReadStick(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 16)), SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 16));
+            state.SetAnalog("cstick_y", ReadStick(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 24)), SignalTool.ReadByteBackwards(packet, 8+BUTTONS.Length + 24));
             
-            state.SetAnalog("trig_l", ReadTrigger(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 32)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 32));
-            state.SetAnalog("trig_r", ReadTrigger(SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 40)), SignalTool.ReadByteBackwards(packet, (offset * 60) + BUTTONS.Length + 40));
+            state.SetAnalog("trig_l", ReadTrigger(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 32)), SignalTool.ReadByteBackwards(packet, 8+BUTTONS.Length + 32));
+            state.SetAnalog("trig_r", ReadTrigger(SignalTool.ReadByteBackwards(packet,8+BUTTONS.Length + 40)), SignalTool.ReadByteBackwards(packet, 8+BUTTONS.Length + 40));
 
             return state.Build();
         }
