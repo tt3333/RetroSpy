@@ -22,11 +22,17 @@ namespace RetroSpy
         private IUsbDevice? _device;
         private UsbEndpointReader? _reader;
         private readonly List<byte> _localBuffer;
-        private int _controllerId;
+        private int _frameNum;
+        private int _readDataLength;
+        private int _frameSize;
+        private int _globalOffset;
 
-        public LibUSBMonitor(string controllerId, int vid, int pid, ReadEndpointID eid)
+        public LibUSBMonitor(string frameNum, int vid, int pid, ReadEndpointID eid, int readDataLength, int frameSize, int globalOffset = 0)
         {
-            _controllerId = int.Parse(controllerId) - 1;
+            _globalOffset = globalOffset;
+            _frameSize = frameSize;
+            _readDataLength = readDataLength;
+            _frameNum = int.Parse(frameNum) - 1;
             _eid = eid;
             _context = new UsbContext();
 
@@ -115,29 +121,25 @@ namespace RetroSpy
             // If there's an IOException then the device has been disconnected.
             try
             { 
-
-                byte[] readBuffer = new byte[37];
+                byte[] readBuffer = new byte[_readDataLength];
                 // If the device hasn't sent data in the last 5 seconds,
                 // a timeout error (ec = IoTimedOut) will occur. 
                 _ = _reader.Read(readBuffer, 5000, out int bytesRead);
-                byte[] newReadBuffer = new byte[61];
+                byte[] newReadBuffer = new byte[(_frameSize*8) + 1];
 
-                int i = _controllerId;
-                for (int j = 0; j < 8; ++j)
-                    newReadBuffer[j] = (byte)((readBuffer[(i * 9) + 2] & (1 << j)) != 0 ? '1' : '0');
+                int i = _frameNum;
 
-                for (int j = 0; j < 4; ++j)
-                    newReadBuffer[8 + j] = (byte)((readBuffer[(i * 9) + 3] & (1 << j)) != 0 ? '1' : '0');
-
-                for(int j = 0; j < 6; ++j)
+                for (int j = 0; j < _frameSize; ++j)
+                {
                     for(int k = 0; k < 8; ++k)
-                        newReadBuffer[12 + j*8 + k] = (byte)((readBuffer[(i * 9) + 4 + j] & (1 << k)) != 0 ? '1' : '0');
-                
-                newReadBuffer[60] = (byte)'\n';
+                    {
+                        newReadBuffer[(j*8) + k] = (byte)((readBuffer[(i * _frameSize) + _globalOffset + j] & (1 << k)) != 0 ? '1' : '0');
+                    }
+                }
+
+                newReadBuffer[(_frameSize * 8)] = (byte)'\n';
 
                 _localBuffer.AddRange(newReadBuffer);
-                
-
             }
             catch (IOException)
             {

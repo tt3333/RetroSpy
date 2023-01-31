@@ -1,3 +1,4 @@
+using LibUsbDotNet.Info;
 using LibUsbDotNet.Main;
 using RetroSpy.Readers;
 using System;
@@ -41,9 +42,10 @@ namespace RetroSpy
         public static readonly InputSource LINUXKEY = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("linuxkeyboard", "Linux Keyboard & Mouse", false, false, false, false, false, new LinuxMouseAndKeyboardReader()) : null;
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-#pragma warning disable CS8601 // Possible null reference assignment.
-        public static readonly InputSource DOLPHIN = new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new MMapControllerReader(controllerId ?? "1", 0x057E, 0x0337, ReadEndpointID.Ep01, DolphinMayflashReader.ReadFromPacket));
-#pragma warning restore CS8601 // Possible null reference assignment.
+        public static readonly InputSource DOLPHIN = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new LibUsbControllerReader(controllerId ?? "1", 0x057E, 0x0337, ReadEndpointID.Ep01, 37, 9, 1, DolphinMayflashReader.ReadFromPacket))
+                                                   : RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new MMapControllerReader(controllerId ?? "1", "/dev/shm/gcadapter", 36, 9, 0, DolphinMayflashReader.ReadFromPacket))
+                                                   :                                                     new("dolphin", "Mayflash GameCube Controller Adapter", false, true, false, false, false, (controllerId, useLagFix) => new MMapControllerReader(controllerId ?? "1", "/tmp/gcadapter", 36, 9, 0, DolphinMayflashReader.ReadFromPacket));
+
 
         public static readonly InputSource XBOX = new("xbox", "Microsoft Xbox", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket, username, password, null, 0));
         public static readonly InputSource XBOX360 = new("xbox360", "Microsoft Xbox 360", false, false, true, false, false, (hostname, username, password) => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b -dddddddd", Xbox360Reader.ReadFromPacket, username, password, null, 0));
@@ -179,7 +181,7 @@ namespace RetroSpy
         }
 
         private InputSource(string typeTag, string name, bool requiresComPort, bool requiresId, bool requiresHostname, bool requiresComPort2, bool requiresMisterControllerId, Func<string, string, string, IControllerReader?>? buildReader4)
-        {
+        { 
             TypeTag = typeTag;
             Name = name;
             RequiresComPort = requiresComPort;

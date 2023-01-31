@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using LibUsbDotNet.LibUsb;
-using LibUsbDotNet.Main;
-using System.IO.MemoryMappedFiles;
 
 namespace RetroSpy
 {
@@ -19,13 +16,19 @@ namespace RetroSpy
         private DispatcherTimer? _timer;
         private FileStream _file;
         private readonly List<byte> _localBuffer;
-        private int _controllerId;
+        private int _frameNum;
+        private int _readDataLength;
+        private int _frameSize;
+        private int _globalOffset;
 
-        public MMapMonitor(string controllerId, int vid, int pid, ReadEndpointID eid)
+        public MMapMonitor(string frameNum, string filename, int readDataLength, int frameSize, int globalOffset)
         {
-            _controllerId = int.Parse(controllerId) - 1;
+            _readDataLength= readDataLength;
+            _frameSize= frameSize;
+            _globalOffset= globalOffset;
+            _frameNum = int.Parse(frameNum) - 1;
 
-            _file = new FileStream("/tmp/gcadapter", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            _file = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             _localBuffer = new List<byte>();
         }
@@ -71,29 +74,28 @@ namespace RetroSpy
             try
             { 
 
-                byte[] readBuffer = new byte[36];
+                byte[] readBuffer = new byte[_readDataLength];
                 // If the device hasn't sent data in the last 5 seconds,
                 // a timeout error (ec = IoTimedOut) will occur. 
                 _file.Position = 0;
-                _ = _file.Read(readBuffer, 0, 36);
+                _ = _file.Read(readBuffer, 0, _readDataLength);
                 _file.Flush();
-                byte[] newReadBuffer = new byte[61];
 
-                int i = _controllerId;
-                for (int j = 0; j < 8; ++j)
-                    newReadBuffer[j] = (byte)((readBuffer[(i * 9) + 1] & (1 << j)) != 0 ? '1' : '0');
+                byte[] newReadBuffer = new byte[(_frameSize * 8) + 1];
 
-                for (int j = 0; j < 4; ++j)
-                    newReadBuffer[8 + j] = (byte)((readBuffer[(i * 9) + 2] & (1 << j)) != 0 ? '1' : '0');
+                int i = _frameNum;
 
-                for(int j = 0; j < 6; ++j)
-                    for(int k = 0; k < 8; ++k)
-                        newReadBuffer[12 + j*8 + k] = (byte)((readBuffer[(i * 9) + 3 + j] & (1 << k)) != 0 ? '1' : '0');
-                
-                newReadBuffer[60] = (byte)'\n';
+                for (int j = 0; j < _frameSize; ++j)
+                {
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        newReadBuffer[(j * 8) + k] = (byte)((readBuffer[(i * _frameSize) + _globalOffset + j] & (1 << k)) != 0 ? '1' : '0');
+                    }
+                }
+
+                newReadBuffer[(_frameSize * 8)] = (byte)'\n';
 
                 _localBuffer.AddRange(newReadBuffer);
-                
 
             }
             catch (IOException)

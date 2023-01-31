@@ -3,20 +3,20 @@ using System;
 
 namespace RetroSpy.Readers
 {
-    public sealed class LibUsbControllerReader : IControllerReader, IDisposable
+    public sealed class MMapControllerReader : IControllerReader, IDisposable
     {
         public event EventHandler<ControllerStateEventArgs>? ControllerStateChanged;
 
         public event EventHandler? ControllerDisconnected;
 
         private readonly Func<byte[]?, ControllerStateEventArgs?> _packetParser;
-        private LibUSBMonitor? _libusbMonitor;
+        private MMapMonitor? _libusbMonitor;
 
-        public LibUsbControllerReader(string controllerId, int vid, int pid, ReadEndpointID eid, Func<byte[]?, ControllerStateEventArgs?> packetParser)
+        public MMapControllerReader(string controllerId, string filename, int readDataLength, int frameSize, int globalOffset, Func<byte[]?, ControllerStateEventArgs?> packetParser)
         {
             _packetParser = packetParser;
 
-            _libusbMonitor = new LibUSBMonitor(controllerId, vid, pid, eid);
+            _libusbMonitor = new MMapMonitor(controllerId, filename, readDataLength, frameSize, globalOffset);
             _libusbMonitor.PacketReceived += SerialMonitor_PacketReceived;
             _libusbMonitor.Disconnected += SerialMonitor_Disconnected;
             _libusbMonitor.Start();
