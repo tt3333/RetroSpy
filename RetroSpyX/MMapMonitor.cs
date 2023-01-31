@@ -25,7 +25,7 @@ namespace RetroSpy
         {
             _controllerId = int.Parse(controllerId) - 1;
 
-            _file = new FileStream("/dev/shm/gcadapter", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            _file = new FileStream("/tmp/gcadapter", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             _localBuffer = new List<byte>();
         }
@@ -74,7 +74,9 @@ namespace RetroSpy
                 byte[] readBuffer = new byte[36];
                 // If the device hasn't sent data in the last 5 seconds,
                 // a timeout error (ec = IoTimedOut) will occur. 
+                _file.Position = 0;
                 _ = _file.Read(readBuffer, 0, 36);
+                _file.Flush();
                 byte[] newReadBuffer = new byte[61];
 
                 int i = _controllerId;
