@@ -13,6 +13,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -177,6 +178,11 @@ namespace GBPemu
 
             }
             catch (UnauthorizedAccessException ex)
+            {
+                AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                Show();
+            }
+            catch (Exception ex)
             {
                 AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 Show();
