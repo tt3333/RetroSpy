@@ -33,13 +33,21 @@ namespace RetroSpy
 
         public Keybindings(string xmlFilePath, IControllerReader reader)
         {
-            string keybindings_location;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
-                keybindings_location = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", xmlFilePath));
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && File.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", xmlFilePath))))
-                keybindings_location = Path.Join(AppContext.BaseDirectory, Path.Join("..", xmlFilePath));
-            else
-                keybindings_location = Path.Join(AppContext.BaseDirectory, xmlFilePath);
+            string? baseDir = Path.GetDirectoryName(Environment.ProcessPath);
+
+            string keybindings_location = xmlFilePath;
+
+            if (baseDir != null)
+            {
+
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && baseDir.Contains("MacOS") && File.Exists(Path.Join(baseDir, "../Info.plist")))
+                    keybindings_location = Path.Join(baseDir, Path.Join("../../../", xmlFilePath));
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && baseDir.Contains("bin") && File.Exists(Path.Join(baseDir, Path.Join("..", xmlFilePath))))
+                    keybindings_location = Path.Join(baseDir, Path.Join("..", xmlFilePath));
+                else
+                    keybindings_location = Path.Join(baseDir, xmlFilePath);
+            }
 
             if (!File.Exists(keybindings_location))
             {

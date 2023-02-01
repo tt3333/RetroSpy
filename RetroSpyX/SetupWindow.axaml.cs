@@ -108,13 +108,19 @@ namespace RetroSpy
             Properties.Settings.Default.CustomSkinPath = _path ?? String.Empty;
             Properties.Settings.Default.Save();
 
-            string skinsDirectory;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
-            else
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
+            string? baseDir = Path.GetDirectoryName(Environment.ProcessPath);
+
+            string skinsDirectory = "skins";
+
+            if (baseDir != null)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && baseDir.Contains("MacOS") && System.IO.File.Exists(Path.Join(baseDir, "../Info.plist")))
+                    skinsDirectory = Path.Join(baseDir, Path.Join("../../../", "skins"));
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && baseDir.Contains("bin") && Directory.Exists(Path.Join(baseDir, Path.Join("..", "skins"))))
+                    skinsDirectory = Path.Join(baseDir, Path.Join("..", "skins"));
+                else
+                    skinsDirectory = Path.Join(baseDir, "skins");
+            }
 
             LoadResults results = Skin.LoadAllSkinsFromParentFolder(skinsDirectory, Properties.Settings.Default.CustomSkinPath);
             _skins = results.SkinsLoaded;
@@ -126,13 +132,19 @@ namespace RetroSpy
 
         private void ReloadSkins_Click(object sender, RoutedEventArgs e)
         {
-            string skinsDirectory;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
-            else
-                skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
+            string? baseDir = Path.GetDirectoryName(Environment.ProcessPath);
+
+            string skinsDirectory = "skins";
+
+            if (baseDir != null)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && baseDir.Contains("MacOS") && System.IO.File.Exists(Path.Join(baseDir, "../Info.plist")))
+                    skinsDirectory = Path.Join(baseDir, Path.Join("../../../", "skins"));
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && baseDir.Contains("bin") && Directory.Exists(Path.Join(baseDir, Path.Join("..", "skins"))))
+                    skinsDirectory = Path.Join(baseDir, Path.Join("..", "skins"));
+                else
+                    skinsDirectory = Path.Join(baseDir, "skins");
+            }
 
             if (!Directory.Exists(skinsDirectory))
             {
@@ -193,16 +205,22 @@ namespace RetroSpy
                 _excludedSources = new Collection<string>();
                 _resources = Properties.Resources.ResourceManager;
 
-                string skinsDirectory;
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") &&
-                    System.IO.File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
-                    skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", "skins"));
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
-                         AppContext.BaseDirectory.Contains("bin") &&
-                         Directory.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"))))
-                    skinsDirectory = Path.Join(AppContext.BaseDirectory, Path.Join("..", "skins"));
-                else
-                    skinsDirectory = Path.Join(AppContext.BaseDirectory, "skins");
+                string? baseDir = Path.GetDirectoryName(Environment.ProcessPath);
+
+                string skinsDirectory = "skins";
+
+                if (baseDir != null)
+                {
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && baseDir.Contains("MacOS") &&
+                        System.IO.File.Exists(Path.Join(baseDir, "../Info.plist")))
+                        skinsDirectory = Path.Join(baseDir, Path.Join("../../../", "skins"));
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
+                             baseDir.Contains("bin") &&
+                             Directory.Exists(Path.Join(baseDir, Path.Join("..", "skins"))))
+                        skinsDirectory = Path.Join(baseDir, Path.Join("..", "skins"));
+                    else
+                        skinsDirectory = Path.Join(baseDir, "skins");
+                }
 
                 if (!Directory.Exists(skinsDirectory))
                 {
@@ -865,7 +883,7 @@ namespace RetroSpy
 
         private void UpdateMayflashList()
         {
-            List<int> controllerList = new List<int> { 1, 2, 3, 4 };
+            List<int> controllerList = new() { 1, 2, 3, 4 };
             _vm.XIAndGamepad.UpdateContents(controllerList);
         }
 

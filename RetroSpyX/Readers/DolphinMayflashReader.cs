@@ -19,11 +19,8 @@ namespace RetroSpy.Readers
             return (float)input / maxVal;
         }
 
-        private static readonly byte[] keyboardData = new byte[3];
-
         public static ControllerStateEventArgs? ReadFromPacket(byte[]? packet)
         {
-            int offset = 0;
             if (packet == null)
             {
                 throw new ArgumentNullException(nameof(packet));

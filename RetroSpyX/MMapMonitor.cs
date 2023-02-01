@@ -14,12 +14,12 @@ namespace RetroSpy
         public event EventHandler? Disconnected;
 
         private DispatcherTimer? _timer;
-        private FileStream _file;
+        private readonly FileStream _file;
         private readonly List<byte> _localBuffer;
-        private int _frameNum;
-        private int _readDataLength;
-        private int _frameSize;
-        private int _globalOffset;
+        private readonly int _frameNum;
+        private readonly int _readDataLength;
+        private readonly int _frameSize;
+        private readonly int _globalOffset;
 
         public MMapMonitor(string frameNum, string filename, int readDataLength, int frameSize, int globalOffset)
         {

@@ -35,7 +35,7 @@ namespace GBPemu
         private DispatcherTimer? _timer;
         private readonly bool _printerMode;
         private bool _beenConnected;
-        private Stopwatch _stopWatch;
+        private readonly Stopwatch _stopWatch;
 
         public SerialMonitor(string? portName, bool printerMode = false)
         {

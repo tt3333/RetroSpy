@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -107,6 +108,8 @@ namespace GBPemu
 
         private List<Game>? games;
 
+        private string? baseDir;
+
         private void ParseGamePalettes()
         {
             bool getMaxRGBValue = false;
@@ -116,13 +119,17 @@ namespace GBPemu
             List<GamePalette> newPalettes = new();
             bool lookingForGame = true;
 
+            baseDir = Path.GetDirectoryName(Environment.ProcessPath);
+            if (baseDir == null)
+                return;
+
             string game_palettes_location;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && AppContext.BaseDirectory.Contains("MacOS") && File.Exists(Path.Join(AppContext.BaseDirectory, "../Info.plist")))
-                game_palettes_location = Path.Join(AppContext.BaseDirectory, Path.Join("../../../", @"game_palettes.cfg"));
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && AppContext.BaseDirectory.Contains("bin") && File.Exists(Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"))))
-                game_palettes_location = Path.Join(AppContext.BaseDirectory, Path.Join("..", @"game_palettes.cfg"));
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && baseDir.Contains("MacOS") && File.Exists(Path.Join(baseDir, "../Info.plist")))
+                game_palettes_location = Path.Join(baseDir, Path.Join("../../../", @"game_palettes.cfg"));
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && baseDir.Contains("bin") && File.Exists(Path.Join(baseDir, Path.Join("..", @"game_palettes.cfg"))))
+                game_palettes_location = Path.Join(baseDir, Path.Join("..", @"game_palettes.cfg"));
             else
-                game_palettes_location = Path.Join(AppContext.BaseDirectory, @"game_palettes.cfg");
+                game_palettes_location = Path.Join(baseDir, @"game_palettes.cfg");
 
             foreach (string line in System.IO.File.ReadLines(game_palettes_location))
             {
@@ -482,7 +489,7 @@ namespace GBPemu
             SelectedPalette = Properties.Settings.Default.SelectedPalette;
             PrintSize = Properties.Settings.Default.PrintSize;
 
-            _imageBuffer.SetRawImage(Path.Join(AppContext.BaseDirectory, "Assets/ErrorImage.png"));
+            _imageBuffer.SetRawImage(Path.Join(baseDir ?? "", "Assets/ErrorImage.png"));
 
             BitmapPixelMaker.GBImage wbitmap = _imageBuffer.MakeBitmap();
 
@@ -545,7 +552,7 @@ namespace GBPemu
 
             PrintSize = Properties.Settings.Default.PrintSize;
             _imageBuffer = new BitmapPixelMaker(480, 432);
-            _imageBuffer.SetRawImage(Path.Join(AppContext.BaseDirectory, "Assets/PrintImage.png"));
+            _imageBuffer.SetRawImage(Path.Join(baseDir ?? "", "Assets/PrintImage.png"));
 
             _imageBuffer.ReplaceColor(new Pixel(0, 0, 0, 255), new Pixel(palettes[SelectedPalette][0][3], palettes[SelectedPalette][1][3], palettes[SelectedPalette][2][3], 255));
             _imageBuffer.ReplaceColor(new Pixel(255, 255, 255, 255), new Pixel(palettes[SelectedPalette][0][0], palettes[SelectedPalette][1][0], palettes[SelectedPalette][2][0], 255));
@@ -608,7 +615,7 @@ namespace GBPemu
 
             if (tempStr.Contains("// GAMEBOY PRINTER"))
             {
-                tempStr = tempStr.Substring(tempStr.IndexOf("// GAMEBOY PRINTER"));
+                tempStr = tempStr[tempStr.IndexOf("// GAMEBOY PRINTER")..];
             }
 
             if (tempStr.StartsWith("// GAMEBOY PRINTER Packet Capture V3.2.1 (Copyright (C) 2022 Brian Khuu)") == true
