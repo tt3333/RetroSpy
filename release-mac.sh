@@ -181,6 +181,8 @@ fi
 
 rm -rf RetroSpyInstall
 
+codesign --force --verbose --timestamp --sign "$apple_teamid" ../../RetroSpyInstall.dmg
+
 xcrun notarytool submit ../../RetroSpyInstall.dmg --wait --apple-id "$apple_username" --password "$apple_password" --team-id "$apple_teamid" --output-format json
 xcrun stapler staple ../../RetroSpyInstall.dmg
 
