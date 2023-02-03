@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
 using Renci.SshNet;
 using System;
+using System.IO;
 using System.Net;
 using System.Threading;
 
@@ -54,7 +55,20 @@ namespace UsbUpdaterX2
                     _client.Connect();
                     ShellStream _data = _client.CreateShellStream("", 0, 0, 0, 0, 1000);
 
-                    _data.WriteLine("sudo /usr/local/bin/update-usb-retrospy.sh");
+                    string token = string.Empty;
+                    if (File.Exists("GITHUB_TOKEN"))
+                    {
+                        token = File.ReadAllText("GITHUB_TOKEN").Trim();
+                    }
+
+                    if (token != string.Empty)
+                    {
+                        _data.WriteLine(string.Format("sudo /usr/local/bin/update-usb-retrospy-nightly.sh {0}", token));
+                    }
+                    else
+                    {
+                        _data.WriteLine("sudo /usr/local/bin/update-usb-retrospy.sh");
+                    }
 
                     while (true)
                     {

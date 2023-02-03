@@ -2,6 +2,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +14,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -55,13 +59,13 @@ namespace GBPUpdaterX2
 
         private static List<string> SetupCOMPortInformation()
         {
-            List<COMPortInfo> comPortInformation = new List<COMPortInfo>();
+            List<COMPortInfo> comPortInformation = new();
 
             string[] portNames = SerialPort.GetPortNames();
             foreach (string s in portNames)
             {
                 // s is like "COM14"
-                COMPortInfo ci = new COMPortInfo
+                COMPortInfo ci = new()
                 {
                     PortName = s,
                     FriendlyName = s
@@ -80,7 +84,7 @@ namespace GBPUpdaterX2
                     if (end >= 0)
                     {
                         // cname is like "COM14"
-                        string cname = s.Substring(start, end - start);
+                        string cname = s[start..end];
                         for (int i = 0; i < comPortInformation.Count; i++)
                         {
                             if (comPortInformation[i].PortName == cname)
@@ -92,7 +96,7 @@ namespace GBPUpdaterX2
                 }
             }
 
-            List<string> ports = new List<string>();
+            List<string> ports = new();
             foreach (COMPortInfo port in comPortInformation)
             {
                 if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || (port.PortName != null && port.FriendlyName != null && port.FriendlyName.Contains("Arduino")))
@@ -108,17 +112,80 @@ namespace GBPUpdaterX2
             return ports;
         }
 
-        private static void DownloadFirmware(string downloadDirectory)
+        private async static void DownloadFirmware(string downloadDirectory)
         {
-            HttpRequestMessage request = new();
-            request.RequestUri = new Uri("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip");
-
-            HttpClient client = new HttpClient();
-            var response = client.Send(request);
-            using (var fs = new FileStream(
-                Path.Combine(downloadDirectory, "GBP_Firmware.zip"),
-                FileMode.CreateNew))
+            string token = string.Empty;
+            if (File.Exists("GITHUB_TOKEN"))
             {
+                token = File.ReadAllText("GITHUB_TOKEN").Trim();
+            }
+
+            if (token != string.Empty)
+            {
+                HttpRequestMessage request = new()
+                {
+                    RequestUri = new Uri("https://api.github.com/repos/retrospy/RetroSpy-private/releases/tags/nightly")
+                };
+
+                HttpClient client = new();
+                
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", token);
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("AppName", "1.0"));
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                var response = client.Send(request);
+
+                string strResponse = await response.Content.ReadAsStringAsync();
+
+
+                if (JsonConvert.DeserializeObject(strResponse) is not JObject json)
+                    throw new FileNotFoundException("Cannot find GBP_Firmware.zip's Asset ID.");
+
+                string? id = null;
+                foreach (var asset in (JArray?)json["assets"] ?? new JArray())
+                {
+                    if (asset is null)
+                        continue;
+
+                    if ((string?)asset["name"] == "GBP_Firmware.zip")
+                    {
+                        id = (string?)asset["id"];
+                        break;
+                    }
+                }
+
+                if (id is null)
+                    throw new FileNotFoundException("Cannot find GBP_Firmware.zip's Asset ID.");
+
+                request = new()
+                {
+                    RequestUri = new Uri(string.Format("https://api.github.com/repos/retrospy/RetroSpy-private/releases/assets/{0}", id))
+                };
+
+                client = new HttpClient();
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", token);
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("AppName", "1.0"));
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/octet-stream"));
+                response = client.Send(request);
+
+
+                using var fs = new FileStream(
+                    Path.Combine(downloadDirectory, "GBP_Firmware.zip"),
+                    FileMode.CreateNew);
+                response.Content.ReadAsStream().CopyTo(fs);
+            }
+            else
+            {
+                HttpRequestMessage request = new()
+                {
+                    RequestUri = new Uri("https://github.com/retrospy/RetroSpy/releases/latest/download/GBP_Firmware.zip")
+                };
+
+                HttpClient client = new();
+                var response = client.Send(request);
+                using var fs = new FileStream(
+                    Path.Combine(downloadDirectory, "GBP_Firmware.zip"),
+                    FileMode.CreateNew);
                 response.Content.ReadAsStream().CopyTo(fs);
             }
         }
@@ -317,7 +384,7 @@ namespace GBPUpdaterX2
                         throw new PlatformNotSupportedException();
                     }
 
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new();
                     Process? p = Process.Start(processInfo);
                     if (p != null)
                     {

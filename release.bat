@@ -38,9 +38,55 @@ cd MiSTer
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\msbuild.exe" MiSTer.vcxproj /p:Configuration=Release /p:Platform="Win32" /p:OutputPath=Release
 cd ..
 
-if errorlevel 0 goto buildOK
+if errorlevel 0 goto GBPNew
 echo Aborting release. Error during MiSTer build.
 goto end
+
+:GBPNew
+if exist "..\..\..\GBP_Firmware\" (
+cd firmware
+..\sed -i "s/.*\/\/#define.*MODE_GAMEBOY_PRINTER/#define MODE_GAMEBOY_PRINTER/" sketches\firmware.ino
+C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\arduino-builder.exe -compile -logger=machine -fqbn=arduino:avr:nano:cpu=atmega328 -build-path D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release -verbose -hardware "C:/Program Files (x86)/Arduino/hardware" -tools "C:/Program Files (x86)/Arduino/tools-builder" -tools "C:/Program Files (x86)/Arduino/hardware/tools/avr" -built-in-libraries "C:/Program Files (x86)/Arduino/libraries" -libraries C:\Users\Administrator\Documents/Arduino/Libraries -prefs=runtime.tools.ctags.path=C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\tools-builder\ctags\5.8-arduino11 sketches/firmware.ino
+..\sed -i "s/.*#define.*MODE_GAMEBOY_PRINTER/\/\/#define MODE_GAMEBOY_PRINTER/" sketches\firmware.ino
+del ..\..\..\..\GBP_Firmware\firmware.ino.hex
+copy D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release\firmware.ino.hex ..\..\..\..\GBP_Firmware\firmware.ino.hex
+cd ..
+)
+
+if errorlevel 0 goto GBPOld
+echo Aborting release. Error during New Bootloader GBP build.
+goto end
+
+:GBPOld
+if exist "..\..\..\GBP_Firmware\" (
+cd firmware
+..\sed -i "s/.*\/\/#define.*MODE_GAMEBOY_PRINTER/#define MODE_GAMEBOY_PRINTER/" sketches\firmware.ino
+C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\arduino-builder.exe -compile -logger=machine -fqbn=arduino:avr:nano:cpu=atmega328old -build-path D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release -verbose -hardware "C:/Program Files (x86)/Arduino/hardware" -tools "C:/Program Files (x86)/Arduino/tools-builder" -tools "C:/Program Files (x86)/Arduino/hardware/tools/avr" -built-in-libraries "C:/Program Files (x86)/Arduino/libraries" -libraries C:\Users\Administrator\Documents/Arduino/Libraries -prefs=runtime.tools.ctags.path=C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\tools-builder\ctags\5.8-arduino11 sketches/firmware.ino
+..\sed -i "s/.*#define.*MODE_GAMEBOY_PRINTER/\/\/#define MODE_GAMEBOY_PRINTER/" sketches\firmware.ino
+del ..\..\..\..\GBP_Firmware\firmware-old.ino.hex
+copy D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release\firmware.ino.hex ..\..\..\..\GBP_Firmware\firmware-old.ino.hex
+cd ..
+)
+
+if errorlevel 0 goto Vision
+echo Aborting release. Error during Old Bootloader GBP build.
+goto end
+
+:Vision
+if exist "..\..\..\Vision_Firmware\" (
+cd firmware
+..\sed -i "s/.*\/\/#define.*RS_VISION/#define RS_VISION/" sketches\firmware.ino
+C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\arduino-builder.exe -compile -logger=machine -fqbn=arduino:avr:nano:cpu=atmega328 -build-path D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release -verbose -hardware "C:/Program Files (x86)/Arduino/hardware" -tools "C:/Program Files (x86)/Arduino/tools-builder" -tools "C:/Program Files (x86)/Arduino/hardware/tools/avr" -built-in-libraries "C:/Program Files (x86)/Arduino/libraries" -libraries C:\Users\Administrator\Documents/Arduino/Libraries -prefs=runtime.tools.ctags.path=C:\Users\Administrator\AppData\Local\VisualGDB\Arduino\tools-builder\ctags\5.8-arduino11 sketches/firmware.ino
+..\sed -i "s/.*#define.*RS_VISION/\/\/#define RS_VISION/" sketches\firmware.ino
+del ..\..\..\..\Vision_Firmware\firmware.ino.hex
+copy D:\pub\src\Repos\retrospy\RetroSpy\firmware\Output\Arduino_Nano\Release\firmware.ino.hex ..\..\..\..\Vision_Firmware\firmware.ino.hex
+cd ..
+)
+
+if errorlevel 0 goto buildOK
+echo Aborting release. Error during Vision Firmware build.
+goto end
+
 
 :buildOK
 ;del RetroSpy-Windows.zip
@@ -122,6 +168,19 @@ del GBP_Firmware.zip
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\libhidapi.0.dylib
 "C:\Program Files\7-Zip\7z.exe" a GBP_Firmware.zip ..\..\..\GBP_Firmware\firmware-old.ino.hex
 copy GBP_Firmware.zip RetroSpy-Upload
+)
+if exist "..\..\..\Vision_Firmware\" (
+del Vision_Firmware.zip
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\avrdude.exe
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\avrdude.conf
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\firmware.ino.hex
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libusb0.dll
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\avrdude
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libusb-1.0.0.dylib
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libusb-0.1.4.dylib
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libftdi1.2.dylib
+"C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libhidapi.0.dylib
+copy Vision_Firmware.zip RetroSpy-Upload
 )
 if exist "..\..\..\kernel\kernel.tar.gz" (
 copy ..\..\..\kernel\kernel.tar.gz RetroSpy-Upload
