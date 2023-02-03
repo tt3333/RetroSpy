@@ -152,7 +152,7 @@ if exist "C:\Program Files (x86)\Actual Installer\actinst.exe" (
 ;mkdir RetroSpy-Upload
 copy RetroSpy-Setup.exe RetroSpy-Upload\RetroSpy-Setup-x64.exe
 copy RetroSpy-Windows.zip RetroSpy-Upload\RetroSpy-Windows-x64.zip
-copy UsbUpdaterX2\update-usb-retrospy-installer.sh RetroSpy-Upload
+if "%sub%" == "1" ( copy UsbUpdaterX2\update-usb-retrospy-nightly-installer.sh RetroSpy-Upload\update-usb-retrospy-installer.sh) else (copy UsbUpdaterX2\update-usb-retrospy-installer.sh RetroSpy-Upload)
 if "%sub%" == "1" ( sed -e s/RELEASE_TAG/%~1/g MiSTer\update-retrospy-nightly-installer.sh > RetroSpy-Upload\update-retrospy-installer.sh) else (copy MiSTer\update-retrospy-installer.sh RetroSpy-Upload)
 ;copy MiSTer\Release\retrospy RetroSpy-Upload
 if exist "..\..\..\GBP_Firmware\" (
@@ -182,6 +182,9 @@ del Vision_Firmware.zip
 "C:\Program Files\7-Zip\7z.exe" a Vision_Firmware.zip ..\..\..\Vision_Firmware\libhidapi.0.dylib
 copy Vision_Firmware.zip RetroSpy-Upload
 )
+
+
+
 if exist "..\..\..\kernel\kernel.tar.gz" (
 copy ..\..\..\kernel\kernel.tar.gz RetroSpy-Upload
 )
