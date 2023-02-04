@@ -88,8 +88,11 @@ namespace RetroSpy
 
             private void UpdatePortListThread()
             {
-                Thread thread = new(UpdatePortList);
-                thread.Start();
+                if (letUpdatePortThreadRun)
+                {
+                    Thread thread = new(UpdatePortList);
+                    thread.Start();
+                }
             }
 
         public async Task<string?> GetPath()
@@ -171,6 +174,7 @@ namespace RetroSpy
 
         }
 
+        private bool letUpdatePortThreadRun = false;
         public SetupWindow(bool skipSetup = false)
         {
             try
@@ -273,6 +277,16 @@ namespace RetroSpy
                 _vm.UseLagFix = Properties.Settings.Default.UseLagFix;
                 LagFixCheckbox.IsChecked = _vm.UseLagFix;
 
+                UpdatePortList();
+                _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
+                _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
+                letUpdatePortThreadRun = true;
+                _vm.XIAndGamepad.SelectFirst();
+                _vm.Sources.SelectId(Properties.Settings.Default.Source);
+                _vm.Skins.SelectId(Properties.Settings.Default.Skin);
+                _vm.Hostname = Properties.Settings.Default.Hostname;
+                txtHostname.Text = _vm.Hostname;
+
                 _portListUpdateTimer = new DispatcherTimer
                 {
                     Interval = TimeSpan.FromSeconds(1)
@@ -315,15 +329,6 @@ namespace RetroSpy
                     //}
                 };
                 _xiAndGamepadListUpdateTimer.Start();
-
-                UpdatePortList();
-                _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
-                _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
-                _vm.XIAndGamepad.SelectFirst();
-                _vm.Sources.SelectId(Properties.Settings.Default.Source);
-                _vm.Skins.SelectId(Properties.Settings.Default.Skin);
-                _vm.Hostname = Properties.Settings.Default.Hostname;
-                txtHostname.Text = _vm.Hostname;
 
                 List<uint> defaultMisterControllers = new();
                 for (uint i = 0; i < 10; ++i)
