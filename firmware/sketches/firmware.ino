@@ -268,21 +268,21 @@ bool CreateSpy()
 	case 0x11:
 		currentSpy = new ThreeDOSpy();
 		break;
-//	case 0x12:
-//		currentSpy = new IntellivisionSpy();
-//		break;	
+	case 0x12:
+		currentSpy = new IntellivisionSpy();
+		break;	
 	case 0x13:
 		currentSpy = new JaguarSpy();
 		break;
-//	case 0x14:
-//		currentSpy = new FMTownsSpy();
-//		break;
-//	case 0x15:
-//		currentSpy = new PCFXSpy();
-//		break;
-//	case 0x16:
-//		currentSpy = new AmigaKeyboardSpy();
-//		break;
+	case 0x14:
+		currentSpy = new FMTownsSpy();
+		break;
+	case 0x15:
+		currentSpy = new PCFXSpy();
+		break;
+	case 0x16:
+		currentSpy = new AmigaKeyboardSpy();
+		break;
 	case 0x17:
 		currentSpy = new AmigaMouseSpy();
 		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL);
@@ -293,12 +293,12 @@ bool CreateSpy()
 		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC);
 		customSetup = true;
 		break;
-//	case 0x19:
-//		currentSpy = new CDTVWiredSpy();
-//		break;
-//	case 0x1A:
-//		currentSpy = new ColecoVisionSpy();
-//		break;
+	case 0x19:
+		currentSpy = new CDTVWiredSpy();
+		break;
+	case 0x1A:
+		currentSpy = new ColecoVisionSpy();
+		break;
 //	case 0x1B:
 //		currentSpy = new PippinSpy();
 //		((PippinSpy*)currentSpy)->setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
