@@ -378,11 +378,12 @@
       </DebugSettingsOverride>
       <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
         <BoardID>arduino:avr:nano</BoardID>
+        <COMPort>COM18</COMPort>
         <Properties>
           <Entries>
             <KeyValue>
               <Key>cpu</Key>
-              <Value>atmega328</Value>
+              <Value>atmega328old</Value>
             </KeyValue>
           </Entries>
         </Properties>
