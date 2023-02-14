@@ -40,7 +40,7 @@ public:
 
 private:
 	bool checkPrefixN64();
-	unsigned char rawData[512]; // This can probably be lowered.
+	unsigned char rawData[300]; // This can probably be lowered.
 	unsigned short readBits;
 };
 
