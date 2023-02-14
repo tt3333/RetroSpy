@@ -43,7 +43,23 @@ static byte lastRawData = 0;
 
 static byte rawData;
 
-void row1_isr()
+void row1_isr_vision()
+{
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (currentState > 3)
+		return;
+	else if (PIN_READ(6) == 0)
+		currentState = 3;
+	else if (PIN_READ(7) == 0)
+		currentState = 2;
+	else if (PINB_READ(1) == 0)
+		currentState = 1;
+	else if (cachedCurrentState >= 1 && cachedCurrentState <= 3)
+		currentState = 0;
+}
+
+void row1_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -59,7 +75,7 @@ void row1_isr()
 		currentState = 0;
 }
 
-void row2_isr()
+void row2_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -75,7 +91,23 @@ void row2_isr()
 		currentState = 0;
 }
 
-void row3_isr()
+void row2_isr_vision()
+{
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (currentState > 6)
+		return;
+	else if (PIN_READ(6) == 0)
+		currentState = 6;
+	else if (PIN_READ(7) == 0)
+		currentState = 5;
+	else if (PINB_READ(1) == 0)
+		currentState = 4;
+	else if (cachedCurrentState >= 4 && cachedCurrentState <= 6)
+		currentState = 0;
+}
+
+void row3_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -91,7 +123,23 @@ void row3_isr()
 		currentState = 0;
 }
 
-void row4_isr()
+void row3_isr_vision()
+{
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (currentState > 9)
+		return;
+	else if (PIN_READ(6) == 0)
+		currentState = 9;
+	else if (PIN_READ(7) == 0)
+		currentState = 8;
+	else if (PINB_READ(1) == 0)
+		currentState = 7;
+	else if (cachedCurrentState >= 7 && cachedCurrentState <= 9)
+		currentState = 0;
+}
+
+void row4_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -105,7 +153,21 @@ void row4_isr()
 		currentState = 0;
 }
 
-void sr_row1sr_isr()
+void row4_isr_vision()
+{
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (PIN_READ(6) == 0)
+		currentState = 12;
+	else if (PIN_READ(7) == 0)
+		currentState = 11;
+	else if (PINB_READ(1) == 0)
+		currentState = 10;
+	else if (cachedCurrentState >= 10)
+		currentState = 0;
+}
+
+void sr_row1sr_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -121,7 +183,23 @@ void sr_row1sr_isr()
 		currentState = 0;
 }
 
-void sr_row2sr_isr()
+void sr_row1sr_isr_vision()
+{
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (currentState > 3)
+		return;
+	else if (PIN_READ(6) == 0)
+		currentState = 3;
+	else if (analogRead(1) < DIGITAL_HIGH_THRESHOLD)
+		currentState = 2;
+	else if (analogRead(0) < DIGITAL_HIGH_THRESHOLD)
+		currentState = 1;
+	else if (cachedCurrentState >= 1 && cachedCurrentState <= 3)
+		currentState = 0;
+}
+
+void sr_row2sr_isr_legacy()
 {
 	delayMicroseconds(LINE_WAIT);
 	byte cachedCurrentState = currentState;
@@ -137,8 +215,25 @@ void sr_row2sr_isr()
 		currentState = 0;
 }
 
-void KeyboardControllerSpy::setup(byte controllerMode)
+void sr_row2sr_isr_vision()
 {
+	delayMicroseconds(LINE_WAIT);
+	byte cachedCurrentState = currentState;
+	if (currentState > 6)
+		return;
+	else if (PIN_READ(6) == 0)
+		currentState = 6;
+	else if (analogRead(1) < 50)
+		currentState = 5;
+	else if (analogRead(0) < 50)
+		currentState = 4;
+	else if (cachedCurrentState >= 4 && cachedCurrentState <= 6)
+		currentState = 0;
+}
+
+void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType)
+{
+	this->outputType = outputType;
 	this->currentControllerMode = controllerMode;
 
 	currentState = 0;
@@ -149,15 +244,33 @@ void KeyboardControllerSpy::setup(byte controllerMode)
 #ifndef DEBUG
 	if (currentControllerMode == MODE_NORMAL)
 	{
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), row1_isr, FALLING);
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), row2_isr, FALLING);
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(4), row3_isr, FALLING);
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(5), row4_isr, FALLING);
+		if (outputType == OUTPUT_GENESIS)
+		{
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), row1_isr_vision, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), row2_isr_vision, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(4), row3_isr_vision, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(5), row4_isr_vision, FALLING); }
+		else
+		{
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), row1_isr_legacy, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), row2_isr_legacy, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(4), row3_isr_legacy, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(5), row4_isr_legacy, FALLING);
+		}
+
 	}
 	else if (currentControllerMode == MODE_STAR_RAIDERS)
 	{
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr, FALLING);
-		attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr, FALLING);
+		if (outputType == OUTPUT_GENESIS)
+		{
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_legacy, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_legacy, FALLING);
+		}
+		else
+		{
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_vision, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_vision, FALLING);
+		}
 	}
 #endif
 }
@@ -177,7 +290,7 @@ void KeyboardControllerSpy::loop()
 	if (currentControllerMode == MODE_BIG_BIRD)
 	{
 		noInterrupts();
-		byte pin6 = PIN_READ(7);
+		byte pin6 = outputType == OUTPUT_GENESIS ? PIN_READ(6) : PIN_READ(7);
 		int pin9 = analogRead(1);
 		interrupts();
 		if ((pin6 & 0b10000000) == 0)

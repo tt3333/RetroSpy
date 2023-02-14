@@ -65,8 +65,12 @@
 #define GC_PIN             DIGITAL_PIN_05
 
 #define ThreeDO_LATCH      DIGITAL_PIN_02
-#define ThreeDO_DATA       DIGITAL_PIN_04
+#define ThreeDO_DATA       DIGITAL_PIN_07
 #define ThreeDO_CLOCK      DIGITAL_PIN_03
+
+#define VIS_ThreeDO_LATCH  DIGITAL_PIN_06
+#define VIS_ThreeDO_DATA   DIGITAL_PIN_07
+#define VIS_ThreeDO_CLOCK  DIGITAL_PIN_08
 
 #define PCFX_LATCH         DIGITAL_PIN_03
 #define PCFX_CLOCK         DIGITAL_PIN_04

@@ -31,6 +31,8 @@
 
 class ThreeDOSpy : public ControllerSpy {
 public:
+	void setup(uint8_t outputType);
+	void setup();
 	void loop();
 	void writeSerial();
 	void debugSerial();
@@ -38,7 +40,18 @@ public:
 	
 	virtual const char* startupMsg();
 
+	enum outputTypes {
+		OUTPUT_SMS     = 1,
+		OUTPUT_GENESIS = 2,
+	};
+	
 private:
+	
+	uint8_t outputType = OUTPUT_SMS;
+	
+	void updateStateLegacy();
+	void updateStateVision();
+
 	unsigned char rawData[32];
 	unsigned char bytesToReturn = 0;
 };

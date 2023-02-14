@@ -31,6 +31,11 @@
 static int value;
 static bool button;
 
+void SMSPaddleSpy::setup(uint8_t outputType) {
+	this->outputType = outputType;
+	setup();
+}
+
 void SMSPaddleSpy::setup()
 {
 	// Setup input pins
@@ -67,6 +72,14 @@ void SMSPaddleSpy::debugSerial()
 
 void SMSPaddleSpy::updateState()
 {
+	if (outputType == OUTPUT_SMS)
+		return updateStateLegacy();
+	
+	return updateStateVision();
+}
+
+void SMSPaddleSpy::updateStateLegacy()
+{
 	noInterrupts();
 	value = 0;
 	WAIT_FALLING_EDGEB(0);
@@ -74,6 +87,18 @@ void SMSPaddleSpy::updateState()
 	WAIT_LEADING_EDGEB(0);
 	value |= (READ_PORTD(0b00111100)) << 2;
 	button = PIN_READ(7) == 0;
+	interrupts();
+}
+
+void SMSPaddleSpy::updateStateVision()
+{
+	noInterrupts();
+	value = 0;
+	WAIT_FALLING_EDGE(7);
+	value |= (READ_PORTD(0b00111100)) >> 2;
+	WAIT_LEADING_EDGE(7);
+	value |= (READ_PORTD(0b00111100)) << 2;
+	button = PIN_READ(6) == 0;
 	interrupts();
 }
 

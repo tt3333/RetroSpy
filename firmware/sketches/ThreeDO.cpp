@@ -28,6 +28,21 @@
 
 #if !(defined(__arm__) && defined(CORE_TEENSY))
 
+void ThreeDOSpy::setup(uint8_t outputType) {
+	this->outputType = outputType;
+	setup();
+}
+
+void ThreeDOSpy::setup() {
+
+	PORTD = 0x00;
+	PORTB = 0x00;
+	DDRD = 0x00;
+
+	for (int i = 2; i <= 6; ++i)
+		pinMode(i, INPUT_PULLUP);
+}
+
 void ThreeDOSpy::loop() {
 	noInterrupts();
 	updateState();
@@ -39,7 +54,15 @@ void ThreeDOSpy::loop() {
 #endif
 }
 
-void ThreeDOSpy::updateState() {
+void ThreeDOSpy::updateState()
+{
+	if (outputType == OUTPUT_SMS)
+		return updateStateLegacy();
+	
+	return updateStateVision();
+}
+
+void ThreeDOSpy::updateStateLegacy() {
 	unsigned char *rawDataPtr = rawData;
 
 	unsigned char bits = 0;
@@ -48,6 +71,25 @@ void ThreeDOSpy::updateState() {
 	do {
 		WAIT_LEADING_EDGE(ThreeDO_CLOCK);
 		*rawDataPtr = PIN_READ(ThreeDO_DATA);
+
+		if (bits == 0 && *rawDataPtr != 0)
+			bytesToReturn = bits = 32;
+		else if (bits == 0)
+			bytesToReturn = bits = 16;
+
+		++rawDataPtr;
+	} while (--bits > 0);
+}
+
+void ThreeDOSpy::updateStateVision() {
+	unsigned char *rawDataPtr = rawData;
+
+	unsigned char bits = 0;
+	WAIT_FALLING_EDGE(VIS_ThreeDO_LATCH);
+
+	do {
+		WAIT_LEADING_EDGEB(VIS_ThreeDO_CLOCK);
+		*rawDataPtr = PIN_READ(VIS_ThreeDO_DATA);
 
 		if (bits == 0 && *rawDataPtr != 0)
 			bytesToReturn = bits = 32;

@@ -28,16 +28,33 @@
 
 #if !(defined(__arm__) && defined(CORE_TEENSY))
 
+void BoosterGripSpy::setup(uint8_t outputType) {
+	this->outputType = outputType;
+	setup();
+}
+
 void BoosterGripSpy::setup() {
-	// TODO: Move these pin numbers to config.h
-	// Set pins
-	inputPins[0] = 2;
-	inputPins[1] = 3;
-	inputPins[2] = 4;
-	inputPins[3] = 5;
-	inputPins[4] = 6;
-	inputPins[5] = 7;
-	inputPins[6] = 8;
+	
+	switch (outputType) {
+	case OUTPUT_SMS:
+		inputPins[0] = 2;
+		inputPins[1] = 3;
+		inputPins[2] = 4;
+		inputPins[3] = 5;
+		inputPins[4] = 6;
+		inputPins[5] = 7;
+		inputPins[6] = 8;
+		break;
+	case OUTPUT_GENESIS:
+		inputPins[0] = 2;
+		inputPins[1] = 3;
+		inputPins[2] = 4;
+		inputPins[3] = 5;
+		inputPins[4] = 9;
+		inputPins[5] = 6;
+		inputPins[6] = 7;
+		break;
+	}
 
 	// Setup input pins
 	for (byte i = 0; i < BG_INPUT_PINS; i++) {

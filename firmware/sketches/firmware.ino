@@ -230,13 +230,19 @@ bool CreateSpy()
 		currentSpy = new GCSpy();
 		break;
 	case 0x05:
-		currentSpy = new SMSSpy();
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;	
 	case 0x06:
 		currentSpy = new SMSPaddleSpy();
+		((SMSPaddleSpy*)currentSpy)->setup(SMSPaddleSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;
 	case 0x07:
 		currentSpy = new SMSSportsPadSpy();
+		((SMSSportsPadSpy*)currentSpy)->setup(SMSSportsPadSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;
 	case 0x08:
 		currentSpy = new GenesisSpy();
@@ -258,6 +264,8 @@ bool CreateSpy()
 		break;
 	case 0x0E:
 		currentSpy = new BoosterGripSpy();
+		((BoosterGripSpy*)currentSpy)->setup(BoosterGripSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;
 	case 0x0F:
 		currentSpy = new TG16Spy();
@@ -306,17 +314,17 @@ bool CreateSpy()
 //		break;
 	case 0x1C:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL, KeyboardControllerSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1D:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS, KeyboardControllerSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1E:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD, KeyboardControllerSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1F:

@@ -31,6 +31,7 @@
 
 class BoosterGripSpy : public ControllerSpy {
 public:
+	void setup(uint8_t outputType);
 	void setup();
 	void loop();
 	void writeSerial();
@@ -39,10 +40,17 @@ public:
 	
 	virtual const char* startupMsg();
 
+	enum outputTypes {
+		OUTPUT_SMS     = 1,
+		OUTPUT_GENESIS = 2,
+	};
+	
 private:
 	word currentState;
 	word lastState = -1;
 
+	uint8_t outputType = OUTPUT_SMS;
+	
 	static const byte BG_INPUT_PINS = 7;
 	const unsigned long BG_READ_DELAY_MS = 5;
 
