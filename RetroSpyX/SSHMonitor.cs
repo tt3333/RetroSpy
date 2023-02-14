@@ -30,8 +30,7 @@ namespace RetroSpy
         public SSHMonitor(string hostname, string command, string username, string password, string? commandSub, int delayInMilliseconds, bool useQuickDisconnect)
         {
             string strIP = hostname;
-            IPAddress? ipAddress;
-            if (!IPAddress.TryParse(hostname, out ipAddress))
+            if (!IPAddress.TryParse(hostname, out _))
             {
                 var ips = Dns.GetHostEntry(hostname);
 
