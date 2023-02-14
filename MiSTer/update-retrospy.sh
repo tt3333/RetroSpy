@@ -8,6 +8,7 @@ echo " "
 
 wget -q -t 3 --no-check-certificate --output-file=/tmp/wget-log --show-progress -O /tmp/update-retrospy-installer.sh https://github.com/retrospy/RetroSpy/releases/latest/download/update-retrospy-installer.sh
 
+dos2unix /tmp/update-retrospy-installer.sh
 chmod +x /tmp/update-retrospy-installer.sh
 
 /tmp/update-retrospy-installer.sh
