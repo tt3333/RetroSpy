@@ -329,6 +329,11 @@ bool CreateSpy()
 		break;
 	case 0x1F:
 		currentSpy = new DrivingControllerSpy();
+		break;		
+	case 0x20:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GX4000);
+		customSetup = true;
 		break;	
 	}
 	
