@@ -55,6 +55,14 @@ void SMSSpy::setup() {
 		inputPins[4] = SMSONGEN_INPUT_PIN_4;
 		inputPins[5] = SMSONGEN_INPUT_PIN_5;
 		break;
+	case OUTPUT_GX4000:
+		inputPins[0] = 2;
+		inputPins[1] = 3;
+		inputPins[2] = 4;
+		inputPins[3] = 5;
+		inputPins[4] = 6;
+		inputPins[5] = 8;	
+		break;
 	}
 
 	// Setup input pins

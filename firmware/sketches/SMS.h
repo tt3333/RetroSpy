@@ -43,6 +43,7 @@ public:
 	enum outputTypes {
 		OUTPUT_SMS = 1,
 		OUTPUT_GENESIS = 2,
+		OUTPUT_GX4000 = 3
 	};
 
 private:

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
-// Version: 6.1
+// Version: 6.1.1
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -293,12 +293,12 @@ bool CreateSpy()
 		break;
 	case 0x17:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x18:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x19:
@@ -329,6 +329,11 @@ bool CreateSpy()
 		break;
 	case 0x1F:
 		currentSpy = new DrivingControllerSpy();
+		break;		
+	case 0x20:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GX4000);
+		customSetup = true;
 		break;	
 	}
 	

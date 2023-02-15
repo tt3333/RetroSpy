@@ -37,10 +37,12 @@ static byte lastEncoderX;
 static byte lastEncoderY;
 
 
-void AmigaMouseSpy::setup(byte videoOutputType)
+void AmigaMouseSpy::setup(byte videoOutputType, uint8_t outputType)
 {
 	currentX = lastX = 0;
 	currentY = lastY = 0;
+	
+	this->outputType = outputType;
 
 	// TIMER 1 for interrupt frequency 50 or 60 Hz:
 	cli(); // stop interrupts
@@ -138,9 +140,19 @@ void AmigaMouseSpy::loop()
 		lastEncoderY = yData;
 	}
 
-	buttons[0] = (data & 0b10000000) != 0 ? 1 : 0;
-	buttons[1] = (data & 0b01000000) != 0 ? 1 : 0;
-	buttons[2] = (PINB & 0b00000001) != 0 ? 0 : 1;
+	if (outputType == OUTPUT_SMS)
+	{
+		buttons[0] = (data & 0b10000000) != 0 ? 1 : 0;
+		buttons[1] = (data & 0b01000000) != 0 ? 1 : 0;
+		buttons[2] = (PINB & 0b00000001) != 0 ? 0 : 1;		
+	}
+	else
+	{
+		buttons[0] = (data & 0b01000000) != 0 ? 1 : 0;
+		buttons[1] = (PINB & 0b00000010) != 0 ? 1 : 0;
+		buttons[2] = (data & 0b10000000) != 0 ? 1 : 0;	
+	}
+
 }
 
 void AmigaMouseSpy::writeSerial() {}

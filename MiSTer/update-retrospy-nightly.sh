@@ -18,6 +18,7 @@ GH_ASSET="https://${GITHUB_API_TOKEN}:@api.github.com/repos/retrospy/RetroSpy-pr
 
 wget -q -t 3 --no-check-certificate --output-file=/tmp/wget-log --show-progress --auth-no-challenge --header "Accept:application/octet-stream" ${GH_ASSET} -O /tmp/update-retrospy-installer.sh
 
+dos2unix /tmp/update-retrospy-installer.sh
 chmod +x /tmp/update-retrospy-installer.sh
 
 /tmp/update-retrospy-installer.sh ${GITHUB_API_TOKEN}
