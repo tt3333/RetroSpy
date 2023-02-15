@@ -33,11 +33,6 @@ static bool sync = false;
 static byte x, y;
 static bool button1, button2;
 
-void SMSSportsPadSpy::setup(uint8_t outputType) {
-	this->outputType = outputType;
-	setup();
-}
-
 void SMSSportsPadSpy::setup()
 {
 	// Setup input pins
@@ -80,41 +75,6 @@ void SMSSportsPadSpy::debugSerial()
 }
 
 void SMSSportsPadSpy::updateState()
-{
-	if (outputType == OUTPUT_SMS)
-		return updateStateLegacy();
-	
-	return updateStateVision();
-}
-
-void SMSSportsPadSpy::updateStateVision()
-{
-	x = y = 0;
-	if (!sync)
-	{
-		noInterrupts();
-		WAIT_FALLING_EDGE(7);
-		interrupts();
-		delay(5);
-		sync = true;
-	}
-	
-	noInterrupts();
-	WAIT_FALLING_EDGE(7);
-	y |= (READ_PORTD(0b00111100)) >> 2;
-	WAIT_LEADING_EDGE(7);
-	x |= (READ_PORTD(0b00111100)) << 2;
-	WAIT_FALLING_EDGE(7);
-	x |= (READ_PORTD(0b00111100)) >> 2;
-	WAIT_LEADING_EDGE(7);
-	y |= (READ_PORTD(0b00111100)) << 2;
-	
-	button1 = PIN_READ(9) == 0;
-	button2 = PIN_READ(6) == 0;
-	interrupts();
-}
-
-void SMSSportsPadSpy::updateStateLegacy()
 {
 	x = y = 0;
 	if (!sync)

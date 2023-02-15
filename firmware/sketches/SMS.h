@@ -31,7 +31,7 @@
 
 class SMSSpy : public ControllerSpy {
 public:
-	void setup(uint8_t outputType);
+	void setup(uint8_t outputType, bool convertOutputToGenesis = false);
 	void setup();
 	void loop();
 	void writeSerial();
@@ -57,6 +57,8 @@ private:
 
 	uint8_t outputType = OUTPUT_SMS;
 
+	bool convertOutputToGenesis = false;
+	
 	static const byte CC_INPUT_PINS = 6;
 	static const unsigned long CC_READ_DELAY_MS = 5;
 

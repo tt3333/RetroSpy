@@ -76,7 +76,7 @@
 //#define MODE_ATARI_PADDLES
 
 // Don't use this.  Its for something else.
-//#define RS_VISION
+#define RS_VISION
 
 // Some consoles care about PAL/NTSC for timing purposes
 #define VIDEO_OUTPUT VIDEO_PAL
@@ -241,8 +241,6 @@ bool CreateSpy()
 		break;
 	case 0x07:
 		currentSpy = new SMSSportsPadSpy();
-		((SMSSportsPadSpy*)currentSpy)->setup(SMSSportsPadSpy::OUTPUT_GENESIS);
-		customSetup = true;
 		break;
 	case 0x08:
 		currentSpy = new GenesisSpy();
@@ -275,6 +273,8 @@ bool CreateSpy()
 		break;
 	case 0x11:
 		currentSpy = new ThreeDOSpy();
+		((ThreeDOSpy*)currentSpy)->setup(ThreeDOSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;
 	case 0x12:
 		currentSpy = new IntellivisionSpy();
@@ -373,7 +373,7 @@ bool CreateSpy()
 	currentSpy = new SMSSportsPadSpy();
 #elif defined(MODE_SMS_ON_GENESIS)
 	currentSpy = new SMSSpy();
-	((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS);
+	((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS, true);
 	customSetup = true;
 #elif defined(MODE_SATURN)
 	currentSpy = new SaturnSpy();

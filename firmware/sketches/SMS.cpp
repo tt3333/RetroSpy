@@ -28,8 +28,9 @@
 
 #if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
 
-void SMSSpy::setup(uint8_t outputType) {
+void SMSSpy::setup(uint8_t outputType, bool convertOutputToGenesis) {
 	this->outputType = outputType;
+	this->convertOutputToGenesis = convertOutputToGenesis;
 	setup();
 }
 
@@ -102,16 +103,18 @@ void SMSSpy::updateState() {
 }
 
 void SMSSpy::writeSerial() {
-	switch (outputType) {
-	case OUTPUT_SMS:
+	
+	if (outputType == OUTPUT_SMS || convertOutputToGenesis == false)
+	{
 		for (unsigned char i = 0; i < 6; ++i)
 		{
 			Serial.write(currentState & (1 << i) ? ONE : ZERO);
 		}
 		Serial.write(ZERO);
 		Serial.write(SPLIT);
-		break;
-	case OUTPUT_GENESIS:
+	}
+	else if (outputType == OUTPUT_GENESIS)
+	{
 		Serial.write(ZERO);
 		Serial.write((currentState & CC_BTN_UP) ? 1 : 0);
 		Serial.write((currentState & CC_BTN_DOWN) ? 1 : 0);
@@ -126,7 +129,6 @@ void SMSSpy::writeSerial() {
 		Serial.write(ZERO);
 		Serial.write(ZERO);
 		Serial.write(SPLIT);
-		break;
 	}
 }
 
