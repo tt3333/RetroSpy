@@ -44,6 +44,14 @@ enum VideoOutputType {
 };
 #endif
 
+// Vision Hardware Configurations
+//#define RS_VISION
+
+#ifdef RS_VISION
+#define TP_TIMERONE
+#define TP_PINCHANGEINTERRUPT
+#endif
+
 // Uncomment these to enable 3rd party libraries once installed
 //#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
 //#define TP_IRLIB2               // Used by MODE_CDI

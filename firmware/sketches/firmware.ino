@@ -75,9 +75,6 @@
 //#define MODE_COLECOVISION_ROLLER
 //#define MODE_ATARI_PADDLES
 
-// Don't use this.  Its for something else.
-//#define RS_VISION
-
 // Some consoles care about PAL/NTSC for timing purposes
 #define VIDEO_OUTPUT VIDEO_PAL
 
