@@ -35,7 +35,7 @@
 
 // The below values are not scientific, but they seem to work.  These may need to be tuned for different systems.
 #define LINE_WAIT 200
-#define DIGITAL_HIGH_THRESHOLD 50
+#define DIGITAL_HIGH_THRESHOLD 150
 
 static volatile byte currentState = 0;
 static byte lastState = 0xFF;
@@ -191,9 +191,9 @@ void sr_row1sr_isr_vision()
 		return;
 	else if (PIN_READ(6) == 0)
 		currentState = 3;
-	else if (analogRead(1) < DIGITAL_HIGH_THRESHOLD)
+	else if (analogRead(7) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 2;
-	else if (analogRead(0) < DIGITAL_HIGH_THRESHOLD)
+	else if (analogRead(6) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 1;
 	else if (cachedCurrentState >= 1 && cachedCurrentState <= 3)
 		currentState = 0;
@@ -207,9 +207,9 @@ void sr_row2sr_isr_legacy()
 		return;
 	else if (PIN_READ(7) == 0)
 		currentState = 6;
-	else if (analogRead(1) < 50)
+	else if (analogRead(1) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 5;
-	else if (analogRead(0) < 50)
+	else if (analogRead(0) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 4;
 	else if (cachedCurrentState >= 4 && cachedCurrentState <= 6)
 		currentState = 0;
@@ -223,9 +223,9 @@ void sr_row2sr_isr_vision()
 		return;
 	else if (PIN_READ(6) == 0)
 		currentState = 6;
-	else if (analogRead(1) < 50)
+	else if (analogRead(7) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 5;
-	else if (analogRead(0) < 50)
+	else if (analogRead(6) < DIGITAL_HIGH_THRESHOLD)
 		currentState = 4;
 	else if (cachedCurrentState >= 4 && cachedCurrentState <= 6)
 		currentState = 0;
@@ -261,15 +261,17 @@ void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType)
 	}
 	else if (currentControllerMode == MODE_STAR_RAIDERS)
 	{
+		pinMode(A0, INPUT);
+		pinMode(A1, INPUT);
 		if (outputType == OUTPUT_GENESIS)
-		{
-			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_legacy, FALLING);
-			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_legacy, FALLING);
-		}
-		else
 		{
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_vision, FALLING);
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_vision, FALLING);
+		}
+		else
+		{
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_legacy, FALLING);
+			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_legacy, FALLING);
 		}
 	}
 #endif
@@ -281,19 +283,35 @@ void KeyboardControllerSpy::loop()
 	noInterrupts();
 	rawData = 0;
 	rawData |= (PIND >> 2) | (PINB << 6);
-	int analog0 = analogRead(0);
-	int analog1 = analogRead(1);
+	int analog0 = analogRead(6);
+	int analog1 = analogRead(7);
 	int analog2 = analogRead(2);
 	int analog3 = analogRead(3);
 	interrupts();
 #else
 	if (currentControllerMode == MODE_BIG_BIRD)
 	{
+		byte bytemask;
+		byte digitalPin;
+		byte analogPin;
+		
+		if (outputType == OUTPUT_GENESIS)
+		{
+			bytemask = 0b01000000;
+			digitalPin = 6;
+			analogPin = 7;
+		}
+		else
+		{
+			bytemask = 0b10000000;
+			digitalPin = 7;
+			analogPin = 1;
+		}
 		noInterrupts();
-		byte pin6 = outputType == OUTPUT_GENESIS ? PIN_READ(6) : PIN_READ(7);
-		int pin9 = analogRead(1);
+		byte pin6 = PIN_READ(digitalPin);
+		int pin9 = analogRead(analogPin);
 		interrupts();
-		if ((pin6 & 0b10000000) == 0)
+		if ((pin6 & bytemask) == 0)
 			currentState = 6;
 		else if (pin9 < DIGITAL_HIGH_THRESHOLD)
 			currentState = 5;
@@ -321,16 +339,14 @@ void KeyboardControllerSpy::loop()
 	Serial.print("|");
 	Serial.print(analog2);
 	Serial.print("|");
-	Serial.print(analog3);
-	Serial.print("\n");
+	Serial.println(analog3);
 	lastRawData = rawData;
 	//}
 #else
 	if (currentState != lastState)
 	{
 #ifdef PRETTY_PRINT
-		Serial.print(currentState);
-		Serial.print("\n");
+		Serial.println(currentState);
 #else
 		Serial.write(currentState + (byte)65);
 		Serial.write("\n");

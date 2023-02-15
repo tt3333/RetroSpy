@@ -9,5 +9,13 @@
         <Version>1.8.6</Version>
       </Key>
     </Dependency>
+    <Dependency>
+      <Type>Library</Type>
+      <Key>
+        <Packager>NicoHood</Packager>
+        <Name>PinChangeInterrupt</Name>
+        <Version>1.2.9</Version>
+      </Key>
+    </Dependency>
   </Dependencies>
 </ArduinoDependencyCollection>

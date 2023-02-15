@@ -329,6 +329,8 @@ bool CreateSpy()
 		break;
 	case 0x1F:
 		currentSpy = new DrivingControllerSpy();
+		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::OUTPUT_GENESIS);
+		customSetup = true;
 		break;		
 	case 0x20:
 		currentSpy = new SMSSpy();		

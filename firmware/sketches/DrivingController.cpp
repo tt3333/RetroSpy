@@ -69,6 +69,12 @@ static void bitchange_isr()
 
 }
 
+void DrivingControllerSpy::setup(uint8_t outputType)
+{
+	this->outputType = outputType;
+	setup();
+}
+
 void DrivingControllerSpy::setup() {
 
 	for (int i = 2; i <= 8; ++i)
@@ -93,8 +99,10 @@ void DrivingControllerSpy::loop() {
 	rawData |= (PIND >> 2);
 	interrupts();
 
+	byte bitmask = outputType == OUTPUT_SMS ?  0b00100000 : 0b00010000;
+	
 #ifndef DEBUG
-	currentState[0] = (byte)((rawData & 0b00100000) == 0);
+	currentState[0] = (byte)((rawData & bitmask) == 0);
 #endif
 
 #ifdef DEBUG
@@ -102,8 +110,7 @@ void DrivingControllerSpy::loop() {
 	{
 		Serial.print((rawData & 0b00000001) != 0 ? "-" : "1");
 		Serial.print((rawData & 0b00000010) != 0 ? "-" : "1");
-		Serial.print((rawData & 0b00100000) != 0 ? "-" : "6");
-		Serial.print("\n");
+		Serial.println((rawData & bitmask) != 0 ? "-" : "6");
 		lastRawData = rawData;
 	}
 #else
@@ -115,8 +122,7 @@ void DrivingControllerSpy::loop() {
 	Serial.print((rawData & 0b00000001) != 0 ? "-" : "1");
 	Serial.print((rawData & 0b00000010) != 0 ? "-" : "1");
 	Serial.print("|");
-	Serial.print(currentEncoderValue);
-	Serial.print("\n");
+	Serial.println(currentEncoderValue);
 #else
 	Serial.write(currentState[0]);
 	Serial.write(currentState[1] + (byte)65);

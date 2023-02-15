@@ -31,6 +31,7 @@
 
 class DrivingControllerSpy : public ControllerSpy {
 public:
+	void setup(uint8_t outputType);
 	void loop();
 	void writeSerial();
 	void debugSerial();
@@ -38,9 +39,14 @@ public:
 	void setup();
 	
 	virtual const char* startupMsg();
-
+	enum outputTypes {
+		OUTPUT_SMS     = 1,
+		OUTPUT_GENESIS = 2,
+	};
+	
 private:
 
+	uint8_t outputType = OUTPUT_SMS;
 };
 
 #endif

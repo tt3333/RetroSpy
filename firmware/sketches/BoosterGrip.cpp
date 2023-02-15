@@ -75,7 +75,7 @@ void BoosterGripSpy::loop() {
 		// Not enough time has elapsed, return
 		return;
 	}
-
+	currentState = 0;
 	noInterrupts();
 	updateState();
 	interrupts();
@@ -114,8 +114,7 @@ void BoosterGripSpy::debugSerial() {
 		Serial.print((currentState & BG_BTN_RIGHT) ? "R" : "0");
 		Serial.print((currentState & BG_BTN_1) ? "1" : "0");
 		Serial.print((currentState & BG_BTN_2) ? "2" : "0");
-		Serial.print((currentState & BG_BTN_3) ? "3" : "0");
-		Serial.print("\n");
+		Serial.println((currentState & BG_BTN_3) ? "3" : "0");
 		lastState = currentState;
 	}
 }

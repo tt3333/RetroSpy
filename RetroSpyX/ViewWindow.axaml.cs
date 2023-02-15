@@ -440,14 +440,14 @@ namespace RetroSpy
                     if (Dispatcher.UIThread.CheckAccess())
                     {
                         image.Margin = new Thickness(x, y, 0, 0);
-                        image.IsVisible = IsVisible;
+                        image.IsVisible = visibility;
                     }
                     else
                     {
                         Dispatcher.UIThread.Post(() =>
                         {
                             image.Margin = new Thickness(x, y, 0, 0);
-                            image.IsVisible = IsVisible;
+                            image.IsVisible = visibility;
                         });
                     }
                 }
