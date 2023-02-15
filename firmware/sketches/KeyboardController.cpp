@@ -346,7 +346,7 @@ void KeyboardControllerSpy::updateState() {}
 
 #else
 
-void KeyboardControllerSpy::setup(byte controllerMode) {}
+void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType) {}
 void KeyboardControllerSpy::loop() {}
 void KeyboardControllerSpy::writeSerial() {}
 void KeyboardControllerSpy::debugSerial() {}

@@ -31,7 +31,7 @@
 
 class AmigaMouseSpy : public ControllerSpy {
 public:
-	void setup(byte videoOutputType);
+	void setup(byte videoOutputType, uint8_t outputType = OUTPUT_SMS);
 	void loop();
 	void writeSerial();
 	void debugSerial();
@@ -39,8 +39,14 @@ public:
 	
 	virtual const char* startupMsg();
 
+	enum outputTypes {
+		OUTPUT_SMS     = 1,
+		OUTPUT_GENESIS = 2
+	};
+	
 private:
 
+	uint8_t outputType = OUTPUT_SMS;
 };
 
 #endif

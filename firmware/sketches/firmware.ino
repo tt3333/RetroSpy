@@ -293,12 +293,12 @@ bool CreateSpy()
 		break;
 	case 0x17:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x18:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::OUTPUT_GENESIS);
 		customSetup = true;
 		break;
 	case 0x19:
