@@ -31,8 +31,8 @@
 static int value;
 static bool button;
 
-void SMSPaddleSpy::setup(uint8_t outputType) {
-	this->outputType = outputType;
+void SMSPaddleSpy::setup(uint8_t cableType) {
+	this->cableType = cableType;
 	setup();
 }
 
@@ -72,7 +72,7 @@ void SMSPaddleSpy::debugSerial()
 
 void SMSPaddleSpy::updateState()
 {
-	if (outputType == OUTPUT_SMS)
+	if (cableType == CABLE_SMS)
 		return updateStateLegacy();
 	
 	return updateStateVision();

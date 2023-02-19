@@ -28,15 +28,15 @@
 
 #if !(defined(__arm__) && defined(CORE_TEENSY))
 
-void BoosterGripSpy::setup(uint8_t outputType) {
-	this->outputType = outputType;
+void BoosterGripSpy::setup(uint8_t cableType) {
+	this->cableType = cableType;
 	setup();
 }
 
 void BoosterGripSpy::setup() {
 	
-	switch (outputType) {
-	case OUTPUT_SMS:
+	switch (cableType) {
+	case CABLE_SMS:
 		inputPins[0] = 2;
 		inputPins[1] = 3;
 		inputPins[2] = 4;
@@ -45,7 +45,7 @@ void BoosterGripSpy::setup() {
 		inputPins[5] = 7;
 		inputPins[6] = 8;
 		break;
-	case OUTPUT_GENESIS:
+	case CABLE_GENESIS:
 		inputPins[0] = 2;
 		inputPins[1] = 3;
 		inputPins[2] = 4;

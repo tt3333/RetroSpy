@@ -34,7 +34,7 @@
 
 class KeyboardControllerSpy : public ControllerSpy {
 public:
-	void setup(uint8_t controllerMode, uint8_t outputType = OUTPUT_SMS);
+	void setup(uint8_t controllerMode, uint8_t cableType = CABLE_SMS);
 	void loop();
 	void writeSerial();
 	void debugSerial();
@@ -48,14 +48,14 @@ public:
 		MODE_BIG_BIRD = 2,
 	};
 
-	enum outputTypes {
-		OUTPUT_SMS     = 1,
-		OUTPUT_GENESIS = 2,
+	enum cableTypes {
+		CABLE_SMS     = 1,
+		CABLE_GENESIS = 2,
 	};
 	
 private:
 	
-	uint8_t outputType = OUTPUT_SMS;
+	uint8_t cableType = CABLE_SMS;
 	
 	void updateStateLegacy();
 	void updateStateVision();

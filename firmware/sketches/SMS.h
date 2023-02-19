@@ -31,7 +31,7 @@
 
 class SMSSpy : public ControllerSpy {
 public:
-	void setup(uint8_t outputType, bool convertOutputToGenesis = false);
+	void setup(uint8_t cableType, uint8_t outputType = OUTPUT_SMS);
 	void setup();
 	void loop();
 	void writeSerial();
@@ -40,12 +40,17 @@ public:
 	
 	virtual const char* startupMsg();
 
-	enum outputTypes {
-		OUTPUT_SMS = 1,
-		OUTPUT_GENESIS = 2,
-		OUTPUT_GX4000 = 3
+	enum cableTypes {
+		CABLE_SMS = 1,
+		CABLE_GENESIS = 2,
+		CABLE_GX4000 = 3
 	};
 
+	enum outputTypes {
+		OUTPUT_SMS     = 1,
+		OUTPUT_GENESIS = 2
+	};
+	
 private:
 	enum buttonTypes {
 		CC_BTN_UP = 1,
@@ -56,6 +61,7 @@ private:
 		CC_BTN_2 = 32
 	};
 
+	uint8_t cableType = CABLE_SMS;
 	uint8_t outputType = OUTPUT_SMS;
 
 	bool convertOutputToGenesis = false;

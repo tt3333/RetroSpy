@@ -31,7 +31,7 @@
 
 class ThreeDOSpy : public ControllerSpy {
 public:
-	void setup(uint8_t outputType);
+	void setup(uint8_t cableType);
 	void setup();
 	void loop();
 	void writeSerial();
@@ -40,14 +40,14 @@ public:
 	
 	virtual const char* startupMsg();
 
-	enum outputTypes {
-		OUTPUT_SMS     = 1,
-		OUTPUT_GENESIS = 2,
+	enum cableTypes {
+		CABLE_SMS     = 1,
+		CABLE_GENESIS = 2,
 	};
 	
 private:
 	
-	uint8_t outputType = OUTPUT_SMS;
+	uint8_t cableType = CABLE_SMS;
 	
 	void updateStateLegacy();
 	void updateStateVision();

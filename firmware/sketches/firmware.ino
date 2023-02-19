@@ -228,12 +228,12 @@ bool CreateSpy()
 		break;
 	case 0x05:
 		currentSpy = new SMSSpy();		
-		((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS);
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;	
 	case 0x06:
 		currentSpy = new SMSPaddleSpy();
-		((SMSPaddleSpy*)currentSpy)->setup(SMSPaddleSpy::OUTPUT_GENESIS);
+		((SMSPaddleSpy*)currentSpy)->setup(SMSPaddleSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x07:
@@ -259,7 +259,7 @@ bool CreateSpy()
 		break;
 	case 0x0E:
 		currentSpy = new BoosterGripSpy();
-		((BoosterGripSpy*)currentSpy)->setup(BoosterGripSpy::OUTPUT_GENESIS);
+		((BoosterGripSpy*)currentSpy)->setup(BoosterGripSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x0F:
@@ -270,7 +270,7 @@ bool CreateSpy()
 		break;
 	case 0x11:
 		currentSpy = new ThreeDOSpy();
-		((ThreeDOSpy*)currentSpy)->setup(ThreeDOSpy::OUTPUT_GENESIS);
+		((ThreeDOSpy*)currentSpy)->setup(ThreeDOSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x12:
@@ -290,12 +290,12 @@ bool CreateSpy()
 		break;
 	case 0x17:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::OUTPUT_GENESIS);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x18:
 		currentSpy = new AmigaMouseSpy();
-		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::OUTPUT_GENESIS);
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x19:
@@ -311,27 +311,27 @@ bool CreateSpy()
 //		break;
 	case 0x1C:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL, KeyboardControllerSpy::OUTPUT_GENESIS);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL, KeyboardControllerSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1D:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS, KeyboardControllerSpy::OUTPUT_GENESIS);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS, KeyboardControllerSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1E:
 		currentSpy = new KeyboardControllerSpy();
-		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD, KeyboardControllerSpy::OUTPUT_GENESIS);
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD, KeyboardControllerSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
 	case 0x1F:
 		currentSpy = new DrivingControllerSpy();
-		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::OUTPUT_GENESIS);
+		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;		
 	case 0x20:
 		currentSpy = new SMSSpy();		
-		((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GX4000);
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GX4000);
 		customSetup = true;
 		break;	
 	}
@@ -377,7 +377,7 @@ bool CreateSpy()
 	currentSpy = new SMSSportsPadSpy();
 #elif defined(MODE_SMS_ON_GENESIS)
 	currentSpy = new SMSSpy();
-	((SMSSpy*)currentSpy)->setup(SMSSpy::OUTPUT_GENESIS, true);
+	((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GENESIS, SMSSpy::OUTPUT_GENESIS);
 	customSetup = true;
 #elif defined(MODE_SATURN)
 	currentSpy = new SaturnSpy();

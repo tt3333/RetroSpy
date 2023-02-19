@@ -28,8 +28,8 @@
 
 #if !(defined(__arm__) && defined(CORE_TEENSY))
 
-void ThreeDOSpy::setup(uint8_t outputType) {
-	this->outputType = outputType;
+void ThreeDOSpy::setup(uint8_t cableType) {
+	this->cableType = cableType;
 	setup();
 }
 
@@ -56,7 +56,7 @@ void ThreeDOSpy::loop() {
 
 void ThreeDOSpy::updateState()
 {
-	if (outputType == OUTPUT_SMS)
+	if (cableType == CABLE_SMS)
 		return updateStateLegacy();
 	
 	return updateStateVision();

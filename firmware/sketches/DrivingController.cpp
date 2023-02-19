@@ -69,9 +69,9 @@ static void bitchange_isr()
 
 }
 
-void DrivingControllerSpy::setup(uint8_t outputType)
+void DrivingControllerSpy::setup(uint8_t cableType)
 {
-	this->outputType = outputType;
+	this->cableType = cableType;
 	setup();
 }
 
@@ -99,7 +99,7 @@ void DrivingControllerSpy::loop() {
 	rawData |= (PIND >> 2);
 	interrupts();
 
-	byte bitmask = outputType == OUTPUT_SMS ?  0b00100000 : 0b00010000;
+	byte bitmask = cableType == CABLE_SMS ?  0b00100000 : 0b00010000;
 	
 #ifndef DEBUG
 	currentState[0] = (byte)((rawData & bitmask) == 0);

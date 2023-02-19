@@ -231,9 +231,9 @@ void sr_row2sr_isr_vision()
 		currentState = 0;
 }
 
-void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType)
+void KeyboardControllerSpy::setup(byte controllerMode, uint8_t cableType)
 {
-	this->outputType = outputType;
+	this->cableType = cableType;
 	this->currentControllerMode = controllerMode;
 
 	currentState = 0;
@@ -244,7 +244,7 @@ void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType)
 #ifndef DEBUG
 	if (currentControllerMode == MODE_NORMAL)
 	{
-		if (outputType == OUTPUT_GENESIS)
+		if (cableType == CABLE_GENESIS)
 		{
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), row1_isr_vision, FALLING);
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), row2_isr_vision, FALLING);
@@ -263,7 +263,7 @@ void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType)
 	{
 		pinMode(A0, INPUT);
 		pinMode(A1, INPUT);
-		if (outputType == OUTPUT_GENESIS)
+		if (cableType == CABLE_GENESIS)
 		{
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), sr_row1sr_isr_vision, FALLING);
 			attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), sr_row2sr_isr_vision, FALLING);
@@ -295,7 +295,7 @@ void KeyboardControllerSpy::loop()
 		byte digitalPin;
 		byte analogPin;
 		
-		if (outputType == OUTPUT_GENESIS)
+		if (cableType == CABLE_GENESIS)
 		{
 			bytemask = 0b01000000;
 			digitalPin = 6;
@@ -362,7 +362,7 @@ void KeyboardControllerSpy::updateState() {}
 
 #else
 
-void KeyboardControllerSpy::setup(byte controllerMode, uint8_t outputType) {}
+void KeyboardControllerSpy::setup(byte controllerMode, uint8_t cableType) {}
 void KeyboardControllerSpy::loop() {}
 void KeyboardControllerSpy::writeSerial() {}
 void KeyboardControllerSpy::debugSerial() {}

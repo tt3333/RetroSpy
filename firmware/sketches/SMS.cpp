@@ -28,17 +28,17 @@
 
 #if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
 
-void SMSSpy::setup(uint8_t outputType, bool convertOutputToGenesis) {
+void SMSSpy::setup(uint8_t cableType, uint8_t outputType) {
+	this->cableType = cableType;
 	this->outputType = outputType;
-	this->convertOutputToGenesis = convertOutputToGenesis;
 	setup();
 }
 
 void SMSSpy::setup() {
 	// Set pins
 	// TODO: Move these to config.h
-	switch (outputType) {
-	case OUTPUT_SMS:
+	switch (cableType) {
+	case CABLE_SMS:
 		inputPins[0] = SMS_INPUT_PIN_0;
 		inputPins[1] = SMS_INPUT_PIN_1;
 		inputPins[2] = SMS_INPUT_PIN_2;
@@ -46,7 +46,7 @@ void SMSSpy::setup() {
 		inputPins[4] = SMS_INPUT_PIN_4;
 		inputPins[5] = SMS_INPUT_PIN_5;
 		break;
-	case OUTPUT_GENESIS:
+	case CABLE_GENESIS:
 		// I don't know why these are different.
 		inputPins[0] = SMSONGEN_INPUT_PIN_0;
 		inputPins[1] = SMSONGEN_INPUT_PIN_1;
@@ -55,7 +55,7 @@ void SMSSpy::setup() {
 		inputPins[4] = SMSONGEN_INPUT_PIN_4;
 		inputPins[5] = SMSONGEN_INPUT_PIN_5;
 		break;
-	case OUTPUT_GX4000:
+	case CABLE_GX4000:
 		inputPins[0] = 2;
 		inputPins[1] = 3;
 		inputPins[2] = 4;
@@ -112,7 +112,7 @@ void SMSSpy::updateState() {
 
 void SMSSpy::writeSerial() {
 	
-	if (outputType == OUTPUT_SMS || convertOutputToGenesis == false)
+	if (outputType == OUTPUT_SMS)
 	{
 		for (unsigned char i = 0; i < 6; ++i)
 		{
@@ -141,8 +141,8 @@ void SMSSpy::writeSerial() {
 }
 
 void SMSSpy::debugSerial() {
-	switch (outputType) {
-	case OUTPUT_SMS:
+	switch (cableType) {
+	case CABLE_SMS:
 		if (currentState == lastState)
 		{
 			return;
@@ -157,7 +157,7 @@ void SMSSpy::debugSerial() {
 		Serial.print("\n");
 		lastState = currentState;
 		break;
-	case OUTPUT_GENESIS:
+	case CABLE_GENESIS:
 		if (currentState == lastState)
 		{
 			return;
