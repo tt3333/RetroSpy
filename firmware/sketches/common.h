@@ -46,10 +46,20 @@ enum VideoOutputType {
 
 // Vision Hardware Configurations
 //#define RS_VISION
+//#define RS_VISION_ULTRA
 
 #ifdef RS_VISION
 #define TP_TIMERONE
 #define TP_PINCHANGEINTERRUPT
+#endif
+
+#ifdef RS_VISION_ULTRA
+#ifdef GC_PIN
+#undef GC_PIN
+#endif#define GC_PIN 8
+#ifdef N64_PIN
+#undef N64_PIN
+#endif#define N64_PIN 0
 #endif
 
 // Uncomment these to enable 3rd party libraries once installed

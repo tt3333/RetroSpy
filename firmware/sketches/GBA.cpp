@@ -64,6 +64,11 @@ void GBASpy::updateState() {
 	} while (++bits < SNES_BITCOUNT - 1);
 }
 
+const char* GBASpy::startupMsg()
+{
+	return "GBA Consolizer";
+}
+
 #else
 void GBASpy::loop() {}
 
@@ -80,7 +85,3 @@ const char* GBASpy::startupMsg()
 
 #endif
 
-const char* GBASpy::startupMsg()
-{
-	return "GBA Consolizer";
-}

@@ -159,18 +159,19 @@ void AmigaMouseSpy::writeSerial() {}
 void AmigaMouseSpy::debugSerial() {}
 void AmigaMouseSpy::updateState() {}
 
+
+
 #else
 void AmigaMouseSpy::loop() {}
-void AmigaMouseSpy::setup(byte videoOutputType) {}
+void AmigaMouseSpy::setup(byte videoOutputType, uint8_t cableType) {}
 void AmigaMouseSpy::writeSerial() {}
 void AmigaMouseSpy::debugSerial() {}
 void AmigaMouseSpy::updateState() {}
-#endif
 
 const char* AmigaMouseSpy::startupMsg()
 {
-	if (OCR1A == 33332)
-		return "Amiga Mouse (VIDEO_NTSC)";
-	else
-		return "Amiga Mouse (VIDEO_PAL)";
+	return "Mode not compatible with this hardware";
 }
+
+#endif
+

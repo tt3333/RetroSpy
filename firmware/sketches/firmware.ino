@@ -158,12 +158,15 @@ void setup()
 	for (int i = 3; i < 9; ++i)
 		if (i != 7)
 			pinMode(i, INPUT_PULLUP);
-#elif !defined(RS_VISION) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
-	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
-	DDRC  = 0x00;
 #elif defined(RS_VISION)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
+#elif defined(RS_VISION_ULTRA)
+	for (int i = 13; i <= 18; ++i)
+		pinMode(i, INPUT_PULLUP);
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
+	DDRC  = 0x00;
 #endif
 
 #ifdef LAG_FIX
@@ -203,6 +206,18 @@ byte ReadAnalog()
 	byte retVal = PINC;
 	
 	return (~retVal  & 0b00111111);
+}
+
+byte ReadAnalog4()
+{
+	byte retVal = 0x00;
+	
+	for (int i = 0; i < 6; ++i)
+	{
+		if (digitalRead(i + 13) == LOW)
+			retVal |= (1 << i);
+	}
+	return retVal;
 }
 
 bool CreateSpy()
@@ -335,7 +350,25 @@ bool CreateSpy()
 		customSetup = true;
 		break;	
 	}
-	
+#elif defined(RS_VISION_ULTRA)
+	switch (ReadAnalog4())
+	{
+	case 0x00:
+		currentSpy = new DreamcastSpy();
+		break;
+	case 0x01:
+		currentSpy = new N64Spy();
+		break;
+	case 0x02:
+		currentSpy = new GCSpy();
+		break;	
+	case 0x03:
+		currentSpy = new WiiSpy();
+		break;
+	case 0x04:
+		currentSpy = new NuonSpy();
+		break;
+	}
 #elif defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
 		currentSpy = new SNESSpy;
