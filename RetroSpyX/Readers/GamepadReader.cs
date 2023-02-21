@@ -78,16 +78,20 @@ namespace RetroSpy.Readers
             switch (name)
             {
                 case "Y Axis":
+                case "Y axis":
                     return "Y";
                 case "X Axis":
+                case "X axis":
                     return "X";
                 case "Y Rotation":
                     return "RotationY";
                 case "X Rotation":
                     return "RotationX";
+                case "Z axis":
                 case "Z Axis":
                     return "Z";
                 case "Z Rotation":
+                case "Rz axis":
                     return "RotationZ";
                 default:
                     break;

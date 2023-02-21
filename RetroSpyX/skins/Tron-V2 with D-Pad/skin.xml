@@ -1,32 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Tron Style with D-Pad" author="Aliensqueakytoy" type="gamecube;dolphin">
+<skin name="Tron Style with D-Pad" author="Aliensqueakytoy" type="gamecube;dolphin;generic">
 
 	<background name="Basic" image="Background.png" />
 
     <button name="a" image="A fill.png" x="669" y="133" width="117" height="117" />
+	<button name="b1" image="A fill.png" x="669" y="133" width="117" height="117" />
     <button name="b" image="B button.png" x="581" y="192" width="74" height="74" />
+	<button name="b2" image="B button.png" x="581" y="192" width="74" height="74" />
     <button name="x" image="X fill.png" x="800" y="117" width="70" height="125" />
+	<button name="b0" image="X fill.png" x="800" y="117" width="70" height="125" />
     <button name="y" image="Y fill.png" x="646" y="54" width="124" height="73" />
+	<button name="b3" image="Y fill.png" x="646" y="54" width="124" height="73" />
     <button name="z" image="Z fill.png" x="776" y="26" width="87" height="72" />
+	<button name="b7" image="Z fill.png" x="776" y="26" width="87" height="72" />
     <button name="start" image="Start fill.png" x="507" y="39" width="58" height="58" />
-
+	<button name="b9" image="Start fill.png" x="507" y="39" width="58" height="58" />
+	
     <button name="r" image="Trigger Fill.png" x="231" y="27" width="208" height="39" />
-    <analog name="trig_r" image="Trigger Fill.png" x="231" y="27" width="208" height="39"
-            direction="left" reverse="false" />
+	<button name="b5" image="Trigger Fill.png" x="231" y="27" width="208" height="39" />
+
 
     <button name="l" image="Trigger Fill.png" x="13" y="27" width="208" height="39" />
-    <analog name="trig_l" image="Trigger Fill.png" x="13" y="27" width="208" height="39"
-            direction="right" reverse="false" />
+	<button name="b4" image="Trigger Fill.png" x="13" y="27" width="208" height="39" />
+
 
     <button name="up" image="Dpad top.png" x="483" y="136" width="38" height="51" />
+	<button name="b12" image="Dpad top.png" x="483" y="136" width="38" height="51" />
     <button name="down" image="Dpad bottom.png" x="483" y="207" width="38" height="51" />
+	<button name="b14" image="Dpad bottom.png" x="483" y="207" width="38" height="51" />
     <button name="left" image="Dpad left.png" x="441" y="178" width="51" height="38" />
+	<button name="b15" image="Dpad left.png" x="441" y="178" width="51" height="38" />
     <button name="right" image="Dpad-right.png" x="512" y="178" width="51" height="37" />
+	<button name="b13" image="Dpad-right.png" x="512" y="178" width="51" height="37" />
 
-    <stick xname="lstick_x" yname="lstick_y" image="L stick.png"
-           x="59" y="120" width="113" height="113" xrange="56" yrange="56"/>
+	<section type="gamecube;dolphin">
+		<analog name="trig_r" image="Trigger Fill.png" x="231" y="27" width="208" height="39"
+			direction="left" reverse="false" />
+		<analog name="trig_l" image="Trigger Fill.png" x="13" y="27" width="208" height="39"
+			direction="right" reverse="false" />
+		<stick xname="lstick_x" yname="lstick_y" image="L stick.png"
+			   x="59" y="120" width="113" height="113" xrange="56" yrange="56"/>
 
-    <stick xname="cstick_x" yname="cstick_y" image="C stick.png"
-           x="293" y="138" width="80" height="80" xrange="50" yrange="50"/>
-
+		<stick xname="cstick_x" yname="cstick_y" image="C stick.png"
+			   x="293" y="138" width="80" height="80" xrange="50" yrange="50"/>
+	</section>
+	
+	<section type="generic">
+		<analog name="ry" image="Trigger Fill.png" x="231" y="27" width="208" height="39"
+				direction="left" />
+		<analog name="rx" image="Trigger Fill.png" x="13" y="27" width="208" height="39"
+				direction="right"  />
+		<stick xname="x" yname="y" image="L stick.png"
+		   x="59" y="120" width="113" height="113" xrange="56" yrange="56" yreverse="true"/>
+		<stick xname="rz" yname="z" image="C stick.png"
+			   x="293" y="138" width="80" height="80" xrange="50" yrange="50" yreverse="true"/>
+	</section>
 </skin>
