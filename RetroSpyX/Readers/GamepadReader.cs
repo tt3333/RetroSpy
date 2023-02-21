@@ -77,7 +77,7 @@ namespace RetroSpy.Readers
         {
             switch (name)
             {
-                case "Yx Axis":
+                case "Y Axis":
                     return "Y";
                 case "X Axis":
                     return "X";
