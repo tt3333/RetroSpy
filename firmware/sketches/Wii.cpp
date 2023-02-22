@@ -27,6 +27,11 @@
 #include "Wii.h"
 
 #if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
+#define READ_PINS GPIOB_PDIR & 12
+#elif defined(__arm__) && defined(CORE_TEENSY) && (defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41))
+#define READ_PINS GPIO6_PSR & 12
+#endif
+#if defined(__arm__) && defined(CORE_TEENSY) && (defined(ARDUINO_TEENSY35) || defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41))
 void WiiSpy::setup() {
 	pinMode(19, INPUT);
 	pinMode(18, INPUT);
@@ -46,7 +51,7 @@ void WiiSpy::setup() {
 void WiiSpy::loop() {
 	last_portb = current_portb;
 	noInterrupts();
-	current_portb = GPIOB_PDIR & 12;
+	current_portb = READ_PINS;
 	interrupts();
 	bool bDataReady = current_portb != last_portb;
 
