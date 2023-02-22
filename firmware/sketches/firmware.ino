@@ -208,17 +208,19 @@ byte ReadAnalog()
 	return (~retVal  & 0b00111111);
 }
 
+#if defined(RS_VISION_ULTRA)
 byte ReadAnalog4()
 {
 	byte retVal = 0x00;
 	
 	for (int i = 0; i < 6; ++i)
 	{
-		if (digitalRead(i + 13) == LOW)
+		if (digitalReadFast(i + 13) == LOW)
 			retVal |= (1 << i);
 	}
 	return retVal;
 }
+#endif
 
 bool CreateSpy()
 {
