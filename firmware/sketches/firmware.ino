@@ -151,7 +151,10 @@ void setup()
 {
 
 	// FOR MODE DETECTION
-#if defined(__arm__) && defined(CORE_TEENSY)
+#if defined(RS_VISION_ULTRA)
+	for (int i = 13; i <= 18; ++i)
+		pinMode(i, INPUT_PULLUP);
+#elif defined(__arm__) && defined(CORE_TEENSY)
 	for (int i = 33; i < 40; ++i)
 		pinMode(i, INPUT_PULLUP);
 #elif defined(ARDUINO_AVR_NANO_EVERY)
@@ -160,9 +163,6 @@ void setup()
 			pinMode(i, INPUT_PULLUP);
 #elif defined(RS_VISION)
 	for (int i = A0; i <= A7; ++i)
-		pinMode(i, INPUT_PULLUP);
-#elif defined(RS_VISION_ULTRA)
-	for (int i = 13; i <= 18; ++i)
 		pinMode(i, INPUT_PULLUP);
 #elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
 	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
@@ -211,6 +211,7 @@ byte ReadAnalog()
 #if defined(RS_VISION_ULTRA)
 byte ReadAnalog4()
 {
+	Serial.println("here");
 	byte retVal = 0x00;
 	
 	for (int i = 0; i < 6; ++i)
@@ -218,6 +219,7 @@ byte ReadAnalog4()
 		if (digitalReadFast(i + 13) == LOW)
 			retVal |= (1 << i);
 	}
+	Serial.println(retVal);
 	return retVal;
 }
 #endif
