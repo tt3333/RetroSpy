@@ -366,6 +366,7 @@
     <None Remove="skins\generic-hitbox-xb360\readme.txt" />
     <None Remove="skins\generic-hitbox-xb360\skin.xml" />
     <None Remove="skins\generic-mayflashn64\skin.xml" />
+    <None Remove="skins\generic-n64\skin.xml" />
     <None Remove="skins\generic-pattonboxanalogue-ds4\24-button.png" />
     <None Remove="skins\generic-pattonboxanalogue-ds4\30-button.png" />
     <None Remove="skins\generic-pattonboxanalogue-ds4\bg.png" />
@@ -1509,6 +1510,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\generic-mayflashn64\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\generic-n64\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\generic-pattonboxanalogue-ds4\24-button.png">
@@ -3018,6 +3022,13 @@
 
 	<ItemGroup>
 		<AssetFiles Include="Assets\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaXaml Remove="skins\generic-mayflashn64 - Copy\**" />
+	  <Compile Remove="skins\generic-mayflashn64 - Copy\**" />
+	  <EmbeddedResource Remove="skins\generic-mayflashn64 - Copy\**" />
+	  <None Remove="skins\generic-mayflashn64 - Copy\**" />
 	</ItemGroup>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
