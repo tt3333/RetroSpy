@@ -161,7 +161,7 @@ void setup()
 	for (int i = 3; i < 9; ++i)
 		if (i != 7)
 			pinMode(i, INPUT_PULLUP);
-#elif defined(RS_VISION)
+#elif defined(RS_VISION) || defined(RS_VISION_CDI)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
 #elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
@@ -371,6 +371,19 @@ bool CreateSpy()
 		break;
 	case 0x04:
 		currentSpy = new NuonSpy();
+		break;
+	}
+#elif defined(RS_VISION_CDI)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
+		break;
+	case 0x01:
+		currentSpy = new CDiKeyboardSpy();
+		break;
+	case 0x02:
+		currentSpy = new CDTVWirelessSpy();
 		break;
 	}
 #elif defined(MODE_DETECT)

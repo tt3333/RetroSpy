@@ -387,13 +387,15 @@ void CDiSpy::printRawData()
 #endif
 }
 
+static char startupBuffer[100];
+
 const char* CDiSpy::startupMsg()
 {
 	char itoaBuff[10];
 	strcpy(startupBuffer, "CDi (");
 	strcat(startupBuffer, itoa(_wired_timeout, itoaBuff, 10));
 	strcat(startupBuffer, ",");
-	strcat(startupBuffer, itoa(_wireless_timeout, itoaBuff, 16));
+	strcat(startupBuffer, itoa(_wireless_timeout, itoaBuff, 10));
 	strcat(startupBuffer, ")");
 	return startupBuffer;
 }
