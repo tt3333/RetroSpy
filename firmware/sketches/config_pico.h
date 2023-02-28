@@ -28,7 +28,7 @@
 
 #define MICROSECOND_NOPS ""
 
-#define T_DELAY( ms ) delay(ms)
+#define T_DELAY( ms ) delay(0)
 #define A_DELAY( ms ) delay(0)
 
 #define SNES_LATCH         2

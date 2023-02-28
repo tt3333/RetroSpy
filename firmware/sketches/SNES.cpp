@@ -30,54 +30,39 @@
 
 void SNESSpy::loop() {
 #if !defined(RASPBERRYPI_PICO)
-    loop1();
-#else
+	loop1();
+#endif
+
 	if (sendRequest)
-    {
+	{
 		sendBytes = bytesToReturn;
-        memcpy(sendData, rawData, SNES_BITCOUNT_EXT);
-        sendRequest = false;
+		memcpy(sendData, rawData, SNES_BITCOUNT_EXT);
+		sendRequest = false;
 #ifdef DEBUG
-        debugSerial();
+		debugSerial();
 #else
-        writeSerial();
+		writeSerial();
 #endif
-    }
-#endif
+		T_DELAY(5);
+	}
 }
 
 void SNESSpy::loop1() {
+	while (sendRequest)
+	{
+	}
 	noInterrupts();
 	updateState();
 	interrupts();
-
-#if !defined(RASPBERRYPI_PICO)
-#if !defined(DEBUG)
-	writeSerial();
-#else
-	debugSerial();
-#endif
-	T_DELAY(5);
-#else
 	sendRequest = true;
-	while (sendRequest) { }
-#endif
 }
 
 void SNESSpy::writeSerial() {
-#if !defined(RASPBERRYPI_PICO)
-	sendRawData(rawData, 0, bytesToReturn);
-#else
 	sendRawData(sendData, 0, sendBytes);
-#endif
 }
 
 void SNESSpy::debugSerial() {
-#if !defined(RASPBERRYPI_PICO)
-	sendRawDataDebug(rawData, 0, bytesToReturn);
-#else
 	sendRawDataDebug(sendData, 0, sendBytes);
-#endif
 }
 
 void SNESSpy::updateState() {
@@ -116,10 +101,11 @@ const char* SNESSpy::startupMsg()
 
 #else
 void SNESSpy::loop() {}
-void SNESSpy::loop1() {}
 
 void SNESSpy::writeSerial() {}
+
 void SNESSpy::debugSerial() {}
+
 void SNESSpy::updateState() {}
 
 const char* SNESSpy::startupMsg()
