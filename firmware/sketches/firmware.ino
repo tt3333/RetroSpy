@@ -161,10 +161,13 @@ void setup()
 	for (int i = 3; i < 9; ++i)
 		if (i != 7)
 			pinMode(i, INPUT_PULLUP);
+#elif defined(RASPBERRYPI_PICO)
+	pinMode(MODEPIN_SNES, INPUT_PULLUP);
+	pinMode(MODEPIN_WII, INPUT_PULLUP);
 #elif defined(RS_VISION) || defined(RS_VISION_CDI)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2) && !defined(RASPBERRYPI_PICO)
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
 	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
 	DDRC  = 0x00;
 #endif
@@ -410,18 +413,24 @@ bool CreateSpy()
 #elif defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
 		currentSpy = new SNESSpy;
+#if !defined(RASPBERRYPI_PICO)
 	else if (!PINC_READ(MODEPIN_N64))
 		currentSpy = new N64Spy();
 	else if (!PINC_READ(MODEPIN_GC))
 		currentSpy = new GCSpy();
+#endif
 #if defined(__arm__) && defined(CORE_TEENSY)
 	else if (!PINC_READ(MODEPIN_DREAMCAST))
 		currentSpy = new DreamcastSpy();
+#endif
+#if (defined(__arm__) && defined(CORE_TEENSY)) || defined(RASPBERRYPI_PICO)
 	else if (!PINC_READ(MODEPIN_WII))
 		currentSpy = new WiiSpy();
 #endif 
+#if !defined(RASPBERRYPI_PICO)
 	else
 		currentSpy = new NESSpy();
+#endif
 #elif defined(MODE_NES)
 	currentSpy = new NESSpy();
 #elif defined(MODE_POWERGLOVE)
