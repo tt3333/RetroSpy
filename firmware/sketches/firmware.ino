@@ -54,7 +54,7 @@
 //#define MODE_NUON
 
 //Bridge GND to the right analog IN to enable your selected mode
-//#define MODE_DETECT
+#define MODE_DETECT
 
 //--- Require Arduino + 3rd Party Libraries.  Setup is more complicated
 //#define MODE_CDI
@@ -143,6 +143,11 @@
 
 bool CreateSpy();
 
+#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+SNESSpy SNESSpy;
+WiiSpy WiiSpy;
+#endif
+
 ControllerSpy* currentSpy = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +183,10 @@ void setup()
 	Serial.begin(115200);
 #endif
 
+#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+	SNESSpy.setup();
+	WiiSpy.setup();
+#else
 	if (!CreateSpy() && currentSpy != NULL)	
 	{
 		currentSpy->setup();
@@ -187,6 +196,7 @@ void setup()
 	{
 		currentSpy->printFirmwareInfo();
 	}
+#endif
 
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wunused-value"
@@ -199,11 +209,16 @@ void setup()
 #if defined(RASPBERRYPI_PICO)
 void setup1()
 {
+#if defined(MODE_DETECT)
+	SNESSpy.setup1();
+	WiiSpy.setup1();
+#else
 	ControllerSpy* volatile *p = &currentSpy;
 	while (*p == NULL)
 	{
 	}
 	currentSpy->setup1();
+#endif
 }
 #endif
 
@@ -211,6 +226,15 @@ void setup1()
 // Arduino sketch main loop definition.
 void loop()
 {
+#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+	if (!PINC_READ(MODEPIN_SNES))
+		currentSpy = &SNESSpy;
+	else if (!PINC_READ(MODEPIN_WII))
+		currentSpy = &WiiSpy;
+	else
+		currentSpy = NULL;
+#endif
+
 	if (currentSpy != NULL)
 		currentSpy->loop();
 }
@@ -248,6 +272,7 @@ byte ReadAnalog4()
 }
 #endif
 
+#if !(defined(RASPBERRYPI_PICO) && defined(MODE_DETECT))
 bool CreateSpy()
 {
 	bool customSetup = false;
@@ -555,3 +580,4 @@ bool CreateSpy()
 	
 	return customSetup;
 }
+#endif
