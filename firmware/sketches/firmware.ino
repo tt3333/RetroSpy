@@ -288,7 +288,10 @@ void setup()
   for(int i = 3; i < 9; ++i)
     if (i != 7)
       pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2) && !defined(RASPBERRYPI_PICO)
+#elif defined(RASPBERRYPI_PICO)
+      pinMode(MODEPIN_SNES, INPUT_PULLUP);
+      pinMode(MODEPIN_WII, INPUT_PULLUP);
+#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
 #endif
@@ -302,7 +305,9 @@ void setup()
 #if defined(MODE_DETECT)
     if ( !PINC_READ(MODEPIN_SNES)) {
         SNESSpy.setup();
-    } else if ( !PINC_READ(MODEPIN_N64))  {
+    }
+#if !defined(RASPBERRYPI_PICO)
+    else if ( !PINC_READ(MODEPIN_N64))  {
 	    delay(1000);
 	    Serial.println("Starting up in N64 mode");
 	    delay(1000);
@@ -313,25 +318,31 @@ void setup()
 	    delay(1000);
         GCSpy.setup();
     }
+#endif
 #if defined(__arm__) && defined(CORE_TEENSY)
-  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
-	  delay(1000);
-	  Serial.println("Starting up in Dreamcast mode");
-	  delay(1000);
-       DCSpy.setup();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
+    else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+	    delay(1000);
+	    Serial.println("Starting up in Dreamcast mode");
+	    delay(1000);
+        DCSpy.setup();
+    }
+#endif
+#if (defined(__arm__) && defined(CORE_TEENSY)) || defined(RASPBERRYPI_PICO)
+    else if( !PINC_READ( MODEPIN_WII ) ) {
 	    delay(1000);
 	    Serial.println("Starting up in Wii mode");
 	    delay(1000);
         WiiSpy.setup();
     }
 #endif 
+#if !defined(RASPBERRYPI_PICO)
     else {
 	    delay(1000);
 	    Serial.println("Starting up in NES mode");
 	    delay(1000);
         NESSpy.setup();
     }
+#endif
 #elif defined(MODE_NES)
     NESSpy.setup();
 #elif defined(MODE_POWERGLOVE)
@@ -448,21 +459,29 @@ void loop()
 #if defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
-    } else if( !PINC_READ( MODEPIN_N64 ) ) {
+    }
+#if !defined(RASPBERRYPI_PICO)
+    else if( !PINC_READ( MODEPIN_N64 ) ) {
         N64Spy.loop();
     } else if( !PINC_READ( MODEPIN_GC ) ) {
         GCSpy.loop();
     } 
+#endif
 #if defined(__arm__) && defined(CORE_TEENSY)
-  else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
+    else if( !PINC_READ( MODEPIN_DREAMCAST ) ) {
         DCSpy.loop();
-    } else if( !PINC_READ( MODEPIN_WII ) ) {
+    }
+#endif
+#if (defined(__arm__) && defined(CORE_TEENSY)) || defined(RASPBERRYPI_PICO)
+    else if( !PINC_READ( MODEPIN_WII ) ) {
         WiiSpy.loop();
     }
 #endif
-  else {
+#if !defined(RASPBERRYPI_PICO)
+    else {
         NESSpy.loop();
     }
+#endif
 #elif defined(MODE_GC)
     GCSpy.loop();
 #elif defined(MODE_N64)
@@ -572,13 +591,15 @@ void setup1()
 void loop1()
 {
 #if defined(MODE_DETECT)
-    if( !PINC_READ( MODEPIN_WII ) ) {
+    if( !PINC_READ( MODEPIN_SNES ) ) {
+        SNESSpy.loop1();
+    } else if( !PINC_READ( MODEPIN_WII ) ) {
         WiiSpy.loop1();
     }
-#elif defined(MODE_WII)
-    WiiSpy.loop1();
 #elif defined(MODE_SNES)
     SNESSpy.loop1();
+#elif defined(MODE_WII)
+    WiiSpy.loop1();
 #endif
 }
 #endif
