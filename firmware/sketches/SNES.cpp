@@ -28,6 +28,17 @@
 
 #if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E) || defined(RASPBERRYPI_PICO)
 
+void SNESSpy::setup1() {
+#if defined(RASPBERRYPI_PICO)
+	// Disable the built-in pull-up and pull-down resistors and input the signals divided by 10kƒ¶ and 20kƒ¶ external resistors.
+	// If the resistance value used for voltage division is too low,
+	// SNES and RetroSpy will recognize that all buttons are being pressed when no controller is connected.
+	pinMode(SNES_LATCH, INPUT);
+	pinMode(SNES_DATA,  INPUT);
+	pinMode(SNES_CLOCK, INPUT);
+#endif
+}
+
 void SNESSpy::loop() {
 #if !defined(RASPBERRYPI_PICO)
 	loop1();
