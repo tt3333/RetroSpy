@@ -6,7 +6,7 @@
 
   (title_block
     (title "RetroSpy for Raspberry Pi Pico")
-    (date "2023-01-11")
+    (date "2023-03-07")
     (rev "1")
     (company "T.T")
   )
@@ -874,6 +874,11 @@
   (text "Wii controller" (at 76.2 86.36 180)
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid 3e93df53-c025-47ef-82b2-1c33403aa7d5)
+  )
+  (text "Disable the built-in pull-up and pull-down resistors\nand input the SNES signals divided by 10kΩ and 20kΩ (10+10kΩ) external resistors.\n\nIf the resistance value used for voltage division is too low,\nSNES and RetroSpy will recognize that all buttons are being pressed when no controller is connected."
+    (at 166.37 139.7 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid b5cad367-39e0-47d5-b6dc-5762190c097a)
   )
   (text "SNES controller" (at 231.14 86.36 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
