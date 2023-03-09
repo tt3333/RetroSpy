@@ -386,6 +386,23 @@ bool CreateSpy()
 		currentSpy = new CDTVWirelessSpy();
 		break;
 	}
+#elif defined(RS_VISION_COLECOVISION)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new ColecoVisionSpy();
+		break;
+	case 0x01:
+		currentSpy = new ColecoVisionRollerSpy();
+		((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_NTSC);
+		customSetup = true;
+		break;	
+	case 0x02:
+		currentSpy = new ColecoVisionRollerSpy();
+		((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_PAL);
+		customSetup = true;
+		break;	
+	}
 #elif defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
 		currentSpy = new SNESSpy;
