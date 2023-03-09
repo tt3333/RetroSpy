@@ -1,3 +1,9 @@
+[Click here for instructions for use with Raspberry Pi Pico](docs/README-RaspberryPiPico.md)<br>
+[Raspberry Pi Picoでの使用方法はこちら](docs/README-RaspberryPiPico-ja.md)
+
+The following is the Readme of the original RetroSpy<br>
+以下は本家RetroSpyのReadme
+
 # RetroSpy
 
 #### [Download the latest RetroSpy release here.](https://github.com/retrospy/RetroSpy/releases/latest)
