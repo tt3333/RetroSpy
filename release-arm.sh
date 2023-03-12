@@ -44,6 +44,7 @@ else
          else
            cp ../../MiSTer/update-retrospy.sh RetroSpy-Linux/MiSTer
          fi
+         dos2unix RetroSpy-Linux/MiSTer/update-retrospy.sh
 
          cp ../../LICENSE RetroSpy-Linux
 	     mv RetroSpy-Linux/bin/RetroSpy RetroSpy-Linux/bin/retrospy

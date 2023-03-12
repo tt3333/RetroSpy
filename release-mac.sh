@@ -39,6 +39,7 @@ then
 else
     cp MiSTer/update-retrospy.sh bin/Release/RetroSpy-macOS/MiSTer
 fi
+dos2unix bin/Release/RetroSpy-macOS/MiSTer/update-retrospy.sh
 
 cp LICENSE bin/Release/RetroSpy-macOS
  
