@@ -29,9 +29,7 @@
 #if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
 
 void SNESSpy::loop() {
-	noInterrupts();
 	updateState();
-	interrupts();
 #if !defined(DEBUG)
 	writeSerial();
 #else
@@ -54,16 +52,31 @@ void SNESSpy::updateState() {
 #else
 	unsigned char position = 0;
 	unsigned char bits = 0;
-
+	unsigned long start;
 	bytesToReturn = SNES_BITCOUNT;
 
+waiting_for_latch:
+	start = millis();
+	position = 0;
+	bits = 0;
 	WAIT_FALLING_EDGE(SNES_LATCH);
-
+	if (millis() - start < 10)
+	{
+		goto waiting_for_latch;
+	}
+	
+	noInterrupts();
 	do {
 		WAIT_FALLING_EDGE(SNES_CLOCK);
 		rawData[position++] = !PIN_READ(SNES_DATA);
 	} while (++bits < SNES_BITCOUNT);
 
+	if (rawData[15] != 0 && rawData[0] != 0)
+	{
+		interrupts();
+		goto waiting_for_latch;
+	}
+	
 	if (rawData[15] != 0x0 || (rawData[15] == 0x00 && rawData[13] != 0x00))
 	{
 		bits = 0;
@@ -74,6 +87,7 @@ void SNESSpy::updateState() {
 
 		bytesToReturn = SNES_BITCOUNT_EXT;
 	}
+	interrupts();
 #endif
 }
 

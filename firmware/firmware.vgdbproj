@@ -378,7 +378,7 @@
       </DebugSettingsOverride>
       <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
         <BoardID>arduino:avr:nano</BoardID>
-        <COMPort>COM10</COMPort>
+        <COMPort />
         <Properties>
           <Entries>
             <KeyValue>
