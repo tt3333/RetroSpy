@@ -13,7 +13,7 @@
 //-- Arduino or Teensy 3.5
 //#define MODE_NES
 //#define MODE_POWERGLOVE
-#define MODE_SNES
+//#define MODE_SNES
 //#define MODE_N64
 //#define MODE_GC
 //#define MODE_SMS
