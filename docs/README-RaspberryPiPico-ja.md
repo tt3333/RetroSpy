@@ -64,6 +64,7 @@ USBコネクタ、トグルスイッチ、コントローラーのケーブル�
 5. 「Tools」→「Board」→「Board Manager...」をクリック
 6. 検索欄に「pico」と入力し、「Raspberry Pi Pico/RP2040 by Earle F. Philhower, III」をインストール
 7. 「Tools」→「Board」→「Raspberry Pi Pico/RP2040」→「Raspberry Pi Pico」をクリック
-8. 「Tools」→「Optimize」→「Fast (-Ofast) (maybe slower)」をクリック
-9. 「Tools」→「USB Stack」→「Pico SDK」をクリック
-10. 「Sketch」→「Export Compiled Binary」をクリック
+8. 「Tools」→「CPU Speed」→「200 MHz (Overclock)」をクリック
+9. 「Tools」→「Optimize」→「Fast (-Ofast) (maybe slower)」をクリック
+10. 「Tools」→「USB Stack」→「Pico SDK」をクリック
+11. 「Sketch」→「Export Compiled Binary」をクリック
