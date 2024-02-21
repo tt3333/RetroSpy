@@ -47,7 +47,7 @@ Make holes for USB connector, toggle switch, and controller cables.
 * A reset switch can be attached to SW2, but there is no problem even without it.
 * Cut the extension cable for Wii in half and connect to CN1.
 * Cut the extension cable for SNES in half and connect to CN2.
-* While pressing the BOOTSEL button on the Raspberry Pi Pico, connect the USB cable and write the firmware.ino.sf2.
+* While pressing the BOOTSEL button on the Raspberry Pi Pico, connect the USB cable and write the firmware.ino.uf2.
 
 ![pcb](tutorial-images/raspberry-pi-pico-pcb.png)
 ![assembly](tutorial-images/raspberry-pi-pico.jpg)

@@ -47,7 +47,7 @@ USBコネクタ、トグルスイッチ、コントローラーのケーブル�
 * SW2にリセットスイッチを付けることができますが、無くても問題ありません。
 * Wii用の延長ケーブルを半分に切り、CN1に接続してください。
 * スーパーファミコン用の延長ケーブルを半分に切り、CN2に接続してください。
-* Raspberry Pi PicoのBOOTSELボタンを押しながらUSBケーブルを接続し、firmware.ino.sf2を書き込んでください。
+* Raspberry Pi PicoのBOOTSELボタンを押しながらUSBケーブルを接続し、firmware.ino.uf2を書き込んでください。
 
 ![pcb](tutorial-images/raspberry-pi-pico-pcb.png)
 ![assembly](tutorial-images/raspberry-pi-pico.jpg)
