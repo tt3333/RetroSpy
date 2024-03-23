@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
-// Version: 6.2
+// Version: 6.4.8
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -81,6 +81,7 @@
 // CD-i controller timeouts (ms)
 #define CDI_WIRED_TIMEOUT 50
 #define CDI_WIRELESS_TIMEOUT 100
+#define CDI_WIRELESS_REMOTE_TIMEOUT 150
 
 // Pippin Controller Configuration
 #define PIPPIN_CONTROLLER_SPY_ADDRESS 0xF
@@ -91,6 +92,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "common.h"
+
+#if defined(TP_IRREMOTE)
+#include <IRremote.hpp>
+#endif
 
 #include "NES.h"
 #include "SNES.h"
@@ -151,6 +156,10 @@ WiiSpy WiiSpy;
 ControllerSpy* currentSpy = NULL;
 bool muteStartupMessage;
 
+#ifdef VISION_ANALOG_ADC_INT_HANDLER
+extern byte adcint_mode;
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
@@ -158,7 +167,7 @@ void setup()
 	muteStartupMessage = false;
 	
 	// FOR MODE DETECTION
-#if defined(RS_VISION_ULTRA)
+#if defined(RS_VISION_DREAM)
 	for (int i = 13; i <= 18; ++i)
 		pinMode(i, INPUT_PULLUP);
 #elif defined(__arm__) && defined(CORE_TEENSY)
@@ -168,13 +177,18 @@ void setup()
 	for (int i = 3; i < 9; ++i)
 		if (i != 7)
 			pinMode(i, INPUT_PULLUP);
+#elif defined(RS_VISION_CDI)
+	for (int i = 16; i <= 21; ++i)
+		pinMode(i, INPUT_PULLUP);
 #elif defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
 	pinMode(MODEPIN_SNES, INPUT_PULLUP);
 	pinMode(MODEPIN_WII, INPUT_PULLUP);
-#elif defined(RS_VISION) || defined(RS_VISION_CDI)
+	for (int i = 16; i < 22; ++i)
+		pinMode(i, INPUT_PULLUP);
+#elif defined(RS_VISION)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
-#elif !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif !defined(VISION_ANALOG_ADC_INT_HANDLER) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
 	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
 	DDRC  = 0x00;
 #endif
@@ -185,6 +199,8 @@ void setup()
 	Serial.begin(115200);
 #endif
 
+	while (!Serial) ; 
+	
 #if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
 	SNESSpy.setup();
 	WiiSpy.setup();
@@ -199,7 +215,7 @@ void setup()
 		currentSpy->printFirmwareInfo();
 	}
 #endif
-
+	
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wunused-value"
 	T_DELAY(5000);
@@ -249,7 +265,7 @@ void loop1()
 }
 #endif
 
-#if defined(RS_VISION) || defined(RS_VISION_CDI)
+#if defined(RS_VISION) || defined(RS_VISION_COLECOVISION)
 byte ReadAnalog()
 {
 	byte retVal = PINC;
@@ -258,10 +274,48 @@ byte ReadAnalog()
 }
 #endif
 
-#if defined(RS_VISION_ULTRA)
+#if defined(VISION_ANALOG_ADC_INT_HANDLER) && (defined(RS_VISION_ANALOG_1) || defined(RS_VISION_ANALOG_2))
+byte ReadAnalog()
+{
+	adcint_mode = (~PINC & 0b00111110) >> 1;
+	
+	return adcint_mode;
+}
+#endif
+
+#if defined(RS_VISION_CDI)
+byte ReadAnalog()
+{
+	byte retVal = 0x00;
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		if (digitalRead(21 - i) == LOW)
+			retVal |= (1 << i);
+	}
+	
+	return retVal;
+}
+#endif 
+
+#if defined(RS_VISION_FLEX)
+byte ReadAnalog()
+{
+	byte retVal = 0x00;
+	
+	for (int i = 0; i < 6; ++i)
+	{
+		if (digitalRead(16 + i) == LOW)
+			retVal |= (1 << i);
+	}
+	
+	return retVal;
+}
+#endif 
+
+#if defined(RS_VISION_DREAM)
 byte ReadAnalog4()
 {
-	Serial.println("here");
 	byte retVal = 0x00;
 	
 	for (int i = 0; i < 6; ++i)
@@ -269,7 +323,19 @@ byte ReadAnalog4()
 		if (digitalReadFast(i + 13) == LOW)
 			retVal |= (1 << i);
 	}
-	Serial.println(retVal);
+	return retVal;
+}
+#endif
+
+#if defined(RS_VISION_PIPPIN)
+byte ReadDigital()
+{
+	byte retVal = 0x00;
+	for (int i = 0; i < 8; ++i)
+	{
+		if (digitalRead(i + 3) == LOW)
+			retVal |= (1 << i);
+	}
 	return retVal;
 }
 #endif
@@ -372,14 +438,6 @@ bool CreateSpy()
 		currentSpy = new CDTVWiredSpy();
 		muteStartupMessage = true;
 		break;
-	case 0x1A:
-		currentSpy = new ColecoVisionSpy();
-		break;
-//	case 0x1B:
-//		currentSpy = new PippinSpy();
-//		((PippinSpy*)currentSpy)->setup(PIPPIN_CONTROLLER_SPY_ADDRESS, PIPPIN_MOUSE_SPY_ADDRESS);
-//		customSetup = true;
-//		break;
 	case 0x1C:
 		currentSpy = new KeyboardControllerSpy();
 		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL, KeyboardControllerSpy::CABLE_GENESIS);
@@ -406,7 +464,7 @@ bool CreateSpy()
 		customSetup = true;
 		break;	
 	}
-#elif defined(RS_VISION_ULTRA)
+#elif defined(RS_VISION_DREAM)
 	switch (ReadAnalog4())
 	{
 	case 0x00:
@@ -422,6 +480,12 @@ bool CreateSpy()
 		currentSpy = new WiiSpy();
 		break;
 	case 0x04:
+		currentSpy = new VFlashSpy();
+		break;
+	case 0x05:
+		currentSpy = new VSmileSpy();
+		break;
+	case 0x06:
 		currentSpy = new NuonSpy();
 		break;
 	}
@@ -429,12 +493,18 @@ bool CreateSpy()
 	switch (ReadAnalog())
 	{
 	case 0x00:
-		currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
+		currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT, CDI_WIRELESS_REMOTE_TIMEOUT, 9);
 		break;
 	case 0x01:
-		currentSpy = new CDiKeyboardSpy();
+		currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT, CDI_WIRELESS_REMOTE_TIMEOUT, 5);
 		break;
 	case 0x02:
+		currentSpy = new CDiKeyboardSpy(9);
+		break;
+	case 0x03:
+		currentSpy = new CDiKeyboardSpy(5);
+		break;
+	case 0x04:
 		currentSpy = new CDTVWirelessSpy();
 		break;
 	}
@@ -454,6 +524,280 @@ bool CreateSpy()
 		((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_PAL);
 		customSetup = true;
 		break;	
+	}
+#elif defined(RS_VISION_PIPPIN)
+	byte switchVal = ReadDigital();
+	byte controllerAddress = (switchVal & 0x0F);
+	byte mouseAddress = ((switchVal & 0xF0) >> 4);
+	
+	if (controllerAddress == mouseAddress && controllerAddress != 0x0F)
+	{
+		controllerAddress = PIPPIN_CONTROLLER_SPY_ADDRESS;
+		mouseAddress = PIPPIN_MOUSE_SPY_ADDRESS;
+	}
+		
+	currentSpy = new PippinSpy();
+	((PippinSpy*)currentSpy)->setup(controllerAddress, mouseAddress);
+	customSetup = true;
+#elif defined(RS_VISION_ANALOG_1)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new AtariPaddlesSpy();
+		break;
+	case 0x01:
+		currentSpy = new AmigaAnalogSpy();
+		((AmigaAnalogSpy*)currentSpy)->setup(false);
+		customSetup = true;
+		break;	
+	case 0x02:
+		currentSpy = new Atari5200Spy();
+		((Atari5200Spy*)currentSpy)->setup(false);
+		customSetup = true;
+		break;	
+	case 0x03:
+		currentSpy = new NESSpy();
+		break;
+	case 0x04:
+		currentSpy = new PowerGloveSpy();
+		break;
+	case 0x05:
+		currentSpy = new SNESSpy();
+		break;
+	case 0x06:
+		currentSpy = new N64Spy();
+		break;
+	case 0x07:
+		currentSpy = new GCSpy();
+		break;
+	case 0x08:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;	
+	case 0x09:
+		currentSpy = new SMSPaddleSpy();
+		((SMSPaddleSpy*)currentSpy)->setup(SMSPaddleSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x0A:
+		currentSpy = new SMSSportsPadSpy();
+		break;
+	case 0x0B:
+		currentSpy = new GenesisSpy();
+		break;
+	case 0x0C:
+		currentSpy = new GenesisMouseSpy();
+		break;
+	case 0x0D:
+		currentSpy = new SaturnSpy();
+		break;
+	case 0x0E:
+		currentSpy = new Saturn3DSpy();
+		break;
+	case 0x0F:
+		currentSpy = new PlayStationSpy();
+		break;
+	case 0x10:
+		currentSpy = new GBASpy();
+		break;
+	case 0x11:
+		currentSpy = new BoosterGripSpy();
+		((BoosterGripSpy*)currentSpy)->setup(BoosterGripSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x12:
+		currentSpy = new TG16Spy();
+		break;
+	case 0x13:
+		currentSpy = new NeoGeoSpy();
+		break;
+	case 0x14:
+		currentSpy = new ThreeDOSpy();
+		((ThreeDOSpy*)currentSpy)->setup(ThreeDOSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x16:
+		currentSpy = new JaguarSpy();
+		break;
+	case 0x18:
+		currentSpy = new PCFXSpy();
+		break;
+	case 0x1B:
+		currentSpy = new DrivingControllerSpy();
+		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;		
+	case 0x1C:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GX4000);
+		customSetup = true;
+		break;	
+	case 0x1D:
+		currentSpy = new IntellivisionSpy();
+		break;
+	case 0x1E:
+		currentSpy = new GenesisMouseSpy();
+		break;
+	}
+#elif defined(RS_VISION_ANALOG_2)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new AtariPaddlesSpy();
+		break;
+	case 0x01:
+		currentSpy = new AmigaAnalogSpy();
+		((AmigaAnalogSpy*)currentSpy)->setup(true);
+		customSetup = true;
+		break;	
+	case 0x02:
+		currentSpy = new Atari5200Spy();
+		((Atari5200Spy*)currentSpy)->setup(true);
+		customSetup = true;
+		break;	
+	}
+#elif defined(RS_VISION_FLEX)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new NESSpy();
+		break;
+	case 0x01:
+		currentSpy = new SNESSpy();
+		break;
+	case 0x02:
+		currentSpy = new N64Spy();
+		break;
+	case 0x03:
+		currentSpy = new GCSpy();
+		break;
+	case 0x04:
+		currentSpy = new WiiSpy();
+		break;	
+	case 0x05:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;	
+	case 0x06:
+		currentSpy = new GenesisSpy();
+		break;
+	case 0x07:
+		currentSpy = new SaturnSpy();
+		break;
+	case 0x08:
+		currentSpy = new Saturn3DSpy();
+		break;
+	case 0x09:
+		currentSpy = new Saturn3DSpy();
+		break;
+	case 0x0A:
+		currentSpy = new PlayStationSpy();
+		break;
+	case 0x0B:
+		currentSpy = new GBASpy();
+		break;
+	case 0x0C:
+		currentSpy = new AmigaCd32Spy();
+		break;
+	case 0x0D:
+		currentSpy = new FMTownsKeyboardAndMouseSpy();
+		break;
+	case 0x0E:
+		currentSpy = new TG16Spy();
+		break;
+	case 0x0F:
+		currentSpy = new NeoGeoSpy();
+		break;
+	case 0x10:
+		currentSpy = new BoosterGripSpy();
+		((BoosterGripSpy*)currentSpy)->setup(BoosterGripSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x11:
+		currentSpy = new JaguarSpy();
+		break;
+	case 0x12:
+		currentSpy = new DreamcastSpy();
+		break;
+	case 0x13:
+		currentSpy = new VSmileSpy();
+		break;
+	case 0x14:
+		currentSpy = new VFlashSpy();
+		break;
+	case 0x15:
+		currentSpy = new FMTownsSpy();
+		break;
+	case 0x16:
+		currentSpy = new IntellivisionSpy();
+		break;
+	case 0x17:
+		currentSpy = new PCFXSpy();
+		break;
+	case 0x18:
+		currentSpy = new PowerGloveSpy();
+		break;
+	case 0x19:
+		currentSpy = new ThreeDOSpy();
+		break;
+	case 0x1A:
+		currentSpy = new GenesisMouseSpy();
+		break;
+	case 0x1B:
+		currentSpy = new AmigaKeyboardSpy();
+		break;
+	case 0x1C:
+		currentSpy = new SMSSpy();		
+		((SMSSpy*)currentSpy)->setup(SMSSpy::CABLE_GX4000);
+		customSetup = true;
+		break;
+	case 0x1D:
+		currentSpy = new SMSPaddleSpy();
+		((SMSPaddleSpy*)currentSpy)->setup(SMSPaddleSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x1E:
+		currentSpy = new SMSSportsPadSpy();
+		break;
+	case 0x1F:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL, KeyboardControllerSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x20:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS, KeyboardControllerSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x21:
+		currentSpy = new KeyboardControllerSpy();
+		((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD, KeyboardControllerSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x22:
+		currentSpy = new DrivingControllerSpy();
+		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x23:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x24:
+		currentSpy = new AmigaMouseSpy();
+		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::CABLE_GENESIS);
+		customSetup = true;
+		break;
+	case 0x25:
+		currentSpy = new CDTVWiredSpy();
+		muteStartupMessage = true;
+		break;
+	case 0x26:
+		currentSpy = new NuonSpy();
+		break;
 	}
 #elif defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
@@ -531,7 +875,7 @@ bool CreateSpy()
 #elif defined(MODE_WII)
 	currentSpy = new WiiSpy();
 #elif defined(MODE_CD32)
-	currentSpy = new Cd32Spy();
+	currentSpy = new AmigaCd32Spy();
 #elif defined(MODE_DRIVING_CONTROLLER)
 	currentSpy = new DrivingControllerSpy();
 #elif defined(MODE_PIPPIN)
@@ -552,7 +896,7 @@ bool CreateSpy()
 #elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)
 	currentSpy = new FMTownsKeyboardAndMouseSpy();
 #elif defined(MODE_CDI)
-	currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT);
+	currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT, CDI_WIRELESS_REMOTE_TIMEOUT, 0xFF);
 #elif defined(MODE_CDI_KEYBOARD)
 	currentSpy = new CDiKeyboardSpy();
 #elif defined(MODE_GAMEBOY_PRINTER)
@@ -589,13 +933,13 @@ bool CreateSpy()
 	currentSpy = new KeyboardControllerSpy();
 	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_NORMAL);
 	customSetup = true;
-#elif (MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) 
+#elif defined(MODE_KEYBOARD_CONTROLLER_STAR_RAIDERS) 
 	currentSpy = new KeyboardControllerSpy();
 	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_STAR_RAIDERS);
 	customSetup = true;
-#elif (MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
+#elif defined(MODE_KEYBOARD_CONTROLLER_BIG_BIRD)
 	currentSpy = new KeyboardControllerSpy();
-	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD);
+	((KeyboardControllerSpy*)currentSpy)->setup(KeyboardControllerSpy::MODE_BIG_BIRD, KeyboardControllerSpy::CABLE_GENESIS);
 	customSetup = true;
 #endif
 	

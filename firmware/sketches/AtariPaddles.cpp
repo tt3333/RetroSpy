@@ -31,6 +31,7 @@
 static int nominal_min = 1024;
 static int nominal_max = 0;
 static volatile int lastVal = 0;
+static volatile int lastValInfo = 0;
 static volatile int currentVal = 0;
 static volatile int analogVal = 0;
 static volatile int readFlag;
@@ -38,18 +39,45 @@ static volatile int readFlag;
 static int window[3];
 static int windowPosition = 0;
 
-#if defined(ATARIPADDLES_ADC_INT_HANDLER)
+#ifdef VISION_ANALOG_ADC_INT_HANDLER
+byte adcint_mode = 0;
+
+extern void PaddlesADCInt();
+extern void AmigaAnalogADCInt();
+extern void Atari5200ADCInt();
 ISR(ADC_vect)
 {
-	
+	switch (adcint_mode)
+	{	
+	case 0x00:
+		PaddlesADCInt();
+		break;
+	case 0x01:
+		AmigaAnalogADCInt();
+		break;
+	case 0x02:
+		Atari5200ADCInt();
+		break;
+	}
+}
+#endif
+
+unsigned long voltageDropTime;
+unsigned long startTime = millis();
+void PaddlesADCInt()
+{
 	// Must read low first
 	analogVal = ADCL | (ADCH << 8);
 
-	if (analogVal < lastVal && (lastVal - analogVal) > 20)
-	{
+	
+	if (analogVal < lastVal && (lastVal - analogVal) > 20 && (millis() - startTime) > 10)
+	{				
+		lastValInfo = lastVal;
+		voltageDropTime = millis() - startTime;
 		currentVal = lastVal;
 		lastVal = analogVal;
 		readFlag = 1;
+		startTime = millis();
 	}
 	else
 	{
@@ -59,6 +87,12 @@ ISR(ADC_vect)
 	// Not needed because free-running mode is enabled.
 	// Set ADSC in ADCSRA (0x7A) to start another ADC conversion
 	// ADCSRA |= B01000000;
+}
+
+#if defined(ATARIPADDLES_ADC_INT_HANDLER)
+ISR(ADC_vect)
+{
+	PaddlesADCInt();
 }
 #endif
 
@@ -124,7 +158,6 @@ void AtariPaddlesSpy::loop()
 {
 	if (readFlag == 1)
 	{
-
 		byte pins = 0;
 		pins |= (PIND >> 2);
       
@@ -148,7 +181,11 @@ void AtariPaddlesSpy::loop()
 		Serial.print(nominal_min);
 		Serial.print("|");
 		Serial.print(nominal_max);
-		Serial.print("\n");
+		Serial.print("|");
+		Serial.print(voltageDropTime);
+		Serial.print("|");
+		Serial.print(lastValInfo);
+		Serial.println();
 #else
 		int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255);
 		Serial.write(0);
@@ -160,7 +197,7 @@ void AtariPaddlesSpy::loop()
 		Serial.write('\n');
 #endif
 		readFlag = 0;
-		delay(5);	
+		//delay(5);	
 	}
 }
 

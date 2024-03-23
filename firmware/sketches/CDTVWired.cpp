@@ -26,12 +26,17 @@
 
 #include "CDTVWired.h"
 
-#if defined(TP_TIMERONE) && !(defined(__arm__) && defined(CORE_TEENSY))
+#if (defined(TP_TIMERONE) && !(defined(__arm__) && defined(CORE_TEENSY))) || (defined(TP_ELASPEDMILLIS) && (defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)))
+
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 #include <TimerOne.h>
+#define PRDT_PIN 2
+#else
+#include <elapsedMillis.h>
+#define PRDT_PIN 0
+#endif
 
 #define BUFFER_SIZE 45
-
-#define PRDT_PIN 2
 
 #define WAITING_FOR_SYNC_HIGH 1
 #define WAITING_FOR_SYNC_LOW  2
@@ -48,13 +53,22 @@ static uint8_t head, tail;
 static volatile CDTV_packet* currentReadPacket = NULL;
 
 static volatile CDTV_packet* currentWritePacket = NULL;
+
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 static volatile unsigned long diff;
+#else
+static volatile uint32_t timestamp;
+#endif
+
 static volatile unsigned int count = 0, state = WAITING_FOR_SYNC_HIGH;
 
 void PRDTStateChanged()
 {
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 	diff = TCNT1 >> 1;
-
+#else
+	uint32_t diff = micros() - timestamp;
+#endif
 	if (state == WAITING_FOR_SYNC_HIGH) {
 		if (diff > 1000) {
 			state = WAITING_FOR_SYNC_LOW;
@@ -107,7 +121,12 @@ void PRDTStateChanged()
 		else
 			count++;
 	}
+	
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 	TCNT1 = 0;
+#else
+	timestamp = micros();
+#endif
 }
 
 void CDTVWiredSpy::setup()
@@ -116,10 +135,14 @@ void CDTVWiredSpy::setup()
 
 	pinMode(PRDT_PIN, INPUT_PULLUP);
 	attachInterrupt(digitalPinToInterrupt(PRDT_PIN), PRDTStateChanged, CHANGE);
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 	Timer1.initialize(10000);
 	Timer1.stop();
 	Timer1.restart();
 	Timer1.detachInterrupt();
+#else
+	timestamp = micros();
+#endif
 
 }
 

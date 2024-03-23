@@ -8,18 +8,43 @@
 	  <RootNamespace>GBPUpdater</RootNamespace>
 	  <AssemblyName>GBPUpdater</AssemblyName>
 	  <BaseOutputPath>..\bin</BaseOutputPath>
+	  <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
+	  <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
+	  <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
 
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<DefineConstants>OS_WINDOWS</DefineConstants>
+	</PropertyGroup>
+	
 	<PropertyGroup>
-		<AssemblyVersion>6.2</AssemblyVersion>
-		<FileVersion>6.2</FileVersion>
-		<Version>6.2</Version>
+		<AssemblyVersion>6.4.8</AssemblyVersion>
+		<FileVersion>6.4.8</FileVersion>
+		<Version>6.4.8</Version>
 		<Copyright>Copyright © 2022</Copyright>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<ApplicationIcon>GBPUpdater.ico</ApplicationIcon>
+		<ResolveComReferenceSilent>true</ResolveComReferenceSilent>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="CH340G_2019.zip" />
+    <None Remove="usb_driver\amd64\WdfCoInstaller01011.dll" />
+    <None Remove="usb_driver\amd64\winusbcoinstaller2.dll" />
+    <None Remove="usb_driver\installer_arm64.exe" />
+    <None Remove="usb_driver\installer_x64.exe" />
+    <None Remove="usb_driver\usb_device.cat" />
+    <None Remove="usb_driver\usb_device.inf" />
+    <None Remove="wdi-simple.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,15 +52,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.IO.Ports" Version="8.0.0-preview.6.23329.7" />
+    <PackageReference Include="System.Management" Version="8.0.0-preview.6.23329.7" />
   </ItemGroup>
 
 	
@@ -44,8 +69,45 @@
 	</ItemGroup>
 
 	
+		<ItemGroup Condition="'$(IsWindows)'=='true'">
+		  <COMReference Include="WUApiLib">
+		    <WrapperTool>tlbimp</WrapperTool>
+		    <VersionMinor>0</VersionMinor>
+		    <VersionMajor>2</VersionMajor>
+		    <Guid>b596cc9f-56e5-419e-a622-e01bb457431e</Guid>
+		    <Lcid>0</Lcid>
+		    <Isolated>false</Isolated>
+		    <EmbedInteropTypes>true</EmbedInteropTypes>
+		  </COMReference>
+		</ItemGroup>
+
+	
 		<ItemGroup>
+		  <Content Include="CH340G_2019.zip">
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		  </Content>
 		  <Content Include="GBPUpdater.ico" />
+		  <Content Include="usb_driver\amd64\WdfCoInstaller01011.dll">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="usb_driver\amd64\winusbcoinstaller2.dll">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="usb_driver\installer_arm64.exe">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="usb_driver\installer_x64.exe">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="usb_driver\usb_device.cat">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="usb_driver\usb_device.inf">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
+		  <Content Include="wdi-simple.exe">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  </Content>
 		</ItemGroup>
 
 </Project>

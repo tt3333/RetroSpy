@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
-using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia.Enums;
 using Renci.SshNet;
 using RetroSpy.Readers;
 using System;
@@ -20,6 +20,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vortice;
 using static System.Net.WebRequestMethods;
 using ComboBox = Avalonia.Controls.ComboBox;
 using File = System.IO.File;
@@ -86,7 +87,18 @@ namespace RetroSpy
             Properties.Settings.Default.UseLagFix = LagFixCheckbox.IsChecked ?? false;
         }
 
-            private void UpdatePortListThread()
+        private void UseUSB2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+                UseUSB2Checkbox.IsChecked = !UseUSB2Checkbox.IsChecked;
+
+            _vm.UseUSB2 = UseUSB2Checkbox.IsChecked ?? false;
+            Properties.Settings.Default.UseUSB2 = UseUSB2Checkbox.IsChecked ?? false;
+
+            PopulateSources();
+        }
+
+        private void UpdatePortListThread()
             {
                 if (letUpdatePortThreadRun)
                 {
@@ -95,6 +107,7 @@ namespace RetroSpy
                 }
             }
 
+        [Obsolete("GetPath is obsolete as it is not compatible with mobile platforms")]
         public async Task<string?> GetPath()
         {
             OpenFolderDialog dialog = new();
@@ -104,6 +117,7 @@ namespace RetroSpy
             return result;
         }
 
+        [Obsolete("GetPath is obsolete as it is not compatible with mobile platforms")]
         private async void CustomSkinPath_Click(object sender, RoutedEventArgs e)
         {
             string? _path = await GetPath();
@@ -151,7 +165,7 @@ namespace RetroSpy
 
             if (!Directory.Exists(skinsDirectory))
             {
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Could not find skins folder!", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
 
@@ -171,10 +185,14 @@ namespace RetroSpy
 
         public SetupWindow() : this(false)
         {
-
+            Closing += (s, e) =>
+            {
+                isClosing = true;
+                Environment.Exit(0);
+            };
         }
 
-        private bool letUpdatePortThreadRun = false;
+        private readonly bool letUpdatePortThreadRun = false;
         public SetupWindow(bool skipSetup = false)
         {
             try
@@ -229,7 +247,7 @@ namespace RetroSpy
                 if (!Directory.Exists(skinsDirectory))
                 {
                     AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture),
-                        "Could not find skins folder!", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                        "Could not find skins folder!", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                     Environment.Exit(-1);
 
                 }
@@ -248,6 +266,9 @@ namespace RetroSpy
                         _excludedSources.Add(source);
                     }
                 }
+
+                _vm.UseUSB2 = Properties.Settings.Default.UseUSB2;
+                UseUSB2Checkbox.IsChecked = _vm.UseUSB2;
 
                 PopulateSources();
 
@@ -356,12 +377,12 @@ namespace RetroSpy
             }
             catch (TypeInitializationException ex)
             {
-                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex?.InnerException?.Message + "\n\n" + ex?.InnerException?.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex?.InnerException?.Message + "\n\n" + ex?.InnerException?.StackTrace, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
             catch (Exception ex)
             {
-                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
         }
@@ -376,7 +397,7 @@ namespace RetroSpy
             Properties.Settings.Default.Skin = _vm.Skins.GetSelectedId();
             try
             {
-                _vm.DelayInMilliseconds = Int32.Parse(txtDelay.Text);
+                _vm.DelayInMilliseconds = Int32.Parse(txtDelay.Text ?? "0");
             }
             catch (Exception)
             {
@@ -390,6 +411,7 @@ namespace RetroSpy
             Properties.Settings.Default.FilterCOMPorts = _vm.FilterCOMPorts;
             Properties.Settings.Default.DontSavePassword = _vm.DontSavePassword;
             Properties.Settings.Default.UseLagFix = _vm.UseLagFix;
+            Properties.Settings.Default.UseUSB2 = _vm.UseUSB2;
 
             if (_vm.Sources.SelectedItem == InputSource.MISTER)
             {
@@ -434,11 +456,11 @@ namespace RetroSpy
                          || _vm.Sources.SelectedItem == InputSource.PS4CRONUS || _vm.Sources.SelectedItem == InputSource.A500MINI || _vm.Sources.SelectedItem == InputSource.PS4USB
                          || _vm.Sources.SelectedItem == InputSource.POCKET))
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader4(txtHostname.Text, txtUsername.Text, txtPassword.Text);
+                    reader = _vm.Sources.SelectedItem.BuildReader4(txtHostname.Text ?? String.Empty, txtUsername.Text ?? String.Empty, txtPassword.Text ?? String.Empty);
                 }
                 else if (_vm.Sources.SelectedItem != null && _vm.Sources.SelectedItem.BuildReader5 != null && _vm.Sources.SelectedItem == InputSource.MISTER)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text, txtUsername.Text, txtPassword.Text, _vm.MisterGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
+                    reader = _vm.Sources.SelectedItem.BuildReader5(txtHostname.Text ?? String.Empty, txtUsername.Text ?? String.Empty, txtPassword.Text ?? String.Empty, _vm.MisterGamepad.SelectedItem.ToString(CultureInfo.CurrentCulture));
                 }
                 else if (_vm.Sources.SelectedItem != null && _vm.Sources.SelectedItem.BuildReader2 != null && (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32
                             || _vm.Sources.SelectedItem == InputSource.ATARI5200 || _vm.Sources.SelectedItem == InputSource.COLECOVISION
@@ -482,16 +504,16 @@ namespace RetroSpy
             }
             catch (ConfigParseException ex)
             {
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
 
             }
             catch (System.Net.Sockets.SocketException)
             {
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), string.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), string.Format(new CultureInfo("en-US"), "Cannot connect to {0}.", txtHostname.Text), ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
             }
             catch (UnauthorizedAccessException ex)
             {
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
             }
             catch (SSHMonitorDisconnectException)
             {
@@ -499,7 +521,7 @@ namespace RetroSpy
             }
             catch (Exception ex)
             {
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 v?.Close();
             }
 
@@ -509,31 +531,37 @@ namespace RetroSpy
         private void PopulateSources()
         {
             List<InputSource> prunedSources = new();
+
             foreach (InputSource source in InputSource.GetAllSources())
             {
-                if (!_excludedSources.Contains(source.Name))
+                if (!_excludedSources.Contains(source.Name) 
+                    && !(source.UseUSB2 == 0 && _vm.UseUSB2 == true) 
+                    && !(source.UseUSB2 == 1 && _vm.UseUSB2 == false)
+                    && !(source.UseUSB2 == 4 && string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VisionTester"))))
                 {
                     prunedSources.Add(source);
                 }
             }
+         
             _vm.Sources.UpdateContents(prunedSources);
         }
 
-        private static void AvaloniaMessageBox(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
+        private static void AvaloniaMessageBox(string? title, string message, ButtonEnum buttonType, MsBox.Avalonia.Enums.Icon iconType)
         {
-            using var source = new CancellationTokenSource();
-            _ = MessageBox.Avalonia.MessageBoxManager
-            .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType)
-                        .Show().ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
+            var source = new CancellationTokenSource();
+            _ = MsBox.Avalonia.MessageBoxManager
+            .GetMessageBoxStandard(title ?? "Unknown Title Argument", message, buttonType, iconType)
+                        .ShowAsync().ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
             Dispatcher.UIThread.MainLoop(source.Token);
         }
 
 
-        private void AvaloniaMessageBoxDialog(string? title, string message, ButtonEnum buttonType, MessageBox.Avalonia.Enums.Icon iconType)
-        { 
-            var m = MessageBox.Avalonia.MessageBoxManager
-                    .GetMessageBoxStandardWindow(title ?? "Unknown Title Argument", message, buttonType, iconType);
-            m.ShowDialog(this);
+        private void AvaloniaMessageBoxDialog(string? title, string message, ButtonEnum buttonType, MsBox.Avalonia.Enums.Icon iconType)
+        {
+            var source = new CancellationTokenSource();
+            var m = MsBox.Avalonia.MessageBoxManager
+                    .GetMessageBoxStandard(title ?? "Unknown Title Argument", message, buttonType, iconType);
+            m.ShowWindowDialogAsync(this).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void ShowSkinParseErrors(Collection<string> errs)
@@ -545,7 +573,7 @@ namespace RetroSpy
                 _ = msg.AppendLine(err);
             }
 
-            AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), msg.ToString(), ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+            AvaloniaMessageBox(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), msg.ToString(), ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
         }
 
         private async void AddRemove_Click(object sender, RoutedEventArgs e)
@@ -568,8 +596,8 @@ namespace RetroSpy
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            string url = String.Format("https://retro-spy.com/about-retrospy/?version={0}&buildtime={1}",
-                System.Web.HttpUtility.UrlEncode(Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString()), System.Web.HttpUtility.UrlEncode(Properties.Resources.BuildDate));
+            string url = String.Format("https://retro-spy.com/about-retrospy/?version={0}&buildtime={1}&cache_buster={2}",
+                System.Web.HttpUtility.UrlEncode(Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString()), System.Web.HttpUtility.UrlEncode(Properties.Resources.BuildDate), Guid.NewGuid());
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -596,7 +624,7 @@ namespace RetroSpy
             {
                 ((TextBox)sender).Text = "0";
             }
-            else if (Int32.Parse(((TextBox)sender).Text) > 300000)
+            else if (Int32.Parse(((TextBox)sender).Text ?? String.Empty) > 300000)
             {
                 ((TextBox)sender).Text = 300000.ToString();
             }
@@ -796,37 +824,45 @@ namespace RetroSpy
 
         private static void GetRaspberryPiPorts(List<string> arduinoPorts)
         {
-            const uint vid = 0x2E8A;
-            string vidStr = "'%USB_VID[_]" + vid.ToString("X", CultureInfo.CurrentCulture) + "%'";
+            uint[] vid = new uint[] { 0x2E8A, 0x6666 };
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            for (int i = 0; i < vid.Length; ++i)
             {
-                using ManagementObjectSearcher searcher = new("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr);
-                foreach (ManagementBaseObject mgmtObject in searcher.Get())
+                string vidStr = "'%USB_VID[_]" + vid[i].ToString("X", CultureInfo.CurrentCulture) + "%'";
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
-                    if (DeviceIdParts[0] != "USB")
+                    using ManagementObjectSearcher searcher = new("root\\CIMV2", "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE " + vidStr);
+                    foreach (ManagementBaseObject mgmtObject in searcher.Get())
                     {
-                        break;
-                    }
-
-                    int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
-                    uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
-
-                    string port;
-                    if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
-                        port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
-                    else
-                        continue;
-
-                    switch (pid)
-                    {
-                        case 0x000A:
-                            arduinoPorts.Add(port + " (Raspberry Pi Pico)");
+                        string[] DeviceIdParts = ((string)mgmtObject["PNPDeviceID"]).Split("\\".ToArray());
+                        if (DeviceIdParts[0] != "USB")
+                        {
                             break;
+                        }
 
-                        default:
-                            break;
+                        int start = DeviceIdParts[1].IndexOf("PID_", StringComparison.Ordinal) + 4;
+                        uint pid = Convert.ToUInt32(DeviceIdParts[1].Substring(start, 4), 16);
+
+                        string port;
+                        if (((string)mgmtObject["Caption"]).Split("()".ToArray()).Length > 2)
+                            port = ((string)mgmtObject["Caption"]).Split("()".ToArray())[1];
+                        else
+                            continue;
+
+                        switch (pid)
+                        {
+                            case 0x000A:
+                                arduinoPorts.Add(port + " (Raspberry Pi Pico)");
+                                break;
+
+                            case 0x6610:
+                                arduinoPorts.Add(port + " (RetroSpy USB Lite)");
+                                break;
+
+                            default:
+                                break;
+                        }
                     }
                 }
             }
@@ -998,7 +1034,7 @@ namespace RetroSpy
             catch (Exception)
             {
 
-                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Couldn't connected to MiSTer to get connected controllers.", ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Couldn't connected to MiSTer to get connected controllers.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
 
             }
             finally
@@ -1023,6 +1059,7 @@ namespace RetroSpy
         public bool FilterCOMPorts { get; set; }
         public bool DontSavePassword { get; set; }
         public bool UseLagFix { get; set; }
+        public bool UseUSB2 { get; set; }
 
         public string? Username { get; set; }
 

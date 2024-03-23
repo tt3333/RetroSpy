@@ -29,16 +29,28 @@
 
 #include "ControllerSpy.h"
 
-#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY))
+#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(ARDUINO_AVR_NANO_EVERY)
 
+#if !defined(RASPBERRYPI_PICO) &&  !defined(ARDUINO_RASPBERRY_PI_PICO)
 #include <SoftwareSerial.h>
-
+#endif
 class CDiKeyboardSpy : public ControllerSpy {
 public:
-	CDiKeyboardSpy()
-		: vSerial(9, 10, true),
-		T_mode_caps_on(false)
-	{}
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	CDiKeyboardSpy(int recvpin)
+		: T_mode_caps_on(false)
+		, serial2RX(recvpin)
+	{
+		Serial2.setRX(recvpin);
+	}
+#else	
+	CDiKeyboardSpy(int recvpin)
+		: vSerial(CDI_RECVSER, CDI_SENDSER, true)
+		, T_mode_caps_on(false)
+		, serial2RX(recvpin)
+	{
+	}
+#endif 
 	
 	void setup();
 	void loop();
@@ -46,13 +58,39 @@ public:
 	void debugSerial();
 	void updateState();
 	
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	int available()
+	{
+		return Serial2.available();
+	}
+	
+	char read()
+	{
+		return Serial2.read();
+	}
+#else
+	int available()
+	{
+		return vSerial.available();
+	}
+	
+	char read()
+	{
+		return vSerial.read();
+	}	
+#endif
+	
 	virtual const char* startupMsg();
 	
 private:
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 	SoftwareSerial vSerial;
+#endif
 	byte rawData[10];
 	byte incomingBytes[4];
 	bool T_mode_caps_on;
+
+	int serial2RX;
 };
 #else
 class CDiKeyboardSpy : public ControllerSpy {

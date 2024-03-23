@@ -26,14 +26,13 @@
 
 #include "CDTVWireless.h"
 
-#if defined(TP_IRREMOTE) && !(defined(__arm__) && defined(CORE_TEENSY))
-#include <IRremote.h>
+#if defined(TP_IRREMOTE)
+
+#define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
+#include <IRremote.hpp>
 
 #define WIRELESS_TIMEOUT 100
 
-static int RECV_PIN = 2;
-
-static IRrecv irrecv(RECV_PIN);
 static unsigned long long rawData;
 static unsigned long wireless_timeout;
 
@@ -169,36 +168,34 @@ unsigned long long GetBitMask_ControllerKeys(unsigned long received_code)
 void CDTVWirelessSpy::setup()
 {
 	rawData = 0;
-	irrecv.enableIRIn();
+	IrReceiver.begin(CDI_IRPIN); // Start the receiver
 }
 
 void CDTVWirelessSpy::loop()
 {
-	decode_results results;
-	if (irrecv.decode(&results))
+	if (IrReceiver.decode()) 
 	{
-		if (results.decode_type == CDTV && results.bits == 24)
+		if (IrReceiver.decodedIRData.protocol == CDTV && IrReceiver.decodedIRData.numberOfBits == 24)
 		{
 			// Handle "remote control" keys
-			if ((results.value & 0b0000000000000000000000000000011) != 0x03)
-				rawData = GetBitMask_RemoteKeys(results.value);
+			if ((IrReceiver.decodedIRData.decodedRawData & 0b0000000000000000000000000000011) != 0x03)
+				rawData = GetBitMask_RemoteKeys(IrReceiver.decodedIRData.decodedRawData);
 			else
-				rawData = GetBitMask_ControllerKeys(results.value);
+				rawData = GetBitMask_ControllerKeys(IrReceiver.decodedIRData.decodedRawData);
 			wireless_timeout = millis();
 		}
-		else if ((results.decode_type == NEC && results.bits == 0 && results.value == 0xFFFFFFFF)
-			|| (results.decode_type == CDTV && results.bits == 4 && results.value == 0xFFFFFF))
+		else if (IrReceiver.decodedIRData.protocol == CDTV && IrReceiver.decodedIRData.numberOfBits == 4 && IrReceiver.decodedIRData.command == 0xFFFF)
 		{
 			wireless_timeout = millis();
 		}
-		irrecv.resume();
+		IrReceiver.resume(); //Restart receiver
 	}
 	else if (((millis() - wireless_timeout) >= WIRELESS_TIMEOUT))
 	{
 		rawData = 0;
 	}
 
-#ifndef DEBUG
+#if !defined(DEBUG) || DEBUG == 0
 	int checksum = 0;
 	for (int i = 0; i < 33; ++i)
 	{
@@ -219,17 +216,9 @@ void CDTVWirelessSpy::writeSerial() {}
 void CDTVWirelessSpy::debugSerial() {}
 void CDTVWirelessSpy::updateState() {}
 
-#else
-
-void CDTVWirelessSpy::setup() {}
-void CDTVWirelessSpy::loop() {}
-void CDTVWirelessSpy::writeSerial() {}
-void CDTVWirelessSpy::debugSerial() {}
-void CDTVWirelessSpy::updateState() {}
-
-#endif
-
 const char* CDTVWirelessSpy::startupMsg()
 {
 	return "CDTV Wireless";
 }
+
+#endif

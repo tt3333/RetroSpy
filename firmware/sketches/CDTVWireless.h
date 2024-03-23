@@ -29,8 +29,14 @@
 
 #include "ControllerSpy.h"
 
+#if defined(TP_IRREMOTE)
+
 class CDTVWirelessSpy : public ControllerSpy {
 public:
+	
+	CDTVWirelessSpy()
+	{}
+
 	void setup();
 	void loop();
 	void writeSerial();
@@ -43,4 +49,24 @@ private:
 
 };
 
+#else
+
+class CDTVWirelessSpy : public ControllerSpy {
+public:
+
+	void setup() {}
+	
+	void loop() {}
+	void writeSerial() {}
+	void debugSerial() {}
+	void updateState() {}
+	
+	virtual const char* startupMsg()
+	{
+		return "CDTV Wireless Firmware Not Supported";
+	}
+	
+};
+
+#endif
 #endif

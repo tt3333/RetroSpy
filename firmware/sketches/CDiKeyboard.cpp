@@ -26,33 +26,41 @@
 
 #include "CDiKeyboard.h"
 
-#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
+#if !defined(TP_PINCHANGEINTERRUPT) && !(defined(__arm__) && defined(CORE_TEENSY)) && !defined(ARDUINO_AVR_NANO_EVERY)
+
+#define NIL (byte)-1
 
 // Backspace == Delete
 static byte lookup[128] = {
-  67,68,69,70,71,72,74,75,
-  63,47,64,59,66,54,-1,-1,
-  -1,-1,-1,-1,-1,-1,-1,-1,
-  -1,47,-1,0,-1,-1,16,-1,
+   67, 68, 69, 70, 71, 72, 74, 75,
+   63, 47, 64, 59, 66, 54,NIL,NIL,
+  NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,
+  NIL, 47,NIL,  0,NIL,NIL, 16,NIL,
 
-  61,2,53,4,5,6,8,53,
-  11,12,10,14,55,13,56,58,
-  12,2,3,4,5,6,7,8,
-  10,11,52,52,55,14,56,58,
+   61,  2, 53,  4,  5,  6,  8, 53,
+   11, 12, 10, 14, 55, 13, 56, 58,
+   12,  2,  3,  4,  5,  6,  7,  8,
+   10, 11, 52, 52, 55, 14, 56, 58,
 
-  3,18,19,20,21,22,23,24,
-  26,27,28,29,30,31,32,34,
-  35,36,37,38,39,40,42,43,
-  44,45,46,48,51,50,7,13,
+    3, 18, 19, 20, 21, 22, 23, 24,
+   26, 27, 28, 29, 30, 31, 32, 34,
+   35, 36, 37, 38, 39, 40, 42, 43,
+   44, 45, 46, 48, 51, 50,  7, 13,
 
-  60,18,19,20,21,22,23,24,
-  26,27,28,29,30,31,32,34,
-  35,36,37,38,39,40,42,43,
-  44,45,46,48,51,50,60,15
+   60, 18, 19, 20, 21, 22, 23, 24,
+   26, 27, 28, 29, 30, 31, 32, 34,
+   35, 36, 37, 38, 39, 40, 42, 43,
+   44, 45, 46, 48, 51, 50, 60, 15
 };
 
 void CDiKeyboardSpy::setup() {
-	vSerial.begin(1200);
+
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	Serial2.begin(1200);
+#else
+	vSerial.begin(1200); 	
+#endif	
+	
 }
 
 void CDiKeyboardSpy::loop() {
@@ -75,20 +83,21 @@ void CDiKeyboardSpy::debugSerial() {
 
 void CDiKeyboardSpy::updateState() {
 
-	if (vSerial.available() >= 2) 
+	if (available() >= 2) 
 	{
+		
 		// clear the pressed keys
-		for(int i = 0 ; i < 10 ; ++i)
-		  rawData[i] = 0;
+		for (int i = 0; i < 10; ++i)
+			rawData[i] = 0;
       
-		incomingBytes[0] = vSerial.read();
-		incomingBytes[1] = vSerial.read();
+		incomingBytes[0] = read();
+		incomingBytes[1] = read();
 
 		if ((incomingBytes[0] & 0b11000000) == 0b11000000 && (incomingBytes[1] & 0b11011111) > 0x5F)
 		{
-			while (vSerial.available() < 2) {}
-			incomingBytes[2] = vSerial.read();
-			incomingBytes[3] = vSerial.read();
+			while (available() < 2) {}
+			incomingBytes[2] = read();
+			incomingBytes[3] = read();
   
 			bool isModifiedFunctionKey = false, blank_f1 = false, caps = false, sshift = false, shift = false, ctrl = false;
       
@@ -163,15 +172,15 @@ void CDiKeyboardSpy::updateState() {
 			if (blank_f1)
 				rawData[67 / 8] &= ~(1 << (67 % 8));
 
-			//    for(int i = 0; i < 4; ++i)
-			//    {
-			//      Serial.print(incomingBytes[i]);
-			//      Serial.print(" ");
-			//      for(int j = 0; j < 8; ++j)
-			//        Serial.print((incomingBytes[i] & (1 << j)) != 0 ? "1" : "0");
-			//      Serial.print("\n");
-			//    }
-			//    Serial.print("\n");
+//			    for(int i = 0; i < 4; ++i)
+//			    {
+//			      Serial.print(incomingBytes[i]);
+//			      Serial.print(" ");
+//			      for(int j = 0; j < 8; ++j)
+//			        Serial.print((incomingBytes[i] & (1 << j)) != 0 ? "1" : "0");
+//			      Serial.print("\n");
+//			    }
+//			    Serial.print("\n");
       
 		}
 		else if ((incomingBytes[0] & 0b10000000) == 0b10000000) // K-Mode
@@ -215,7 +224,7 @@ void CDiKeyboardSpy::updateState() {
       
 			if ((0b00000010 & incomingBytes[0]) == 0)
 			{     
-				if (lookup[incomingBytes[1]] != -1)
+				if (lookup[incomingBytes[1]] != NIL)
 				{
 					rawData[lookup[incomingBytes[1]] / 8] |= (1 << lookup[incomingBytes[1]] % 8);
 				}
@@ -236,7 +245,16 @@ void CDiKeyboardSpy::updateState() {
 
 #endif
 
+static char startupBuffer[100];
+
 const char* CDiKeyboardSpy::startupMsg()
 {
-	return "CDi Keyboard";
+	char itoaBuff[10];
+	strcpy(startupBuffer, "CDi Keyboard");
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	strcat(startupBuffer, " with Serial2 RX = ");
+	strcat(startupBuffer, itoa(serial2RX, itoaBuff, 10));
+#endif
+
+	return startupBuffer;
 }

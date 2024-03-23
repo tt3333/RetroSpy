@@ -48,16 +48,20 @@ enum VideoOutputType {
 
 // Vision Hardware Configurations
 //#define RS_VISION
-//#define RS_VISION_ULTRA
+//#define RS_VISION_DREAM
 //#define RS_VISION_CDI
 //#define RS_VISION_COLECOVISION
+//#define RS_VISION_PIPPIN
+//#define RS_VISION_ANALOG_1
+//#define RS_VISION_ANALOG_2
+//#define RS_VISION_FLEX
 
 #ifdef RS_VISION
 #define TP_TIMERONE
 #define TP_PINCHANGEINTERRUPT
 #endif
 
-#ifdef RS_VISION_ULTRA
+#ifdef RS_VISION_DREAM
 #ifdef N64_PIN
 #undef N64_PIN
 #endif
@@ -65,7 +69,7 @@ enum VideoOutputType {
 #endif
 
 #ifdef RS_VISION_CDI
-#define TP_IRLIB2
+#define TP_IRREMOTE
 #endif
 
 #ifdef RS_VISION_COLECOVISION
@@ -73,13 +77,35 @@ enum VideoOutputType {
 #define COLECOVISION_ROLLER_TIMER_INT_HANDLER
 #endif
 
+#ifdef RS_VISION_PIPPIN
+#define TP_TIMERONE
+#endif
+
+#if defined(RS_VISION_ANALOG_1) || defined(RS_VISION_ANALOG_2)
+#define TP_PINCHANGEINTERRUPT
+#define VISION_ANALOG_ADC_INT_HANDLER
+#endif
+
+#if defined(RS_VISION_FLEX)
+#undef SNES_LATCH
+#undef SNES_DATA
+#undef SNES_LATCH
+#define SNES_LATCH         1
+#define SNES_DATA          2
+#define SNES_CLOCK         4
+#define TP_ELAPSEDMILLIS
+#endif
+
 // Uncomment these to enable 3rd party libraries once installed
-//#define TP_IRREMOTE             // Used by MODE_CDTV_WIRELESS
-//#define TP_IRLIB2               // Used by MODE_CDI
+//#define TP_IRREMOTE               // Used by MODE_CDI & MODE_CDTV_WIRELESS
 // Used by MODE_PIPPIN & MODE_CDTV_WIRED
 //#define TP_TIMERONE             
 // Used by MODE_COLECOVISION, MODE_DRIVING_CONTROLLER & MODE_KEYBOARD_CONTROLLER
 //#define TP_PINCHANGEINTERRUPT
+// Used by Pi Pico implementation of N64, Gamecube, Nuon & CDTV
+//#define TP_ELAPSEDMILLIS
+// Used by Amiga Mouse
+//#define TP_TIMERINTERRUPTS
 
 // Uncomment these out to enable the necessary ADC interrupt handler.
 // They cannot co-exist when linked even when not active
@@ -87,8 +113,8 @@ enum VideoOutputType {
 //#define ATARI5200_ADC_INT_HANDLER
 //#define ATARIPADDLES_ADC_INT_HANDLER
 //#define COLECOVISION_ROLLER_TIMER_INT_HANDLER
-
 	
+
 // Uncomment this for serial debugging output
 //#define DEBUG
 
@@ -104,6 +130,7 @@ enum VideoOutputType {
 
 #define PIN_READ PIND_READ
 
+#define WAIT_FALLING_EDGE_COUNT( pin ) long count = 0; while( !PIN_READ(pin) ){count++;} while( PIN_READ(pin) ){count++;};
 #define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
 #define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
 

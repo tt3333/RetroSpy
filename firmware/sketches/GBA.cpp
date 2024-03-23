@@ -26,7 +26,7 @@
 
 #include "GBA.h"
 
-#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
+#if defined(ARDUINO_TEENSY35) || defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E) || defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
 
 void GBASpy::loop() {
 	noInterrupts();
@@ -56,7 +56,12 @@ void GBASpy::updateState() {
 	bytesToReturn = SNES_BITCOUNT;
 
 	WAIT_FALLING_EDGE(SNES_LATCH);
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	unsigned long start = micros();
+	while (micros() - start < 1) ;
+#else
 	asm volatile(MICROSECOND_NOPS);
+#endif
 	rawData[position++] = !PIN_READ(SNES_DATA);
 	do {
 		WAIT_FALLING_EDGE(SNES_CLOCK);

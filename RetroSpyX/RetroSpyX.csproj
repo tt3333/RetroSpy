@@ -12,9 +12,9 @@
     <NeutralLanguage>en-US</NeutralLanguage> 
   </PropertyGroup>
 	<PropertyGroup>
-		<AssemblyVersion>6.2</AssemblyVersion>
-		<FileVersion>6.2</FileVersion>
-		<Version>6.2</Version>
+		<AssemblyVersion>6.4.8</AssemblyVersion>
+		<FileVersion>6.4.8</FileVersion>
+		<Version>6.4.8</Version>
 		<Copyright>Copyright © 2022</Copyright>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<UseWindowsForms>False</UseWindowsForms>
@@ -22,6 +22,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -698,9 +699,17 @@
     <None Remove="skins\Tron-V2 with D-Pad\X fill.png" />
     <None Remove="skins\Tron-V2 with D-Pad\Y fill.png" />
     <None Remove="skins\Tron-V2 with D-Pad\Z fill.png" />
+    <None Remove="skins\vflash-controller\circle.png" />
+    <None Remove="skins\vflash-controller\skin.xml" />
+    <None Remove="skins\vflash-controller\vflash-background.png" />
+    <None Remove="skins\vflash-controller\vflash-knob.png" />
     <None Remove="skins\virtualboy-default\circle.png" />
     <None Remove="skins\virtualboy-default\skin.xml" />
     <None Remove="skins\virtualboy-default\VBcontroller.png" />
+    <None Remove="skins\vsmile-controller\circle.png" />
+    <None Remove="skins\vsmile-controller\skin.xml" />
+    <None Remove="skins\vsmile-controller\vsmile-background.png" />
+    <None Remove="skins\vsmile-controller\vsmile-knob.png" />
     <None Remove="skins\wii-classic\circle.png" />
     <None Remove="skins\wii-classic\classic.png" />
     <None Remove="skins\wii-classic\disconnect.png" />
@@ -2508,6 +2517,18 @@
     <Content Include="skins\Tron-V2 with D-Pad\Z fill.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="skins\vflash-controller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vflash-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vflash-controller\vflash-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vflash-controller\vflash-knob.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="skins\virtualboy-default\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2515,6 +2536,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\virtualboy-default\VBcontroller.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vsmile-controller\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vsmile-controller\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vsmile-controller\vsmile-background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\vsmile-controller\vsmile-knob.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\wii-classic\circle.png">
@@ -2677,29 +2710,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18">
+    <PackageReference Include="Avalonia" Version="11.0.0">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
-    <PackageReference Include="Desktop.Robot" Version="1.3.2" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="Desktop.Robot" Version="1.5.0" />
     <PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
-    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.0.0" />
+    <PackageReference Include="NodaTime" Version="3.1.9" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
-    <PackageReference Include="Vortice.DirectInput" Version="2.3.0" />
-    <PackageReference Include="Vortice.XInput" Version="2.3.0" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
-    <PackageReference Include="Zafiro.Avalonia" Version="2.5.10">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
+    <PackageReference Include="System.Management" Version="7.0.2" />
+    <PackageReference Include="System.Reactive" Version="6.0.0" />
+    <PackageReference Include="Vortice.DirectInput" Version="3.2.0" />
+    <PackageReference Include="Vortice.XInput" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -32,6 +32,7 @@
 class N64Spy : public ControllerSpy {
 public:
 	void loop();
+	void loop1();
 	void writeSerial();
 	void debugSerial();
 	void updateState();
@@ -42,8 +43,12 @@ private:
 	bool checkPrefixN64();
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_NANO_EVERY) || defined(ARDUINO_AVR_LARDU_328E)
 	unsigned char rawData[100];
-#else	unsigned char rawData[300];
+#else
+	unsigned char rawData[300];
+	unsigned char sendData[300];
+	bool sendRequest = false;
 #endif
+	
 	unsigned short readBits;
 };
 

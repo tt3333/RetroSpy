@@ -26,7 +26,7 @@
 
 #include "VSmile.h"
 
-#if defined(__arm__) && defined(CORE_TEENSY) && defined(ARDUINO_TEENSY35)
+#if defined(__arm__) && defined(CORE_TEENSY) && (defined(ARDUINO_TEENSY35) || defined(ARDUINO_TEENSY40)) || defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
 
 static bool redButton = false;
 static bool yellowButton = false;
@@ -41,19 +41,24 @@ static byte y = 0;
 
 void VSmileSpy::setup() {
 	
+#if defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
+	Serial2.setRX(5);
+#endif
 	Serial1.begin(4800);
 	Serial2.begin(4800);
 	
 }
 
 void VSmileSpy::loop() {
+	noInterrupts();
 	updateState();
+	interrupts();
 #if !defined(DEBUG)
 	writeSerial();
 #else
 	debugSerial();
 #endif
-	delay(5);
+	//delay(16);
 }
 
 void VSmileSpy::writeSerial() {
@@ -65,8 +70,8 @@ void VSmileSpy::writeSerial() {
 	Serial.write(helpButton ? ONE : ZERO);
 	Serial.write(exitButton ? ONE : ZERO);
 	Serial.write(learningZoneButton ? ONE : ZERO);
-	Serial.write(x == 10 ? 11 : x);
-	Serial.write(y == 10 ? 11 : y);
+	Serial.write(x << 4);
+	Serial.write(y << 4);
 	Serial.write(SPLIT);
 }
 
@@ -86,9 +91,9 @@ void VSmileSpy::debugSerial() {
 }
 
 void VSmileSpy::updateState() {
-	if (Serial1.available())
+	if (Serial2.available())
 	{
-		char c = Serial1.read();
+		char c = Serial2.read();
 		if ((c & 0b11110000) == 0b11000000)
 		{
 			x = (c & 0b00001111);
@@ -136,9 +141,9 @@ void VSmileSpy::updateState() {
 			}
 		}
 	}
-	if (Serial2.available())
+	if (Serial1.available())
 	{
-		char c = Serial2.read();
+		char c = Serial1.read();
 		if ((c & 0b11110000) == 0b01100000)
 		{
 			redButton = ((c & 0b00001000) != 0) ? true : false;

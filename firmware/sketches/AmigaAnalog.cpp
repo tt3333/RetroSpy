@@ -42,9 +42,7 @@ static bool lockedCalibration = false;
 static int nominal_min = 1023;
 static int nominal_max = 0;
 
-#if defined(AMIGA_ANALOG_ADC_INT_HANDLER)
-// Interrupt service routine for the ADC completion
-ISR(ADC_vect)
+void AmigaAnalogADCInt()
 {
 	// Must read low first
 	analogVal = ADCL | (ADCH << 8);
@@ -70,7 +68,15 @@ ISR(ADC_vect)
 
 	// Not needed because free-running mode is enabled.
 	// Set ADSC in ADCSRA (0x7A) to start another ADC conversion
-	// ADCSRA |= B01000000;
+	// ADCSRA |= B01000000;	
+}
+
+
+#if defined(AMIGA_ANALOG_ADC_INT_HANDLER)
+// Interrupt service routine for the ADC completion
+ISR(ADC_vect)
+{
+	AmigaAnalogADCInt();
 }
 #endif
 
@@ -185,8 +191,14 @@ void AmigaAnalogSpy::loop()
 		Serial.print(triggerButton ? "3" : "-");
 		Serial.print(thumbButton ? "4" : "-");
 		Serial.print("|");
+		Serial.print(lockedCalibration ? "L" : "U");
+		Serial.print("|");
+		Serial.print(nominal_min);
+		Serial.print("|");
+		Serial.print(nominal_max);
+		Serial.print("|");
 		Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30));
-		Serial.print("\n");
+		Serial.println();
 #else
 		int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30);
 		Serial.write(topButton1 ? 1 : 0);
@@ -204,7 +216,7 @@ void AmigaAnalogSpy::loop()
 void AmigaAnalogSpy::writeSerial() {}
 void AmigaAnalogSpy::debugSerial() {}
 void AmigaAnalogSpy::updateState() {}
-
+ 
 #else
 
 void AmigaAnalogSpy::setup(bool isSecondArduino) {}
