@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
-// Version: 6.1.3
+// Version: 6.2
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -149,12 +149,14 @@ WiiSpy WiiSpy;
 #endif
 
 ControllerSpy* currentSpy = NULL;
+bool muteStartupMessage;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-
+	muteStartupMessage = false;
+	
 	// FOR MODE DETECTION
 #if defined(RS_VISION_ULTRA)
 	for (int i = 13; i <= 18; ++i)
@@ -166,7 +168,7 @@ void setup()
 	for (int i = 3; i < 9; ++i)
 		if (i != 7)
 			pinMode(i, INPUT_PULLUP);
-#elif defined(RASPBERRYPI_PICO)
+#elif defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)
 	pinMode(MODEPIN_SNES, INPUT_PULLUP);
 	pinMode(MODEPIN_WII, INPUT_PULLUP);
 #elif defined(RS_VISION) || defined(RS_VISION_CDI)
@@ -192,7 +194,7 @@ void setup()
 		currentSpy->setup();
 	}
 
-	if (currentSpy != NULL)
+	if (!muteStartupMessage && currentSpy != NULL)
 	{
 		currentSpy->printFirmwareInfo();
 	}
@@ -206,7 +208,7 @@ void setup()
  
 }
 
-#if defined(RASPBERRYPI_PICO)
+#if defined(RASPBERRYPI_PICO)  || defined(ARDUINO_RASPBERRY_PI_PICO)
 void setup1()
 {
 #if defined(MODE_DETECT)
@@ -239,7 +241,7 @@ void loop()
 		currentSpy->loop();
 }
 
-#if defined(RASPBERRYPI_PICO)
+#if defined(RASPBERRYPI_PICO)  || defined(ARDUINO_RASPBERRY_PI_PICO)
 void loop1()
 {
 	if (currentSpy != NULL)
@@ -368,6 +370,7 @@ bool CreateSpy()
 		break;
 	case 0x19:
 		currentSpy = new CDTVWiredSpy();
+		muteStartupMessage = true;
 		break;
 	case 0x1A:
 		currentSpy = new ColecoVisionSpy();
@@ -435,6 +438,23 @@ bool CreateSpy()
 		currentSpy = new CDTVWirelessSpy();
 		break;
 	}
+#elif defined(RS_VISION_COLECOVISION)
+	switch (ReadAnalog())
+	{
+	case 0x00:
+		currentSpy = new ColecoVisionSpy();
+		break;
+	case 0x01:
+		currentSpy = new ColecoVisionRollerSpy();
+		((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_NTSC);
+		customSetup = true;
+		break;	
+	case 0x02:
+		currentSpy = new ColecoVisionRollerSpy();
+		((ColecoVisionRollerSpy*)currentSpy)->setup(VIDEO_PAL);
+		customSetup = true;
+		break;	
+	}
 #elif defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
 		currentSpy = new SNESSpy;
@@ -448,11 +468,11 @@ bool CreateSpy()
 	else if (!PINC_READ(MODEPIN_DREAMCAST))
 		currentSpy = new DreamcastSpy();
 #endif
-#if (defined(__arm__) && defined(CORE_TEENSY)) || defined(RASPBERRYPI_PICO)
+#if (defined(__arm__) && defined(CORE_TEENSY)) || defined(RASPBERRYPI_PICO)  || defined(ARDUINO_RASPBERRY_PI_PICO)
 	else if (!PINC_READ(MODEPIN_WII))
 		currentSpy = new WiiSpy();
 #endif 
-#if !defined(RASPBERRYPI_PICO)
+#if !defined(RASPBERRYPI_PICO) && !defined(ARDUINO_RASPBERRY_PI_PICO)
 	else
 		currentSpy = new NESSpy();
 #endif
@@ -526,6 +546,7 @@ bool CreateSpy()
 	customSetup = true;
 #elif defined(MODE_CDTV_WIRED)
 	currentSpy = new CDTVWiredSpy();
+	muteStartupMessage = true;
 #elif defined(MODE_CDTV_WIRELESS)
 	currentSpy = new CDTVWirelessSpy();
 #elif defined(MODE_FMTOWNS_KEYBOARD_AND_MOUSE)

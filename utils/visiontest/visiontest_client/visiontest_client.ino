@@ -11,39 +11,51 @@
  *********************************************************/
 static int count = 0;
 
+#define PIND_READ( pin ) (PIND&(1<<(pin)))
 #define PINB_READ( pin ) (PINB&(1<<(pin)))
-#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ); while( !PINB_READ(pin) )
+#define PINB_READ( pin ) (PINB&(1<<(pin)))
+#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ){} while( !PINB_READ(pin) ){}
 
 void setup()
 {
     count = 0;
-    for(int i = 2; i < 10; ++i)
+    for(int i = 2; i < 12; ++i)
     {
       pinMode(i, INPUT_PULLUP);
     }
+
+  PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
+  DDRC  = 0x00;
 
     Serial.begin(115200);
 }
 
 void loop()
 {
-
-  WAIT_LEADING_EDGEB(0);
+  while(true)
+  {
+  if ((PINC & 0b00100000) == 0)
+  {
+    Serial.print("Switch=");
+    Serial.println(~PINC & 0b00111111);
+  }
+  else
+  {
+  WAIT_LEADING_EDGEB(2);
 
   //Serial.print("Starting Cycle #");
-  //Serial.println(++count);
+  //Serial.println(count);
 
-  noInterrupts();
-  for(int i = 0; i < 64; ++i)
+  //noInterrupts();
+  for(int i = 0; i < 256; ++i)
   { 
-    
-    WAIT_LEADING_EDGEB(1);
-    byte val = 0;
-    for(int i = 0; i < 6; ++i)
-    {
-      val |= digitalRead(i+2) == HIGH ? (1 << i) : 0; 
-    }
-    
+
+    WAIT_LEADING_EDGEB(3);
+    //Serial.println(PIND & 0b11111100);
+    //Serial.println(PINB & 0b00000111);
+    //int val = (((PINB & 0b00000111) << 6) | ((PIND & 0b11111100) >> 2));
+    int val = ((PINB & 0b00000011) << 6) | ((PIND & 0b11111100) >> 2);
+  
     if (val != i)
     {
       interrupts();
@@ -69,6 +81,9 @@ void loop()
   
   Serial.print("Cycle #");
   Serial.print(++count);
-  Serial.println(" PASSED");
-
+  Serial.print(" PASSED, Switch=");
+  Serial.print((~PINC & 0b00111111));
+  Serial.println("");
+  }
+  }
 }
