@@ -1073,4 +1073,15 @@
 		(remove_unused_layers no)
 		(uuid "e2c769c1-6913-4d5d-a900-13de75710a4e")
 	)
+	(model "${KIPRJMOD}/Pico.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )
