@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "RetroSpy for Raspberry Pi Pico")
-		(date "2023-03-07")
-		(rev "1")
+		(date "2024-03-24")
+		(rev "2")
 		(company "T.T")
 	)
 	(lib_symbols
@@ -563,6 +563,62 @@
 					)
 					(fill
 						(type background)
+					)
+				)
+			)
+			(symbol "Raspberry Pi Pico_1_0"
+				(pin input line
+					(at -2.54 -29.21 90)
+					(length 2.54)
+					(name "SWCLK"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "41"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -29.21 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "42"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -29.21 90)
+					(length 2.54)
+					(name "SWDIO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "43"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
 					)
 				)
 			)
@@ -1795,6 +1851,12 @@
 		(uuid "9a2ae62f-c740-420a-9c14-4dcb69f42136")
 	)
 	(junction
+		(at 135.89 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9a2ce9b9-19b8-4f1c-85e3-8c109693e7f0")
+	)
+	(junction
 		(at 158.75 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1879,6 +1941,10 @@
 		(uuid "502170cf-727a-4d92-8c88-14663c81d583")
 	)
 	(no_connect
+		(at 133.35 99.06)
+		(uuid "5bac155b-91b2-431d-b2e4-c29b43e993d9")
+	)
+	(no_connect
 		(at 118.11 60.96)
 		(uuid "6b6d333a-f540-4ea0-b29b-8039a4a406aa")
 	)
@@ -1897,6 +1963,10 @@
 	(no_connect
 		(at 153.67 53.34)
 		(uuid "9dd66150-952c-4086-b762-05e729e1fa8c")
+	)
+	(no_connect
+		(at 138.43 99.06)
+		(uuid "9e9453b5-378b-44a7-bda5-e2f0681c3a6b")
 	)
 	(no_connect
 		(at 118.11 81.28)
@@ -2026,7 +2096,7 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 121.92) (xy 158.75 121.92)
+			(xy 113.03 121.92) (xy 135.89 121.92)
 		)
 		(stroke
 			(width 0)
@@ -2176,6 +2246,16 @@
 	)
 	(wire
 		(pts
+			(xy 135.89 99.06) (xy 135.89 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "68c53fa4-d7e3-4a3e-a972-436c708a1704")
+	)
+	(wire
+		(pts
 			(xy 173.99 91.44) (xy 173.99 100.33)
 		)
 		(stroke
@@ -2313,6 +2393,16 @@
 			(type default)
 		)
 		(uuid "9ae55355-0071-4476-9360-47096000cb7f")
+	)
+	(wire
+		(pts
+			(xy 135.89 121.92) (xy 158.75 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b9baf9e-8c28-40d8-91e3-c92f213da672")
 	)
 	(wire
 		(pts
@@ -3203,6 +3293,15 @@
 		)
 		(pin "9"
 			(uuid "03db5583-bedb-4b0b-9b16-0b366fe57494")
+		)
+		(pin "41"
+			(uuid "7dfa5d7c-8657-4e13-9e42-5b19dd131a7c")
+		)
+		(pin "42"
+			(uuid "df35a82e-ebe3-44e7-803b-18b1d6e723f7")
+		)
+		(pin "43"
+			(uuid "bf8e601c-e993-42a9-a9fe-957effb568bd")
 		)
 		(instances
 			(project "RetroSpyPico"
