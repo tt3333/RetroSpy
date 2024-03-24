@@ -40,7 +40,7 @@ Make holes for USB connector, toggle switch, and controller cables.
 
 ### Assembly
 
-* Solder sockets to U1 and mount a Raspberry Pi Pico.
+* Solder Raspberry Pi Pico to U1.
 * Solder 10kΩ resistors to R1 to R9.
 * Connect a toggle switch or solder a jumper pin to SW1.<br>
   (SW1 is used to select which controller to read.)
