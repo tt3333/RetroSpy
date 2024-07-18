@@ -32,28 +32,36 @@ void loop()
 {
   while(true)
   {
-  
-  WAIT_LEADING_EDGEB(2);
-
-  noInterrupts();
-  for(int i = 0; i < 65536; ++i)
-  { 
+    bool failure = false;
     WAIT_LEADING_EDGEB(3);
+    noInterrupts();
+    for(int i = 0; i < 65536; ++i)
+    { 
 
-    int val = (gpio_get_all() & 0x0001FF) & ((gpio_get_all() & 0x07F000) >> 3);
-    
-    if (val != i)
-    {
-      interrupts();
-      Serial.print(0);
-      digitalWrite(21, HIGH);
-      digitalWrite(22, LOW);
+      WAIT_LEADING_EDGEB(4);
+  
+      int val = (gpio_get_all() & 0x0001FF) | ((gpio_get_all() & 0x07F000) >> 3);
+      
+      if (val != i)
+      {
+        interrupts();
+        Serial.print("FAILED ");
+        Serial.print(i);
+        Serial.print("!=");
+        Serial.print(val);
+        Serial.println(".");
+        digitalWrite(21, HIGH);
+        digitalWrite(22, LOW);
+        failure = true;
+      }
     }
-  }
-  interrupts();
-
-    Serial.print(1);
-    digitalWrite(21, LOW);
-    digitalWrite(22, HIGH);
+  
+    interrupts();
+    if (!failure)
+    {
+      Serial.print(1);
+      digitalWrite(21, LOW);
+      digitalWrite(22, HIGH);
+    }
   }
 }

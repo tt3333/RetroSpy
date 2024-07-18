@@ -85,6 +85,9 @@
         <string>sketches\utils.h</string>
         <string>sketches\maple_in.pio.h</string>
         <string>sketches\maple_out.pio.h</string>
+        <string>sketches\config_esp32.h</string>
+        <string>sketches\PSString.h</string>
+        <string>sketches\N64Slow.h</string>
       </OtherFiles>
     </ProjectModeSettings>
   </Project>
@@ -170,11 +173,7 @@
         <string>unix.StdCLibraryFunctions</string>
         <string>unix.Vfork</string>
       </SelectedAnalyzers>
-      <ExtraArguments>
-        <string>-analyzer-store=region</string>
-        <string>-analyzer-opt-analyze-nested-blocks</string>
-        <string>-analyzer-eagerly-assume</string>
-      </ExtraArguments>
+      <ExtraArguments />
     </CodeAnalyzerSettings>
   </CodeSense>
   <Configurations>
@@ -215,6 +214,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod>
           <ID>gdbsim</ID>
@@ -243,7 +243,7 @@
         <Properties>
           <Entries />
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -287,6 +287,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod>
           <ID>gdbsim</ID>
@@ -331,7 +332,7 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -371,6 +372,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -439,6 +441,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -454,6 +457,22 @@
         <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
         <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
         <UnusedStackFillPattern xsi:nil="true" />
+        <SoftwareTracingSettings>
+          <TraceWhileDebugging>false</TraceWhileDebugging>
+          <AutoStart>false</AutoStart>
+          <StaticTracePrograms xsi:type="InsideWorkArea" />
+          <DynamicProgramAreaSize>0</DynamicProgramAreaSize>
+          <SkipInitiallyDisabledTracepoints>false</SkipInitiallyDisabledTracepoints>
+          <TraceProgramOptimization>Size</TraceProgramOptimization>
+          <OutputMode>NonBlocking</OutputMode>
+          <AssumeFramePointerIsValid>true</AssumeFramePointerIsValid>
+          <InstrumentWithNoFeasibleTracepoints>false</InstrumentWithNoFeasibleTracepoints>
+          <MaximumStringLength>255</MaximumStringLength>
+          <DeferVectorTablePatching>true</DeferVectorTablePatching>
+          <ShowAdvancedConfiguration>true</ShowAdvancedConfiguration>
+          <WorkAreaSize>4096</WorkAreaSize>
+          <DisableLiveCodePatching>false</DisableLiveCodePatching>
+        </SoftwareTracingSettings>
         <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
       </DebugSettingsOverride>
       <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
@@ -478,7 +497,7 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -522,6 +541,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -549,7 +569,7 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -589,6 +609,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -611,7 +632,7 @@
         <Properties>
           <Entries />
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -651,6 +672,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -690,7 +712,7 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -730,6 +752,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -769,7 +792,7 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
@@ -809,6 +832,7 @@
           <MaxBreakpointLimit>0</MaxBreakpointLimit>
           <EnableVerboseMode>true</EnableVerboseMode>
           <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
         </AdditionalGDBSettings>
         <DebugMethod />
         <AutoDetectRTOS>true</AutoDetectRTOS>
@@ -877,7 +901,225 @@
             </KeyValue>
           </Entries>
         </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
+      </BuildSettingsExtension>
+    </VisualGDBConfiguration>
+    <VisualGDBConfiguration>
+      <PlatformName>Node32s</PlatformName>
+      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
+        <AdditionalStartupCommands />
+        <AdditionalGDBSettings>
+          <Features>
+            <DisableAutoDetection>false</DisableAutoDetection>
+            <UseFrameParameter>false</UseFrameParameter>
+            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
+            <ListLocalsSupported>false</ListLocalsSupported>
+            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
+            <ThreadInfoSupported>false</ThreadInfoSupported>
+            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
+            <SupportTargetCommand>false</SupportTargetCommand>
+            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+          </Features>
+          <EnableSmartStepping>false</EnableSmartStepping>
+          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
+          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+          <UseAppleExtensions>false</UseAppleExtensions>
+          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
+          <MakeLogFile>false</MakeLogFile>
+          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
+          <UseRelativePathsOnly>false</UseRelativePathsOnly>
+          <ExitAction>None</ExitAction>
+          <DisableDisassembly>false</DisableDisassembly>
+          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
+          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+          <DisableSignals>false</DisableSignals>
+          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+          <AsyncModeSupportsBreakpoints>true</AsyncModeSupportsBreakpoints>
+          <TemporaryBreakConsolidationTimeout>0</TemporaryBreakConsolidationTimeout>
+          <EnableNonStopMode>false</EnableNonStopMode>
+          <MaxBreakpointLimit>0</MaxBreakpointLimit>
+          <EnableVerboseMode>true</EnableVerboseMode>
+          <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
+        </AdditionalGDBSettings>
+        <DebugMethod />
+        <AutoDetectRTOS>true</AutoDetectRTOS>
+        <SemihostingSupport>Auto</SemihostingSupport>
+        <SemihostingPollingDelay>0</SemihostingPollingDelay>
+        <StepIntoEntryPoint>false</StepIntoEntryPoint>
+        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
+        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
+        <StopAtEntryPoint>false</StopAtEntryPoint>
+        <EnableVirtualHalts>false</EnableVirtualHalts>
+        <DynamicAnalysisSettings />
+        <EndOfStackSymbol>_estack</EndOfStackSymbol>
+        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
+        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+        <UnusedStackFillPattern xsi:nil="true" />
+        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
+      </DebugSettingsOverride>
+      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
+        <BoardID>esp32:esp32:node32s</BoardID>
+        <Properties>
+          <Entries>
+            <KeyValue>
+              <Key>PartitionScheme</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>FlashFreq</Key>
+              <Value>80</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>UploadSpeed</Key>
+              <Value>921600</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>DebugLevel</Key>
+              <Value>none</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>EraseFlash</Key>
+              <Value>none</Value>
+            </KeyValue>
+          </Entries>
+        </Properties>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
+      </BuildSettingsExtension>
+    </VisualGDBConfiguration>
+    <VisualGDBConfiguration>
+      <PlatformName>ESP32S3_Dev_Module</PlatformName>
+      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
+        <AdditionalStartupCommands />
+        <AdditionalGDBSettings>
+          <Features>
+            <DisableAutoDetection>false</DisableAutoDetection>
+            <UseFrameParameter>false</UseFrameParameter>
+            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
+            <ListLocalsSupported>false</ListLocalsSupported>
+            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
+            <ThreadInfoSupported>false</ThreadInfoSupported>
+            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
+            <SupportTargetCommand>false</SupportTargetCommand>
+            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+          </Features>
+          <EnableSmartStepping>false</EnableSmartStepping>
+          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
+          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+          <UseAppleExtensions>false</UseAppleExtensions>
+          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
+          <MakeLogFile>false</MakeLogFile>
+          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
+          <UseRelativePathsOnly>false</UseRelativePathsOnly>
+          <ExitAction>None</ExitAction>
+          <DisableDisassembly>false</DisableDisassembly>
+          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
+          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+          <DisableSignals>false</DisableSignals>
+          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+          <AsyncModeSupportsBreakpoints>true</AsyncModeSupportsBreakpoints>
+          <TemporaryBreakConsolidationTimeout>0</TemporaryBreakConsolidationTimeout>
+          <EnableNonStopMode>false</EnableNonStopMode>
+          <MaxBreakpointLimit>0</MaxBreakpointLimit>
+          <EnableVerboseMode>true</EnableVerboseMode>
+          <EnablePrettyPrinters>false</EnablePrettyPrinters>
+          <EnableAbsolutePathReporting>true</EnableAbsolutePathReporting>
+        </AdditionalGDBSettings>
+        <DebugMethod>
+          <ID>gdbsim</ID>
+          <Configuration>
+            <Entries />
+          </Configuration>
+        </DebugMethod>
+        <AutoDetectRTOS>true</AutoDetectRTOS>
+        <SemihostingSupport>Auto</SemihostingSupport>
+        <SemihostingPollingDelay>0</SemihostingPollingDelay>
+        <StepIntoEntryPoint>false</StepIntoEntryPoint>
+        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
+        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
+        <StopAtEntryPoint>false</StopAtEntryPoint>
+        <EnableVirtualHalts>false</EnableVirtualHalts>
+        <DynamicAnalysisSettings />
+        <EndOfStackSymbol>_estack</EndOfStackSymbol>
+        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
+        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+        <UnusedStackFillPattern xsi:nil="true" />
+        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
+      </DebugSettingsOverride>
+      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
+        <BoardID>esp32:esp32:esp32s3</BoardID>
+        <COMPort />
+        <Properties>
+          <Entries>
+            <KeyValue>
+              <Key>JTAGAdapter</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>PSRAM</Key>
+              <Value>enabled</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>FlashMode</Key>
+              <Value>qio</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>FlashSize</Key>
+              <Value>16M</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>LoopCore</Key>
+              <Value>1</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>EventsCore</Key>
+              <Value>1</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>USBMode</Key>
+              <Value>hwcdc</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>CDCOnBoot</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>MSCOnBoot</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>DFUOnBoot</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>UploadMode</Key>
+              <Value>default</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>PartitionScheme</Key>
+              <Value>fatflash</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>CPUFreq</Key>
+              <Value>240</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>UploadSpeed</Key>
+              <Value>921600</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>DebugLevel</Key>
+              <Value>none</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>EraseFlash</Key>
+              <Value>none</Value>
+            </KeyValue>
+          </Entries>
+        </Properties>
+        <DebugUnoptimizedComponentTypes>None</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
   </Configurations>

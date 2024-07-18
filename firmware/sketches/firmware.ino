@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
-// Version: 6.4.8
+// Version: 6.5
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -100,6 +100,7 @@
 #include "NES.h"
 #include "SNES.h"
 #include "N64.h"
+#include "N64Slow.h"
 #include "GC.h"
 #include "GBA.h"
 
@@ -188,7 +189,10 @@ void setup()
 #elif defined(RS_VISION)
 	for (int i = A0; i <= A7; ++i)
 		pinMode(i, INPUT_PULLUP);
-#elif !defined(VISION_ANALOG_ADC_INT_HANDLER) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2)
+#elif defined(RS_VISION_ANALOG_1) || defined(RS_VISION_ANALOG_1)
+	for (int i = A1; i <= A7; ++i)
+		pinMode(i, INPUT_PULLUP);
+#elif !defined(VISION_ANALOG_ADC_INT_HANDLER) && !defined(MODE_ATARI_PADDLES) && !defined(MODE_ATARI5200_1) && !defined(MODE_ATARI5200_2) && !defined(MODE_AMIGA_ANALOG_1) && !defined(MODE_AMIGA_ANALOG_2) && !defined(ESP_PLATFORM)
 	PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
 	DDRC  = 0x00;
 #endif
@@ -221,7 +225,7 @@ void setup()
 	T_DELAY(5000);
 	A_DELAY(200);
 	#pragma GCC diagnostic pop
- 
+	
 }
 
 #if defined(RASPBERRYPI_PICO)  || defined(ARDUINO_RASPBERRY_PI_PICO)
@@ -777,25 +781,28 @@ bool CreateSpy()
 		customSetup = true;
 		break;
 	case 0x22:
+		currentSpy = new N64Slow();
+		break;
+	case 0x23:
 		currentSpy = new DrivingControllerSpy();
 		((DrivingControllerSpy*)currentSpy)->setup(DrivingControllerSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
-	case 0x23:
+	case 0x24:
 		currentSpy = new AmigaMouseSpy();
 		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_PAL, AmigaMouseSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
-	case 0x24:
+	case 0x25:
 		currentSpy = new AmigaMouseSpy();
 		((AmigaMouseSpy*)currentSpy)->setup(VIDEO_NTSC, AmigaMouseSpy::CABLE_GENESIS);
 		customSetup = true;
 		break;
-	case 0x25:
+	case 0x26:
 		currentSpy = new CDTVWiredSpy();
 		muteStartupMessage = true;
 		break;
-	case 0x26:
+	case 0x27:
 		currentSpy = new NuonSpy();
 		break;
 	}
@@ -899,7 +906,7 @@ bool CreateSpy()
 	currentSpy = new CDiSpy(CDI_WIRED_TIMEOUT, CDI_WIRELESS_TIMEOUT, CDI_WIRELESS_REMOTE_TIMEOUT, 0xFF);
 #elif defined(MODE_CDI_KEYBOARD)
 	currentSpy = new CDiKeyboardSpy();
-#elif defined(MODE_GAMEBOY_PRINTER)
+#elif defined(MODE_GAMEBOY_PRINTER) || defined(RS_PIXEL_2)
 	currentSpy = new GameBoyPrinterEmulator();
 #elif defined(MODE_AMIGA_ANALOG_1)
 	currentSpy = new AmigaAnalogSpy();
