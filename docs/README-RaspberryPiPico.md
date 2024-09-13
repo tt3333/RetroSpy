@@ -21,7 +21,7 @@ Upload gerber_JLCPCB.zip and select "Specify a location" from the "Remove Order 
 #### If you place an order with JLCPCB and do not want the order number printed
 
 Upload gerber.zip and select "Yes" from the "Remove Order Number" options.<BR>
-However, if Yes is selected, an optional fee will be charged.
+~~However, if Yes is selected, an optional fee will be charged.~~
 
 #### For orders outside of JLCPCB
 

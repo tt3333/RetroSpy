@@ -16,12 +16,12 @@
 
 #### JLCPCBで、オーダー番号を目立たない場所に印字したい場合
 
-gerber_JLCPCB.zip をアップロードし、「Remove Order Number」から「Specify a location」を選択してください。
+gerber_JLCPCB.zip をアップロードし、「PCB上のマーク」から「オーダー番号(位置指定)」を選択してください。
 
 #### JLCPCBで、オーダー番号を印字したくない場合
 
-gerber.zip をアップロードし、「Remove Order Number」から「Yes」を選択してください。<BR>
-但し、Yesを選択するとオプション料金がかかります。
+gerber.zip をアップロードし、「PCB上のマーク」から「マーク除去」を選択してください。<BR>
+~~但し、「マーク除去」を選択するとオプション料金がかかります。~~
 
 #### JLCPCB以外の場合
 
