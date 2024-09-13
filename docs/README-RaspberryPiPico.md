@@ -29,6 +29,8 @@ Upload gerber.zip.
 
 ### Selection of Case
 
+#### When using an off-the-shelf case
+
 The PCB is designed for the following cases.
 
 * PR-105B manufactured by TAKACHI ELECTRONICS ENCLOSURE
@@ -37,6 +39,11 @@ The PCB is designed for the following cases.
 * TB-32-IV manufactured by Teishin Electric
 
 Make holes for USB connector, toggle switch, and controller cables.
+
+#### When printing 3D data
+
+If you are installing both cables for Wii and SNES, print Bottom_for_two_controllers.stl and Top_with_switch.stl.<BR>
+If you are installing only one cable for Wii or SNES, print Bottom_for_single_controller.stl and Top_without_switch.stl.
 
 ### Assembly
 
