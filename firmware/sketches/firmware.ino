@@ -149,7 +149,7 @@
 
 bool CreateSpy();
 
-#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+#if (defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)) && defined(MODE_DETECT)
 SNESSpy SNESSpy;
 WiiSpy WiiSpy;
 #endif
@@ -205,7 +205,7 @@ void setup()
 
 	while (!Serial) ; 
 	
-#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+#if (defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)) && defined(MODE_DETECT)
 	SNESSpy.setup();
 	WiiSpy.setup();
 #else
@@ -248,7 +248,7 @@ void setup1()
 // Arduino sketch main loop definition.
 void loop()
 {
-#if defined(RASPBERRYPI_PICO) && defined(MODE_DETECT)
+#if (defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)) && defined(MODE_DETECT)
 	if (!PINC_READ(MODEPIN_SNES))
 		currentSpy = &SNESSpy;
 	else if (!PINC_READ(MODEPIN_WII))
@@ -344,7 +344,7 @@ byte ReadDigital()
 }
 #endif
 
-#if !(defined(RASPBERRYPI_PICO) && defined(MODE_DETECT))
+#if !((defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)) && defined(MODE_DETECT))
 bool CreateSpy()
 {
 	bool customSetup = false;
