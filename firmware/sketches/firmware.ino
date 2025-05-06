@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // RetroSpy Firmware for Arduino Uno & Teensy 3.5/4.0/4.1
-// Version: 6.5
+// Version: 6.9
 // RetroSpy written by zoggins of RetroSpy Technologies
 // NintendoSpy originally written by jaburns
 
@@ -146,6 +146,8 @@
 #include "Nuon.h"
 #include "VSmile.h"
 #include "VFlash.h"
+
+#include "Duo.h"
 
 bool CreateSpy();
 
@@ -804,6 +806,9 @@ bool CreateSpy()
 		break;
 	case 0x27:
 		currentSpy = new NuonSpy();
+		break;
+	case 0x28:
+		currentSpy = new DuoSpy();
 		break;
 	}
 #elif defined(MODE_DETECT)

@@ -98,6 +98,25 @@ namespace RetroSpy
             PopulateSources();
         }
 
+        private void UseVJoy_Checked(object sender, RoutedEventArgs e)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && RuntimeInformation.OSArchitecture == Architecture.X64)
+            {
+                if (sender is MenuItem)
+                    UseVJoyCheckbox.IsChecked = !UseVJoyCheckbox.IsChecked;
+
+                _vm.UseVJoy = UseVJoyCheckbox.IsChecked ?? false;
+                Properties.Settings.Default.UseVJoy = UseVJoyCheckbox.IsChecked ?? false;
+            }
+            else
+            {
+                _vm.UseVJoy = false;
+                Properties.Settings.Default.UseVJoy = false;
+
+                AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "vJoy only supported for 64-bit Windows.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Info);
+            }
+        }
+
         private void UpdatePortListThread()
             {
                 if (letUpdatePortThreadRun)
@@ -193,7 +212,7 @@ namespace RetroSpy
         }
 
         private readonly bool letUpdatePortThreadRun = false;
-        public SetupWindow(bool skipSetup = false)
+        public SetupWindow(bool skipSetup = false, string? startsource = null, string? startskin = null, string? startdelay = null)
         {
             try
             {
@@ -269,6 +288,10 @@ namespace RetroSpy
 
                 _vm.UseUSB2 = Properties.Settings.Default.UseUSB2;
                 UseUSB2Checkbox.IsChecked = _vm.UseUSB2;
+
+
+                _vm.UseVJoy = Properties.Settings.Default.UseVJoy;
+                UseVJoyCheckbox.IsChecked = _vm.UseVJoy;
 
                 PopulateSources();
 
@@ -371,8 +394,52 @@ namespace RetroSpy
 
                 if (skipSetup)
                 {
+                    startsource = startsource?.Replace("\"", "");
+                    if(startsource != null && SourcesComboBox != null)
+                    {
+                        int i;
+                        for (i = 0; i < SourcesComboBox.Items.Count; ++i)
+                        {
+                            if(_vm.Sources[i].Name == startsource)
+                                break;
+                        }
+
+                        if (i == _vm.Sources.Count)
+                        {
+                            Show();
+                            AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Source specified on the command line cannot be found.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                            return;
+                        }
+                        SourcesComboBox.SelectedIndex = i;
+                    }
                     SourceSelectComboBox_SelectionChanged(null, null);
+
+                    startskin = startskin?.Replace("\"", "");
+                    if (startskin != null && SkinListBox != null)
+                    {
+                        int i;
+                        for (i = 0; i < SkinListBox.Items.Count; ++i)
+                        {
+                            if (_vm.Skins[i].Name == startskin)
+                                break;
+                        }
+
+                        if (i == _vm.Skins.Count)
+                        {
+                            Show();
+                            AvaloniaMessageBoxDialog(_resources.GetString("RetroSpy", CultureInfo.CurrentUICulture), "Skin specified on the command line cannot be found.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                            return;
+                        }
+
+                        SkinListBox.SelectedIndex = i;
+                    }
+
                     Skin_SelectionChanged(null, null);
+
+                    startdelay = startdelay?.Replace("\"", "");
+                    if (startdelay != null)
+                        txtDelay.Text = startdelay;
+
                     GoButton_Click(null, null);
                 }
                 else
@@ -390,6 +457,11 @@ namespace RetroSpy
                 AvaloniaMessageBox(_resources == null ? "Invalid Resource Handle" : _resources.GetString("RetroSpy", CultureInfo.CurrentUICulture) ?? "Unknown Resource String: RetroSpy", ex.Message + "\n\n" + ex.StackTrace, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 Environment.Exit(-1);
             }
+        }
+
+        private void OnViewerLoaded(object? sender, System.EventArgs? e)
+        {
+            Hide();
         }
 
         private async void GoButton_Click(object? sender, RoutedEventArgs? e)
@@ -417,6 +489,7 @@ namespace RetroSpy
             Properties.Settings.Default.DontSavePassword = _vm.DontSavePassword;
             Properties.Settings.Default.UseLagFix = _vm.UseLagFix;
             Properties.Settings.Default.UseUSB2 = _vm.UseUSB2;
+            Properties.Settings.Default.UseVJoy = _vm.UseVJoy;
 
             if (_vm.Sources.SelectedItem == InputSource.MISTER)
             {
@@ -432,6 +505,11 @@ namespace RetroSpy
 
             try
             {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
+                    && RuntimeInformation.OSArchitecture == Architecture.X64 
+                    && Properties.Settings.Default.UseVJoy)
+                    vJoyInterface.InitVJoy();
+
                 IControllerReader? reader = null;
                 if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
@@ -501,11 +579,12 @@ namespace RetroSpy
                     reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds, _vm.LegacyKeybindingBehavior);
                 }
 
-
                 _portListUpdateTimer.Stop();
                 v = new ViewWindow(this, _vm.Skins.SelectedItem,
                                _vm.Backgrounds.SelectedItem,
-                               reader, _vm.StaticViewerWindowName);
+                               reader, _vm.StaticViewerWindowName, _vm.Sources.SelectedItem?.TypeTag ?? "none");
+                v.Loaded += OnViewerLoaded;
+                Show();
                 await v.ShowDialog(this);
                 _portListUpdateTimer.Start();
 
@@ -1100,6 +1179,7 @@ namespace RetroSpy
         public bool DontSavePassword { get; set; }
         public bool UseLagFix { get; set; }
         public bool UseUSB2 { get; set; }
+        public bool UseVJoy { get; set; }
 
         public string? Username { get; set; }
 

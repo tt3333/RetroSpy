@@ -27,6 +27,7 @@ namespace RetroSpy
         private readonly Skin _skin;
         private readonly IControllerReader _reader;
         private readonly Keybindings? _keybindings;
+        private readonly vJoybindings? _vJoybindings;
         private readonly BlinkReductionFilter _blinkFilter = new();
         private readonly List<Tuple<Detail, Image>> _detailsWithImages = new();
         private readonly List<Tuple<Button, Image>> _buttonsWithImages = new();
@@ -49,7 +50,7 @@ namespace RetroSpy
 
         private readonly SetupWindow _sw;
 
-        public ViewWindow(SetupWindow sw, Skin? skin, Background? skinBackground, IControllerReader? reader, bool staticViewerWindowName)
+        public ViewWindow(SetupWindow sw, Skin? skin, Background? skinBackground, IControllerReader? reader, bool staticViewerWindowName, string typeTag)
         {
             Closing += (s, e) =>
             {
@@ -273,10 +274,21 @@ namespace RetroSpy
             try
             {
                 _keybindings = new Keybindings(Keybindings.XmlFilePath, _reader);
+                _keybindings.CurrentlyActiveType = typeTag;
             }
             catch (ConfigParseException)
             {
                 noKeyBindings = true;
+                StartNoKeybindingDialogThread();
+            }
+
+            try
+            {
+                _vJoybindings = new vJoybindings(vJoybindings.XmlFilePath, _reader);
+            }
+            catch (ConfigParseException)
+            {
+                novJoyBindings = true;
                 StartNoKeybindingDialogThread();
             }
 
@@ -296,6 +308,17 @@ namespace RetroSpy
                 Dispatcher.UIThread.Post(() =>
                 {
                     loop = !IsVisible;
+                });
+            }
+
+            if (novJoyBindings)
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    var m = MsBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandard("RetroSpy", "Error parsing vjoybindings.xml. Not binding any controls to vJoy", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                    this.Topmost = false;
+                    await m.ShowWindowDialogAsync(this);
                 });
             }
 
@@ -319,7 +342,7 @@ namespace RetroSpy
         }
 
         readonly bool noKeyBindings = false;
-
+        readonly bool novJoyBindings = false;
         private void Reader_ControllerDisconnected(object? sender, EventArgs e)
         {
             if (Dispatcher.UIThread.CheckAccess())
@@ -393,13 +416,13 @@ namespace RetroSpy
                 {
                     if (Dispatcher.UIThread.CheckAccess())
                     {
-                        button.Item2.IsVisible = e.Buttons[button.Item1.Name ?? string.Empty];
+                        button.Item2.IsVisible = !button.Item1.Invert ? e.Buttons[button.Item1.Name ?? string.Empty] : !e.Buttons[button.Item1.Name ?? string.Empty];
                     }
                     else
                     {
                         Dispatcher.UIThread.Post(() =>
                         {
-                            button.Item2.IsVisible = e.Buttons[button.Item1.Name ?? string.Empty];
+                            button.Item2.IsVisible = !button.Item1.Invert ? e.Buttons[button.Item1.Name ?? string.Empty] : !e.Buttons[button.Item1.Name ?? string.Empty];
                         });
                     }
                 }

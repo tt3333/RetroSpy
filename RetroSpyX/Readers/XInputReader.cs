@@ -57,10 +57,17 @@ namespace RetroSpy.Readers
             outState.SetButton("b", ((int)state.Gamepad.Buttons & 0x2000) != 0);
             outState.SetButton("x", ((int)state.Gamepad.Buttons & 0x4000) != 0);
             outState.SetButton("y", ((int)state.Gamepad.Buttons & 0x8000) != 0);
-            outState.SetButton("up", ((int)state.Gamepad.Buttons & 0x0001) != 0);
-            outState.SetButton("down", ((int)state.Gamepad.Buttons & 0x0002) != 0);
-            outState.SetButton("left", ((int)state.Gamepad.Buttons & 0x0004) != 0);
-            outState.SetButton("right", ((int)state.Gamepad.Buttons & 0x0008) != 0);
+
+            bool up = ((int)state.Gamepad.Buttons & 0x0001) != 0;
+            bool right = ((int)state.Gamepad.Buttons & 0x0008) != 0;
+            bool down = ((int)state.Gamepad.Buttons & 0x0002) != 0;
+            bool left = ((int)state.Gamepad.Buttons & 0x0004) != 0;
+
+            outState.SetButton("up", up);
+            outState.SetButton("down", down);
+            outState.SetButton("left", left);
+            outState.SetButton("right", right);
+
             outState.SetButton("start", ((int)state.Gamepad.Buttons & 0x0010) != 0);
             outState.SetButton("back", ((int)state.Gamepad.Buttons & 0x0020) != 0);
             outState.SetButton("l3", ((int)state.Gamepad.Buttons & 0x0040) != 0);

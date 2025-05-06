@@ -9,12 +9,12 @@
     <ApplicationIcon>RetroSpy.ico</ApplicationIcon>
     <BaseOutputPath>..\bin</BaseOutputPath>
     <UseWPF>False</UseWPF>
-    <NeutralLanguage>en-US</NeutralLanguage> 
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 	<PropertyGroup>
-		<AssemblyVersion>6.5</AssemblyVersion>
-		<FileVersion>6.5</FileVersion>
-		<Version>6.5</Version>
+		<AssemblyVersion>6.9</AssemblyVersion>
+		<FileVersion>6.9</FileVersion>
+		<Version>6.9</Version>
 		<Copyright>Copyright © 2022</Copyright>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<UseWindowsForms>False</UseWindowsForms>
@@ -23,6 +23,9 @@
 	<PropertyGroup>
 		<CurrentDate>$([System.DateTime]::Now.ToString("ddd MM/dd/yyyy HH:mm:ss.FF"))</CurrentDate>
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	</PropertyGroup>
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<DefineConstants>OS_WINDOWS</DefineConstants>
 	</PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -461,7 +464,6 @@
     <None Remove="skins\img_N64\pad-twist.png" />
     <None Remove="skins\img_N64\pad-yellow.png" />
     <None Remove="skins\img_N64\pad-zelda.png" />
-    <None Remove="skins\img_N64\skin.xml" />
     <None Remove="skins\intellivision-controller\circle2.png" />
     <None Remove="skins\intellivision-controller\intellivision.png" />
     <None Remove="skins\intellivision-controller\skin.xml" />
@@ -902,9 +904,15 @@
     <None Remove="skins\xbox360-controller\stick.png" />
     <None Remove="skins\xbox360-controller\trig-l.png" />
     <None Remove="skins\xbox360-controller\trig-r.png" />
+    <None Remove="vjoybindings.xml" />
+    <None Remove="vJoyInterface.dll" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
+    <None Remove="vJoyInterfaceWrap.dll" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Carlito-Regular.ttf" />
+    <Content Include="vjoybindings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="keybindings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1942,9 +1950,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\img_N64\pad-zelda.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\img_N64\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\intellivision-controller\circle2.png">
@@ -3267,6 +3272,12 @@
     <Content Include="skins\xbox360-controller\trig-r.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="vJoyInterface.dll" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vJoyInterfaceWrap.dll" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -3274,20 +3285,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.11">
+    <PackageReference Include="Avalonia" Version="11.1.3">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.11" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.11" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.11" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
     <PackageReference Include="Desktop.Robot" Version="1.5.0" />
     <PackageReference Include="LibUsbDotNet" Version="3.0.102-alpha" />
-    <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.1.6" />
     <PackageReference Include="NodaTime" Version="3.1.11" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
-    <PackageReference Include="SSH.NET" Version="2024.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="SSH.NET" Version="2024.1.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
     <PackageReference Include="System.Management" Version="8.0.0" />
@@ -3627,6 +3638,12 @@
 
 	<ItemGroup>
 	  <Folder Include="Emulator\" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'">
+	  <Reference Include="vJoyInterfaceWrap">
+	    <HintPath>vJoyInterfaceWrap.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 	
 	<Target Name="CopyAssetFiles" AfterTargets="Build">
