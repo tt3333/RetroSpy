@@ -251,12 +251,19 @@ void setup1()
 void loop()
 {
 #if (defined(RASPBERRYPI_PICO) || defined(ARDUINO_RASPBERRY_PI_PICO)) && defined(MODE_DETECT)
+	ControllerSpy* newSpy;
 	if (!PINC_READ(MODEPIN_SNES))
-		currentSpy = &SNESSpy;
+		newSpy = &SNESSpy;
 	else if (!PINC_READ(MODEPIN_WII))
-		currentSpy = &WiiSpy;
+		newSpy = &WiiSpy;
 	else
-		currentSpy = NULL;
+		newSpy = NULL;
+
+	if (currentSpy != newSpy)
+	{
+		currentSpy = newSpy;
+		cancelFlag = true;
+	}
 #endif
 
 	if (currentSpy != NULL)
@@ -266,8 +273,18 @@ void loop()
 #if defined(RASPBERRYPI_PICO)  || defined(ARDUINO_RASPBERRY_PI_PICO)
 void loop1()
 {
-	if (currentSpy != NULL)
-		currentSpy->loop1();
+	ControllerSpy* spy = currentSpy;
+	if (spy != NULL)
+	{
+		if ((spy == &WiiSpy) || (setjmp(cancelBuf) == 0))
+		{
+			spy->loop1();
+		}
+		else
+		{
+			interrupts();
+		}
+	}
 }
 #endif
 

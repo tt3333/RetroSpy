@@ -26,6 +26,9 @@
 
 #include "common.h"
 
+volatile bool cancelFlag = false;
+jmp_buf cancelBuf;
+
 void common_pin_setup()
 {
 #if defined(ARDUINO_AVR_NANO_EVERY)

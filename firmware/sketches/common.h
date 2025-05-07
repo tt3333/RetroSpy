@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 #include "Arduino.h"
+#include <setjmp.h>
 
 #if  defined(__arm__) && defined(CORE_TEENSY) && (defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41))
 #include "config_teensy4.h"
@@ -133,15 +134,20 @@ enum VideoOutputType {
 
 #define PIN_READ PIND_READ
 
-#define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
-#define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
+#define CHECK_CANCEL() if (cancelFlag) { cancelFlag = false; longjmp(cancelBuf, 1); }
 
-#define WAIT_FALLING_EDGEB( pin ) while( !PINB_READ(pin) ); while( PINB_READ(pin) );
-#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ); while( !PINB_READ(pin) );
+#define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ){ CHECK_CANCEL(); } while( PIN_READ(pin) ){ CHECK_CANCEL(); }
+#define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ){ CHECK_CANCEL(); } while( !PIN_READ(pin) ){ CHECK_CANCEL(); }
+
+#define WAIT_FALLING_EDGEB( pin ) while( !PINB_READ(pin) ){ CHECK_CANCEL(); } while( PINB_READ(pin) ){ CHECK_CANCEL(); }
+#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ){ CHECK_CANCEL(); } while( !PINB_READ(pin) ){ CHECK_CANCEL(); }
 
 #define ZERO  ((uint8_t)0)  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE   '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
+
+extern volatile bool cancelFlag;
+extern jmp_buf cancelBuf;
 
 void common_pin_setup();
 void read_shiftRegister_2wire(unsigned char rawData[], unsigned char latch, unsigned char data, unsigned char longWait, unsigned char bits);
