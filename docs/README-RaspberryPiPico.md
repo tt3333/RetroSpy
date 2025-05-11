@@ -2,8 +2,9 @@
 
 # RetroSpy for Raspberry Pi Pico
 
-This is a RetroSpy modification to allow the following controllers to be used with Raspberry Pi Pico.<br>
-(Operation has been tested only with SNES and SNES Classic.)
+This is a modification of RetroSpy that allows it to switch operating modes without having to restart the firmware.<br>
+I have also designed a dedicated board and cases that allows the following controllers to be connected to Raspberry Pi Pico.<br>
+(Operation has been tested only with SNES, SNES Classic, and WiiU.)
 
 - SNES
 - Nintendo Wii

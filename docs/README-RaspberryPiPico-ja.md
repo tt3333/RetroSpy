@@ -2,8 +2,9 @@
 
 # RetroSpy for Raspberry Pi Pico
 
-以下のコントローラーをRaspberry Pi Picoで使えるように、RetroSpyを改造したものです。<br>
-(動作確認はスーファミ実機とミニスーファミでのみ行っています。)
+ファームウェアを再起動しなくても動作モードを切り替えられるように、RetroSpyを改造したものです。<br>
+また、以下のコントローラをRaspberry Pi Picoに接続できる専用基板とケースも設計しました。<br>
+(動作確認はスーファミ実機、ミニスーファミ、WiiUでのみ行っています。)
 
 - SNES
 - Nintendo Wii
